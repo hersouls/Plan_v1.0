@@ -21,6 +21,7 @@ import {
   FamilyView,
   LeaderboardEntry,
 } from '../../types/family';
+import { Timestamp } from 'firebase/firestore';
 import {
   calculateEngagementScore,
   calculateFamilyStats,
@@ -166,7 +167,7 @@ const ActivitySection: React.FC<{
   members: Map<string, FamilyMember>;
   limit?: number;
   compact?: boolean;
-}> = memo(({ activities, members, limit = 10, compact }) => {
+}> = memo(({ activities, members: _members, limit = 10, compact }) => {
   const recentActivities = activities.slice(0, limit);
 
   return (
@@ -575,12 +576,16 @@ export const FamilyDashboard: React.FC<FamilyDashboardProps> = memo(
             <FamilyStats
               stats={{
                 groupId: group.id,
-                period: 'week',
-                members: members.map(m => ({
+                period: 'weekly',
+                members: {
+                  total: members.length,
+                  active: stats.activeMembers,
+                  newThisPeriod: 0,
+                },
+                memberStats: members.map(m => ({
                   userId: m.userId,
                   userName: m.name,
                   tasksCompleted: m.stats.completedTasks,
-                  completionRate: m.stats.completionRate,
                   points: m.stats.points,
                 })),
                 performance: {
@@ -598,10 +603,10 @@ export const FamilyDashboard: React.FC<FamilyDashboardProps> = memo(
                   overdue: stats.overdueTasks,
                 },
                 trends: {
-                  weeklyGrowth: stats.weeklyGrowth,
-                  monthlyGrowth: stats.monthlyGrowth,
+                  completionTrend: stats.weeklyGrowth,
+                  activityTrend: stats.monthlyGrowth,
                 },
-                updatedAt: new Date(),
+                updatedAt: Timestamp.now(),
               }}
             />
           )}

@@ -52,7 +52,7 @@ export function ManualInviteModal({
       <GlassCard
         variant="medium"
         className="p-6 max-w-md w-full relative"
-        onClick={e => e.stopPropagation()}
+        onClickCapture={(e) => e.stopPropagation()}
       >
         {/* Close Button */}
         <button

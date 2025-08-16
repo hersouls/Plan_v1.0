@@ -12,6 +12,7 @@ export const GlassCard = forwardRef<HTMLDivElement, GlassCardProps>(
       style,
       onClick,
       ariaLabel,
+      ...rest
     },
     ref
   ) => {
@@ -76,6 +77,7 @@ export const GlassCard = forwardRef<HTMLDivElement, GlassCardProps>(
         role={isClickable ? 'button' : undefined}
         tabIndex={isClickable ? 0 : undefined}
         aria-label={ariaLabel}
+        {...rest}
         onKeyDown={
           isClickable
             ? e => {
