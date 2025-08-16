@@ -19,7 +19,7 @@ import { GlassCard } from '../../ui/GlassCard';
 import { WaveButton } from '../../ui/WaveButton';
 import { SettingsGroup } from '../components';
 import { useSettings } from '../hooks/useSettings';
-import type { SettingsSectionProps } from '../types';
+import type { SettingsSectionProps, UserProfile } from '../types';
 
 export function ProfileSection({
   isActive,
@@ -30,17 +30,17 @@ export function ProfileSection({
 }: SettingsSectionProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { user: authUser } = useAuth();
-  const { uploadAvatar, deleteAvatar, uploadingAvatar, error } = useSettings();
+  const { uploadAvatar, deleteAvatar, uploadingAvatar } = useSettings();
 
   // 단순한 상태 관리 - useEffect 없이
   const [isEditing, setIsEditing] = useState(false);
-  const [editingField, setEditingField] = useState<string | null>(null);
+  const [editingField, setEditingField] = useState<keyof UserProfile | null>(null);
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
  
   // editData는 항상 현재 settings.profile을 사용하거나 편집 중일 때만 로컬 상태 사용
-  const [localEditData, setLocalEditData] = useState<any>(null);
+  const [localEditData, setLocalEditData] = useState<UserProfile | null>(null);
   const editData = useMemo(
     () => (isEditing && localEditData ? localEditData : settings.profile),
     [isEditing, localEditData, settings.profile]
@@ -62,10 +62,10 @@ export function ProfileSection({
   // 미완료 필드 목록
   const incompleteFields = useMemo(() => {
     const fields = [
-      { key: 'displayName', label: '이름', icon: User },
-      { key: 'phone', label: '전화번호', icon: Phone },
-      { key: 'location', label: '위치', icon: MapPin },
-      { key: 'bio', label: '자기소개', icon: Globe },
+      { key: 'displayName' as keyof UserProfile, label: '이름', icon: User },
+      { key: 'phone' as keyof UserProfile, label: '전화번호', icon: Phone },
+      { key: 'location' as keyof UserProfile, label: '위치', icon: MapPin },
+      { key: 'bio' as keyof UserProfile, label: '자기소개', icon: Globe },
     ];
     return fields.filter(field => !settings.profile[field.key]);
   }, [settings.profile]);
@@ -140,7 +140,7 @@ export function ProfileSection({
     setIsEditing(!isEditing);
   };
 
-  const handleFieldEdit = (fieldKey: string) => {
+  const handleFieldEdit = (fieldKey: keyof UserProfile) => {
     if (!isEditing) {
       // 편집 모드가 아니면 먼저 편집 모드로 전환
       setLocalEditData({ ...settings.profile });
@@ -149,7 +149,7 @@ export function ProfileSection({
     setEditingField(fieldKey);
   };
 
-  const handleFieldSave = async (fieldKey: string) => {
+  const handleFieldSave = async (fieldKey: keyof UserProfile) => {
     if (!localEditData) return;
 
     try {
@@ -232,7 +232,7 @@ export function ProfileSection({
     return name.substring(0, 2).toUpperCase();
   };
 
-  const renderField = (fieldKey: string, label: string, icon: any, placeholder: string, type: string = 'text') => {
+  const renderField = (fieldKey: keyof UserProfile, label: string, icon: any, placeholder: string, type: string = 'text') => {
     const isFieldEditing = editingField === fieldKey;
     const value = isFieldEditing ? (editData[fieldKey] || '') : (settings.profile[fieldKey] || '');
     const hasError = formErrors[fieldKey];
@@ -262,8 +262,8 @@ export function ProfileSection({
               <textarea
                 value={value}
                 onChange={e =>
-                  setLocalEditData(prev => ({
-                    ...prev,
+                  setLocalEditData((prev: UserProfile | null) => ({
+                    ...prev!,
                     [fieldKey]: e.target.value,
                   }))
                 }
@@ -281,8 +281,8 @@ export function ProfileSection({
                 type={type}
                 value={value}
                 onChange={e =>
-                  setLocalEditData(prev => ({
-                    ...prev,
+                  setLocalEditData((prev: UserProfile | null) => ({
+                    ...prev!,
                     [fieldKey]: e.target.value,
                   }))
                 }
