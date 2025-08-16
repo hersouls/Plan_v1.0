@@ -5,7 +5,7 @@ import { WaveButton } from '../ui/WaveButton';
 import { Typography } from '../ui/typography';
 import { GlassCard } from '../ui/GlassCard';
 import { useClaudeAI } from '../../lib/claude';
-import { TaskPriority, TaskCategory } from '../../types/task';
+import { TaskPriority, TaskCategory, TaskSuggestion } from '../../types/task';
 import { cn } from '../../lib/utils';
 
 export interface SmartTaskInputProps {
@@ -33,7 +33,7 @@ export function SmartTaskInput({
 }: SmartTaskInputProps) {
   const [isEnhancing, setIsEnhancing] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(false);
-  const [suggestion, setSuggestion] = useState<any>(null);
+  const [suggestion, setSuggestion] = useState<TaskSuggestion | null>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   
   const { 
@@ -67,7 +67,7 @@ export function SmartTaskInput({
         clearTimeout(timeoutRef.current);
       }
     };
-  }, [value, isAvailable]);
+  }, [value, isAvailable, handleAutoEnhance]);
 
   const handleAutoEnhance = useCallback(async (input: string) => {
     if (!isAvailable || isEnhancing) return;

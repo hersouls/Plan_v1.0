@@ -298,7 +298,7 @@ export class ValidationService {
    * Phone number validation
    */
   isValidPhone(phone: string): boolean {
-    const phoneRegex = /^[0-9\-\+\(\)\s]+$/;
+    const phoneRegex = /^[0-9\-+()\s]+$/;
     return phoneRegex.test(phone);
   }
 

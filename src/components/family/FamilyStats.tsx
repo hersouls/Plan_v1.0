@@ -1,4 +1,4 @@
-import { TrendingUp, Target, Calendar, Users, CheckCircle } from 'lucide-react';
+import { TrendingUp, Target, Calendar, CheckCircle } from 'lucide-react';
 import { GlassCard } from '../ui/GlassCard';
 import { GroupStats } from '../../types/group';
 
@@ -178,7 +178,7 @@ export function FamilyStats({
       </GlassCard>
 
       {/* Recent Activity Summary - Temporarily disabled */}
-      {Boolean(false) && (
+      {/* {false && (
         <GlassCard variant="light" className="p-6">
           <div className="flex items-center justify-between mb-4">
             <h4 className="text-base-ko font-semibold">최근 활동</h4>
@@ -204,7 +204,6 @@ export function FamilyStats({
                     </span>
                   </p>
                   <p className="text-xs text-gray-500">
-                    {/* {formatDistanceToNow(activity.timestamp.toDate())} */}
                     방금 전
                   </p>
                 </div>
@@ -212,7 +211,7 @@ export function FamilyStats({
             ))}
           </div>
         </GlassCard>
-      )}
+      )} */}
     </div>
   );
 }

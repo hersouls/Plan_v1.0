@@ -180,7 +180,7 @@ function TodoHome() {
 
   const displayTasks = useMemo(() => {
     // 먼저 가시성에 따른 필터링 적용
-    let tasks = filteredTasks;
+    const tasks = filteredTasks;
 
     // 그 다음 시간 필터 적용
     switch (viewFilter) {

@@ -5,12 +5,13 @@ import { WaveButton } from '../ui/WaveButton';
 import { Typography } from '../ui/typography';
 import { Input } from '../ui/input';
 import { useClaudeAI } from '../../lib/claude';
+import { TaskSuggestion } from '../../types/task';
 import { cn } from '../../lib/utils';
 
 export interface ClaudeAssistantProps {
   isOpen: boolean;
   onClose: () => void;
-  onTaskSuggestion?: (suggestion: any) => void;
+  onTaskSuggestion?: (suggestion: TaskSuggestion) => void;
   placeholder?: string;
   className?: string;
 }
@@ -24,7 +25,7 @@ export function ClaudeAssistant({
 }: ClaudeAssistantProps) {
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
-  const [suggestions, setSuggestions] = useState<any[]>([]);
+  const [suggestions, setSuggestions] = useState<TaskSuggestion[]>([]);
   const { isAvailable, generateTaskSuggestions } = useClaudeAI();
 
   const handleSubmit = useCallback(async (e: React.FormEvent) => {
@@ -42,7 +43,7 @@ export function ClaudeAssistant({
     }
   }, [input, loading, isAvailable, generateTaskSuggestions]);
 
-  const handleSuggestionSelect = useCallback((suggestion: any) => {
+  const handleSuggestionSelect = useCallback((suggestion: TaskSuggestion) => {
     onTaskSuggestion?.(suggestion);
     setInput('');
     setSuggestions([]);

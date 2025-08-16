@@ -134,23 +134,5 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 }
 
-export const withErrorBoundary = <P extends object>(
-  Component: React.ComponentType<P>,
-  fallback?: ReactNode,
-  onReset?: () => void
-) => {
-  const WrappedComponent = (props: P) => (
-    <ErrorBoundary fallback={fallback} onReset={onReset}>
-      <Component {...props} />
-    </ErrorBoundary>
-  );
-
-  WrappedComponent.displayName = `withErrorBoundary(${
-    Component.displayName || Component.name
-  })`;
-
-  return WrappedComponent;
-};
-
 // Export the main ErrorBoundary as default
 export { ErrorBoundary as default };

@@ -244,3 +244,12 @@ export interface TaskStats {
   byPriority: Record<TaskPriority, number>;
   byAssignee: Record<string, number>;
 }
+
+// Task suggestion from AI
+export interface TaskSuggestion {
+  title: string;
+  description?: string;
+  category: TaskCategory;
+  priority: TaskPriority;
+  estimatedMinutes?: number;
+}
