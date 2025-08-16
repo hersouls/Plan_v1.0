@@ -1,4 +1,4 @@
-import { Trophy, Medal, Award, TrendingUp, Flame, Target } from 'lucide-react';
+import { Trophy, Medal, Award, TrendingUp, Target } from 'lucide-react';
 import { GlassCard } from '../ui/GlassCard';
 import { GroupStats } from '../../types/group';
 
@@ -153,14 +153,14 @@ export function LeaderBoard({
                       </div>
 
                       {/* Streak temporarily disabled */}
-                      {Boolean(false) && (
+                      {/* {false && (
                         <div className="flex items-center gap-1">
                           <Flame size={12} className="text-orange-500 sm:w-3.5 sm:h-3.5" />
                           <span className="text-xs sm:text-sm font-medium text-orange-600">
                             0일
                           </span>
                         </div>
-                      )}
+                      )} */}
                     </div>
                   </div>
 
