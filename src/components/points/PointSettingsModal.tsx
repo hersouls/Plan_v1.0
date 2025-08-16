@@ -260,10 +260,7 @@ export function PointSettingsModal({
             <div className="w-16 h-16 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
               <Settings className="w-8 h-8 text-white" />
             </div>
-            <Typography.H1
-              id="point-settings-modal-title"
-              className="text-3xl font-bold text-white mb-2 drop-shadow-sm"
-            >
+            <Typography.H1 className="text-3xl font-bold text-white mb-2 drop-shadow-sm">
               포인트 관리 설정
             </Typography.H1>
             <Typography.Body className="text-white/95 text-lg">
@@ -284,7 +281,7 @@ export function PointSettingsModal({
               </Typography.Body>
               <WaveButton
                 onClick={onClose}
-                variant="outline"
+                variant="ghost"
                 size="lg"
                 className="text-white border-white/30 hover:bg-white/10 transition-all duration-200"
               >
@@ -330,9 +327,7 @@ export function PointSettingsModal({
                     const originalRule = pointRules.find(
                       rule => rule.type === category.id
                     );
-                    const originalValue =
-                      originalRule?.points || category.defaultPoints;
-                    const hasChanged = currentValue !== originalValue;
+                    const hasChanged = currentValue !== (originalRule?.points || category.defaultPoints);
 
                     return (
                       <div

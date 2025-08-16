@@ -142,7 +142,7 @@ export function QRScannerModal({
       <GlassCard
         variant="medium"
         className="p-6 max-w-md w-full relative"
-        onClick={(e) => e.stopPropagation()}
+        onClick={(e: React.MouseEvent) => e.stopPropagation()}
       >
         {/* Close Button */}
         <button

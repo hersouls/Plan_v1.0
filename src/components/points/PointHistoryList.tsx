@@ -286,7 +286,6 @@ export function PointHistoryList({
         /* 포인트 내역 목록 */
         <div className="space-y-3">
           {filteredAndSortedHistories.map(history => {
-            const user = userProfiles[history.userId];
             const style = getPointStyle();
             const Icon = style.icon;
 
