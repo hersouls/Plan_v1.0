@@ -91,8 +91,8 @@ export function SmartTaskInput({
 
       setSuggestion(enhancedSuggestion);
       setShowSuggestions(true);
-    } catch (error) {
-      console.error('Smart task input enhancement error:', error);
+    } catch (_error) {
+      // Handle enhancement error silently
     } finally {
       setIsEnhancing(false);
     }

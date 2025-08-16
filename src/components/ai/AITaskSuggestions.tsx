@@ -52,8 +52,8 @@ export function AITaskSuggestions({
       const fullPrompt = `${promptText}. ${familyContext}`;
       const newSuggestions = await generateTaskSuggestions(fullPrompt);
       setSuggestions(newSuggestions.slice(0, maxSuggestions));
-    } catch (error) {
-      console.error('AI task suggestions error:', error);
+    } catch (_error) {
+      // Handle AI task suggestions error silently
       setSuggestions([]);
     } finally {
       setLoading(false);
