@@ -86,7 +86,7 @@ export function QRInviteModal({
       <GlassCard
         variant="medium"
         className="p-6 max-w-md w-full relative"
-        onClick={(e: React.MouseEvent) => e.stopPropagation()}
+        onClick={(e) => e.stopPropagation()}
       >
         {/* Close Button */}
         <button

@@ -154,7 +154,7 @@ export function PointHistoryList({
   };
 
   // 포인트 타입별 스타일 - 모든 타입에 대해 동일한 밝은 초록색 배경 사용
-  const getPointStyle = (history: PointHistory) => {
+  const getPointStyle = () => {
     // 모든 포인트 타입에 대해 동일한 스타일 적용
     return {
       icon: Plus,
@@ -287,10 +287,7 @@ export function PointHistoryList({
         <div className="space-y-3">
           {filteredAndSortedHistories.map(history => {
             const user = userProfiles[history.userId];
-            const userName =
-              user?.displayName || `사용자 ${history.userId.slice(-4)}`;
-            const userAvatar = user?.photoURL;
-            const style = getPointStyle(history);
+            const style = getPointStyle();
             const Icon = style.icon;
 
             return (
@@ -309,8 +306,8 @@ export function PointHistoryList({
                     {/* 포인트 정보 */}
                     <div className="flex-1">
                       <Typography.Body className="typography-body font-bold text-gray-800 dark:text-gray-200 font-pretendard mb-1">
-                        {history.taskName
-                          ? `할일 완료: ${history.taskName}`
+                        {history.taskTitle
+                          ? `할일 완료: ${history.taskTitle}`
                           : history.reason || '포인트 내역'}
                       </Typography.Body>
                       <Typography.Body className="typography-body text-gray-600 dark:text-gray-300 text-sm font-pretendard">
@@ -322,8 +319,8 @@ export function PointHistoryList({
                   {/* 포인트 금액 - 오른쪽에 표시 */}
                   <div className="flex items-center gap-3">
                     <Typography.Body className="typography-body font-bold text-green-600 dark:text-green-400 font-pretendard">
-                      {history.points > 0 ? '+' : ''}
-                      {history.points} 포인트
+                      {history.amount > 0 ? '+' : ''}
+                      {history.amount} 포인트
                     </Typography.Body>
                     <MoreHorizontal className="w-4 h-4 text-gray-400 dark:text-gray-500" />
                   </div>
