@@ -91,14 +91,16 @@ export function PointHistoryList({
             new Date(b.createdAt.seconds * 1000).getTime() -
             new Date(a.createdAt.seconds * 1000).getTime();
           break;
-        case 'amount':
+        case 'amount': {
           comparison = Math.abs(b.amount) - Math.abs(a.amount);
           break;
-        case 'user':
+        }
+        case 'user': {
           const userA = userProfiles[a.userId]?.displayName || a.userId;
           const userB = userProfiles[b.userId]?.displayName || b.userId;
           comparison = userA.localeCompare(userB, 'ko');
           break;
+        }
       }
 
       return sortDirection === 'asc' ? -comparison : comparison;

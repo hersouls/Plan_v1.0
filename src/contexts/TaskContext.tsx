@@ -218,11 +218,12 @@ const applyFiltersAndSort = (
         aValue = a.dueDate ? new Date(a.dueDate).getTime() : Infinity;
         bValue = b.dueDate ? new Date(b.dueDate).getTime() : Infinity;
         break;
-      case 'priority':
+      case 'priority': {
         const priorityOrder = { high: 3, medium: 2, low: 1 };
         aValue = priorityOrder[a.priority] || 0;
         bValue = priorityOrder[b.priority] || 0;
         break;
+      }
       case 'createdAt':
         aValue = new Date(a.createdAt).getTime();
         bValue = new Date(b.createdAt).getTime();
@@ -231,11 +232,12 @@ const applyFiltersAndSort = (
         aValue = a.title.toLowerCase();
         bValue = b.title.toLowerCase();
         break;
-      case 'status':
+      case 'status': {
         const statusOrder = { pending: 1, in_progress: 2, completed: 3 };
         aValue = statusOrder[a.status] || 0;
         bValue = statusOrder[b.status] || 0;
         break;
+      }
       default:
         return 0;
     }

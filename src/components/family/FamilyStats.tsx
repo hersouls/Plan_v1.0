@@ -178,7 +178,7 @@ export function FamilyStats({
       </GlassCard>
 
       {/* Recent Activity Summary - Temporarily disabled */}
-      {false && (
+      {Boolean(false) && (
         <GlassCard variant="light" className="p-6">
           <div className="flex items-center justify-between mb-4">
             <h4 className="text-base-ko font-semibold">최근 활동</h4>

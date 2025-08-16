@@ -121,7 +121,7 @@ export class ValidationService {
       },
       phone: {
         required: false,
-        pattern: /^[0-9\-\+\(\)\s]+$/,
+        pattern: /^[0-9\-+()\s]+$/,
         message: '올바른 전화번호 형식을 입력해주세요.',
       },
       bio: {
