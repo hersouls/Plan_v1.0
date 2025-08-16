@@ -183,7 +183,6 @@ export function PointSettingsModal({
       originalRule?.points ||
       POINT_CATEGORIES.find(c => c.id === categoryId)?.defaultPoints ||
       0;
-    const hasChanged = newValues[categoryId] !== originalValue;
 
     setHasChanges(
       Object.keys(newValues).some(key => {
