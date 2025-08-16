@@ -183,8 +183,8 @@ const calculateAverageCompletionTime = (completedTasks: Task[]): number => {
   const completionTimes = completedTasks
     .filter(task => task.createdAt && task.completedAt)
     .map(task => {
-      const created = toDate(task.createdAt!);
-      const completed = toDate(task.completedAt!);
+      const created = toDate(task.createdAt);
+      const completed = toDate(task.completedAt);
       return completed.getTime() - created.getTime();
     });
 

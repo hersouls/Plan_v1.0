@@ -36,7 +36,7 @@ interface ChatMessage {
   userName: string;
   userAvatar?: string;
   message: string;
-  timestamp: any;
+  timestamp: Date | string;
   attachments?: Array<{
     type: 'image' | 'file' | 'video';
     url: string;
@@ -57,7 +57,12 @@ interface GroupChatProps {
   onOpenFullscreen?: (data: {
     groupId: string;
     groupName: string;
-    members: any[];
+    members: Array<{
+      userId: string;
+      displayName?: string;
+      userName?: string;
+      avatar?: string;
+    }>;
   }) => void;
 }
 
@@ -190,7 +195,6 @@ export function GroupChat({
 
   // 전체화면 모달 열기 핸들러
   const handleOpenFullscreenModal = () => {
-    console.log('전체화면 모달 열기 시도:', { groupId, groupName, members });
     if (onOpenFullscreen) {
       onOpenFullscreen({ groupId, groupName, members });
     } else {
@@ -200,7 +204,6 @@ export function GroupChat({
       });
       window.dispatchEvent(event);
     }
-    console.log('전체화면 모달 이벤트 발생 완료');
   };
 
   // 롱프레스 핸들러

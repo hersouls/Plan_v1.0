@@ -36,8 +36,8 @@ export function ClaudeAssistant({
     try {
       const taskSuggestions = await generateTaskSuggestions(input.trim());
       setSuggestions(taskSuggestions);
-    } catch (error) {
-      console.error('Claude Assistant error:', error);
+    } catch (_error) {
+      // Handle Claude Assistant error silently
     } finally {
       setLoading(false);
     }

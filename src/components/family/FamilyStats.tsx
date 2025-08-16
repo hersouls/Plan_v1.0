@@ -72,7 +72,7 @@ export function FamilyStats({
             ].map(option => (
               <button
                 key={option.key}
-                onClick={() => onTimeRangeChange(option.key as any)}
+                onClick={() => onTimeRangeChange(option.key as 'week' | 'month' | 'all')}
                 className={`
                   px-3 py-1.5 rounded-md text-sm font-medium transition-colors
                   ${timeRange === option.key 
