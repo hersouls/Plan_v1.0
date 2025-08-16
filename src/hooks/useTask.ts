@@ -59,7 +59,7 @@ export const useTask = (options: UseTaskOptions): UseTaskReturn => {
         const commentData = {
           taskId: taskId || '',
           userId: user.uid || '',
-          userName: user.displayName || user.email || '익명' || '',
+          userName: user.displayName || user.email || '익명',
           userAvatar: user.photoURL || null,
           content: content.trim() || '',
           attachments: validAttachments,

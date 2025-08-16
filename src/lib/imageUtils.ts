@@ -33,7 +33,7 @@ export function resizeImage(
       const { width: originalWidth, height: originalHeight } = img;
 
       // 새로운 크기 계산 (비율 유지)
-      let { width: newWidth, height: newHeight } = calculateNewSize(
+      const { width: newWidth, height: newHeight } = calculateNewSize(
         originalWidth,
         originalHeight,
         maxWidth,

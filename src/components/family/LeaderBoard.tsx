@@ -153,7 +153,7 @@ export function LeaderBoard({
                       </div>
 
                       {/* Streak temporarily disabled */}
-                      {false && (
+                      {Boolean(false) && (
                         <div className="flex items-center gap-1">
                           <Flame size={12} className="text-orange-500 sm:w-3.5 sm:h-3.5" />
                           <span className="text-xs sm:text-sm font-medium text-orange-600">
