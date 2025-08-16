@@ -19,6 +19,7 @@ import { Task } from '../../types/task';
 import { GlassCard } from '../ui/GlassCard';
 import { WaveButton } from '../ui/WaveButton';
 import { Typography } from '../ui/typography';
+import { toDate } from '../../utils/dateHelpers';
 
 interface CalendarProps {
   tasks: Task[];
@@ -51,7 +52,7 @@ export const Calendar: React.FC<CalendarProps> = ({
     return tasks.filter(task => {
       if (!task.dueDate) return false;
       try {
-        return isSameDay(new Date(task.dueDate), date);
+        return isSameDay(toDate(task.dueDate), date);
       } catch {
         return false;
       }

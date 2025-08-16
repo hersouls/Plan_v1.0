@@ -410,7 +410,7 @@ export const DashboardWidget: React.FC<DashboardWidgetProps> = ({
         tasks={tasks}
         compact={compact}
         className={className}
-        onViewStats={onViewDetails}
+        onViewDetails={onViewDetails}
       />
     );
   }

@@ -298,7 +298,7 @@ export function GroupChat({
         console.error('오류 상세:', {
           code: error?.code,
           message: error?.message,
-          details: error?.details,
+          name: (error as any)?.name,
         });
         setIsLoading(false);
       }
@@ -497,7 +497,7 @@ export function GroupChat({
       console.error('오류 상세:', {
         code: (error as any)?.code,
         message: (error as any)?.message,
-        details: (error as any)?.details,
+        name: (error as any)?.name,
       });
       alert(`메시지 전송에 실패했습니다: ${(error as any)?.message || error}`);
     } finally {
