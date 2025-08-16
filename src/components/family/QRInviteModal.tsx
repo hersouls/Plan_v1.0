@@ -1,5 +1,5 @@
 import { Copy, Download, Share2, X } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import QRCode from 'react-qr-code';
 import { GlassCard } from '../ui/GlassCard';
 import { WaveButton } from '../ui/WaveButton';
@@ -86,7 +86,7 @@ export function QRInviteModal({
       <GlassCard
         variant="medium"
         className="p-6 max-w-md w-full relative"
-        onClick={e => e.stopPropagation()}
+        onClick={(e: React.MouseEvent) => e.stopPropagation()}
       >
         {/* Close Button */}
         <button
