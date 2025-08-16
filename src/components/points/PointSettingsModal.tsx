@@ -178,7 +178,7 @@ export function PointSettingsModal({
     setPointValues(newValues);
 
     // 변경사항 확인
-    const originalRule = pointRules.find(rule => rule.type === categoryId);
+    // const originalRule = pointRules.find(rule => rule.type === categoryId);
 
 
     setHasChanges(
