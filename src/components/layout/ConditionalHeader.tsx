@@ -4,7 +4,6 @@ import { Header } from './Header';
 
 export function ConditionalHeader() {
   const location = useLocation();
-  const [isVisible, setIsVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   // 숨겨야 하는 페이지 경로들
@@ -16,7 +15,6 @@ export function ConditionalHeader() {
     setIsLoading(true);
     
     const timer = setTimeout(() => {
-      setIsVisible(!shouldHideHeader);
       setIsLoading(false);
     }, 50); // 짧은 지연으로 자연스러운 전환
 

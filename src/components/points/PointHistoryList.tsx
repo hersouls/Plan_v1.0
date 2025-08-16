@@ -55,12 +55,12 @@ export function PointHistoryList({
         const userName =
           user?.displayName || `사용자 ${history.userId.slice(-4)}`;
         const reason = history.reason || '';
-        const taskName = history.taskName || '';
+        const taskTitle = history.taskTitle || '';
 
         return (
           userName.toLowerCase().includes(searchTerm.toLowerCase()) ||
           reason.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          taskName.toLowerCase().includes(searchTerm.toLowerCase())
+          taskTitle.toLowerCase().includes(searchTerm.toLowerCase())
         );
       });
     }
@@ -92,7 +92,7 @@ export function PointHistoryList({
             new Date(a.createdAt.seconds * 1000).getTime();
           break;
         case 'amount':
-          comparison = Math.abs(b.points) - Math.abs(a.points);
+          comparison = Math.abs(b.amount) - Math.abs(a.amount);
           break;
         case 'user':
           const userA = userProfiles[a.userId]?.displayName || a.userId;
@@ -155,12 +155,6 @@ export function PointHistoryList({
 
   // 포인트 타입별 스타일 - 모든 타입에 대해 동일한 밝은 초록색 배경 사용
   const getPointStyle = (history: PointHistory) => {
-    const isEarned = history.type === 'earned' || history.type === 'bonus';
-    const isDeducted =
-      history.type === 'deducted' || history.type === 'penalty';
-    const isManual =
-      history.type === 'manual_add' || history.type === 'manual_deduct';
-
     // 모든 포인트 타입에 대해 동일한 스타일 적용
     return {
       icon: Plus,
