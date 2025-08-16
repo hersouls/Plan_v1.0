@@ -67,7 +67,7 @@ export function ProfileSection({
       { key: 'location' as keyof UserProfile, label: '위치', icon: MapPin },
       { key: 'bio' as keyof UserProfile, label: '자기소개', icon: Globe },
     ];
-    return fields.filter(field => !settings.profile[field.key]);
+    return fields.filter(field => !settings.profile[field.key as keyof UserProfile]);
   }, [settings.profile]);
 
   const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -234,7 +234,7 @@ export function ProfileSection({
 
   const renderField = (fieldKey: keyof UserProfile, label: string, icon: any, placeholder: string, type: string = 'text') => {
     const isFieldEditing = editingField === fieldKey;
-    const value = isFieldEditing ? (editData[fieldKey] || '') : (settings.profile[fieldKey] || '');
+    const value = isFieldEditing ? (editData[fieldKey as keyof UserProfile] || '') : (settings.profile[fieldKey as keyof UserProfile] || '');
     const hasError = formErrors[fieldKey];
     const IconComponent = icon;
 
@@ -262,10 +262,8 @@ export function ProfileSection({
               <textarea
                 value={value}
                 onChange={e =>
-                  setLocalEditData((prev: UserProfile | null) => ({
-                    ...prev!,
                     [fieldKey]: e.target.value,
-                  }))
+                  }) : null)
                 }
                 className={`w-full px-3 py-2 bg-white/10 backdrop-blur-sm rounded-lg text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-primary-400 resize-none font-pretendard transition-all ${
                   hasError
@@ -281,10 +279,8 @@ export function ProfileSection({
                 type={type}
                 value={value}
                 onChange={e =>
-                  setLocalEditData((prev: UserProfile | null) => ({
-                    ...prev!,
                     [fieldKey]: e.target.value,
-                  }))
+                  }) : null)
                 }
                 className={`w-full px-3 py-2 bg-white/10 backdrop-blur-sm rounded-lg text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-primary-400 font-pretendard transition-all ${
                   hasError
