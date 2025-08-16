@@ -1,4 +1,4 @@
-import { Save, Settings as SettingsIcon } from 'lucide-react';
+import { Save } from 'lucide-react';
 import React, { useState } from 'react';
 import { InlineLoading, LoadingSpinner } from '../common/LoadingSpinner';
 import { WaveBackground } from '../layout/WaveBackground';

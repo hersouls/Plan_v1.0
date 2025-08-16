@@ -86,16 +86,10 @@ export function PointsExplanationModal({
             <div className="w-16 h-16 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
               <Award className="w-8 h-8 text-white" />
             </div>
-            <Typography.H1
-              id="points-modal-title"
-              className="text-3xl font-bold text-white mb-2 drop-shadow-sm"
-            >
+            <Typography.H1 className="text-3xl font-bold text-white mb-2 drop-shadow-sm">
               🏆 포인트 시스템 가이드
             </Typography.H1>
-            <Typography.Body
-              id="points-modal-description"
-              className="text-white/95 text-lg"
-            >
+            <Typography.Body className="text-white/95 text-lg">
               가족 구성원들의 동기부여를 위한 포인트 시스템을 알아보세요
             </Typography.Body>
           </div>

@@ -179,10 +179,7 @@ export function PointSettingsModal({
 
     // 변경사항 확인
     const originalRule = pointRules.find(rule => rule.type === categoryId);
-    const originalValue =
-      originalRule?.points ||
-      POINT_CATEGORIES.find(c => c.id === categoryId)?.defaultPoints ||
-      0;
+
 
     setHasChanges(
       Object.keys(newValues).some(key => {
@@ -391,7 +388,7 @@ export function PointSettingsModal({
                           {hasChanged && (
                             <div className="flex items-center gap-2 p-2 bg-yellow-500/20 rounded-lg border border-yellow-400/30">
                               <Typography.Body className="text-yellow-300 text-sm">
-                                변경됨: {originalValue} → {currentValue} 포인트
+                                변경됨: {originalRule?.points || category.defaultPoints} → {currentValue} 포인트
                               </Typography.Body>
                             </div>
                           )}
@@ -448,7 +445,7 @@ export function PointSettingsModal({
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <WaveButton
                   onClick={handleReset}
-                  variant="outline"
+                  variant="ghost"
                   size="lg"
                   className="text-white border-white/30 hover:bg-white/10 transition-all duration-200"
                 >
@@ -456,7 +453,7 @@ export function PointSettingsModal({
                 </WaveButton>
                 <WaveButton
                   onClick={onClose}
-                  variant="outline"
+                  variant="ghost"
                   size="lg"
                   className="text-white border-white/30 hover:bg-white/10 transition-all duration-200"
                 >

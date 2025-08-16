@@ -73,19 +73,7 @@ export const TaskDetailModal = ({
     });
   };
 
-  // 우선순위 색상
-  const getPriorityColor = (priority: string) => {
-    switch (priority) {
-      case 'high':
-        return 'bg-red-500/20 text-red-300 border-red-500/30';
-      case 'medium':
-        return 'bg-yellow-500/20 text-yellow-300 border-yellow-500/30';
-      case 'low':
-        return 'bg-green-500/20 text-green-300 border-green-500/30';
-      default:
-        return 'bg-gray-500/20 text-gray-300 border-gray-500/30';
-    }
-  };
+
 
   // 우선순위 텍스트
   const getPriorityText = (priority: string) => {
