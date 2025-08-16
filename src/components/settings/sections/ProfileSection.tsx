@@ -19,7 +19,7 @@ import { GlassCard } from '../../ui/GlassCard';
 import { WaveButton } from '../../ui/WaveButton';
 import { SettingsGroup } from '../components';
 import { useSettings } from '../hooks/useSettings';
-import type { SettingsSectionProps } from '../types';
+import type { SettingsSectionProps, UserProfile } from '../types';
 
 export function ProfileSection({
   isActive,
@@ -30,7 +30,7 @@ export function ProfileSection({
 }: SettingsSectionProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { user: authUser } = useAuth();
-  const { uploadAvatar, deleteAvatar, uploadingAvatar, error } = useSettings();
+  const { uploadAvatar, deleteAvatar, uploadingAvatar } = useSettings();
 
   // 단순한 상태 관리 - useEffect 없이
   const [isEditing, setIsEditing] = useState(false);
@@ -40,7 +40,7 @@ export function ProfileSection({
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
  
   // editData는 항상 현재 settings.profile을 사용하거나 편집 중일 때만 로컬 상태 사용
-  const [localEditData, setLocalEditData] = useState<any>(null);
+  const [localEditData, setLocalEditData] = useState<UserProfile | null>(null);
   const editData = useMemo(
     () => (isEditing && localEditData ? localEditData : settings.profile),
     [isEditing, localEditData, settings.profile]
@@ -67,7 +67,7 @@ export function ProfileSection({
       { key: 'location', label: '위치', icon: MapPin },
       { key: 'bio', label: '자기소개', icon: Globe },
     ];
-    return fields.filter(field => !settings.profile[field.key]);
+    return fields.filter(field => !settings.profile[field.key as keyof UserProfile]);
   }, [settings.profile]);
 
   const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -234,7 +234,7 @@ export function ProfileSection({
 
   const renderField = (fieldKey: string, label: string, icon: any, placeholder: string, type: string = 'text') => {
     const isFieldEditing = editingField === fieldKey;
-    const value = isFieldEditing ? (editData[fieldKey] || '') : (settings.profile[fieldKey] || '');
+    const value = isFieldEditing ? (editData[fieldKey as keyof UserProfile] || '') : (settings.profile[fieldKey as keyof UserProfile] || '');
     const hasError = formErrors[fieldKey];
     const IconComponent = icon;
 
@@ -262,10 +262,10 @@ export function ProfileSection({
               <textarea
                 value={value}
                 onChange={e =>
-                  setLocalEditData(prev => ({
+                  setLocalEditData((prev: UserProfile | null) => prev ? ({
                     ...prev,
                     [fieldKey]: e.target.value,
-                  }))
+                  }) : null)
                 }
                 className={`w-full px-3 py-2 bg-white/10 backdrop-blur-sm rounded-lg text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-primary-400 resize-none font-pretendard transition-all ${
                   hasError
@@ -281,10 +281,10 @@ export function ProfileSection({
                 type={type}
                 value={value}
                 onChange={e =>
-                  setLocalEditData(prev => ({
+                  setLocalEditData((prev: UserProfile | null) => prev ? ({
                     ...prev,
                     [fieldKey]: e.target.value,
-                  }))
+                  }) : null)
                 }
                 className={`w-full px-3 py-2 bg-white/10 backdrop-blur-sm rounded-lg text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-primary-400 font-pretendard transition-all ${
                   hasError

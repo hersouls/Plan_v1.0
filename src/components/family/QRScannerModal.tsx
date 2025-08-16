@@ -1,6 +1,6 @@
 import jsQR from 'jsqr';
 import { AlertCircle, CheckCircle, X } from 'lucide-react';
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { GlassCard } from '../ui/GlassCard';
 import { WaveButton } from '../ui/WaveButton';
 import { Typography } from '../ui/typography';

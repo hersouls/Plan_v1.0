@@ -14,7 +14,6 @@ export const SettingsContent: React.FC<SettingsContentProps> = ({
   activeTab,
   settings,
   onUpdate,
-  onSave,
   saving,
 }) => {
   return (
