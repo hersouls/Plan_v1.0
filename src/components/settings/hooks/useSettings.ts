@@ -75,7 +75,7 @@ const getDefaultSettings = (_user: unknown): SettingsState => {
         dataRetention: 90,
       },
     };
-  } catch (error) {
+  } catch {
     // 기본값 반환
     return {
       profile: {
@@ -233,10 +233,10 @@ export function useSettings(): UseSettingsReturn {
   const currentUser = useMemo(() => {
     try {
       return authContext.user;
-    } catch (error) {
+    } catch {
       return null;
     }
-  }, [authContext.user?.uid]); // uid만 의존
+  }, [authContext.user]); // 전체 user 객체 의존
 
   // LocalStorage 키 (상수로 정의)
   const STORAGE_KEY = 'moonwave-settings' as const;

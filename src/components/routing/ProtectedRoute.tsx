@@ -48,18 +48,4 @@ export function ProtectedRoute({
   return <>{children}</>;
 }
 
-// HOC for protecting routes
-export function withProtectedRoute<P extends object>(
-  Component: React.ComponentType<P>,
-  options?: Omit<ProtectedRouteProps, 'children'>
-) {
-  return function ProtectedComponent(props: P) {
-    return (
-      <ProtectedRoute {...options}>
-        <Component {...props} />
-      </ProtectedRoute>
-    );
-  };
-}
-
 export default ProtectedRoute;
