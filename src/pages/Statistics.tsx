@@ -21,7 +21,7 @@ import { GlassCard } from '../components/ui/GlassCard';
 import { AvatarWrapper, getAvatarInitials } from '../components/ui/avatar-utils';
 import { Typography } from '../components/ui/typography';
 import { WaveButton } from '../components/ui/WaveButton';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../hooks/useAuth';
 import { useGroup, useUserGroups } from '../hooks/useGroup';
 import { useTasks } from '../hooks/useTasks';
 import { FilterUtils } from '../lib/design-tokens';

@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from '../../hooks/useAuth';
 import { LoadingSpinner } from '../common/LoadingSpinner';
 import { WaveBackground } from '../layout/WaveBackground';
 import { DEFAULT_REDIRECT_TO, DEFAULT_REQUIRE_AUTH } from './routeConstants';

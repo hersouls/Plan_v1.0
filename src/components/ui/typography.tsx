@@ -250,8 +250,7 @@ export const Quote = ({
   </Component>
 );
 
-// Typography object for easy importing
-export const Typography = {
+export default {
   H1,
   H2,
   H3,
@@ -267,5 +266,3 @@ export const Typography = {
   Code,
   Quote,
 };
-
-export default Typography;

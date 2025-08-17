@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/popover';
 import { cn } from '@/components/ui/utils';
 import { WaveButton } from '@/components/ui/WaveButton';
-import { Task, TaskCategory, TaskPriority } from '@/types/task';
+import { TaskCategory, TaskPriority } from '@/types/task';
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import {

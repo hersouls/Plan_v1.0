@@ -23,7 +23,7 @@ import { AttachmentSection } from '../components/task/FileAttachment';
 import { GlassCard } from '../components/ui/GlassCard';
 import { WaveButton } from '../components/ui/WaveButton';
 import { Typography } from '../components/ui/typography';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../hooks/useAuth';
 import { useGroup, useUserGroups } from '../hooks/useGroup';
 import { useTask } from '../hooks/useTask';
 import { useTasks } from '../hooks/useTasks';

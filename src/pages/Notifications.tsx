@@ -16,7 +16,7 @@ import { WaveBackground } from '../components/layout/WaveBackground';
 import { GlassCard } from '../components/ui/GlassCard';
 import { WaveButton } from '../components/ui/WaveButton';
 import { Typography } from '../components/ui/typography';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../hooks/useAuth';
 import { NotificationService } from '../lib/notifications';
 import { Notification, NotificationStats } from '../types/notification';
 import { cn } from '../lib/utils';

@@ -23,7 +23,7 @@ import { PointAnalysisModal } from '../components/points/PointAnalysisModal';
 import { GlassCard } from '../components/ui/GlassCard';
 import { WaveButton } from '../components/ui/WaveButton';
 import { Typography } from '../components/ui/typography';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../hooks/useAuth';
 import { useGroup, useUserGroups } from '../hooks/useGroup';
 import { enhancedUserService } from '../lib/firestore-improved';
 import { PointHistory, PointStats, pointsService } from '../lib/points';

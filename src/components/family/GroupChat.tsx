@@ -21,7 +21,7 @@ import {
   X,
 } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from '../../hooks/useAuth';
 import { useUser } from '../../hooks/useUser';
 import { uploadChatAttachment } from '../../lib/storage';
 import { cn } from '../../lib/utils';

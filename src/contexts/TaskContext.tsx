@@ -1,8 +1,8 @@
 import React, { createContext, useContext, useReducer, useEffect } from 'react';
 import { Task, TaskStatus, CreateTaskInput, UpdateTaskInput } from '../types/task';
 import { taskService } from '../lib/firestore';
-import { useAuth } from './AuthContext';
-import { useApp } from './AppContext';
+import { useAuth } from '../hooks/useAuth';
+import { useApp } from '../hooks/useApp';
 
 // Task State Interface
 export interface TaskState {

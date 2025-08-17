@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../hooks/useAuth';
 import { commentService, taskService } from '../lib/firestore';
 import { Task, TaskActivity, TaskComment } from '../types/task';
 
