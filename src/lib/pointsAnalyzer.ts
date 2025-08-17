@@ -107,7 +107,7 @@ ${JSON.stringify(recentHistories, null, 2)}
 
   async analyzeBulkPoints(
     histories: PointHistory[],
-    _groupId: string
+    groupId: string
   ): Promise<Map<string, PointAnalysis>> {
     const analysisMap = new Map<string, PointAnalysis>();
 
@@ -162,13 +162,10 @@ ${i + 1}. ID: ${h.id}
               }
             });
           }
-        } catch {
-        // Handle error silently
-              }
       }
     } catch (error) {
-        // Handle error silently
-      }
+      // Handle error silently
+    }
 
     // Fill missing analyses with defaults
     histories.forEach(h => {

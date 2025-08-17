@@ -2,75 +2,67 @@
  * 이미지 리사이징 및 압축 유틸리티
  */
 
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import { storage } from './firebase';
+
 export interface ImageResizeOptions {
-  maxWidth?: number;
-  maxHeight?: number;
-  quality?: number;
-  format?: 'jpeg' | 'png' | 'webp';
+  maxWidth: number;
+  maxHeight: number;
+  quality: number;
+  format: 'jpeg' | 'png' | 'webp';
 }
 
 /**
- * 이미지를 캔버스에 그려서 리사이징
+ * 이미지 리사이징 함수
  */
-export function resizeImage(
+export async function resizeImage(
   file: File,
-  options: ImageResizeOptions = {}
+  options: ImageResizeOptions
 ): Promise<File> {
   return new Promise((resolve, reject) => {
-    const {
-      maxWidth = 1920,
-      maxHeight = 1920,
-      quality = 0.8,
-      format = 'jpeg',
-    } = options;
-
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
     const img = new Image();
 
     img.onload = () => {
-      // 원본 이미지 크기
-      const { width: originalWidth, height: originalHeight } = img;
+      try {
+        const { width: newWidth, height: newHeight } = calculateNewSize(
+          img.width,
+          img.height,
+          options.maxWidth,
+          options.maxHeight
+        );
 
-      // 새로운 크기 계산 (비율 유지)
-      const { width: newWidth, height: newHeight } = calculateNewSize(
-        originalWidth,
-        originalHeight,
-        maxWidth,
-        maxHeight
-      );
+        canvas.width = newWidth;
+        canvas.height = newHeight;
 
-      // 캔버스 크기 설정
-      canvas.width = newWidth;
-      canvas.height = newHeight;
+        if (ctx) {
+          ctx.drawImage(img, 0, 0, newWidth, newHeight);
+        }
 
-      // 이미지 그리기
-      ctx?.drawImage(img, 0, 0, newWidth, newHeight);
-
-      // 캔버스를 Blob으로 변환
-      canvas.toBlob(
-        blob => {
-          if (blob) {
-            // 새로운 파일 생성
-            const resizedFile = new File([blob], file.name, {
-              type: `image/${format}`,
-              lastModified: Date.now(),
-            });
-            resolve(resizedFile);
-          } else {
-            reject(new Error('이미지 리사이징에 실패했습니다.'));
-          }
-        },
-        `image/${format}`,
-        quality
-      );
+        canvas.toBlob(
+          blob => {
+            if (blob) {
+              const resizedFile = new File([blob], file.name, {
+                type: `image/${options.format}`,
+              });
+              resolve(resizedFile);
+            } else {
+              reject(new Error('이미지 리사이징에 실패했습니다.'));
+            }
+          },
+          `image/${options.format}`,
+          options.quality
+        );
+      } catch (error) {
+        reject(error);
+      }
     };
 
     img.onerror = () => {
-      reject(new Error('이미지 로드에 실패했습니다.'));
+      reject(new Error('이미지를 로드할 수 없습니다.'));
     };
 
-    // 파일을 URL로 변환하여 이미지 로드
     img.src = URL.createObjectURL(file);
   });
 }
@@ -157,7 +149,6 @@ export async function optimizeImage(file: File): Promise<File> {
   const fileSizeMB = getFileSizeInMB(file);
 
   if (fileSizeMB > MAX_SIZE_MB) {
-
     const options: ImageResizeOptions = {
       maxWidth: MAX_DIMENSION,
       maxHeight: MAX_DIMENSION,
@@ -169,7 +160,6 @@ export async function optimizeImage(file: File): Promise<File> {
       const resizedFile = await resizeImage(file, options);
       return resizedFile;
     } catch (error) {
-      // FIX: Added missing catch block
       throw new Error('이미지 크기 조정에 실패했습니다.');
     }
   }
