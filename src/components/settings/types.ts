@@ -2,7 +2,6 @@
 export interface SettingsTab {
   id: string;
   label: string;
-  icon: React.ComponentType<{ className?: string }>;
 }
 
 export interface UserProfile {
