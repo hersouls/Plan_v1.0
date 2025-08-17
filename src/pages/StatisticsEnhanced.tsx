@@ -11,7 +11,7 @@ import {
   Trophy,
   Users,
 } from 'lucide-react';
-import { Typography } from '../components/ui/typography';
+import { Typography } from '../components/ui/typography-utils';
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {

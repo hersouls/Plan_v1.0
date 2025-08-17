@@ -1,4 +1,4 @@
-export { FileAttachment } from './FileAttachment';
+export { AttachmentSection } from './FileAttachment';
 export { MentionInput } from './MentionInput';
 export { QuickAddTask } from './QuickAddTask';
 export { TaskCard } from './TaskCard';
