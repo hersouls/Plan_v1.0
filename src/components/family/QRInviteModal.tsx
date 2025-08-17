@@ -36,9 +36,6 @@ export function QRInviteModal({
       setTimeout(() => setCopied(false), 2000);
     } catch (error) {
       // Handle error silently
-      if (import.meta.env.DEV) {
-        console.error('Error copying link:', error);
-      }
     }
   };
 
@@ -49,9 +46,6 @@ export function QRInviteModal({
       setTimeout(() => setCopied(false), 2000);
     } catch (error) {
       // Handle error silently
-      if (import.meta.env.DEV) {
-        console.error('Error copying code:', error);
-      }
     }
   };
 
@@ -65,9 +59,6 @@ export function QRInviteModal({
         });
       } catch (error) {
         // Handle error silently
-        if (import.meta.env.DEV) {
-          console.error('Error sharing:', error);
-        }
       }
     } else {
       // Fallback to copy link

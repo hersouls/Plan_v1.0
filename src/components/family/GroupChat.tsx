@@ -357,7 +357,7 @@ export function GroupChat({
           uploadProgress: 0,
         },
       ]);
-    } catch (_error) {
+    } catch {
       alert('파일 처리에 실패했습니다.');
     }
   };
@@ -429,7 +429,7 @@ export function GroupChat({
                 name: attachment.name,
                 size: attachment.size,
               };
-            } catch (_error) {
+            } catch {
               throw new Error(
                 `파일 "${attachment.name}" 업로드에 실패했습니다.`
               );
@@ -460,7 +460,7 @@ export function GroupChat({
       setAttachments([]);
       setShowEmojiPicker(false);
       inputRef.current?.focus();
-    } catch (error) {
+    } catch {
     } finally {
       setIsSending(false);
     }
