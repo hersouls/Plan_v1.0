@@ -98,16 +98,16 @@ ${JSON.stringify(recentHistories, null, 2)}
           return this.getDefaultAnalysis();
         }
       }
-    } catch {
-        // Handle error silently
-      }
+    } catch (error) {
+      // Handle error silently
+    }
 
     return this.getDefaultAnalysis();
   }
 
   async analyzeBulkPoints(
     histories: PointHistory[],
-    _groupId: string
+    groupId: string
   ): Promise<Map<string, PointAnalysis>> {
     const analysisMap = new Map<string, PointAnalysis>();
 
@@ -162,13 +162,13 @@ ${i + 1}. ID: ${h.id}
               }
             });
           }
-        } catch {
-        // Handle error silently
-              }
+        } catch (error) {
+          // Handle error silently
+        }
       }
-    } catch {
-        // Handle error silently
-      }
+    } catch (error) {
+      // Handle error silently
+    }
 
     // Fill missing analyses with defaults
     histories.forEach(h => {
@@ -224,8 +224,9 @@ ${histories.map(h => `
           return [];
         }
       }
-        // Handle error silently
-      }
+    } catch (error) {
+      // Handle error silently
+    }
 
     return [];
   }
@@ -266,8 +267,9 @@ ${histories.map(h => `
         const points = parseInt(content.text.trim());
         return isNaN(points) ? 10 : Math.max(1, Math.min(100, points));
       }
-        // Handle error silently
-      }
+    } catch (error) {
+      // Handle error silently
+    }
 
     return 10;
   }
