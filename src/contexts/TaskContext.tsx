@@ -606,5 +606,3 @@ export function useTask() {
   }
   return context;
 }
-
-export { TaskProvider };
