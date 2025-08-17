@@ -240,6 +240,10 @@ function TodoHome() {
       const taskData = _taskData as Record<string, unknown>;
       await createTask({
         ...taskData,
+        taskType: (taskData.taskType as string) || 'personal',
+        title: (taskData.title as string) || '',
+        priority: (taskData.priority as string) || 'medium',
+        category: (taskData.category as string) || 'other',
         groupId: groupId,
         userId: user.uid,
         assigneeId: (taskData.assigneeId as string) || user?.uid || '',
@@ -815,7 +819,7 @@ function TodoHome() {
                         'visibility',
                         taskVisibility
                       );
-                      return filterOption?.description || '할일이 없습니다';
+                      return filterOption?.label || '할일이 없습니다';
                     })()}
                   </Typography.H4>
                   {/* 51. 빈 상태 설명 텍스트 */}

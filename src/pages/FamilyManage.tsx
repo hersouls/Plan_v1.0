@@ -350,9 +350,11 @@ function FamilyManage() {
               lastLoginTime: lastLogin,
             };
           } else {
-            }
-        } else {
+            // Handle case where user data is not available
           }
+        } else {
+          // Handle case where user data is not available
+        }
       } catch {
         // Handle error silently
       }
@@ -819,7 +821,7 @@ function FamilyManage() {
     try {
       if (selectedGroupId && group) {
         await updateGroup(selectedGroupId, {
-          settings: { ...group.settings, ...groupSettings },
+          settings: { ...group.settings, ...(_settings as Record<string, unknown>) },
         });
         alert('그룹 설정이 업데이트되었습니다.');
         setShowSettingsModal(false);
@@ -1284,7 +1286,6 @@ function FamilyManage() {
                   <Star
                     size={20}
                     className="text-yellow-400 fill-current"
-                    title="즐겨찾기 그룹"
                   />
                 )}
                 {sortedGroups && sortedGroups.length > 1 && (
@@ -1349,12 +1350,12 @@ function FamilyManage() {
                   초대 코드
                 </p>
                 <p className="text-white text-lg lg:text-xl font-mono font-bold">
-                  {(group as Record<string, unknown>)?.inviteCode || '코드 생성 필요'}
+                  {String((group as Record<string, unknown>)?.inviteCode || '코드 생성 필요')}
                 </p>
               </div>
               <div className="text-right">
                 <p className="text-white/60 text-sm font-pretendard">
-                  최대 {(group.settings as Record<string, unknown>)?.maxMembers || 10}명
+                  최대 {String((group.settings as Record<string, unknown>)?.maxMembers || 10)}명
                 </p>
               </div>
             </div>
@@ -2000,9 +2001,9 @@ function FamilyManage() {
               groupName={group.name}
               members={members.map(member => ({
                 userId: member.userId,
-                displayName: member.displayName,
-                userName: member.userName,
-                avatar: member.avatar,
+                displayName: (member as ExtendedGroupMember).displayName,
+                userName: (member as ExtendedGroupMember).userName,
+                avatar: (member as ExtendedGroupMember).avatar,
               }))}
               onOpenFullscreen={data => {
                 setFullscreenChatData(data);
@@ -2079,7 +2080,7 @@ function FamilyManage() {
                 <input
                   type="checkbox"
                   checked={
-                    (group.settings as Record<string, unknown>)?.allowChildrenToInvite || false
+                    Boolean((group.settings as Record<string, unknown>)?.allowChildrenToInvite) || false
                   }
                   onChange={e =>
                     handleUpdateSettings({
@@ -2093,7 +2094,7 @@ function FamilyManage() {
                 <span className="text-white/80">초대 승인 필요</span>
                 <input
                   type="checkbox"
-                  checked={(group.settings as Record<string, unknown>)?.requireApproval || false}
+                  checked={Boolean((group.settings as Record<string, unknown>)?.requireApproval) || false}
                   onChange={e =>
                     handleUpdateSettings({ requireApproval: e.target.checked })
                   }
@@ -2104,7 +2105,7 @@ function FamilyManage() {
                 <span className="text-white/80">부그룹장 권한 활성화</span>
                 <input
                   type="checkbox"
-                  checked={(group.settings as Record<string, unknown>)?.enableViceOwner || false}
+                  checked={Boolean((group.settings as Record<string, unknown>)?.enableViceOwner) || false}
                   onChange={e =>
                     handleUpdateSettings({ enableViceOwner: e.target.checked })
                   }
@@ -2116,7 +2117,7 @@ function FamilyManage() {
                 <input
                   type="checkbox"
                   checked={
-                    (group.settings as Record<string, unknown>)?.enablePointsManagement || false
+                    Boolean((group.settings as Record<string, unknown>)?.enablePointsManagement) || false
                   }
                   onChange={e =>
                     handleUpdateSettings({
@@ -2193,7 +2194,7 @@ function FamilyManage() {
                 </label>
                 <input
                   type="number"
-                  value={(group.settings as Record<string, unknown>)?.maxMembers || 10}
+                  value={String((group.settings as Record<string, unknown>)?.maxMembers || 10)}
                   onChange={e =>
                     handleUpdateSettings({
                       maxMembers: parseInt(e.target.value),
@@ -2584,7 +2585,7 @@ function FamilyManage() {
         <QRInviteModal
           isOpen={showQRInviteModal}
           onClose={() => setShowQRInviteModal(false)}
-          inviteCode={(group as Record<string, unknown>)?.inviteCode || '코드 생성 필요'}
+          inviteCode={String((group as Record<string, unknown>)?.inviteCode || '코드 생성 필요')}
           groupName={group.name}
           inviteUrl={`${window.location.origin}/join/${
             (group as Record<string, unknown>)?.inviteCode || 'code'
@@ -2621,7 +2622,12 @@ function FamilyManage() {
               <GroupChat
                 groupId={fullscreenChatData.groupId}
                 groupName={fullscreenChatData.groupName}
-                members={fullscreenChatData.members}
+                members={fullscreenChatData.members as Array<{
+                  userId: string;
+                  displayName?: string;
+                  userName?: string;
+                  avatar?: string;
+                }>}
                 onOpenFullscreen={() => {
                   // 전체화면 모달에서는 전체화면 기능 비활성화
                   }}

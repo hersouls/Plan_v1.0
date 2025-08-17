@@ -8,7 +8,7 @@ export const trackEvent = async (eventName: string, parameters?: Record<string, 
     }
 
     const { logEvent } = await import('firebase/analytics');
-    logEvent(analytics, eventName, parameters);
+    logEvent(analytics, eventName, parameters || {});
   } catch {
     // Handle error silently
   }

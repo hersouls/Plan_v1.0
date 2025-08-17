@@ -884,7 +884,7 @@ function PointsManagement() {
                           // 날짜 포맷팅 개선
                           const formatDate = (_timestamp: unknown) => {
                             try {
-                              const date = new Date(_timestamp.seconds * 1000);
+                              const date = new Date((_timestamp as Record<string, unknown>).seconds * 1000);
                               const now = new Date();
                               const diffTime = Math.abs(
                                 now.getTime() - date.getTime()
@@ -916,14 +916,14 @@ function PointsManagement() {
                               role="listitem"
                               onClick={
                                 history.taskId
-                                  ? () => handleTaskCardClick(history.taskId)
+                                  ? () => handleTaskCardClick(history.taskId as string)
                                   : undefined
                               }
                               onKeyDown={
                                 history.taskId
                                   ? e => {
                                       if (e.key === 'Enter') {
-                                        handleTaskCardClick(history.taskId);
+                                        handleTaskCardClick(history.taskId as string);
                                       }
                                     }
                                   : undefined
@@ -1138,7 +1138,7 @@ function PointsManagement() {
                           // 날짜 포맷팅 개선
                           const formatDate = (_timestamp: unknown) => {
                             try {
-                              const date = new Date(_timestamp.seconds * 1000);
+                              const date = new Date((_timestamp as Record<string, unknown>).seconds * 1000);
                               const now = new Date();
                               const diffTime = Math.abs(
                                 now.getTime() - date.getTime()
@@ -1490,7 +1490,7 @@ function PointsManagement() {
                   // 날짜 포맷팅 개선
                   const formatDate = (_timestamp: unknown) => {
                     try {
-                      const date = new Date(_timestamp.seconds * 1000);
+                      const date = new Date((_timestamp as Record<string, unknown>).seconds * 1000);
                       return date.toLocaleDateString('ko-KR', {
                         year: 'numeric',
                         month: 'long',
@@ -1676,7 +1676,7 @@ function PointsManagement() {
                   // 날짜 포맷팅 개선
                   const formatDate = (_timestamp: unknown) => {
                     try {
-                      const date = new Date(_timestamp.seconds * 1000);
+                      const date = new Date((_timestamp as Record<string, unknown>).seconds * 1000);
                       return date.toLocaleDateString('ko-KR', {
                         year: 'numeric',
                         month: 'long',

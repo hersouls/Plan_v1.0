@@ -286,9 +286,9 @@ function TaskDetailPage() {
     });
     return member
       ? {
-          name: (member as Record<string, unknown>).userName || '알 수 없음',
-          role: (member as Record<string, unknown>).role,
-          avatar: (member as Record<string, unknown>).userAvatar,
+          name: String((member as Record<string, unknown>).userName || '알 수 없음'),
+          role: String((member as Record<string, unknown>).role),
+          avatar: String((member as Record<string, unknown>).userAvatar || ''),
         }
       : null;
   };
@@ -606,15 +606,15 @@ function TaskDetailPage() {
                                     const member = _member as Record<string, unknown>;
                                     return (
                                       <div
-                                        key={member.userId}
+                                        key={String(member.userId)}
                                         className="w-6 h-6 rounded-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-white text-xs font-bold border-2 border-white/20"
                                         title={
-                                          member.userName ||
+                                          String(member.userName ||
                                           member.displayName ||
-                                          '알 수 없음'
+                                          '알 수 없음')
                                         }
                                       >
-                                        {(
+                                        {String(
                                           member.userName ||
                                           member.displayName ||
                                           '알'
@@ -708,22 +708,22 @@ function TaskDetailPage() {
                         {isGroupTask && task.assigneeId ? (
                           <>
                             <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
-                              {getGroupMemberInfo(
+                              {String(getGroupMemberInfo(
                                 task.assigneeId
-                              )?.name?.charAt(0) || assigneeInfo.initial}
+                              )?.name || '').charAt(0) || assigneeInfo.initial}
                             </div>
                             <div className="text-right">
-                              <div className="text-sm font-medium font-pretendard text-gray-300">
-                                {getGroupMemberInfo(task.assigneeId)?.name ||
-                                  assigneeInfo.name}
-                              </div>
+                                                              <div className="text-sm font-medium font-pretendard text-gray-300">
+                                  {String(getGroupMemberInfo(task.assigneeId)?.name ||
+                                    assigneeInfo.name)}
+                                </div>
                               {getGroupMemberInfo(task.assigneeId)?.role && (
                                 <div className="text-xs text-gray-400 font-pretendard">
-                                  {getGroupMemberInfo(task.assigneeId)?.role ===
+                                  {String(getGroupMemberInfo(task.assigneeId)?.role) ===
                                   'owner'
                                     ? '그룹장'
-                                    : getGroupMemberInfo(task.assigneeId)
-                                        ?.role === 'admin'
+                                    : String(getGroupMemberInfo(task.assigneeId)
+                                        ?.role) === 'admin'
                                     ? '관리자'
                                     : '멤버'}
                                 </div>

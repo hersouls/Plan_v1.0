@@ -113,9 +113,9 @@ function Statistics() {
 
   // 즐겨찾기 토글
   const toggleFavorite = (_groupId: string) => {
-    const newFavorites = favoriteGroups.includes(groupId)
-      ? favoriteGroups.filter(id => id !== groupId)
-      : [...favoriteGroups, groupId];
+    const newFavorites = favoriteGroups.includes(_groupId)
+      ? favoriteGroups.filter(id => id !== _groupId)
+      : [...favoriteGroups, _groupId];
     saveFavoriteGroups(newFavorites);
   };
 
@@ -124,7 +124,7 @@ function Statistics() {
     if (!members || members.length === 0) return;
 
     const loadUserProfiles = async () => {
-      setLoadingProfiles(true);
+      setLoadingPoints(true);
       try {
         const { enhancedUserService } = await import(
           '../lib/firestore-improved'
@@ -148,7 +148,7 @@ function Statistics() {
       } catch {
         // Handle error silently
       } finally {
-        setLoadingProfiles(false);
+        setLoadingPoints(false);
       }
     };
 
@@ -640,7 +640,7 @@ function Statistics() {
                     fill="#8884d8"
                     dataKey="value"
                   >
-                    {chartData.categoryData.map((entry, index) => (
+                    {chartData.categoryData.map((_entry, index) => (
                       <Cell
                         key={`cell-${index}`}
                         fill={COLORS[index % COLORS.length]}
@@ -684,8 +684,8 @@ function Statistics() {
 
                 // 아바타 우선순위: 사용자 프로필 > 멤버 정보 > 기본값
                 const avatarUrl =
-                  userProfile?.photoURL ||
-                  userProfile?.avatarStorageUrl ||
+                  (userProfile as Record<string, unknown>)?.photoURL ||
+                  (userProfile as Record<string, unknown>)?.avatarStorageUrl ||
                   memberInfo?.userAvatar;
 
                 return (
@@ -850,7 +850,7 @@ function Statistics() {
                           return task.dueDate.toDate() < new Date();
                         }
                         // If it's already a Date object or string
-                        return new Date(task.dueDate as Record<string, unknown>) < new Date();
+                        return new Date(String(task.dueDate)) < new Date();
                       } catch {
                         return false;
                       }
@@ -865,9 +865,9 @@ function Statistics() {
                           <div className="flex items-center gap-3">
                             <AvatarWrapper
                               src={
-                                userProfiles[memberInfo?.userId || '']
+                                (userProfiles[memberInfo?.userId || ''] as Record<string, unknown>)
                                   ?.photoURL ||
-                                userProfiles[memberInfo?.userId || '']
+                                (userProfiles[memberInfo?.userId || ''] as Record<string, unknown>)
                                   ?.avatarStorageUrl ||
                                 memberInfo?.userAvatar
                               }
@@ -949,8 +949,8 @@ function Statistics() {
                     <div className="flex justify-center mb-4">
                       <AvatarWrapper
                         src={
-                          userProfiles[member.userId]?.photoURL ||
-                          userProfiles[member.userId]?.avatarStorageUrl ||
+                          (userProfiles[member.userId] as Record<string, unknown>)?.photoURL ||
+                          (userProfiles[member.userId] as Record<string, unknown>)?.avatarStorageUrl ||
                           member.userAvatar
                         }
                         alt={member.userName || '사용자'}
@@ -1044,8 +1044,8 @@ function Statistics() {
                             <div className="flex items-center gap-3">
                               <AvatarWrapper
                                 src={
-                                  userProfiles[member.userId]?.photoURL ||
-                                  userProfiles[member.userId]
+                                  (userProfiles[member.userId] as Record<string, unknown>)?.photoURL ||
+                                  (userProfiles[member.userId] as Record<string, unknown>)
                                     ?.avatarStorageUrl ||
                                   member.userAvatar
                                 }

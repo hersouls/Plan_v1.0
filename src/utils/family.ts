@@ -27,10 +27,10 @@ export const formatRelativeTime = (
   try {
     const dateObj =
       typeof date === 'string'
-        ? new Date(date)
+        ? new Date(String(date))
         : date?.toDate
-        ? date.toDate()
-        : new Date(date);
+        ? (date as Record<string, unknown>).toDate()
+        : new Date(String(date));
 
     if (isNaN(dateObj.getTime())) {
       return '날짜 정보 없음';
@@ -52,10 +52,10 @@ export const formatDateTime = (
   try {
     const dateObj =
       typeof date === 'string'
-        ? new Date(date)
+        ? new Date(String(date))
         : date?.toDate
-        ? date.toDate()
-        : new Date(date);
+        ? (date as Record<string, unknown>).toDate()
+        : new Date(String(date));
 
     if (isNaN(dateObj.getTime())) {
       return '날짜 정보 없음';
@@ -74,10 +74,10 @@ export const isWithinTimeRange = (
   try {
     const dateObj =
       typeof date === 'string'
-        ? new Date(date)
+        ? new Date(String(date))
         : date?.toDate
-        ? date.toDate()
-        : new Date(date);
+        ? (date as Record<string, unknown>).toDate()
+        : new Date(String(date));
 
     if (isNaN(dateObj.getTime())) {
       return false;
@@ -195,12 +195,12 @@ export const calculateFamilyStats = (
   const previousActivities = activities.filter(activity => {
     const activityDate =
       typeof activity.timestamp === 'string'
-        ? new Date(activity.timestamp)
+        ? new Date(activity.timestamp.toDate())
         : activity.timestamp instanceof Date
         ? activity.timestamp
         : activity.timestamp?.toDate
         ? activity.timestamp.toDate()
-        : new Date(activity.timestamp);
+        : new Date(activity.timestamp.toDate());
     return (
       activityDate >= previousPeriodStart &&
       activityDate <
@@ -262,12 +262,12 @@ export const calculateMemberPerformance = (
     const dayActivities = memberActivities.filter(activity => {
       const activityDate =
         typeof activity.timestamp === 'string'
-          ? new Date(activity.timestamp)
+          ? new Date(activity.timestamp.toDate())
           : activity.timestamp instanceof Date
           ? activity.timestamp
           : activity.timestamp?.toDate
           ? activity.timestamp.toDate()
-          : new Date(activity.timestamp);
+          : new Date(activity.timestamp.toDate());
       return (
         format(activityDate, 'yyyy-MM-dd') ===
           format(checkDate, 'yyyy-MM-dd') && activity.type === 'task_completed'
@@ -443,12 +443,12 @@ export const calculateEngagementScore = (
     memberActivities.map(a => {
       const date =
         typeof a.timestamp === 'string'
-          ? new Date(a.timestamp)
+          ? new Date(a.timestamp.toDate())
           : a.timestamp instanceof Date
           ? a.timestamp
           : a.timestamp?.toDate
           ? a.timestamp.toDate()
-          : new Date(a.timestamp);
+          : new Date(a.timestamp.toDate());
       return format(date, 'yyyy-MM-dd');
     })
   );
@@ -472,7 +472,7 @@ export const calculateEngagementScore = (
 
 // Data Validation and Sanitization
 export const validateFamilyMember = (member: unknown): member is FamilyMember => {
-  return (
+  return Boolean(
     member &&
     typeof (member as Record<string, unknown>).id === 'string' &&
     typeof (member as Record<string, unknown>).userId === 'string' &&
@@ -484,7 +484,7 @@ export const validateFamilyMember = (member: unknown): member is FamilyMember =>
 
 export const validateFamilyActivity = (
   activity: unknown): activity is FamilyActivity => {
-  return (
+  return Boolean(
     activity &&
     typeof (activity as Record<string, unknown>).id === 'string' &&
     typeof (activity as Record<string, unknown>).userId === 'string' &&
