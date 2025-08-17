@@ -108,8 +108,6 @@ class FCMService {
     }
 
     return onMessage(messaging, payload => {
-
-      }
       callback(payload);
 
       // Show notification if the app is in focus
@@ -147,8 +145,6 @@ class FCMService {
   // Initialize FCM for a user
   async initialize(userId: string): Promise<boolean> {
     if (!this.isSupported) {
-
-      }
       return false;
     }
     try {
