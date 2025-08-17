@@ -1,13 +1,12 @@
 import React from 'react';
 import {
   responsiveConditional,
-  responsivePadding,
   responsiveTouchTarget,
 } from '../../../lib/responsive';
 import { cn } from '../../../lib/utils';
 import { ButtonProps } from '../button';
 
-interface ResponsiveButtonProps extends Omit<ButtonProps, 'className'> {
+export interface ResponsiveButtonProps extends Omit<ButtonProps, 'className'> {
   children: React.ReactNode;
   className?: string;
   padding?: 'button' | 'card' | 'container' | 'none';
@@ -33,7 +32,6 @@ export const ResponsiveButton: React.FC<ResponsiveButtonProps> = ({
   iconSize = 'responsive',
   ...props
 }) => {
-  const paddingClasses = padding !== 'none' ? responsivePadding(padding as 'button' | 'card' | 'container') : '';
   const touchTargetClasses =
     touchTarget !== 'none' ? responsiveTouchTarget(touchTarget as 'button' | 'icon') : '';
 
@@ -92,8 +90,6 @@ export const ResponsiveButton: React.FC<ResponsiveButtonProps> = ({
   return (
     <button
       className={cn(
-        'inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background',
-        paddingClasses,
         touchTargetClasses,
         className
       )}
