@@ -9,7 +9,7 @@ import {
 } from 'firebase/storage';
 import { FileAttachment, FileUploadProgress } from '../types/task';
 import { storage } from './firebase';
-import { getFileSizeInMB, optimizeAvatarImage } from './imageUtils';
+import { optimizeAvatarImage } from './imageUtils';
 
 // 간단한 파일 업로드 함수
 export async function uploadFile(
@@ -114,10 +114,8 @@ export async function uploadAvatarImage(
             storageUrl: avatarPath,
             downloadUrl: downloadURL,
           });
-        } catch (error) {
-          reject(
-            new Error('아바타 업로드 완료 후 URL을 가져오는데 실패했습니다.')
-          );
+        } catch (_error) {
+          reject(new Error('아바타 업로드 완료 후 URL을 가져오는데 실패했습니다.'));
         }
       }
     );
@@ -141,7 +139,7 @@ export async function deleteAvatarImage(
   try {
     const storageRef = ref(storage, storageUrl);
     await deleteObject(storageRef);
-  } catch (error) {
+  } catch (_error) {
     throw new Error('아바타 삭제에 실패했습니다.');
   }
 }
@@ -428,7 +426,7 @@ export class StorageService {
         this.deleteFolder(prefix)
       );
       await Promise.all(folderPromises);
-    } catch (error) {
+    } catch (_error) {
       // Handle error silently
     }
   }
