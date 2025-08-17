@@ -5,16 +5,7 @@ import { useAuth } from '../hooks/useAuth';
 import { AppState, AppAction, AppNotification, AppContextType } from './AppContextTypes';
 
 // Create the context
-const AppContext = createContext<AppContextType | undefined>(undefined);
 
-// Hook to use the context
-export const useApp = () => {
-  const context = useContext(AppContext);
-  if (context === undefined) {
-    throw new Error('useApp must be used within an AppProvider');
-  }
-  return context;
-};
 
 
 // Initial State
