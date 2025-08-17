@@ -1,4 +1,5 @@
 export { AppProvider } from './AppContext';
+export { AuthProvider } from './AuthContext';
 export { DataProvider } from './DataContext';
 export { TaskProvider } from './TaskContext';
 export { useAuth } from '../hooks/useAuth';
