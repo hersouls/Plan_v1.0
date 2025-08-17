@@ -84,7 +84,7 @@ export function useDebouncedSearch<T>(
         setError(null);
         const searchResults = await searchFunction(debouncedQuery);
         setResults(searchResults);
-      } catch (err) {
+      } catch (_err) {
         setError(err instanceof Error ? err.message : '검색 중 오류가 발생했습니다.');
         setResults([]);
       } finally {

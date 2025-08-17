@@ -19,7 +19,7 @@ export interface DataContextType {
   createGroup: (groupData: CreateGroupInput) => Promise<string>;
   updateGroup: (groupId: string, updates: UpdateGroupInput) => Promise<void>;
   joinGroup: (inviteCode: string) => Promise<void>;
-  leaveGroup: (groupId: string) => Promise<void>;
+  leaveGroup: (_groupId: string) => Promise<void>;
 
   // Invitations
   invitations: GroupInvitation[];
@@ -32,9 +32,9 @@ export interface DataContextType {
 
   // Notifications
   notifications: UserNotification[];
-  markNotificationAsRead: (notificationId: string) => Promise<void>;
+  markNotificationAsRead: (_notificationId: string) => Promise<void>;
   markAllNotificationsAsRead: () => Promise<void>;
-  deleteNotification: (notificationId: string) => Promise<void>;
+  deleteNotification: (_notificationId: string) => Promise<void>;
 
   // Loading states
   loading: boolean;

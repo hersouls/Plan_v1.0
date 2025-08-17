@@ -45,7 +45,7 @@ export async function uploadFile(
             storageUrl: path,
             downloadUrl: downloadURL,
           });
-        } catch (error) {
+        } catch (_error) {
           reject(error);
         }
       }
@@ -87,7 +87,7 @@ export async function uploadAvatarImage(
   try {
     optimizedFile = await optimizeAvatarImage(file);
     const optimizedSizeMB = getFileSizeInMB(optimizedFile);
-  } catch (error) {
+  } catch (_error) {
     throw new Error('이미지 처리에 실패했습니다.');
   }
 
@@ -117,7 +117,7 @@ export async function uploadAvatarImage(
             storageUrl: avatarPath,
             downloadUrl: downloadURL,
           });
-        } catch (error) {
+        } catch (_error) {
           reject(
             new Error('아바타 업로드 완료 후 URL을 가져오는데 실패했습니다.')
           );
@@ -144,7 +144,7 @@ export async function deleteAvatarImage(
   try {
     const storageRef = ref(storage, storageUrl);
     await deleteObject(storageRef);
-  } catch (error) {
+  } catch (_error) {
     throw new Error('아바타 삭제에 실패했습니다.');
   }
 }
@@ -153,7 +153,7 @@ export async function deleteAvatarImage(
  * 아바타 업로드 에러 메시지 변환
  */
 function getAvatarUploadErrorMessage(_error: unknown): string {
-  const error = _error as any;
+  const error = _error as Record<string, unknown>;
   if (error.code === 'storage/unauthorized') {
     return '아바타 업로드 권한이 없습니다.';
   } else if (error.code === 'storage/canceled') {
@@ -180,7 +180,7 @@ function getAvatarUploadErrorMessage(_error: unknown): string {
 export interface UploadOptions {
   onProgress?: (progress: FileUploadProgress) => void;
   onComplete?: (fileAttachment: FileAttachment) => void;
-  onError?: (error: string) => void;
+  onError?: (_error: string) => void;
 }
 
 export class StorageService {
@@ -223,7 +223,7 @@ export class StorageService {
       // 토큰 갱신 시도
       try {
         await currentUser.getIdToken(true);
-        } catch (tokenError) {
+        } catch (_tokenError) {
         throw new Error('인증 토큰이 만료되었습니다. 다시 로그인해주세요.');
       }
 
@@ -295,7 +295,7 @@ export class StorageService {
               storageUrl: filePath,
               downloadUrl: downloadURL,
               uploadedBy: currentUser?.uid || 'unknown-user',
-              uploadedAt: new Date() as any, // Timestamp로 교체 필요
+              uploadedAt: new Date() as Record<string, unknown>, // Timestamp로 교체 필요
               thumbnailUrl: thumbnailURL,
               isImage: this.isImage(file.type),
               width,
@@ -312,7 +312,7 @@ export class StorageService {
             options?.onComplete?.(fileAttachment);
 
             return fileAttachment;
-          } catch (error) {
+          } catch (_error) {
             const errorMessage = this.getErrorMessage(error);
             options?.onError?.(errorMessage);
             throw new Error(errorMessage);
@@ -342,7 +342,7 @@ export class StorageService {
         storageUrl: filePath,
         downloadUrl: downloadURL,
         uploadedBy: currentUser?.uid || 'unknown-user',
-        uploadedAt: new Date() as any, // Timestamp로 교체 필요
+        uploadedAt: new Date() as Record<string, unknown>, // Timestamp로 교체 필요
         thumbnailUrl: thumbnailURL,
         isImage: this.isImage(file.type),
         width,
@@ -350,7 +350,7 @@ export class StorageService {
       };
 
       return fileAttachment;
-    } catch (error) {
+    } catch (_error) {
       const errorMessage = this.getErrorMessage(error);
       options?.onError?.(errorMessage);
       throw new Error(errorMessage);
@@ -362,12 +362,12 @@ export class StorageService {
    */
   static async downloadFile(fileAttachment: FileAttachment): Promise<Blob> {
     try {
-      const response = await fetch(fileAttachment.downloadUrl!);
+      const response = await fetch(fileAttachment.downloadUrl);
       if (!response.ok) {
         throw new Error('파일 다운로드에 실패했습니다.');
       }
       return await response.blob();
-    } catch (error) {
+    } catch (_error) {
       throw new Error(this.getErrorMessage(error));
     }
   }
@@ -385,7 +385,7 @@ export class StorageService {
         const thumbnailRef = ref(storage, fileAttachment.thumbnailUrl);
         await deleteObject(thumbnailRef);
       }
-    } catch (error) {
+    } catch (_error) {
       throw new Error(this.getErrorMessage(error));
     }
   }
@@ -397,7 +397,7 @@ export class StorageService {
     try {
       const taskFilesRef = ref(storage, `tasks/${taskId}`);
       await this.deleteFolder(taskFilesRef);
-    } catch (error) {
+    } catch (_error) {
       throw new Error(this.getErrorMessage(error));
     }
   }
@@ -415,7 +415,7 @@ export class StorageService {
         `tasks/${taskId}/comments/${commentId}`
       );
       await this.deleteFolder(commentFilesRef);
-    } catch (error) {
+    } catch (_error) {
       throw new Error(this.getErrorMessage(error));
     }
   }
@@ -438,7 +438,7 @@ export class StorageService {
         this.deleteFolder(prefix)
       );
       await Promise.all(folderPromises);
-    } catch (error) {
+    } catch (_error) {
         // Handle error silently
       }
   }
@@ -475,7 +475,7 @@ export class StorageService {
   /**
    * 에러 메시지 변환
    */
-  private static getErrorMessage(error: any): string {
+  private static getErrorMessage(error: unknown): string {
     // CORS 오류 처리
     if (error.message && error.message.includes('CORS')) {
       return '브라우저 보안 정책으로 인해 파일 업로드가 차단되었습니다. 개발자에게 문의해주세요.';
@@ -615,7 +615,7 @@ export async function uploadChatAttachment(
             storageUrl: chatPath,
             downloadUrl: downloadURL,
           });
-        } catch (error) {
+        } catch (_error) {
           reject(error);
         }
       }

@@ -574,7 +574,7 @@ export const enhancedNotificationService = {
   },
 
   // Mark notification as read
-  async markAsRead(notificationId: string): Promise<void> {
+  async markAsRead(_notificationId: string): Promise<void> {
     try {
       const notificationRef = doc(db, 'notifications', notificationId);
       await updateDoc(notificationRef, {

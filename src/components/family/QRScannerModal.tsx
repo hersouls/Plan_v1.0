@@ -10,7 +10,7 @@ interface QRScannerModalProps {
   isOpen: boolean;
   onClose: () => void;
   onScanSuccess: (data: string) => void;
-  onScanError: (error: string) => void;
+  onScanError: (_error: string) => void;
 }
 
 export function QRScannerModal({

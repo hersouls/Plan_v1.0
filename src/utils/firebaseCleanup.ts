@@ -19,7 +19,7 @@ export const deleteAllDocumentsInCollection = async (collectionName: string) => 
     await Promise.all(deletePromises);
     
     return { success: true, deletedCount: snapshot.docs.length };
-  } catch (error) {
+  } catch (_error) {
     return { success: false, error };
   }
 };
@@ -58,7 +58,7 @@ export const deleteUserData = async (userId: string) => {
       deletedTrips: tripsSnapshot.docs.length,
       deletedPlans: tripIds.length 
     };
-  } catch (error) {
+  } catch (_error) {
     return { success: false, error };
   }
 };
@@ -76,7 +76,7 @@ export const cleanupAllFirebaseData = async () => {
     
     return { success: true, results };
     
-  } catch (error) {
+  } catch (_error) {
     return { success: false, error };
   }
 };
@@ -95,7 +95,7 @@ export const cleanupCurrentUserData = async () => {
     }
     
     return result;
-  } catch (error) {
+  } catch (_error) {
     return { success: false, error };
   }
 };

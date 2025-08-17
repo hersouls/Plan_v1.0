@@ -53,7 +53,7 @@ export class RealtimeService {
 
       this.subscriptions.set(subscriptionId, unsubscribe);
       return subscriptionId;
-    } catch (error) {
+    } catch (_error) {
       if (onError) {
         onError(new Error('사용자 프로필 구독에 실패했습니다.'));
       }
@@ -99,7 +99,7 @@ export class RealtimeService {
 
       this.subscriptions.set(subscriptionId, unsubscribe);
       return subscriptionId;
-    } catch (error) {
+    } catch (_error) {
       if (onError) {
         onError(new Error('그룹 목록 구독에 실패했습니다.'));
       }
@@ -143,7 +143,7 @@ export class RealtimeService {
 
       this.subscriptions.set(subscriptionId, unsubscribe);
       return subscriptionId;
-    } catch (error) {
+    } catch (_error) {
       if (onError) {
         onError(new Error('그룹 정보 구독에 실패했습니다.'));
       }
@@ -203,7 +203,7 @@ export class RealtimeService {
 
       this.subscriptions.set(subscriptionId, unsubscribe);
       return subscriptionId;
-    } catch (error) {
+    } catch (_error) {
       if (onError) {
         onError(new Error('할일 목록 구독에 실패했습니다.'));
       }
@@ -249,7 +249,7 @@ export class RealtimeService {
 
       this.subscriptions.set(subscriptionId, unsubscribe);
       return subscriptionId;
-    } catch (error) {
+    } catch (_error) {
       if (onError) {
         onError(new Error('그룹 활동 구독에 실패했습니다.'));
       }
@@ -294,7 +294,7 @@ export class RealtimeService {
 
       this.subscriptions.set(subscriptionId, unsubscribe);
       return subscriptionId;
-    } catch (error) {
+    } catch (_error) {
       if (onError) {
         onError(new Error('사용자 설정 구독에 실패했습니다.'));
       }

@@ -116,7 +116,7 @@ export function ProfileSection({
       if (onSave) {
         await onSave();
       }
-    } catch (error) {
+    } catch (_error) {
       alert(
         error instanceof Error ? error.message : '아바타 업로드에 실패했습니다.'
       );

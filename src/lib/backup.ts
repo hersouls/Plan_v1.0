@@ -201,7 +201,7 @@ export class BackupService {
   // 파일 메타데이터 가져오기
   private async getFileMetadata(path: string): Promise<any> {
     try {
-      const fileRef = ref(storage, path);
+      // const fileRef = ref(storage, path); // Unused variable
       // Firebase Storage의 메타데이터는 직접 접근이 제한적이므로
       // 파일명에서 날짜를 파싱하는 방식 사용
       const fileName = path.split('/').pop();
@@ -295,7 +295,7 @@ export class BackupService {
     try {
       const backupRef = ref(storage, backupPath);
       await deleteObject(backupRef);
-      } catch (error) {
+      } catch (_error) {
       throw new Error('백업 삭제에 실패했습니다.');
     }
   }
@@ -325,7 +325,7 @@ export class BackupScheduler {
       try {
         const backupService = new BackupService(userId);
         await backupService.createAutoBackup(frequency);
-        } catch (error) {
+        } catch (_error) {
         // Handle error silently
       }
     }, interval);

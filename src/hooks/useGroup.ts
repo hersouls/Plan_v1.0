@@ -27,8 +27,8 @@ export interface UseGroupReturn {
   // Group operations
   createGroup: (data: Omit<CreateGroupInput, 'ownerId'>) => Promise<string>;
   updateGroup: (groupId: string, updates: UpdateGroupInput) => Promise<void>;
-  deleteGroup: (groupId: string) => Promise<void>;
-  leaveGroup: (groupId: string) => Promise<void>;
+  deleteGroup: (_groupId: string) => Promise<void>;
+  leaveGroup: (_groupId: string) => Promise<void>;
 
   // Member operations
   inviteByEmail: (
