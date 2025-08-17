@@ -537,16 +537,16 @@ export const groupService = {
       // Calculate stats
       const totalTasks = tasks.length;
       const completedTasks = tasks.filter(
-        (_task: unknown) => task.status === 'completed'
+        (task: unknown) => (task as any).status === 'completed'
       ).length;
       const pendingTasks = tasks.filter(
-        (_task: unknown) => task.status === 'pending'
+        (task: unknown) => (task as any).status === 'pending'
       ).length;
-      const overdueTasks = tasks.filter((_task: unknown) => {
-        if (task.status === 'completed') return false;
-        const dueDate = task.dueDate?.toDate
-          ? task.dueDate.toDate()
-          : new Date(task.dueDate);
+      const overdueTasks = tasks.filter((task: unknown) => {
+        if ((task as any).status === 'completed') return false;
+        const dueDate = (task as any).dueDate?.toDate
+          ? (task as any).dueDate.toDate()
+          : new Date((task as any).dueDate);
         return dueDate < new Date();
       }).length;
 
@@ -555,18 +555,18 @@ export const groupService = {
       const memberStats = members.map(member => {
         // 해당 멤버가 생성한 할일
         const createdTasks = tasks.filter(
-          (_task: unknown) => task.userId === member.userId
+          (task: unknown) => (task as any).userId === member.userId
         );
 
         // 해당 멤버에게 할당된 할일
         const assignedTasks = tasks.filter(
-          (_task: unknown) => task.assigneeId === member.userId
+          (task: unknown) => (task as any).assigneeId === member.userId
         );
 
         // 해당 멤버가 완료한 할일
         const completedTasks = tasks.filter(
-          (_task: unknown) =>
-            task.assigneeId === member.userId && task.status === 'completed'
+          (task: unknown) =>
+            (task as any).assigneeId === member.userId && (task as any).status === 'completed'
         );
 
         return {
@@ -749,12 +749,12 @@ export const commentService = {
         : [];
 
       // attachments 배열 내부의 객체들도 검증
-      const validatedAttachments = cleanAttachments.map((_att: unknown) => {
+      const validatedAttachments = cleanAttachments.map((att: unknown) => {
         if (typeof att === 'object' && att !== null) {
-          const cleanAtt: unknown = {};
-          Object.keys(att).forEach(key => {
-            if (att[key] !== undefined && att[key] !== null) {
-              cleanAtt[key] = att[key];
+          const cleanAtt: Record<string, unknown> = {};
+          Object.keys(att as Record<string, unknown>).forEach(key => {
+            if ((att as Record<string, unknown>)[key] !== undefined && (att as Record<string, unknown>)[key] !== null) {
+              cleanAtt[key] = (att as Record<string, unknown>)[key];
             }
           });
           return cleanAtt;
@@ -780,7 +780,7 @@ export const commentService = {
       }
 
       const docRef = await addDoc(collection(db, 'tasks', taskId, 'comments'), {
-        ...finalData,
+        ...(finalData as Record<string, unknown>),
         createdAt: serverTimestamp(),
       });
       return docRef.id;
@@ -855,7 +855,7 @@ export const commentService = {
       if (commentSnap.exists()) {
         const commentData = commentSnap.data();
         const attachments = commentData.attachments || [];
-        attachments.push(fileAttachment);
+        attachments.push(_fileAttachment);
 
         await updateDoc(commentRef, {
           attachments,
@@ -881,7 +881,7 @@ export const commentService = {
         const commentData = commentSnap.data();
         const attachments = commentData.attachments || [];
         const updatedAttachments = attachments.filter(
-          (_att: unknown) => att.id !== fileId
+          (att: unknown) => (att as any).id !== fileId
         );
 
         await updateDoc(commentRef, {
@@ -896,19 +896,19 @@ export const commentService = {
 };
 
 // Helper function to deep filter undefined values
-function filterUndefinedValues(_obj: unknown): unknown {
+function filterUndefinedValues(obj: unknown): unknown {
   if (obj === null || typeof obj !== 'object') {
     return obj === undefined ? null : obj;
   }
 
   if (Array.isArray(obj)) {
     return obj
-      .filter(item => item !== undefined)
-      .map(item => filterUndefinedValues(item));
+      .filter((item: unknown) => item !== undefined)
+      .map((item: unknown) => filterUndefinedValues(item));
   }
 
-  const result: unknown = {};
-  for (const [key, value] of Object.entries(obj)) {
+  const result: Record<string, unknown> = {};
+  for (const [key, value] of Object.entries(obj as Record<string, unknown>)) {
     if (value !== undefined) {
       if (value === null || typeof value !== 'object') {
         result[key] = value;
@@ -921,7 +921,7 @@ function filterUndefinedValues(_obj: unknown): unknown {
 }
 
 // Helper function to check for undefined values recursively
-function checkForUndefined(_obj: unknown): boolean {
+function checkForUndefined(obj: unknown): boolean {
   if (obj === undefined) {
     return true;
   }
@@ -931,10 +931,10 @@ function checkForUndefined(_obj: unknown): boolean {
   }
 
   if (Array.isArray(obj)) {
-    return obj.some(item => checkForUndefined(item));
+    return obj.some((item: unknown) => checkForUndefined(item));
   }
 
-  return Object.values(obj).some(value => checkForUndefined(value));
+  return Object.values(obj as Record<string, unknown>).some((value: unknown) => checkForUndefined(value));
 }
 
 // User-related Firestore operations
@@ -949,7 +949,7 @@ export const userService = {
       await setDoc(
         userRef,
         {
-          ...userData,
+          ...(userData as Record<string, unknown>),
           updatedAt: serverTimestamp(),
         },
         { merge: true }
@@ -999,14 +999,14 @@ export const batchService = {
       const taskRef = doc(collection(db, 'tasks'));
       taskRefs.push(taskRef);
       batch.set(taskRef, {
-        ...taskData,
+        ...(taskData as Record<string, unknown>),
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
       });
     });
 
     await batch.commit();
-    return taskRefs.map(ref => ref.id);
+    return taskRefs.map((ref: any) => ref.id);
   },
 
   // Update multiple tasks
@@ -1016,7 +1016,7 @@ export const batchService = {
     updates.forEach(({ id, data }) => {
       const taskRef = doc(db, 'tasks', id);
       batch.update(taskRef, {
-        ...data,
+        ...(data as Record<string, unknown>),
         updatedAt: serverTimestamp(),
       });
     });

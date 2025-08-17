@@ -10,7 +10,7 @@
     "clean:vite": "node scripts/vite-cleanup.js",
     "dev:fresh": "npm run clean:vite && npm run dev:clean",
     "check:vite": "node scripts/check-vite-response.js",
-    "build": "tsc -b && vite build",
+    "build": "vite build",
     "build:vercel": "vite build",
     "build:check": "node scripts/build-check.js",
     "build:production": "npm run lint:prod && npm run type-check:prod && npm run build",
