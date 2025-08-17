@@ -51,13 +51,7 @@ export function StatisticsInsights({
   const [selectedInsight, setSelectedInsight] = useState<StatisticsInsight | null>(null);
   const [activeTab, setActiveTab] = useState<'insights' | 'prediction' | 'team' | 'pattern'>('insights');
 
-  useEffect(() => {
-    if (statisticsAnalyzer.isAvailable()) {
-      loadInsights();
-    }
-  }, [tasks, members, pointStats, period]);
-
-  const loadInsights = async () => {
+  const loadInsights = useCallback(async () => {
     setLoading(true);
     try {
       // 기본 인사이트 로드
@@ -93,12 +87,18 @@ export function StatisticsInsights({
         );
         setActivityPattern(patternData);
       }
-    } catch (error) {
+    } catch {
         // Handle error silently
       } finally {
       setLoading(false);
     }
-  };
+  }, [tasks, members, pointStats, period, userId, statisticsAnalyzer]);
+
+  useEffect(() => {
+    if (statisticsAnalyzer.isAvailable()) {
+      loadInsights();
+    }
+  }, [loadInsights]);
 
   const getInsightIcon = (type: string) => {
     switch (type) {

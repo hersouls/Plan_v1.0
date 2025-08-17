@@ -30,7 +30,12 @@ export const SettingsContent: React.FC<SettingsContentProps> = ({
             </div>
             프로필 설정
           </Typography.H3>
-          <ProfileSection />
+          <ProfileSection
+            isActive={true}
+            settings={settings}
+            onUpdate={onUpdate}
+            saving={saving}
+          />
         </GlassCard>
       )}
 

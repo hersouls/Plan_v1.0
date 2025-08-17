@@ -436,7 +436,7 @@ export function useSettings(): UseSettingsReturn {
     } finally {
       setSaving(false);
     }
-  }, [currentUser?.uid, settings]); // uid와 settings에만 의존
+  }, [settings]); // settings에만 의존
 
   // 아바타 업로드
   const uploadAvatar = useCallback(
@@ -465,8 +465,15 @@ export function useSettings(): UseSettingsReturn {
             if (pathMatch) {
               const decodedPath = decodeURIComponent(pathMatch[1]);
               await StorageService.deleteFile({
+                id: 'temp',
+                fileName: 'avatar',
+                fileSize: 0,
+                mimeType: 'image/jpeg',
                 storageUrl: decodedPath,
-              } as { storageUrl: string });
+                uploadedBy: userId,
+                uploadedAt: Timestamp.now(),
+                isImage: true,
+              });
             }
           } catch {
             // 이전 아바타 삭제 실패는 무시하고 계속 진행
@@ -554,7 +561,16 @@ export function useSettings(): UseSettingsReturn {
           const pathMatch = url.pathname.match(/\/v0\/b\/[^/]+\/o\/(.+)\?/);
           if (pathMatch) {
             const decodedPath = decodeURIComponent(pathMatch[1]);
-            await StorageService.deleteFile({ storageUrl: decodedPath } as { storageUrl: string });
+            await StorageService.deleteFile({
+              id: 'temp',
+              fileName: 'avatar',
+              fileSize: 0,
+              mimeType: 'image/jpeg',
+              storageUrl: decodedPath,
+              uploadedBy: userId,
+              uploadedAt: Timestamp.now(),
+              isImage: true,
+            });
           }
         } catch {
           // Handle error silently
@@ -601,6 +617,7 @@ export function useSettings(): UseSettingsReturn {
       isInitializedRef.current = true;
       loadSettingsInternal();
     }
+  }, [currentUser?.uid, loadSettingsInternal]);
 
   // 1시간마다 자동 동기화 설정
   useEffect(() => {

@@ -232,7 +232,7 @@ export function DataSection({
     }
   };
 
-  const loadBackupList = async () => {
+  const loadBackupList = useCallback(async () => {
     if (!authContext.user?.uid) return;
 
     setLoadingBackups(true);
@@ -245,7 +245,7 @@ export function DataSection({
       } finally {
       setLoadingBackups(false);
     }
-  };
+  }, [authContext.user?.uid]);
 
   const restoreFromBackup = async (backupPath: string) => {
     if (!authContext.user?.uid) {
