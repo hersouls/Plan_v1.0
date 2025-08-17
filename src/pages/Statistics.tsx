@@ -1,7 +1,6 @@
 import { format, startOfWeek, subDays } from 'date-fns';
 import { Award, Clock, Star, Trophy, Users, Zap } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import {
   Bar,
   BarChart,
@@ -21,7 +20,6 @@ import { GlassCard } from '../components/ui/GlassCard';
 import { AvatarWrapper } from '../components/ui/avatar-utils';
 import { getAvatarInitials } from '../utils/avatar-utils';
 import { Typography } from '../components/ui/typography-utils';
-import { WaveButton } from '../components/ui/WaveButton';
 import { useAuth } from '../hooks/useAuth';
 import { useGroup, useUserGroups } from '../hooks/useGroup';
 import { useTasks } from '../hooks/useTasks';
@@ -56,7 +54,6 @@ function Statistics() {
   const {
     group,
     members,
-    stats: groupStats,
     loading: groupLoading,
   } = useGroup({
     groupId: selectedGroupId || undefined,
@@ -142,12 +139,13 @@ function Statistics() {
             if (profile) {
               profiles[member.userId] = profile;
             }
-          } catch (error) {
+          } catch {
+            // Handle error silently
           }
         }
 
         setUserProfiles(profiles);
-      } catch (error) {
+      } catch {
         // Handle error silently
       } finally {
         setLoadingProfiles(false);
@@ -171,7 +169,7 @@ function Statistics() {
               selectedGroupId
             );
             return { userId: member.userId, stats };
-          } catch (error) {
+          } catch {
             return { userId: member.userId, stats: null };
           }
         });
@@ -185,7 +183,7 @@ function Statistics() {
         }, {} as Record<string, PointStats>);
 
         setPointStats(statsMap);
-      } catch (error) {
+      } catch {
         // Handle error silently
       } finally {
         setLoadingPoints(false);
@@ -229,7 +227,7 @@ function Statistics() {
         try {
           const taskDate = format(toDate(task.createdAt), 'yyyy-MM-dd');
           return taskDate === dateStr;
-        } catch (error) {
+        } catch {
           return false;
         }
       });
@@ -239,7 +237,7 @@ function Statistics() {
         try {
           const completedDate = format(toDate(task.completedAt), 'yyyy-MM-dd');
           return completedDate === dateStr;
-        } catch (error) {
+        } catch {
           return false;
         }
       });
@@ -853,7 +851,7 @@ function Statistics() {
                         }
                         // If it's already a Date object or string
                         return new Date(task.dueDate as Record<string, unknown>) < new Date();
-                      } catch (error) {
+                      } catch {
                         return false;
                       }
                     });
