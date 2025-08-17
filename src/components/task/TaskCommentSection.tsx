@@ -48,7 +48,6 @@ interface CommentItemProps {
   onEdit: (commentId: string, content: string) => void;
   onDelete: (commentId: string) => void;
   onReaction: (commentId: string, emoji: string) => void;
-  replyToId?: string;
   level?: number;
 }
 
@@ -66,7 +65,6 @@ const CommentItem: React.FC<CommentItemProps> = ({
   onEdit,
   onDelete,
   onReaction,
-  replyToId,
   level = 0,
 }) => {
   const { user } = useAuth();
@@ -95,10 +93,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
     [comment.id, onReaction]
   );
 
-  const reactionCount = Object.values(comment.reactions || {}).reduce(
-    (total, users) => total + users.length,
-    0
-  );
+
 
   const userReactions = Object.entries(comment.reactions || {}).filter(
     ([_, users]) => users.includes(user?.uid || '')
