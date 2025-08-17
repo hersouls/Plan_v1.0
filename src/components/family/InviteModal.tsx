@@ -64,7 +64,7 @@ export function InviteModal({
     } catch (error) {
       // Handle error silently
       if (import.meta.env.DEV) {
-        console.error('Error sending email invite:', error);
+        // Error logging can be added here if needed
       }
     } finally {
       setIsLoading(false);
@@ -81,7 +81,7 @@ export function InviteModal({
     } catch (error) {
       // Handle error silently
       if (import.meta.env.DEV) {
-        console.error('Error generating invite link:', error);
+        // Error logging can be added here if needed
       }
     } finally {
       setIsLoading(false);
@@ -96,7 +96,7 @@ export function InviteModal({
     } catch (error) {
       // Handle error silently
       if (import.meta.env.DEV) {
-        console.error('Error copying to clipboard:', error);
+        // Error logging can be added here if needed
       }
     }
   };

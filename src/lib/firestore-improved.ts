@@ -92,132 +92,116 @@ function validateGroupInput(input: CreateGroupInput | UpdateGroupInput): void {
 export const enhancedTaskService = {
   // Create a new task with validation
   async createTask(taskData: CreateTaskInput): Promise<string> {
-    try {
-      validateTaskInput(taskData);
-      
-      const sanitizedData = sanitizeData({
-        ...taskData,
-        status: 'pending',
-        watchers: taskData.watchers || [],
-        mentionedUsers: taskData.mentionedUsers || [],
-        attachments: taskData.attachments || [],
-        tags: taskData.tags || [],
-        reminders: taskData.reminders || [],
-        version: 1,
-        createdAt: serverTimestamp(),
-        updatedAt: serverTimestamp(),
-      });
-      
-      const docRef = await addDoc(collection(db, 'tasks'), sanitizedData);
-      
-      // Create activity log
-      await this.logActivity({
-        taskId: docRef.id,
-        userId: taskData.userId,
-        action: 'created',
-        entityType: 'task',
-        entityId: docRef.id,
-      });
-      
-      return docRef.id;
-    } catch (error) {
-      throw error;
-    }
+    validateTaskInput(taskData);
+    
+    const sanitizedData = sanitizeData({
+      ...taskData,
+      status: 'pending',
+      watchers: taskData.watchers || [],
+      mentionedUsers: taskData.mentionedUsers || [],
+      attachments: taskData.attachments || [],
+      tags: taskData.tags || [],
+      reminders: taskData.reminders || [],
+      version: 1,
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
+    });
+    
+    const docRef = await addDoc(collection(db, 'tasks'), sanitizedData);
+    
+    // Create activity log
+    await this.logActivity({
+      taskId: docRef.id,
+      userId: taskData.userId,
+      action: 'created',
+      entityType: 'task',
+      entityId: docRef.id,
+    });
+    
+    return docRef.id;
   },
 
   // Update a task with optimistic locking
   async updateTask(taskId: string, updates: UpdateTaskInput, currentVersion?: number): Promise<void> {
-    try {
-      validateTaskInput(updates);
+    validateTaskInput(updates);
+    
+    await runTransaction(db, async (transaction) => {
+      const taskRef = doc(db, 'tasks', taskId);
+      const taskDoc = await transaction.get(taskRef);
       
-      await runTransaction(db, async (transaction) => {
-        const taskRef = doc(db, 'tasks', taskId);
-        const taskDoc = await transaction.get(taskRef);
-        
-        if (!taskDoc.exists()) {
-          throw new Error('Task not found');
-        }
-        
-        const currentData = taskDoc.data();
-        
-        // Optimistic locking check
-        if (currentVersion && currentData.version !== currentVersion) {
-          throw new Error('Task was modified by another user. Please refresh and try again.');
-        }
-        
-        const sanitizedUpdates = sanitizeData({
-          ...updates,
-          version: increment(1),
-          updatedAt: serverTimestamp(),
-        });
-        
-        transaction.update(taskRef, sanitizedUpdates);
-        
-        // Log changes for history
-        const changes = Object.keys(updates).map(key => ({
-          field: key,
-          oldValue: currentData[key],
-          newValue: updates[key as keyof UpdateTaskInput],
-        }));
-        
-        // Create activity log
-        await this.logActivity({
-          taskId,
-          userId: currentData.userId,
-          action: 'updated',
-          entityType: 'task',
-          entityId: taskId,
-          changes,
-        });
+      if (!taskDoc.exists()) {
+        throw new Error('Task not found');
+      }
+      
+      const currentData = taskDoc.data();
+      
+      // Optimistic locking check
+      if (currentVersion && currentData.version !== currentVersion) {
+        throw new Error('Task was modified by another user. Please refresh and try again.');
+      }
+      
+      const sanitizedUpdates = sanitizeData({
+        ...updates,
+        version: increment(1),
+        updatedAt: serverTimestamp(),
       });
-    } catch (error) {
-      throw error;
-    }
+      
+      transaction.update(taskRef, sanitizedUpdates);
+      
+      // Log changes for history
+      const changes = Object.keys(updates).map(key => ({
+        field: key,
+        oldValue: currentData[key],
+        newValue: updates[key as keyof UpdateTaskInput],
+      }));
+      
+      // Create activity log
+      await this.logActivity({
+        taskId,
+        userId: currentData.userId,
+        action: 'updated',
+        entityType: 'task',
+        entityId: taskId,
+        changes,
+      });
+    });
   },
 
   // Soft delete a task
   async deleteTask(taskId: string, userId: string): Promise<void> {
-    try {
-      const taskRef = doc(db, 'tasks', taskId);
-      await updateDoc(taskRef, {
-        archivedAt: serverTimestamp(),
-        archivedBy: userId,
-        updatedAt: serverTimestamp(),
-      });
-      
-      // Log deletion
-      await this.logActivity({
-        taskId,
-        userId,
-        action: 'deleted',
-        entityType: 'task',
-        entityId: taskId,
-      });
-    } catch (error) {
-      throw error;
-    }
+    const taskRef = doc(db, 'tasks', taskId);
+    await updateDoc(taskRef, {
+      archivedAt: serverTimestamp(),
+      archivedBy: userId,
+      updatedAt: serverTimestamp(),
+    });
+    
+    // Log deletion
+    await this.logActivity({
+      taskId,
+      userId,
+      action: 'deleted',
+      entityType: 'task',
+      entityId: taskId,
+    });
   },
 
   // Get a single task with error handling
   async getTask(taskId: string): Promise<Task | null> {
-    try {
-      const docSnap = await getDoc(doc(db, 'tasks', taskId));
-      
-      if (!docSnap.exists()) {
-        return null;
-      }
-      
-      const data = docSnap.data();
-      
-      // Filter out archived tasks
-      if (data.archivedAt) {
-        return null;
-      }
-      
-      return { id: docSnap.id, ...data } as Task;
-    } catch (error) {
-      throw error;
+    const docSnap = await getDoc(doc(db, 'tasks', taskId));
+    
+    if (!docSnap.exists()) {
+      return null;
     }
+    
+    const data = docSnap.data();
+    
+    // Filter out archived tasks
+    if (data.archivedAt) {
+      return null;
+    }
+    
+    return { id: docSnap.id, ...data } as Task;
   },
 
   // Subscribe to tasks with pagination support
