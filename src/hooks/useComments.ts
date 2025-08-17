@@ -91,7 +91,7 @@ export const useComments = ({ taskId, realtime = true }: UseCommentsOptions): Us
             setComments(commentList);
             setLoading(false);
           },
-          (err) => {
+          (_err) => {
             setError('댓글을 불러오는 중 오류가 발생했습니다.');
             setLoading(false);
           }
@@ -99,7 +99,8 @@ export const useComments = ({ taskId, realtime = true }: UseCommentsOptions): Us
 
         return unsubscribe;
       }
-    } catch (err) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (_err) {
       setError('댓글을 불러오는 중 오류가 발생했습니다.');
       setLoading(false);
     }
@@ -137,7 +138,8 @@ export const useComments = ({ taskId, realtime = true }: UseCommentsOptions): Us
       });
 
       return docRef.id;
-    } catch (err) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (_err) {
       throw new Error('댓글 추가 중 오류가 발생했습니다.');
     }
   }, [user]);
@@ -158,7 +160,8 @@ export const useComments = ({ taskId, realtime = true }: UseCommentsOptions): Us
       }
 
       await updateDoc(commentRef, updateData);
-    } catch (err) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (_err) {
       throw new Error('댓글 수정 중 오류가 발생했습니다.');
     }
   }, [user]);
@@ -169,7 +172,8 @@ export const useComments = ({ taskId, realtime = true }: UseCommentsOptions): Us
     try {
       const commentRef = doc(db, 'comments', commentId);
       await deleteDoc(commentRef);
-    } catch (err) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (_err) {
       throw new Error('댓글 삭제 중 오류가 발생했습니다.');
     }
   }, [user]);
@@ -191,7 +195,8 @@ export const useComments = ({ taskId, realtime = true }: UseCommentsOptions): Us
       }
 
       await updateComment(commentId, { reactions });
-    } catch (err) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (_err) {
       throw new Error('반응 추가 중 오류가 발생했습니다.');
     }
   }, [user, comments, updateComment]);
@@ -212,7 +217,8 @@ export const useComments = ({ taskId, realtime = true }: UseCommentsOptions): Us
       }
 
       await updateComment(commentId, { reactions });
-    } catch (err) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (_err) {
       throw new Error('반응 제거 중 오류가 발생했습니다.');
     }
   }, [user, comments, updateComment]);

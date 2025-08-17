@@ -138,6 +138,7 @@ export const useActivity = (
 
         return unsubscribe;
       }
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (_err) {
       setError('활동 정보를 불러오는 중 오류가 발생했습니다.');
       setLoading(false);
@@ -158,6 +159,7 @@ export const useActivity = (
         };
 
         await addDoc(collection(db, 'activities'), activityDoc);
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (_err) {
         // Don't throw error to prevent disrupting main functionality
       }
@@ -223,6 +225,7 @@ export const usePresence = (groupId: string): UsePresenceReturn => {
         };
 
         await addDoc(collection(db, 'presence'), presenceDoc);
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (_error) {
         // Handle error silently
       }

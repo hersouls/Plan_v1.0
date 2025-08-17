@@ -1,3 +1,4 @@
+import React, { useState, useCallback } from 'react';
 import { 
   Brain, 
   TrendingUp, 
@@ -245,7 +246,7 @@ export function StatisticsInsights({
             {/* 인사이트 탭 */}
             {activeTab === 'insights' && (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {insights.map((insight, index) => (
+                {insights.map((insight: StatisticsInsight, index: number) => (
                   <div
                     key={index}
                     className="p-4 bg-white/5 rounded-lg border border-white/10 hover:bg-white/10 transition-all cursor-pointer"

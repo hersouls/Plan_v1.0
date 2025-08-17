@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useReducer, useEffect } from 'react';
+import React, { createContext, useReducer, useEffect } from 'react';
 import { Task, TaskStatus, CreateTaskInput, UpdateTaskInput } from '../types/task';
 import { taskService } from '../lib/firestore';
 import { useApp } from '../hooks/useApp';
@@ -420,16 +420,7 @@ export interface TaskContextType {
 }
 
 // Create Context
-const TaskContext = createContext<TaskContextType | undefined>(undefined);
-
-// Hook to use Task Context
-export function useTask(): TaskContextType {
-  const context = useContext(TaskContext);
-  if (context === undefined) {
-    throw new Error('useTask must be used within a TaskProvider');
-  }
-  return context;
-}
+export const TaskContext = createContext<TaskContextType | undefined>(undefined);
 
 // Task Provider Component
 export function TaskProvider({ children }: { children: React.ReactNode }) {
@@ -451,6 +442,7 @@ export function TaskProvider({ children }: { children: React.ReactNode }) {
       try {
         dispatch({ type: 'SET_TASKS', payload: tasks });
         dispatch({ type: 'SET_LOADING', payload: false });
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (_error) {
         dispatch({ type: 'SET_ERROR', payload: '할일 목록을 처리하는 중 오류가 발생했습니다.' });
         dispatch({ type: 'SET_LOADING', payload: false });
@@ -518,6 +510,7 @@ export function TaskProvider({ children }: { children: React.ReactNode }) {
 
     try {
       await updateTask(taskId, updates);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (_error) {
       dispatch({ type: 'SET_ERROR', payload: '할일 상태를 변경하는 중 오류가 발생했습니다.' });
     }
@@ -593,6 +586,7 @@ export function TaskProvider({ children }: { children: React.ReactNode }) {
     try {
       dispatch({ type: 'SET_LOADING', payload: true });
       // The subscription will automatically refresh the data
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (_error) {
       dispatch({ type: 'SET_ERROR', payload: '할일 목록을 새로고침하는 중 오류가 발생했습니다.' });
     }
