@@ -90,9 +90,6 @@ function PointsManagement() {
   // 모달 상태 디버깅
   useEffect(() => {
     // 모달 상태 변경 시 로그 출력 (디버깅용)
-    if (import.meta.env?.DEV) {
-      console.log('Point settings modal state:', showPointSettingsModal);
-    }
   }, [showPointSettingsModal]);
 
   // 즐겨찾기 그룹 로드
@@ -385,7 +382,7 @@ function PointsManagement() {
       loadApprovedPointHistory();
       loadMemberStats();
     }
-  }, [selectedGroupId, selectedMember]);
+  }, [selectedGroupId, selectedMember, loadApprovedPointHistory, loadMemberStats, loadUnapprovedPointHistory]);
 
   // 포인트 수동 추가/차감
   const handleAddPoints = async (amount: number, reason: string) => {
@@ -414,9 +411,6 @@ function PointsManagement() {
       setShowAddPointsModal(false);
     } catch (error) {
         // Handle error silently
-        if (import.meta.env?.DEV) {
-        console.error('Error adding points:', error);
-      }
     }
   };
 
@@ -448,9 +442,6 @@ function PointsManagement() {
       setShowAddPointsModal(false);
     } catch (error) {
         // Handle error silently
-        if (import.meta.env?.DEV) {
-        console.error('Error deducting points:', error);
-      }
     }
   };
 

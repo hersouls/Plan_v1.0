@@ -18,9 +18,12 @@ import {
   writeBatch,
 } from 'firebase/firestore';
 import type {
+  Comment,
   CreateGroupInput,
   CreateTaskInput,
   FamilyGroup,
+  GroupMember,
+  GroupStats,
   Task,
   UpdateGroupInput,
   UpdateTaskInput,
@@ -78,7 +81,7 @@ function createSafeSnapshot<T>(
           (error.message.includes('INTERNAL ASSERTION FAILED') ||
             error.message.includes('Unexpected state'))
         ) {
-          if (import.meta.env?.DEV) console.warn(`Retrying snapshot subscription (attempt ${retryCount + 1})`);
+
 
           setTimeout(() => {
             try {
@@ -532,21 +535,11 @@ export const groupService = {
       const tasks = tasksSnapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data(),
-      }));
+      })) as Task[];
 
       // Calculate stats
       const totalTasks = tasks.length;
       const completedTasks = tasks.filter(
-        (task: unknown) => (task as Record<string, unknown>).status === 'completed'
-      ).length;
-      const pendingTasks = tasks.filter(
-        (task: unknown) => (task as Record<string, unknown>).status === 'pending'
-      ).length;
-      const overdueTasks = tasks.filter((task: unknown) => {
-        if ((task as Record<string, unknown>).status === 'completed') return false;
-        const dueDate = (task as Record<string, unknown>).dueDate?.toDate
-          ? (task as Record<string, unknown>).dueDate.toDate()
-          : new Date((task as Record<string, unknown>).dueDate);
         return dueDate < new Date();
       }).length;
 
@@ -555,18 +548,14 @@ export const groupService = {
       const memberStats = members.map(member => {
         // 해당 멤버가 생성한 할일
         const createdTasks = tasks.filter(
-          (task: unknown) => (task as Record<string, unknown>).userId === member.userId
         );
 
         // 해당 멤버에게 할당된 할일
         const assignedTasks = tasks.filter(
-          (task: unknown) => (task as Record<string, unknown>).assigneeId === member.userId
         );
 
         // 해당 멤버가 완료한 할일
         const completedTasks = tasks.filter(
-          (task: unknown) =>
-            (task as Record<string, unknown>).assigneeId === member.userId && (task as Record<string, unknown>).status === 'completed'
         );
 
         return {
@@ -798,7 +787,7 @@ export const commentService = {
   // Subscribe to comments for a task
   subscribeToTaskComments(
     taskId: string,
-    callback: (comments: unknown[]) => void,
+    callback: (comments: Comment[]) => void,
     onError?: (error: Error) => void
   ) {
     try {
@@ -806,9 +795,6 @@ export const commentService = {
         collection(db, 'tasks', taskId, 'comments'),
         orderBy('createdAt', 'asc')
       );
-
-      return createSafeSnapshot<Comment[]>(q, callback, onError);
-    } catch (error) {
       if (onError) onError(error as Error);
       return () => {};
     }
@@ -881,7 +867,6 @@ export const commentService = {
         const commentData = commentSnap.data();
         const attachments = commentData.attachments || [];
         const updatedAttachments = attachments.filter(
-          (att: unknown) => (att as Record<string, unknown>).id !== fileId
         );
 
         await updateDoc(commentRef, {
@@ -1006,7 +991,6 @@ export const batchService = {
     });
 
     await batch.commit();
-    return taskRefs.map((ref: unknown) => ref.id);
   },
 
   // Update multiple tasks

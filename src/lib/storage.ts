@@ -85,7 +85,6 @@ export async function uploadAvatarImage(
 
   try {
     optimizedFile = await optimizeAvatarImage(file);
-  } catch (error) {
     throw new Error('이미지 처리에 실패했습니다.');
   }
 
@@ -151,7 +150,6 @@ export async function deleteAvatarImage(
  * 아바타 업로드 에러 메시지 변환
  */
 function getAvatarUploadErrorMessage(_error: unknown): string {
-  const error = _error as Record<string, unknown>;
   if (error.code === 'storage/unauthorized') {
     return '아바타 업로드 권한이 없습니다.';
   } else if (error.code === 'storage/canceled') {
@@ -289,7 +287,6 @@ export class StorageService {
               storageUrl: filePath,
               downloadUrl: downloadURL,
               uploadedBy: currentUser?.uid || 'unknown-user',
-              uploadedAt: new Date() as Record<string, unknown>, // Timestamp로 교체 필요
               thumbnailUrl: thumbnailURL,
               isImage: this.isImage(file.type),
               width,
@@ -336,7 +333,6 @@ export class StorageService {
         storageUrl: filePath,
         downloadUrl: downloadURL,
         uploadedBy: currentUser?.uid || 'unknown-user',
-        uploadedAt: new Date() as Record<string, unknown>, // Timestamp로 교체 필요
         thumbnailUrl: thumbnailURL,
         isImage: this.isImage(file.type),
         width,

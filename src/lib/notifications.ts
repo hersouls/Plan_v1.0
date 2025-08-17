@@ -60,7 +60,6 @@ export class NotificationService {
         ...doc.data(),
       })) as Notification[];
     } catch (_error: unknown) {
-      const error = _error as Record<string, unknown>;
       // 인덱스 빌드 중 오류인 경우 기본 쿼리로 재시도
       if (
         error.code === 'failed-precondition' &&
@@ -137,8 +136,6 @@ export class NotificationService {
         })) as Notification[];
         callback(notifications);
       },
-      (error: unknown) => {
-        const errorObj = error as Record<string, unknown>;
         // 인덱스 빌드 중 오류인 경우 기본 쿼리로 재시도
         if (
           errorObj.code === 'failed-precondition' &&
@@ -167,7 +164,7 @@ export class NotificationService {
 
               callback(notifications);
             },
-            fallbackError => {
+            _fallbackError => {
               callback([]); // 빈 배열 반환
             }
           );

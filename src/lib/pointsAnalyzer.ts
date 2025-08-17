@@ -164,7 +164,7 @@ ${i + 1}. ID: ${h.id}
           }
         } catch {
         // Handle error silently
-      }
+              }
       }
     } catch {
         // Handle error silently
