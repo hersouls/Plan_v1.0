@@ -26,6 +26,28 @@ export function QRScannerModal({
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const animationFrameRef = useRef<number | null>(null);
+  
+  const stopScanning = useCallback(() => {
+    setIsScanning(false);
+    
+    // Stop animation frame
+    if (animationFrameRef.current) {
+      cancelAnimationFrame(animationFrameRef.current);
+      animationFrameRef.current = null;
+    }
+    
+    // Stop video stream
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach(track => track.stop());
+      streamRef.current = null;
+    }
+    
+    // Clear video source
+    if (videoRef.current) {
+      videoRef.current.srcObject = null;
+    }
+  }, []);
+
   const scanQRCode = useCallback(() => {
     if (!videoRef.current || !canvasRef.current || !isScanning) return;
 
@@ -93,27 +115,6 @@ export function QRScannerModal({
       setIsScanning(false);
     }
   }, [scanQRCode]);
-
-  const stopScanning = useCallback(() => {
-    setIsScanning(false);
-    
-    // Stop animation frame
-    if (animationFrameRef.current) {
-      cancelAnimationFrame(animationFrameRef.current);
-      animationFrameRef.current = null;
-    }
-    
-    // Stop video stream
-    if (streamRef.current) {
-      streamRef.current.getTracks().forEach(track => track.stop());
-      streamRef.current = null;
-    }
-    
-    // Clear video source
-    if (videoRef.current) {
-      videoRef.current.srcObject = null;
-    }
-  }, []);
 
   useEffect(() => {
     if (isOpen) {
