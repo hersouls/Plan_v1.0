@@ -2,6 +2,8 @@ import React, { useReducer, useEffect } from 'react';
 import { Task, TaskStatus, CreateTaskInput, UpdateTaskInput } from '../types/task';
 import { taskService } from '../lib/firestore';
 import { useApp } from '../hooks/useApp';
+import { useAuth } from '../hooks/useAuth';
+import { Timestamp } from 'firebase/firestore';
 import { 
   TaskState, 
   TaskFilters, 
@@ -400,7 +402,7 @@ function taskReducer(state: TaskState, action: TaskAction): TaskState {
 // Task Provider Component
 export function TaskProvider({ children }: { children: React.ReactNode }) {
   const [state, dispatch] = useReducer(taskReducer, initialState);
-  const { user } = useApp();
+  const { user } = useAuth();
   const { state: appState } = useApp();
 
   // Subscribe to tasks for current group
@@ -481,7 +483,7 @@ export function TaskProvider({ children }: { children: React.ReactNode }) {
     const updates: UpdateTaskInput = {
       status: newStatus,
       ...(newStatus === 'completed' && {
-        completedAt: new Date(),
+        completedAt: Timestamp.fromDate(new Date()),
         completedBy: user.uid
       }),
       ...(newStatus === 'pending' && {
@@ -609,5 +611,14 @@ export function TaskProvider({ children }: { children: React.ReactNode }) {
       {children}
     </TaskContext.Provider>
   );
+}
+
+// Hook to use TaskContext
+export function useTask() {
+  const context = React.useContext(TaskContext);
+  if (context === undefined) {
+    throw new Error('useTask must be used within a TaskProvider');
+  }
+  return context;
 }
 

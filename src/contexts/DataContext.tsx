@@ -381,4 +381,13 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   return <DataContext.Provider value={value}>{children}</DataContext.Provider>;
 }
 
+// Hook to use DataContext
+export function useData() {
+  const context = React.useContext(DataContext);
+  if (context === undefined) {
+    throw new Error('useData must be used within a DataProvider');
+  }
+  return context;
+}
+
 export default DataProvider;

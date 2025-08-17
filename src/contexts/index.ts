@@ -14,12 +14,12 @@ export type {
   AppNotification, 
   AppContextType, 
   AppAction 
-} from './AppContext';
+} from './AppContextTypes';
 export type { 
   TaskState, 
   TaskFilters, 
   TaskSortBy, 
   TaskStats, 
-  TaskContextType, 
   TaskAction 
-} from './TaskContext';
+} from '../types/taskContext';
+export type { TaskContextType } from './TaskContextTypes';
