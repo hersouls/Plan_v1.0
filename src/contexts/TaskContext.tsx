@@ -2,105 +2,14 @@ import React, { createContext, useContext, useReducer, useEffect } from 'react';
 import { Task, TaskStatus, CreateTaskInput, UpdateTaskInput } from '../types/task';
 import { taskService } from '../lib/firestore';
 import { useApp } from '../hooks/useApp';
-
-// Task State Interface
-export interface TaskState {
-  // Tasks data
-  tasks: Task[];
-  filteredTasks: Task[];
-  
-  // Current task details
-  selectedTask: Task | null;
-  selectedTaskId: string | null;
-  
-  // Filters and sorting
-  filters: TaskFilters;
-  sortBy: TaskSortBy;
-  sortOrder: 'asc' | 'desc';
-  
-  // UI state
-  viewMode: 'list' | 'grid' | 'calendar';
-  showCompleted: boolean;
-  
-  // Loading and error states
-  loading: boolean;
-  error: string | null;
-  
-  // Statistics
-  stats: TaskStats;
-}
-
-export interface TaskFilters {
-  status?: TaskStatus[];
-  assigneeId?: string[];
-  priority?: string[];
-  category?: string[];
-  dateRange?: {
-    start: Date;
-    end: Date;
-  };
-  searchQuery: string;
-  tags?: string[];
-}
-
-export type TaskSortBy = 'dueDate' | 'priority' | 'createdAt' | 'title' | 'status';
-
-export interface TaskStats {
-  total: number;
-  completed: number;
-  pending: number;
-  inProgress: number;
-  overdue: number;
-  dueToday: number;
-  dueThisWeek: number;
-  completionRate: number;
-}
-
-// Action Types
-export type TaskAction =
-  | { type: 'SET_TASKS'; payload: Task[] }
-  | { type: 'ADD_TASK'; payload: Task }
-  | { type: 'UPDATE_TASK'; payload: { id: string; updates: Partial<Task> } }
-  | { type: 'REMOVE_TASK'; payload: string }
-  | { type: 'SET_SELECTED_TASK'; payload: { task: Task | null; taskId?: string | null } }
-  | { type: 'SET_FILTERS'; payload: Partial<TaskFilters> }
-  | { type: 'CLEAR_FILTERS' }
-  | { type: 'SET_SORT'; payload: { sortBy: TaskSortBy; sortOrder?: 'asc' | 'desc' } }
-  | { type: 'SET_VIEW_MODE'; payload: 'list' | 'grid' | 'calendar' }
-  | { type: 'TOGGLE_SHOW_COMPLETED' }
-  | { type: 'SET_SHOW_COMPLETED'; payload: boolean }
-  | { type: 'SET_LOADING'; payload: boolean }
-  | { type: 'SET_ERROR'; payload: string | null }
-  | { type: 'APPLY_FILTERS_AND_SORT' };
-
-// Initial State
-const initialFilters: TaskFilters = {
-  searchQuery: '',
-};
-
-const initialState: TaskState = {
-  tasks: [],
-  filteredTasks: [],
-  selectedTask: null,
-  selectedTaskId: null,
-  filters: initialFilters,
-  sortBy: 'dueDate',
-  sortOrder: 'asc',
-  viewMode: 'list',
-  showCompleted: true,
-  loading: false,
-  error: null,
-  stats: {
-    total: 0,
-    completed: 0,
-    pending: 0,
-    inProgress: 0,
-    overdue: 0,
-    dueToday: 0,
-    dueThisWeek: 0,
-    completionRate: 0,
-  },
-};
+import { 
+  TaskState, 
+  TaskFilters, 
+  TaskSortBy, 
+  TaskStats, 
+  TaskAction, 
+  initialState 
+} from '../types/taskContext';
 
 // Helper function to calculate stats
 const calculateStats = (tasks: Task[]): TaskStats => {
@@ -526,7 +435,7 @@ export function useTask(): TaskContextType {
 export function TaskProvider({ children }: { children: React.ReactNode }) {
   const [state, dispatch] = useReducer(taskReducer, initialState);
   const { user } = useAuth();
-  const { state: appState, setLoading: setAppLoading, setError: setAppError } = useApp();
+  const { state: appState } = useApp();
 
   // Subscribe to tasks for current group
   useEffect(() => {
@@ -542,7 +451,7 @@ export function TaskProvider({ children }: { children: React.ReactNode }) {
       try {
         dispatch({ type: 'SET_TASKS', payload: tasks });
         dispatch({ type: 'SET_LOADING', payload: false });
-      } catch (error) {
+      } catch (_error) {
         dispatch({ type: 'SET_ERROR', payload: '할일 목록을 처리하는 중 오류가 발생했습니다.' });
         dispatch({ type: 'SET_LOADING', payload: false });
       }
@@ -566,27 +475,27 @@ export function TaskProvider({ children }: { children: React.ReactNode }) {
       };
       
       await taskService.createTask(fullTaskData);
-    } catch (error) {
+    } catch (_error) {
       dispatch({ type: 'SET_ERROR', payload: '할일을 생성하는 중 오류가 발생했습니다.' });
-      throw error;
+      throw _error;
     }
   };
 
   const updateTask = async (taskId: string, updates: UpdateTaskInput) => {
     try {
       await taskService.updateTask(taskId, updates);
-    } catch (error) {
+    } catch (_error) {
       dispatch({ type: 'SET_ERROR', payload: '할일을 업데이트하는 중 오류가 발생했습니다.' });
-      throw error;
+      throw _error;
     }
   };
 
   const deleteTask = async (taskId: string) => {
     try {
       await taskService.deleteTask(taskId);
-    } catch (error) {
+    } catch (_error) {
       dispatch({ type: 'SET_ERROR', payload: '할일을 삭제하는 중 오류가 발생했습니다.' });
-      throw error;
+      throw _error;
     }
   };
 
@@ -609,7 +518,7 @@ export function TaskProvider({ children }: { children: React.ReactNode }) {
 
     try {
       await updateTask(taskId, updates);
-    } catch (error) {
+    } catch (_error) {
       dispatch({ type: 'SET_ERROR', payload: '할일 상태를 변경하는 중 오류가 발생했습니다.' });
     }
   };
@@ -684,7 +593,7 @@ export function TaskProvider({ children }: { children: React.ReactNode }) {
     try {
       dispatch({ type: 'SET_LOADING', payload: true });
       // The subscription will automatically refresh the data
-    } catch (error) {
+    } catch (_error) {
       dispatch({ type: 'SET_ERROR', payload: '할일 목록을 새로고침하는 중 오류가 발생했습니다.' });
     }
   };
