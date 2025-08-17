@@ -1,5 +1,5 @@
 import React from 'react';
-import { DataContext } from '../DataContextTypes';
+import { DataContext } from '../DataContext';
 
 // Hook to use DataContext
 export function useData() {

@@ -495,7 +495,11 @@ export const groupService = {
 
       // Calculate stats
       const totalTasks = tasks.length;
-      const completedTasks = tasks.filter(
+      const completedTasks = tasks.filter(task => task.status === 'completed').length;
+      const pendingTasks = tasks.filter(task => task.status === 'pending').length;
+      const overdueTasks = tasks.filter(task => {
+        if (!task.dueDate) return false;
+        const dueDate = task.dueDate instanceof Date ? task.dueDate : task.dueDate.toDate();
         return dueDate < new Date();
       }).length;
 
@@ -503,16 +507,13 @@ export const groupService = {
       const members = await this.getGroupMembers(groupId);
       const memberStats = members.map(member => {
         // 해당 멤버가 생성한 할일
-        const createdTasks = tasks.filter(
-        );
+        const createdTasks = tasks.filter(task => task.userId === member.userId);
 
         // 해당 멤버에게 할당된 할일
-        const assignedTasks = tasks.filter(
-        );
+        const assignedTasks = tasks.filter(task => task.assigneeId === member.userId);
 
         // 해당 멤버가 완료한 할일
-        const completedTasks = tasks.filter(
-        );
+        const completedTasks = tasks.filter(task => task.assigneeId === member.userId && task.status === 'completed');
 
         return {
           userId: member.userId,
@@ -772,7 +773,8 @@ export const commentService = {
   async addFileAttachment(
     taskId: string,
     commentId: string,
-    _fileAttachment: unknown) {
+    _fileAttachment: unknown
+  ) {
     try {
       const commentRef = doc(db, 'tasks', taskId, 'comments', commentId);
       const commentSnap = await getDoc(commentRef);
@@ -804,6 +806,7 @@ export const commentService = {
         const commentData = commentSnap.data();
         const attachments = commentData.attachments || [];
         const updatedAttachments = attachments.filter(
+          (attachment: { id: string }) => attachment.id !== fileId
         );
 
         await updateDoc(commentRef, {

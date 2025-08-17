@@ -591,3 +591,5 @@ export function TaskProvider({ children }: { children: React.ReactNode }) {
   );
 }
 
+export type { TaskAction } from '../types/taskContext';
+
