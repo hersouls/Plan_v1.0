@@ -241,10 +241,6 @@ function TodoHome() {
       });
 
       // 성공 피드백 개선
-      const visibilityText =
-        groupId === 'personal' ? '나만 보는 할일' : '그룹 할일';
-      // TODO: 토스트 알림으로 변경
-    } catch (error) {
       // 에러 피드백 개선
       // TODO: 토스트 알림으로 변경
       console.error('❌ 할일 생성에 실패했습니다. 다시 시도해주세요.');
