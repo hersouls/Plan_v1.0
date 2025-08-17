@@ -3,7 +3,7 @@ export { DataProvider, useData } from './DataContext';
 export { AppProvider } from './AppContext';
 export { TaskProvider, useTask } from './TaskContext';
 
-// Re-export hooks
+// Re-export hooks from hooks directory
 export { useAuth } from '../hooks/useAuth';
 export { useApp } from '../hooks/useApp';
 

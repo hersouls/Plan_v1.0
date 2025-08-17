@@ -12,8 +12,8 @@ import {
   serverTimestamp,
   Timestamp,
 } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
-import { useAuth } from '@/hooks/useAuth';
+import { db } from '../lib/firebase';
+import { useAuth } from './useAuth';
 
 export interface Comment {
   id: string;
@@ -41,6 +41,15 @@ export interface CreateCommentInput {
 export interface UpdateCommentInput {
   content?: string;
   reactions?: Record<string, string[]>;
+}
+
+// 명시적인 업데이트 데이터 타입 정의
+export interface CommentUpdateData {
+  content?: string;
+  reactions?: Record<string, string[]>;
+  updatedAt: any; // FieldValue | Timestamp
+  isEdited?: boolean;
+  editedAt?: any; // FieldValue | Timestamp
 }
 
 export interface UseCommentsOptions {
@@ -149,7 +158,7 @@ export const useComments = ({ taskId, realtime = true }: UseCommentsOptions): Us
 
     try {
       const commentRef = doc(db, 'comments', commentId);
-      const updateData: unknown = {
+      const updateData: CommentUpdateData = {
         ...updates,
         updatedAt: serverTimestamp(),
       };
@@ -159,7 +168,7 @@ export const useComments = ({ taskId, realtime = true }: UseCommentsOptions): Us
         updateData.editedAt = serverTimestamp();
       }
 
-      await updateDoc(commentRef, updateData);
+      await updateDoc(commentRef, updateData as any);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (_err) {
       throw new Error('댓글 수정 중 오류가 발생했습니다.');

@@ -14,6 +14,12 @@ import {
   initialFilters
 } from '../types/taskContext';
 import { TaskContext, TaskContextType } from './TaskContextTypes';
+import { 
+  getTodayTasks as getTodayTasksUtil, 
+  getUpcomingTasks as getUpcomingTasksUtil, 
+  getOverdueTasks as getOverdueTasksUtil, 
+  getTasksByStatus as getTasksByStatusUtil 
+} from './TaskContextUtils';
 
 // Helper function to calculate stats
 const calculateStats = (tasks: Task[]): TaskStats => {
@@ -532,37 +538,10 @@ export function TaskProvider({ children }: { children: React.ReactNode }) {
   };
 
   // Utility functions
-  const getTodayTasks = () => {
-    const today = new Date().toISOString().split('T')[0];
-    return state.tasks.filter(task => {
-      if (!task.dueDate) return false;
-      const taskDate = (task.dueDate instanceof Date ? task.dueDate : task.dueDate.toDate()).toISOString().split('T')[0];
-      return taskDate === today;
-    });
-  };
-
-  const getUpcomingTasks = (days: number = 7) => {
-    const now = new Date();
-    const futureDate = new Date(now.getTime() + days * 24 * 60 * 60 * 1000);
-    
-    return state.tasks.filter(task => {
-      if (!task.dueDate) return false;
-      const taskDate = task.dueDate instanceof Date ? task.dueDate : task.dueDate.toDate();
-      return taskDate > now && taskDate <= futureDate;
-    });
-  };
-
-  const getOverdueTasks = () => {
-    const now = new Date();
-    return state.tasks.filter(task => {
-      if (!task.dueDate || task.status === 'completed') return false;
-      return (task.dueDate instanceof Date ? task.dueDate : task.dueDate.toDate()) < now;
-    });
-  };
-
-  const getTasksByStatus = (status: TaskStatus) => {
-    return state.tasks.filter(task => task.status === status);
-  };
+  const getTodayTasks = () => getTodayTasksUtil(state.tasks);
+  const getUpcomingTasks = (days: number = 7) => getUpcomingTasksUtil(state.tasks, days);
+  const getOverdueTasks = () => getOverdueTasksUtil(state.tasks);
+  const getTasksByStatus = (status: TaskStatus) => getTasksByStatusUtil(state.tasks, status);
 
   const refreshTasks = async () => {
     if (!user || !appState.currentGroupId) return;
@@ -570,8 +549,7 @@ export function TaskProvider({ children }: { children: React.ReactNode }) {
     try {
       dispatch({ type: 'SET_LOADING', payload: true });
       // The subscription will automatically refresh the data
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (_error) {
+    } catch {
       dispatch({ type: 'SET_ERROR', payload: '할일 목록을 새로고침하는 중 오류가 발생했습니다.' });
     }
   };

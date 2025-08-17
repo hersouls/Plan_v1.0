@@ -64,14 +64,6 @@ export function useGroup(options: UseGroupOptions = {}): UseGroupReturn {
     setError(null);
   }, []);
 
-  const refetch = useCallback(() => {
-    if (groupId) {
-      loadGroupData(groupId);
-    } else {
-      loadGroupData(null);
-    }
-  }, [groupId, loadGroupData]);
-
   const loadGroupData = useCallback(
     async (targetGroupId: string | null) => {
       try {
@@ -94,7 +86,7 @@ export function useGroup(options: UseGroupOptions = {}): UseGroupReturn {
           setGroup(null);
           setMembers([]);
           setStats(null);
-          // 에러 메시지를 설정하지 않고 조용히 처리
+          setLoading(false);
           return;
         }
         setGroup(groupData);
@@ -122,7 +114,7 @@ export function useGroup(options: UseGroupOptions = {}): UseGroupReturn {
               setMembers(prevMembers =>
                 prevMembers.map(member => {
                   const memberStat = statsData.memberStats.find(
-                    (_stat: unknown) => stat.userId === member.userId
+                    (memberStat: any) => memberStat.userId === member.userId
                   );
                   return {
                     ...member,
@@ -145,6 +137,14 @@ export function useGroup(options: UseGroupOptions = {}): UseGroupReturn {
     },
     [loadMembers, loadStats]
   );
+
+  const refetch = useCallback(() => {
+    if (groupId) {
+      loadGroupData(groupId);
+    } else {
+      loadGroupData(null);
+    }
+  }, [groupId, loadGroupData]);
 
   // Load group data when groupId changes
   useEffect(() => {
@@ -241,6 +241,7 @@ export function useGroup(options: UseGroupOptions = {}): UseGroupReturn {
 
       } catch {
         setError('그룹을 생성하는 중 오류가 발생했습니다.');
+        throw new Error('그룹을 생성하는 중 오류가 발생했습니다.');
       }
     },
     [user]
@@ -386,6 +387,7 @@ export function useGroup(options: UseGroupOptions = {}): UseGroupReturn {
       return inviteCode;
     } catch {
       setError('초대 코드를 생성하는 중 오류가 발생했습니다.');
+      throw new Error('초대 코드를 생성하는 중 오류가 발생했습니다.');
     }
   }, [groupId, group]);
 
