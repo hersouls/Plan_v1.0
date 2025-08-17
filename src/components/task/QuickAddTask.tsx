@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/popover';
 import { cn } from '@/components/ui/utils';
 import { WaveButton } from '@/components/ui/WaveButton';
-import { TaskCategory, TaskPriority } from '@/types/task';
+import { Task, TaskCategory, TaskPriority } from '@/types/task';
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import {
@@ -62,7 +62,6 @@ interface QuickAddTaskProps {
     taskType?: 'personal' | 'group';
     groupId?: string;
   }) => void;
-  onTaskCreate?: (task: Omit<unknown, 'userId' | 'groupId'>) => Promise<void>;
   defaultAssigneeId?: string;
   groupMembers?: Array<{ id: string; name: string; avatar?: string }>;
   groups?: Array<{ id: string; name: string }>;
