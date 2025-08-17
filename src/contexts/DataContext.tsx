@@ -384,5 +384,4 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   return <DataContext.Provider value={value}>{children}</DataContext.Provider>;
 }
 
-export { DataContext };
 export default DataProvider;
