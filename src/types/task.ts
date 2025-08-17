@@ -181,6 +181,9 @@ export interface TaskComment {
   createdAt: Timestamp;
 }
 
+// Alias for backward compatibility
+export type Comment = TaskComment;
+
 // Task activity log entry
 export interface TaskActivity {
   id: string;

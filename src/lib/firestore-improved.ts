@@ -61,7 +61,7 @@ function validateTaskInput(input: CreateTaskInput | UpdateTaskInput): void {
     // Handle both Timestamp and Date objects
     const dueDate = input.dueDate instanceof Date 
       ? input.dueDate 
-      : (input.dueDate as any).toDate ? (input.dueDate as any).toDate() : new Date(input.dueDate as any);
+      : (input.dueDate as { toDate?: () => Date }).toDate ? (input.dueDate as { toDate: () => Date }).toDate() : new Date(input.dueDate as string | number);
     if (isNaN(dueDate.getTime())) {
       throw new Error('Invalid due date format');
     }
@@ -99,7 +99,7 @@ export const enhancedTaskService = {
       version: 1,
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
-    }) as Record<string, any>;
+    }) as Record<string, unknown>;
     
     const docRef = await addDoc(collection(db, 'tasks'), sanitizedData);
     
@@ -138,7 +138,7 @@ export const enhancedTaskService = {
         ...updates,
         version: increment(1),
         updatedAt: serverTimestamp(),
-      }) as Record<string, any>;
+      }) as Record<string, unknown>;
       
       transaction.update(taskRef, sanitizedUpdates);
       
@@ -285,7 +285,7 @@ export const enhancedTaskService = {
           version: 1,
           createdAt: serverTimestamp(),
           updatedAt: serverTimestamp(),
-        }) as Record<string, any>;
+        }) as Record<string, unknown>;
         
         batch.set(taskRef, sanitizedData);
       });
@@ -313,7 +313,7 @@ export const enhancedTaskService = {
           throw new Error('Task not found');
         }
         
-        const updates: Record<string, any> = {
+        const updates: Record<string, unknown> = {
           status: completed ? 'completed' : 'pending',
           version: increment(1),
           updatedAt: serverTimestamp(),
@@ -389,7 +389,7 @@ export const enhancedGroupService = {
         tags: [],
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
-      }) as Record<string, any>;
+      }) as Record<string, unknown>;
       
       const docRef = await addDoc(collection(db, 'groups'), sanitizedData);
       
@@ -410,7 +410,7 @@ export const enhancedGroupService = {
       const sanitizedUpdates = sanitizeData({
         ...updates,
         updatedAt: serverTimestamp(),
-      }) as Record<string, any>;
+      }) as Record<string, unknown>;
       
       const groupRef = doc(db, 'groups', groupId);
       await updateDoc(groupRef, sanitizedUpdates);
@@ -496,13 +496,13 @@ export const enhancedUserService = {
       if (docSnap.exists()) {
         // Document exists, use updateDoc
         await updateDoc(userRef, {
-          ...(cleanProfileData as Record<string, any>),
+          ...(cleanProfileData as Record<string, unknown>),
           updatedAt: serverTimestamp(),
         });
       } else {
         // Document doesn't exist, use setDoc
         await setDoc(userRef, {
-          ...(cleanProfileData as Record<string, any>),
+          ...(cleanProfileData as Record<string, unknown>),
           createdAt: serverTimestamp(),
           updatedAt: serverTimestamp(),
         });
@@ -526,7 +526,7 @@ export const enhancedUserService = {
   async updateUserStats(userId: string, statsUpdate: Record<string, number>): Promise<void> {
     try {
       const userRef = doc(db, 'users', userId);
-      const updateData: unknown = { updatedAt: serverTimestamp() };
+      const updateData: Record<string, unknown> = { updatedAt: serverTimestamp() };
       
       Object.entries(statsUpdate).forEach(([key, value]) => {
         if (typeof value === 'number') {
@@ -569,7 +569,7 @@ export const enhancedNotificationService = {
         createdAt: serverTimestamp(),
       });
       
-      const docRef = await addDoc(collection(db, 'notifications'), sanitizedData);
+      const docRef = await addDoc(collection(db, 'notifications'), sanitizedData as Record<string, unknown>);
       return docRef.id;
     } catch {
       throw new Error('Failed to create notification');

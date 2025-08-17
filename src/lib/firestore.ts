@@ -33,7 +33,7 @@ import { db } from './firebase';
 
 // 안전한 실시간 구독을 위한 헬퍼 함수 - 재시도 로직 포함
 function createSafeSnapshot<T>(
-  queryOrDoc: unknown,
+  queryOrDoc: any,
   onNext: (data: T) => void,
   onError?: (error: Error) => void,
   retryCount: number = 0
@@ -53,7 +53,7 @@ function createSafeSnapshot<T>(
             }
 
             // QuerySnapshot
-            const data = snapshot.docs.map((_doc: unknown) => ({
+            const data = snapshot.docs.map((_doc: any) => ({
               id: _doc.id,
               ..._doc.data(),
             })) as T;
@@ -128,7 +128,7 @@ export const taskService = {
       );
 
       // 디버깅용 로그
-      const docRef = await addDoc(collection(db, 'tasks'), finalData);
+      const docRef = await addDoc(collection(db, 'tasks'), finalData as Record<string, any>);
       return docRef.id;
     } catch (_error) { 
       // FIX: Handle error silently - intentionally unused
@@ -146,7 +146,7 @@ export const taskService = {
         ...updates,
         updatedAt: serverTimestamp(),
       });
-      await updateDoc(taskRef, sanitizedUpdates);
+      await updateDoc(taskRef, sanitizedUpdates as Record<string, any>);
     } catch (_error) { 
       // FIX: Handle error silently - intentionally unused
       // Handle error silently
@@ -298,7 +298,7 @@ export const groupService = {
   async createGroup(groupData: CreateGroupInput): Promise<string> {
     try {
       const docRef = await addDoc(collection(db, 'groups'), {
-        ...groupData,
+        ...(groupData as Record<string, any>),
         memberIds: [groupData.ownerId],
         memberRoles: { [groupData.ownerId]: 'owner' },
         createdAt: serverTimestamp(),
@@ -317,7 +317,7 @@ export const groupService = {
     try {
       const groupRef = doc(db, 'groups', groupId);
       await updateDoc(groupRef, {
-        ...updates,
+        ...(updates as Record<string, any>),
         updatedAt: serverTimestamp(),
       });
     } catch (_error) { 
@@ -811,7 +811,7 @@ export const commentService = {
       }
 
       const docRef = await addDoc(collection(db, 'tasks', taskId, 'comments'), {
-        ...(finalData as Record<string, unknown>),
+        ...(finalData as Record<string, any>),
         createdAt: serverTimestamp(),
       });
       return docRef.id;
@@ -989,7 +989,7 @@ export const userService = {
       await setDoc(
         userRef,
         {
-          ...(userData as Record<string, unknown>),
+          ...(userData as Record<string, any>),
           updatedAt: serverTimestamp(),
         },
         { merge: true }
@@ -1042,7 +1042,7 @@ export const batchService = {
       const taskRef = doc(collection(db, 'tasks'));
       taskRefs.push(taskRef);
       batch.set(taskRef, {
-        ...(taskData as Record<string, unknown>),
+        ...(taskData as Record<string, any>),
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
       });
@@ -1058,7 +1058,7 @@ export const batchService = {
     updates.forEach(({ id, data }) => {
       const taskRef = doc(db, 'tasks', id);
       batch.update(taskRef, {
-        ...(data as Record<string, unknown>),
+        ...(data as Record<string, any>),
         updatedAt: serverTimestamp(),
       });
     });
