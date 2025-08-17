@@ -341,7 +341,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       // 프로필 업데이트 후 사용자 프로필 새로고침
       await refreshUserProfile();
     } catch (err) {
-      console.error(err);
       setError(err instanceof Error ? err.message : '프로필 업데이트에 실패했습니다.');
       throw err;
     }
