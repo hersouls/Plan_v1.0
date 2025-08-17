@@ -1,6 +1,7 @@
 import { useContext } from 'react';
-import { AppContext } from '../contexts/AppContextDef';
+import { AppContext } from '../contexts/AppContext';
 
+// Hook to use the context
 export const useApp = () => {
   const context = useContext(AppContext);
   if (context === undefined) {

@@ -13,6 +13,7 @@ import {
   UserNotification,
 } from '../types';
 import { useAuth } from '../hooks/useAuth';
+import { DataContextType } from './DataContextTypes';
 
 export function DataProvider({ children }: { children: React.ReactNode }) {
   const { user, userProfile } = useAuth();
@@ -212,7 +213,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
 
   // Leave group
   const leaveGroup = useCallback(
-    async (_groupId: string): Promise<void> => {
+    async (groupId: string): Promise<void> => {
       if (!user || !userProfile) throw new Error('User not authenticated');
 
       try {

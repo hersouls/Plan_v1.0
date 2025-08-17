@@ -17,7 +17,7 @@ export function useLocalStorage<T>(
     try {
       const item = window.localStorage.getItem(key);
       return item ? deserialize(item) : defaultValue;
-    } catch (error) {
+    } catch (_error) {
       return defaultValue;
     }
   });

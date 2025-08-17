@@ -28,7 +28,7 @@ export const ResponsiveButton: React.FC<ResponsiveButtonProps> = ({
   icon,
   iconPosition = 'left',
   fullWidth = false,
-  _responsive = true,
+  responsive = true,
   iconSize = 'responsive',
   ...props
 }) => {

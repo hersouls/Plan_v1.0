@@ -7,16 +7,6 @@ import { AppState, AppAction, AppNotification, AppContextType } from './AppConte
 // Create the context
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
-// Hook to use the context
-export const useApp = () => {
-  const context = useContext(AppContext);
-  if (context === undefined) {
-    throw new Error('useApp must be used within an AppProvider');
-  }
-  return context;
-};
-
-
 // Initial State
 const initialState: AppState = {
   currentGroup: null,
@@ -406,4 +396,5 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 }
 
+export { AppContext };
 export default AppProvider;
