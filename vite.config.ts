@@ -9,8 +9,8 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
 
   return {
-    // Use root path for Vercel deployment
-    base: '/',
+    // Use repository name for GitHub Pages deployment
+    base: process.env.GITHUB_PAGES === 'true' ? '/Plan_v1.0/' : '/',
     plugins: [react(), tsconfigPaths()],
     esbuild: {
       jsx: 'automatic',
