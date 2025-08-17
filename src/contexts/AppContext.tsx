@@ -1,11 +1,8 @@
-import React, { useEffect, useReducer, createContext } from 'react';
+import React, { useEffect, useReducer } from 'react';
 import * as firestoreServices from '../lib/firestore';
 import { FamilyGroup } from '../types/group';
 import { useAuth } from '../hooks/useAuth';
-import { AppState, AppAction, AppNotification, AppContextType } from './AppContextTypes';
-
-// Create the context
-export const AppContext = createContext<AppContextType | undefined>(undefined);
+import { AppState, AppAction, AppNotification, AppContextType, AppContext } from './AppContextTypes';
 
 // Initial State
 const initialState: AppState = {
@@ -396,5 +393,4 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 }
 
-export { AppContext };
 export default AppProvider;

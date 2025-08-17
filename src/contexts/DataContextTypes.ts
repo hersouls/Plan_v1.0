@@ -1,3 +1,4 @@
+import { createContext } from 'react';
 import {
   CreateGroupInput,
   FamilyGroup,
@@ -39,3 +40,6 @@ export interface DataContextType {
   loading: boolean;
   error: string | null;
 }
+
+// Create Context
+export const DataContext = createContext<DataContextType | undefined>(undefined);

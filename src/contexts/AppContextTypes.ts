@@ -1,4 +1,5 @@
 
+import { createContext } from 'react';
 import { FamilyGroup } from '../types/group';
 
 // App State Interface
@@ -101,3 +102,6 @@ export interface AppContextType {
   showInfoMessage: (message: string) => void;
   showWarningMessage: (message: string) => void;
 }
+
+// Create Context
+export const AppContext = createContext<AppContextType | undefined>(undefined);
