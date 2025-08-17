@@ -968,16 +968,12 @@ function PointsManagement() {
                             >
                               <div className="flex items-center gap-4">
                                 <div
-                                  className={`
-                                    w-10 h-10 rounded-full flex items-center justify-center shadow-sm point-icon-animate
-                                    ${
-                                      isEarned
-                                        ? 'point-earned'
-                                        : isDeducted
-                                        ? 'point-deducted'
-                                        : 'point-manual'
-                                    }
-                                  `}
+                                  className={"w-10 h-10 rounded-full flex items-center justify-center shadow-sm point-icon-animate " + 
+                                    (isEarned
+                                      ? 'point-earned'
+                                      : isDeducted
+                                      ? 'point-deducted'
+                                      : 'point-manual')}
                                   aria-label={
                                     isEarned
                                       ? '획득'
@@ -1024,16 +1020,12 @@ function PointsManagement() {
                               <div className="flex items-center gap-3">
                                 <div className="flex items-center gap-2">
                                   <Typography.Body
-                                    className={`
-                                      font-bold text-lg
-                                      ${
-                                        isEarned
-                                          ? 'text-semantic-success-600'
-                                          : isDeducted
-                                          ? 'text-semantic-danger-600'
-                                          : 'text-semantic-primary-600'
-                                      }
-                                    `}
+                                    className={"font-bold text-lg " + 
+                                      (isEarned
+                                        ? 'text-semantic-success-600'
+                                        : isDeducted
+                                        ? 'text-semantic-danger-600'
+                                        : 'text-semantic-primary-600')}
                                   >
                                     {isEarned ? '+' : isDeducted ? '-' : ''}
                                     {history.amount}
@@ -1164,11 +1156,9 @@ function PointsManagement() {
                           className="hover:points-glow transition-all duration-200 text-white border-white/30 hover:bg-white/10"
                           aria-label="승인된 포인트 내역 새로고침"
                         >
-                          <RefreshCw
-                            className={`w-4 h-4 ${
-                              loading ? 'animate-spin' : ''
-                            }`}
-                          />
+                                                      <RefreshCw
+                              className={"w-4 h-4 " + (loading ? 'animate-spin' : '')}
+                            />
                         </WaveButton>
                       </div>
                     </div>
@@ -1207,9 +1197,9 @@ function PointsManagement() {
                                 return '오늘';
                               } else if (diffDays === 2) {
                                 return '어제';
-                              } else if (diffDays <= 7) {
-                                return `${diffDays - 1}일 전`;
-                              } else {
+                                                              } else if (diffDays <= 7) {
+                                  return (diffDays - 1) + "일 전";
+                                } else {
                                 return date.toLocaleDateString('ko-KR', {
                                   month: 'short',
                                   day: 'numeric',
