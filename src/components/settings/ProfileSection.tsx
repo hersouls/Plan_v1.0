@@ -196,7 +196,8 @@ export function ProfileSection() {
         try {
           await deleteAvatarImage(user.uid, editData.avatarStorageUrl);
         } catch (error) {
-          }
+        // Handle error silently
+      }
       }
 
       // 새 아바타 정보로 업데이트

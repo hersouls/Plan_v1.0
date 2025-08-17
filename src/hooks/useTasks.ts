@@ -243,25 +243,25 @@ export const useTasks = (options: UseTasksOptions = {}): UseTasksReturn => {
 
           if (options.filters?.status) {
             filteredTasks = filteredTasks.filter(task =>
-              options.filters!.status!.includes(task.status)
+              options.filters?.status?.includes(task.status)
             );
           }
 
           if (options.filters?.priority) {
             filteredTasks = filteredTasks.filter(task =>
-              options.filters!.priority!.includes(task.priority)
+              options.filters?.priority?.includes(task.priority)
             );
           }
 
           if (options.filters?.category) {
             filteredTasks = filteredTasks.filter(task =>
-              options.filters!.category!.includes(task.category)
+              options.filters?.category?.includes(task.category)
             );
           }
 
           if (options.filters?.assigneeId) {
             filteredTasks = filteredTasks.filter(task =>
-              options.filters!.assigneeId!.includes(task.assigneeId)
+              options.filters?.assigneeId?.includes(task.assigneeId)
             );
           }
 
@@ -294,25 +294,25 @@ export const useTasks = (options: UseTasksOptions = {}): UseTasksReturn => {
 
       if (options.filters?.status) {
         filteredTasks = filteredTasks.filter(task =>
-          options.filters!.status!.includes(task.status)
+          options.filters?.status?.includes(task.status)
         );
       }
 
       if (options.filters?.priority) {
         filteredTasks = filteredTasks.filter(task =>
-          options.filters!.priority!.includes(task.priority)
+          options.filters?.priority?.includes(task.priority)
         );
       }
 
       if (options.filters?.category) {
         filteredTasks = filteredTasks.filter(task =>
-          options.filters!.category!.includes(task.category)
+          options.filters?.category?.includes(task.category)
         );
       }
 
       if (options.filters?.assigneeId) {
         filteredTasks = filteredTasks.filter(task =>
-          options.filters!.assigneeId!.includes(task.assigneeId)
+          options.filters?.assigneeId?.includes(task.assigneeId)
         );
       }
 

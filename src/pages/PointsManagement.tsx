@@ -97,7 +97,7 @@ function PointsManagement() {
     if (savedFavorites) {
       try {
         setFavoriteGroups(JSON.parse(savedFavorites));
-      } catch {
+      } catch (error) {
         setFavoriteGroups([]);
       }
     }
@@ -165,7 +165,8 @@ function PointsManagement() {
         selectedGroupId
       );
       setUnapprovedPointHistory(history);
-    } catch {
+    } catch (error) {
+        // Handle error silently
       } finally {
       setLoading(false);
     }
@@ -183,7 +184,8 @@ function PointsManagement() {
       );
 
       setApprovedPointHistory(history);
-    } catch {
+    } catch (error) {
+        // Handle error silently
       } finally {
       setLoading(false);
     }
@@ -214,7 +216,8 @@ function PointsManagement() {
       await loadUnapprovedPointHistory();
       await loadApprovedPointHistory();
       await loadMemberStats();
-    } catch {
+    } catch (error) {
+        // Handle error silently
       } finally {
       setApprovingHistoryId(null);
     }
@@ -249,7 +252,8 @@ function PointsManagement() {
       await loadUnapprovedPointHistory();
       await loadApprovedPointHistory();
       await loadMemberStats();
-    } catch {
+    } catch (error) {
+        // Handle error silently
       } finally {
       setApprovingHistoryId(null);
     }
@@ -280,7 +284,8 @@ function PointsManagement() {
       });
 
       setMemberStats(statsMap);
-    } catch {
+    } catch (error) {
+        // Handle error silently
       }
   };
 
@@ -301,7 +306,8 @@ function PointsManagement() {
       }
 
       setUserProfiles(prev => ({ ...prev, ...profiles }));
-    } catch {
+    } catch (error) {
+        // Handle error silently
       }
   };
 
@@ -414,7 +420,8 @@ function PointsManagement() {
       await loadUnapprovedPointHistory();
       await loadApprovedPointHistory();
       setShowAddPointsModal(false);
-    } catch {
+    } catch (error) {
+        // Handle error silently
       }
   };
 
@@ -444,7 +451,8 @@ function PointsManagement() {
       await loadUnapprovedPointHistory();
       await loadApprovedPointHistory();
       setShowAddPointsModal(false);
-    } catch {
+    } catch (error) {
+        // Handle error silently
       }
   };
 
@@ -862,8 +870,9 @@ function PointsManagement() {
                               setLoading(true);
                               try {
                                 await loadUnapprovedPointHistory();
-                              } catch {
-                                } finally {
+                              } catch (error) {
+        // Handle error silently
+      } finally {
                                 setLoading(false);
                               }
                             }
@@ -1155,8 +1164,9 @@ function PointsManagement() {
                               setLoading(true);
                               try {
                                 await loadApprovedPointHistory();
-                              } catch {
-                                } finally {
+                              } catch (error) {
+        // Handle error silently
+      } finally {
                                 setLoading(false);
                               }
                             }

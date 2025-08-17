@@ -223,8 +223,9 @@ export const usePresence = (groupId: string): UsePresenceReturn => {
         };
 
         await addDoc(collection(db, 'presence'), presenceDoc);
-      } catch (err) {
-        }
+      } catch (error) {
+        // Handle error silently
+      }
     },
     [user, groupId]
   );

@@ -438,6 +438,7 @@ export class StorageService {
       );
       await Promise.all(folderPromises);
     } catch (error) {
+        // Handle error silently
       }
   }
 

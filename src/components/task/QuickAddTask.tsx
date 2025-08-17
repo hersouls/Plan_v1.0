@@ -323,6 +323,7 @@ const QuickAddTask: React.FC<QuickAddTaskProps> = ({
       // Reset form
       resetForm();
     } catch (error) {
+        // Handle error silently
       } finally {
       setIsLoading(false);
     }

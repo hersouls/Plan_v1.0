@@ -150,6 +150,7 @@ export function AccountActions() {
       URL.revokeObjectURL(url);
 
       } catch (error) {
+        // Handle error silently
       } finally {
       setLoading(null);
     }
@@ -173,6 +174,7 @@ export function AccountActions() {
 
       window.location.reload();
     } catch (error) {
+        // Handle error silently
       } finally {
       setLoading(null);
     }
@@ -184,6 +186,7 @@ export function AccountActions() {
       await signOut();
       navigate('/login');
     } catch (error) {
+        // Handle error silently
       } finally {
       setLoading(null);
       setShowLogoutModal(false);
@@ -197,6 +200,7 @@ export function AccountActions() {
       
       navigate('/login');
     } catch (error) {
+        // Handle error silently
       } finally {
       setLoading(null);
       setShowDeleteModal(false);

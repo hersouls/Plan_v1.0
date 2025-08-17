@@ -163,22 +163,22 @@ const applyFiltersAndSort = (
 
   // Apply status filter
   if (filters.status && filters.status.length > 0) {
-    filteredTasks = filteredTasks.filter(task => filters.status!.includes(task.status));
+    filteredTasks = filteredTasks.filter(task => filters.status?.includes(task.status));
   }
 
   // Apply assignee filter
   if (filters.assigneeId && filters.assigneeId.length > 0) {
-    filteredTasks = filteredTasks.filter(task => filters.assigneeId!.includes(task.assigneeId));
+    filteredTasks = filteredTasks.filter(task => filters.assigneeId?.includes(task.assigneeId));
   }
 
   // Apply priority filter
   if (filters.priority && filters.priority.length > 0) {
-    filteredTasks = filteredTasks.filter(task => filters.priority!.includes(task.priority));
+    filteredTasks = filteredTasks.filter(task => filters.priority?.includes(task.priority));
   }
 
   // Apply category filter
   if (filters.category && filters.category.length > 0) {
-    filteredTasks = filteredTasks.filter(task => filters.category!.includes(task.category));
+    filteredTasks = filteredTasks.filter(task => filters.category?.includes(task.category));
   }
 
   // Apply date range filter
@@ -204,7 +204,7 @@ const applyFiltersAndSort = (
   // Apply tags filter
   if (filters.tags && filters.tags.length > 0) {
     filteredTasks = filteredTasks.filter(task =>
-      filters.tags!.some(tag => task.tags.includes(tag))
+      filters.tags?.some(tag => task.tags.includes(tag))
     );
   }
 

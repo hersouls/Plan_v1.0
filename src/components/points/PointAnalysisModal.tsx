@@ -46,6 +46,7 @@ export function PointAnalysisModal({
       );
       setAnalysis(result);
     } catch (error) {
+        // Handle error silently
       } finally {
       setLoading(false);
     }

@@ -99,6 +99,7 @@ ${JSON.stringify(recentHistories, null, 2)}
         }
       }
     } catch (error) {
+        // Handle error silently
       }
 
     return this.getDefaultAnalysis();
@@ -161,10 +162,12 @@ ${i + 1}. ID: ${h.id}
               }
             });
           }
-        } catch (parseError) {
-          }
+        } catch (error) {
+        // Handle error silently
+      }
       }
     } catch (error) {
+        // Handle error silently
       }
 
     // Fill missing analyses with defaults
@@ -222,6 +225,7 @@ ${histories.map(h => `
         }
       }
     } catch (error) {
+        // Handle error silently
       }
 
     return [];
@@ -264,6 +268,7 @@ ${histories.map(h => `
         return isNaN(points) ? 10 : Math.max(1, Math.min(100, points));
       }
     } catch (error) {
+        // Handle error silently
       }
 
     return 10;

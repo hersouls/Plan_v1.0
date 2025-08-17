@@ -28,7 +28,8 @@ export class PWAManager {
       try {
         await this.registerServiceWorker();
       } catch (error) {
-        }
+        // Handle error silently
+      }
     }
   }
 
@@ -133,6 +134,7 @@ export class PWAManager {
         });
       }
     } catch (error) {
+        // Handle error silently
       }
   }
 
@@ -160,7 +162,7 @@ export class PWAManager {
         resolve(event.data);
       };
 
-      this.registration!.active!.postMessage({ type: 'GET_CACHE_STATUS' }, [
+      this.registration?.active?.postMessage({ type: 'GET_CACHE_STATUS' }, [
         messageChannel.port2,
       ]);
 
@@ -177,7 +179,8 @@ export class PWAManager {
           cacheNames.map(cacheName => caches.delete(cacheName))
         );
         } catch (error) {
-        }
+        // Handle error silently
+      }
     }
   }
 
@@ -193,6 +196,7 @@ export class PWAManager {
     try {
       await this.registration.sync.register(tag);
       } catch (error) {
+        // Handle error silently
       }
   }
 

@@ -150,7 +150,8 @@ function Statistics() {
 
         setUserProfiles(profiles);
       } catch (error) {
-        } finally {
+        // Handle error silently
+      } finally {
         setLoadingProfiles(false);
       }
     };
@@ -188,7 +189,8 @@ function Statistics() {
 
         setPointStats(statsMap);
       } catch (error) {
-        } finally {
+        // Handle error silently
+      } finally {
         setLoadingPoints(false);
       }
     };

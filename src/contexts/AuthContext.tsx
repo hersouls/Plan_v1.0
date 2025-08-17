@@ -119,6 +119,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         await userService.createOrUpdateUserProfile(user.uid, updateData);
       }
     } catch (error) {
+        // Handle error silently
       }
   };
 
@@ -162,7 +163,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                       }
                   }
                 } catch (error) {
-                  }
+        // Handle error silently
+      }
 
                 if (!isSubscribed) return;
 
@@ -194,17 +196,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                     (error) => {
                       }
                   );
-                } catch (subscriptionError) {
-                  }
+                } catch (error) {
+        // Handle error silently
+      }
               } catch (error) {
-                }
+        // Handle error silently
+      }
             } else {
               setUserProfile(null);
               if (profileUnsubscribe) {
                 try {
                   profileUnsubscribe();
                 } catch (error) {
-                  }
+        // Handle error silently
+      }
                 profileUnsubscribe = null;
               }
             }
@@ -230,14 +235,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         try {
           authUnsubscribe();
         } catch (error) {
-          }
+        // Handle error silently
+      }
       }
 
       if (profileUnsubscribe) {
         try {
           profileUnsubscribe();
         } catch (error) {
-          }
+        // Handle error silently
+      }
       }
     };
   }, []);
@@ -365,13 +372,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const updateUserProfile = async (updates: Partial<User>) => {
     if (!user) throw new Error('User not authenticated');
 
-    try {
-      await userService.createOrUpdateUserProfile(user.uid, updates);
+    await userService.createOrUpdateUserProfile(user.uid, updates);
       // 프로필 업데이트 후 사용자 프로필 새로고침
       await refreshUserProfile();
-    } catch (error) {
-      throw error;
-    }
+    
   };
 
   // Refresh user profile from Firestore
@@ -382,6 +386,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const profile = await userService.getUserProfile(user.uid);
       setUserProfile(profile);
     } catch (error) {
+        // Handle error silently
       }
   };
 

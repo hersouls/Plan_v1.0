@@ -60,8 +60,9 @@ export class NavigationCallback {
     if (returnQuery) {
       try {
         state.returnQuery = JSON.parse(returnQuery);
-      } catch (e) {
-        }
+      } catch (error) {
+        // Handle error silently
+      }
     }
     
     // 프래그먼트 복원
@@ -75,8 +76,9 @@ export class NavigationCallback {
     if (contextData) {
       try {
         state.contextData = JSON.parse(contextData);
-      } catch (e) {
-        }
+      } catch (error) {
+        // Handle error silently
+      }
     }
     
     return state;

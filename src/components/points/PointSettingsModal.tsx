@@ -166,6 +166,7 @@ export function PointSettingsModal({
       setPointValues(initialValues);
       setHasChanges(false);
     } catch (error) {
+        // Handle error silently
       } finally {
       setLoading(false);
     }
@@ -217,6 +218,7 @@ export function PointSettingsModal({
       await loadPointRules();
       setHasChanges(false);
     } catch (error) {
+        // Handle error silently
       } finally {
       setSaving(false);
     }

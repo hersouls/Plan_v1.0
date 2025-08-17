@@ -81,7 +81,8 @@ function Settings() {
           const parsed = JSON.parse(savedSettings);
           setSettings({ ...settings, ...parsed });
         } catch (error) {
-          }
+        // Handle error silently
+      }
       }
       
       setEditProfile({
@@ -105,6 +106,7 @@ function Settings() {
       if (import.meta.env.DEV) {
         }
     } catch (error) {
+        // Handle error silently
       } finally {
       setSaving(false);
     }
@@ -122,6 +124,7 @@ function Settings() {
       
       setIsEditing(false);
     } catch (error) {
+        // Handle error silently
       } finally {
       setSaving(false);
     }
@@ -131,6 +134,7 @@ function Settings() {
     try {
       await signOut();
     } catch (error) {
+        // Handle error silently
       }
   };
 
@@ -155,6 +159,7 @@ function Settings() {
       
       URL.revokeObjectURL(url);
     } catch (error) {
+        // Handle error silently
       }
   };
 

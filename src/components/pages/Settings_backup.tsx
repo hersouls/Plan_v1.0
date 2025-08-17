@@ -43,7 +43,8 @@ export const Settings: React.FC<SettingsProps> = ({
       try {
         setPreferences(JSON.parse(savedPreferences));
       } catch (error) {
-        }
+        // Handle error silently
+      }
     }
   }, []);
 

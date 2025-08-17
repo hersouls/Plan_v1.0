@@ -559,8 +559,9 @@ export function useSettings(): UseSettingsReturn {
             const decodedPath = decodeURIComponent(pathMatch[1]);
             await StorageService.deleteFile({ storageUrl: decodedPath } as any);
           }
-        } catch (deleteError) {
-          }
+        } catch (error) {
+        // Handle error silently
+      }
       }
 
       // 프로필에서 아바타 제거

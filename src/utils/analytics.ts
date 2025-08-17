@@ -15,7 +15,8 @@ export const trackEvent = async (eventName: string, parameters?: Record<string, 
     if (import.meta.env.DEV) {
       }
   } catch (error) {
-    }
+        // Handle error silently
+      }
 };
 
 export const trackPageView = async (pageName: string, userId?: string) => {

@@ -79,6 +79,7 @@ function Notifications() {
         )
       );
     } catch (error) {
+        // Handle error silently
       }
   };
 
@@ -92,6 +93,7 @@ function Notifications() {
         prev.map(n => ({ ...n, status: 'read' as const, readAt: new Date() }))
       );
     } catch (error) {
+        // Handle error silently
       }
   };
 
@@ -103,6 +105,7 @@ function Notifications() {
       await NotificationService.deleteNotification(notificationId);
       setNotifications(prev => prev.filter(n => n.id !== notificationId));
     } catch (error) {
+        // Handle error silently
       }
   };
 

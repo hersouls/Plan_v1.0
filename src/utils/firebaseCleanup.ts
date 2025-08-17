@@ -17,7 +17,6 @@ export const deleteAllDocumentsInCollection = async (collectionName: string) => 
     );
     
     await Promise.all(deletePromises);
-    `);
     
     return { success: true, deletedCount: snapshot.docs.length };
   } catch (error) {
@@ -36,7 +35,6 @@ export const deleteUserData = async (userId: string) => {
       deleteDoc(doc(db, 'trips', document.id))
     );
     await Promise.all(tripDeletePromises);
-    `);
     
     // plans 컬렉션에서 해당 사용자의 여행과 연관된 데이터 삭제
     // 먼저 해당 사용자의 trip_id 목록을 가져와야 함
@@ -52,7 +50,6 @@ export const deleteUserData = async (userId: string) => {
           deleteDoc(doc(db, 'plans', document.id))
         );
         await Promise.all(planDeletePromises);
-        `);
       }
     }
     
@@ -94,7 +91,8 @@ export const cleanupCurrentUserData = async () => {
     const result = await deleteUserData(auth.currentUser.uid);
     
     if (result.success) {
-      }
+      // Success message
+    }
     
     return result;
   } catch (error) {

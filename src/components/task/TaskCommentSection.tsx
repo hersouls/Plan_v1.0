@@ -308,6 +308,7 @@ export const TaskCommentSection: React.FC<TaskCommentSectionProps> = ({
       setCommentText('');
       setReplyToId(null);
     } catch (error) {
+        // Handle error silently
       } finally {
       setIsSubmitting(false);
     }
@@ -323,7 +324,8 @@ export const TaskCommentSection: React.FC<TaskCommentSectionProps> = ({
       try {
         await updateComment(commentId, { content });
       } catch (error) {
-        }
+        // Handle error silently
+      }
     },
     [updateComment]
   );
@@ -335,7 +337,8 @@ export const TaskCommentSection: React.FC<TaskCommentSectionProps> = ({
       try {
         await deleteComment(commentId);
       } catch (error) {
-        }
+        // Handle error silently
+      }
     },
     [deleteComment]
   );
@@ -363,7 +366,8 @@ export const TaskCommentSection: React.FC<TaskCommentSectionProps> = ({
 
         await updateComment(commentId, { reactions: newReactions });
       } catch (error) {
-        }
+        // Handle error silently
+      }
     },
     [comments, user?.uid, updateComment]
   );

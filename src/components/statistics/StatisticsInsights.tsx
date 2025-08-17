@@ -94,6 +94,7 @@ export function StatisticsInsights({
         setActivityPattern(patternData);
       }
     } catch (error) {
+        // Handle error silently
       } finally {
       setLoading(false);
     }

@@ -59,7 +59,8 @@ export const useOffline = (): UseOfflineReturn => {
       try {
         await enableNetwork(db);
         } catch (error) {
-        }
+        // Handle error silently
+      }
 
       // Sync pending actions when coming back online
       if (pendingActions.length > 0) {
@@ -176,6 +177,7 @@ export const useOffline = (): UseOfflineReturn => {
       await disableNetwork(db);
       setIsConnected(false);
       } catch (error) {
+        // Handle error silently
       }
   }, []);
 
@@ -184,6 +186,7 @@ export const useOffline = (): UseOfflineReturn => {
       await enableNetwork(db);
       setIsConnected(true);
       } catch (error) {
+        // Handle error silently
       }
   }, []);
 

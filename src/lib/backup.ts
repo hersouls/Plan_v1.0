@@ -326,7 +326,8 @@ export class BackupScheduler {
         const backupService = new BackupService(userId);
         await backupService.createAutoBackup(frequency);
         } catch (error) {
-        }
+        // Handle error silently
+      }
     }, interval);
     
     this.intervals.set(key, timeout);

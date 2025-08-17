@@ -242,6 +242,7 @@ export function DataSection({
       const backups = await backupService.getBackupList();
       setBackupList(backups);
     } catch (error) {
+        // Handle error silently
       } finally {
       setLoadingBackups(false);
     }

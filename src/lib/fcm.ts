@@ -98,6 +98,7 @@ class FCMService {
         lastTokenUpdate: new Date().toISOString(),
       });
     } catch (error) {
+        // Handle error silently
       }
   }
 

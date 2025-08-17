@@ -34,7 +34,8 @@ export function QRInviteModal({
       await navigator.clipboard.writeText(inviteUrl);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
-    } catch (err) {
+    } catch (error) {
+        // Handle error silently
       }
   };
 
@@ -43,7 +44,8 @@ export function QRInviteModal({
       await navigator.clipboard.writeText(inviteCode);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
-    } catch (err) {
+    } catch (error) {
+        // Handle error silently
       }
   };
 
@@ -55,8 +57,9 @@ export function QRInviteModal({
           text: `${groupName} 가족 그룹에 초대합니다. 아래 링크로 참여해주세요!`,
           url: inviteUrl,
         });
-      } catch (err) {
-        }
+      } catch (error) {
+        // Handle error silently
+      }
     } else {
       // Fallback to copy link
       handleCopyLink();

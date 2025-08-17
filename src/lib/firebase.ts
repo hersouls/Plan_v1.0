@@ -120,7 +120,8 @@ export const loadAnalytics = async () => {
       return analytics;
     }
   } catch (error) {
-    }
+        // Handle error silently
+      }
   return null;
 };
 
@@ -137,7 +138,8 @@ export const loadPerformance = async () => {
       return performance;
     }
   } catch (error) {
-    }
+        // Handle error silently
+      }
   return null;
 };
 
@@ -155,7 +157,8 @@ export const loadMessaging = async () => {
       return messaging;
     }
   } catch (error) {
-    }
+        // Handle error silently
+      }
   return null;
 };
 

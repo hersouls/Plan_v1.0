@@ -29,7 +29,8 @@ export function useLocalStorage<T>(
         setState(valueToStore);
         window.localStorage.setItem(key, serialize(valueToStore));
       } catch (error) {
-        }
+        // Handle error silently
+      }
     },
     [key, serialize]
   );
@@ -39,6 +40,7 @@ export function useLocalStorage<T>(
       window.localStorage.removeItem(key);
       setState(defaultValue);
     } catch (error) {
+        // Handle error silently
       }
   }, [key, defaultValue]);
 
@@ -49,7 +51,8 @@ export function useLocalStorage<T>(
         try {
           setState(deserialize(e.newValue));
         } catch (error) {
-          }
+        // Handle error silently
+      }
       }
     };
 

@@ -353,8 +353,9 @@ function FamilyManage() {
             }
         } else {
           }
-      } catch (authError) {
-        }
+      } catch (error) {
+        // Handle error silently
+      }
 
       // 방법 2: Firestore에서 사용자 정보 확인 (백업)
       const db = getFirestore();

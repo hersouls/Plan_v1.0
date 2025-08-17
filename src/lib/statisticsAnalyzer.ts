@@ -145,6 +145,7 @@ ${JSON.stringify(timePatterns, null, 2)}
         }
       }
     } catch (error) {
+        // Handle error silently
       }
 
     return this.getDefaultInsights();
@@ -213,6 +214,7 @@ ${JSON.stringify(timePatterns, null, 2)}
         }
       }
     } catch (error) {
+        // Handle error silently
       }
 
     return this.getDefaultPrediction(targetPeriod);
@@ -301,6 +303,7 @@ ${JSON.stringify(memberPerformance, null, 2)}
         }
       }
     } catch (error) {
+        // Handle error silently
       }
 
     return this.getDefaultTeamAnalysis();
@@ -362,6 +365,7 @@ ${JSON.stringify(memberPerformance, null, 2)}
         }
       }
     } catch (error) {
+        // Handle error silently
       }
 
     return this.getDefaultActivityPattern();

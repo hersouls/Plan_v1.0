@@ -62,6 +62,7 @@ export function InviteModal({
       setMessage('');
       // Show success message or close modal
     } catch (error) {
+        // Handle error silently
       } finally {
       setIsLoading(false);
     }
@@ -75,6 +76,7 @@ export function InviteModal({
       const link = await onGenerateInviteLink();
       setInviteLink(link);
     } catch (error) {
+        // Handle error silently
       } finally {
       setIsLoading(false);
     }
@@ -86,6 +88,7 @@ export function InviteModal({
       setCopied(type);
       setTimeout(() => setCopied(null), 2000);
     } catch (error) {
+        // Handle error silently
       }
   };
 

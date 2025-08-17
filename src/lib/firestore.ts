@@ -150,11 +150,8 @@ export const taskService = {
 
   // Delete a task
   async deleteTask(taskId: string): Promise<void> {
-    try {
-      await deleteDoc(doc(db, 'tasks', taskId));
-    } catch (error) {
-      throw error;
-    }
+    await deleteDoc(doc(db, 'tasks', taskId));
+    
   },
 
   // Get a single task
@@ -795,11 +792,8 @@ export const commentService = {
 
   // Delete a comment
   async deleteComment(taskId: string, commentId: string) {
-    try {
-      await deleteDoc(doc(db, 'tasks', taskId, 'comments', commentId));
-    } catch (error) {
-      throw error;
-    }
+    await deleteDoc(doc(db, 'tasks', taskId, 'comments', commentId));
+    
   },
 
   // Subscribe to comments for a task

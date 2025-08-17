@@ -201,6 +201,7 @@ export function useGroup(options: UseGroupOptions = {}): UseGroupReturn {
         unsubscribeMembers = () => clearInterval(interval);
       }
     } catch (error) {
+        // Handle error silently
       }
 
     return () => {

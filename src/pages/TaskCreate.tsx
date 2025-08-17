@@ -387,6 +387,7 @@ function TaskCreate({ mode = 'create' }: TaskCreateProps) {
 
       navigate(-1); // Go back
     } catch (error) {
+        // Handle error silently
       } finally {
       setSaving(false);
     }

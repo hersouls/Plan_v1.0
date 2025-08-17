@@ -52,7 +52,8 @@ export const CompletedTasksList = ({
       try {
         await refresh();
       } catch (error) {
-        } finally {
+        // Handle error silently
+      } finally {
         setLoading(false);
       }
     }
