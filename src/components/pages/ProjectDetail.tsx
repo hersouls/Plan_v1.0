@@ -1,3 +1,4 @@
+import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, ExternalLink, Mail, Globe, Music, CreditCard, Coins, Gift, TrendingUp, Crown } from 'lucide-react';
 import { Header } from '../layout/Header';
@@ -199,7 +200,7 @@ export function ProjectDetail() {
               <div className="space-y-6">
                 <div className="flex items-center justify-center gap-4">
                   <div className={`w-20 h-20 rounded-2xl flex items-center justify-center shadow-lg bg-gradient-to-r ${project.color}`}>
-                    <IconComponent size={32} className="text-white" />
+                    {React.createElement(project.icon as React.ComponentType<{ size: number; className: string }>, { size: 32, className: "text-white" })}
                   </div>
                   <div className="text-left">
                     <h1 className="text-4xl font-bold text-white mb-2 tracking-normal">
@@ -232,7 +233,7 @@ export function ProjectDetail() {
               <div className="space-y-6">
                 <div className="flex items-center space-x-3 mb-6">
                   <div className={`w-12 h-12 rounded-xl flex items-center justify-center shadow-lg bg-gradient-to-r ${project.color}`}>
-                    <IconComponent size={24} className="text-white" />
+                    {React.createElement(project.icon as React.ComponentType<{ size: number; className: string }>, { size: 24, className: "text-white" })}
                   </div>
                   <div>
                     <h2 className="text-2xl font-semibold text-white tracking-normal">

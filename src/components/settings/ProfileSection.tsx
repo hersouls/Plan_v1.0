@@ -121,7 +121,7 @@ export function ProfileSection() {
         setProfileData(newProfileData);
         setEditData(newProfileData);
       }
-    } catch (error) {
+    } catch {
       // 에러 발생 시 Auth 데이터만 사용
       const newProfileData = {
         displayName: user.displayName || '',
@@ -195,7 +195,7 @@ export function ProfileSection() {
       if (editData.avatarStorageUrl) {
         try {
           await deleteAvatarImage(user.uid, editData.avatarStorageUrl);
-        } catch (error) {
+        } catch {
         // Handle error silently
       }
       }
@@ -212,10 +212,8 @@ export function ProfileSection() {
       setSelectedFile(null);
       setUploadProgress(0);
 
-      } catch (error) {
-      alert(
-        error instanceof Error ? error.message : '아바타 업로드에 실패했습니다.'
-      );
+      } catch {
+      alert('아바타 업로드에 실패했습니다.');
     } finally {
       setUploadingAvatar(false);
       setUploadProgress(0);
@@ -262,7 +260,7 @@ export function ProfileSection() {
             displayName: editData.displayName,
             photoURL: editData.avatar,
           });
-          } catch (authError) {
+          } catch {
           // Auth 업데이트 실패해도 Firestore 업데이트는 계속 진행
         }
       }
@@ -293,12 +291,12 @@ export function ProfileSection() {
       // 프로필 업데이트 후 페이지 새로고침으로 변경사항 반영
       window.location.reload();
 
-      } catch (error) {
+      } catch {
       alert('프로필 업데이트에 실패했습니다.');
     } finally {
       setSaving(false);
     }
-  }, [editData, user?.uid, uploadingAvatar, user]);
+  }, [editData, uploadingAvatar, user]);
 
   const getInitials = useCallback(() => {
     return getAvatarInitials(profileData.displayName, profileData.email);

@@ -37,39 +37,7 @@ export function QRScannerModal({
     return () => {
       stopScanning();
     };
-  }, [isOpen, startScanning]);
-
-  const startScanning = useCallback(async () => {
-    try {
-      setError(null);
-      setSuccess(null);
-      setIsScanning(true);
-
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: {
-          facingMode: 'environment',
-          width: { ideal: 1280 },
-          height: { ideal: 720 },
-        },
-      });
-
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream;
-        streamRef.current = stream;
-
-        // 비디오 로드 완료 후 스캔 시작
-        videoRef.current.onloadedmetadata = () => {
-          if (videoRef.current) {
-            videoRef.current.play();
-            scanQRCode();
-          }
-        };
-      }
-    } catch {
-      setError('카메라 접근에 실패했습니다. 카메라 권한을 확인해주세요.');
-      setIsScanning(false);
-    }
-  }, [scanQRCode]);
+  }, [isOpen]);
 
   const scanQRCode = useCallback(() => {
     if (!videoRef.current || !canvasRef.current || !isScanning) return;
@@ -106,6 +74,38 @@ export function QRScannerModal({
     // 다음 프레임 스캔
     animationFrameRef.current = requestAnimationFrame(scanQRCode);
   }, [isScanning, onScanSuccess]);
+
+  const startScanning = useCallback(async () => {
+    try {
+      setError(null);
+      setSuccess(null);
+      setIsScanning(true);
+
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: {
+          facingMode: 'environment',
+          width: { ideal: 1280 },
+          height: { ideal: 720 },
+        },
+      });
+
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+        streamRef.current = stream;
+
+        // 비디오 로드 완료 후 스캔 시작
+        videoRef.current.onloadedmetadata = () => {
+          if (videoRef.current) {
+            videoRef.current.play();
+            scanQRCode();
+          }
+        };
+      }
+    } catch {
+      setError('카메라 접근에 실패했습니다. 카메라 권한을 확인해주세요.');
+      setIsScanning(false);
+    }
+  }, [scanQRCode]);
 
   const stopScanning = () => {
     if (animationFrameRef.current) {

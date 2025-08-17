@@ -56,7 +56,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
       } else {
         navigate('/login');
       }
-    } catch (error) {
+    } catch {
       alert('로그아웃에 실패했습니다.');
     }
   };
