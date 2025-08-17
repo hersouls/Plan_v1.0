@@ -11,7 +11,7 @@ import {
   Users,
   Brain,
 } from 'lucide-react';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { LoadingSpinner } from '../components/common/LoadingSpinner';
 import { WaveBackground } from '../components/layout/WaveBackground';
@@ -98,7 +98,7 @@ function PointsManagement() {
     if (savedFavorites) {
       try {
         setFavoriteGroups(JSON.parse(savedFavorites));
-      } catch (error) {
+      } catch {
         setFavoriteGroups([]);
       }
     }
@@ -156,7 +156,7 @@ function PointsManagement() {
   }, [members, selectedMember, user?.uid]);
 
   // 미승인 포인트 내역 로드
-  const loadUnapprovedPointHistory = async () => {
+  const loadUnapprovedPointHistory = useCallback(async () => {
     if (!selectedGroupId || !selectedMember) return;
 
     setLoading(true);
@@ -166,15 +166,15 @@ function PointsManagement() {
         selectedGroupId
       );
       setUnapprovedPointHistory(history);
-    } catch (error) {
+    } catch {
         // Handle error silently
       } finally {
       setLoading(false);
     }
-  };
+  }, [selectedGroupId, selectedMember]);
 
   // 승인된 포인트 내역 로드
-  const loadApprovedPointHistory = async () => {
+  const loadApprovedPointHistory = useCallback(async () => {
     if (!selectedGroupId || !selectedMember) return;
 
     setLoading(true);
@@ -185,12 +185,12 @@ function PointsManagement() {
       );
 
       setApprovedPointHistory(history);
-    } catch (error) {
+    } catch {
         // Handle error silently
       } finally {
       setLoading(false);
     }
-  };
+  }, [selectedGroupId, selectedMember]);
 
   // 포인트 내역 승인 (AI 분석 결과 반영 가능)
   const handleApprovePointHistory = async (historyId: string, adjustedAmount?: number) => {
@@ -217,7 +217,7 @@ function PointsManagement() {
       await loadUnapprovedPointHistory();
       await loadApprovedPointHistory();
       await loadMemberStats();
-    } catch (error) {
+    } catch {
         // Handle error silently
       } finally {
       setApprovingHistoryId(null);
@@ -253,7 +253,7 @@ function PointsManagement() {
       await loadUnapprovedPointHistory();
       await loadApprovedPointHistory();
       await loadMemberStats();
-    } catch (error) {
+    } catch {
         // Handle error silently
       } finally {
       setApprovingHistoryId(null);
@@ -264,14 +264,14 @@ function PointsManagement() {
   const handleTaskCardClick = (taskId: string) => {
     try {
       navigate(`/tasks/${taskId}/edit`);
-    } catch (error) {
+    } catch {
       // 오류 발생 시 사용자에게 알림
       alert('할일 수정 페이지로 이동할 수 없습니다. 다시 시도해주세요.');
     }
   };
 
   // 멤버별 포인트 통계 로드
-  const loadMemberStats = async () => {
+  const loadMemberStats = useCallback(async () => {
     if (!selectedGroupId || !members.length) return;
 
     try {
@@ -285,10 +285,10 @@ function PointsManagement() {
       });
 
       setMemberStats(statsMap);
-    } catch (error) {
+    } catch {
         // Handle error silently
       }
-  };
+  }, [selectedGroupId, members.length]);
 
   // 사용자 프로필 정보 로드 함수
   const loadUserProfiles = async (memberIds: string[]) => {
@@ -307,7 +307,7 @@ function PointsManagement() {
       }
 
       setUserProfiles(prev => ({ ...prev, ...profiles }));
-    } catch (error) {
+    } catch {
         // Handle error silently
       }
   };
@@ -409,7 +409,7 @@ function PointsManagement() {
       await loadUnapprovedPointHistory();
       await loadApprovedPointHistory();
       setShowAddPointsModal(false);
-    } catch (error) {
+    } catch {
         // Handle error silently
     }
   };
@@ -440,7 +440,7 @@ function PointsManagement() {
       await loadUnapprovedPointHistory();
       await loadApprovedPointHistory();
       setShowAddPointsModal(false);
-    } catch (error) {
+    } catch {
         // Handle error silently
     }
   };
@@ -845,7 +845,7 @@ function PointsManagement() {
                               setLoading(true);
                               try {
                                 await loadUnapprovedPointHistory();
-                              } catch (error) {
+                              } catch {
         // Handle error silently
       } finally {
                                 setLoading(false);
@@ -1099,7 +1099,7 @@ function PointsManagement() {
                               setLoading(true);
                               try {
                                 await loadApprovedPointHistory();
-                              } catch (error) {
+                              } catch {
         // Handle error silently
       } finally {
                                 setLoading(false);
