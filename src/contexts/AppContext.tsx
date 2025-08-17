@@ -5,6 +5,9 @@ import { useAuth } from '../hooks/useAuth';
 import { AppState, AppAction, AppNotification, AppContextType } from './AppContextTypes';
 
 
+// Create the context
+const AppContext = createContext<AppContextType | undefined>(undefined);
+
 // Initial State
 const initialState: AppState = {
   currentGroup: null,
