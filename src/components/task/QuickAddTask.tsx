@@ -25,7 +25,7 @@ import {
   User,
   Users,
 } from 'lucide-react';
-import React, { KeyboardEvent, useEffect, useRef, useState } from 'react';
+import React, { KeyboardEvent, useEffect, useRef, useState, useCallback } from 'react';
 
 // Enhanced natural language parsing patterns
 const DATE_PATTERNS = {
@@ -109,7 +109,7 @@ const QuickAddTask: React.FC<QuickAddTaskProps> = ({
   }>({});
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const parseNaturalLanguage = (text: string) => {
+  const parseNaturalLanguage = useCallback((text: string) => {
     if (!enhancedParsing) {
       return {
         title: text.trim(),
@@ -199,13 +199,13 @@ const QuickAddTask: React.FC<QuickAddTaskProps> = ({
     const tagMatches = text.match(/#\S+/g);
     if (tagMatches) {
       tagMatches.forEach(tag => {
-        parsedTags.push(tag.substring(1));
+        const cleanTag = tag.substring(1).trim();
+        if (cleanTag && !parsedTags.includes(cleanTag)) {
+          parsedTags.push(cleanTag);
+        }
         parsedTitle = parsedTitle.replace(tag, '').trim();
       });
     }
-
-    // "까지" 제거
-    parsedTitle = parsedTitle.replace(/까지/g, '').trim();
 
     return {
       title: parsedTitle,
@@ -214,10 +214,10 @@ const QuickAddTask: React.FC<QuickAddTaskProps> = ({
       tags: parsedTags,
       dueDate: parsedDueDate,
     };
-  };
+  }, [enhancedParsing, priority, category, dueDate, tags, taskType, selectedGroupId]);
 
   // Real-time suggestions based on input
-  const generateSuggestions = (text: string) => {
+  const generateSuggestions = useCallback((text: string) => {
     if (!showSuggestions || text.length < 2) return [];
 
     const suggestions: string[] = [];
@@ -244,7 +244,7 @@ const QuickAddTask: React.FC<QuickAddTaskProps> = ({
     }
 
     return suggestions.slice(0, 3);
-  };
+  }, [showSuggestions]);
 
   // Real-time parsing effect
   useEffect(() => {

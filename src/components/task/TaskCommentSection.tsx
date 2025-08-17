@@ -258,8 +258,8 @@ export const TaskCommentSection: React.FC<TaskCommentSectionProps> = ({
   className,
 }) => {
   const { user } = useAuth();
-  const { currentGroup, groupMembers } = useData();
-  const { comments, loading, error, addComment, updateComment, deleteComment } =
+  const { groupMembers } = useData();
+  const { comments, loading, addComment, updateComment, deleteComment } =
     useComments({
       taskId,
       realtime: true,
@@ -301,9 +301,9 @@ export const TaskCommentSection: React.FC<TaskCommentSectionProps> = ({
       });
       setCommentText('');
       setReplyToId(null);
-    } catch (error) {
-        // Handle error silently
-      } finally {
+    } catch {
+      // Handle error silently
+    } finally {
       setIsSubmitting(false);
     }
   }, [commentText, user, taskId, replyToId, addComment, groupMembers]);
@@ -317,7 +317,7 @@ export const TaskCommentSection: React.FC<TaskCommentSectionProps> = ({
     async (commentId: string, content: string) => {
       try {
         await updateComment(commentId, { content });
-      } catch (error) {
+      } catch {
         // Handle error silently
       }
     },
@@ -330,7 +330,7 @@ export const TaskCommentSection: React.FC<TaskCommentSectionProps> = ({
 
       try {
         await deleteComment(commentId);
-      } catch (error) {
+      } catch {
         // Handle error silently
       }
     },
@@ -359,7 +359,7 @@ export const TaskCommentSection: React.FC<TaskCommentSectionProps> = ({
         };
 
         await updateComment(commentId, { reactions: newReactions });
-      } catch (error) {
+      } catch {
         // Handle error silently
       }
     },
@@ -420,14 +420,6 @@ export const TaskCommentSection: React.FC<TaskCommentSectionProps> = ({
           댓글 {comments.length}개
         </Typography.H4>
       </div>
-
-      {error && (
-        <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
-          <Typography.BodySmall className="text-red-600">
-            댓글을 불러오는 중 오류가 발생했습니다.
-          </Typography.BodySmall>
-        </div>
-      )}
 
       {/* 댓글 작성 폼 */}
       <GlassCard className="p-4">
