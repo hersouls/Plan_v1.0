@@ -369,8 +369,16 @@ export class StorageService {
    * 파일 다운로드
    */
   static async downloadFile(fileAttachment: FileAttachment): Promise<Blob> {
+    try {
+      const response = await fetch(fileAttachment.downloadUrl);
+      if (!response.ok) {
+        throw new Error('파일 다운로드에 실패했습니다.');
+      }
+      return await response.blob();
+    } catch (error) {
+      throw new Error('파일 다운로드 중 오류가 발생했습니다.');
     }
-    return await response.blob();
+  }
   }
 
   /**
