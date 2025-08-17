@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/popover';
 import { cn } from '@/components/ui/utils';
 import { WaveButton } from '@/components/ui/WaveButton';
-import { TaskCategory, TaskPriority } from '@/types/task';
+import { Task, TaskCategory, TaskPriority } from '@/types/task';
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import {
@@ -62,7 +62,7 @@ interface QuickAddTaskProps {
     taskType?: 'personal' | 'group';
     groupId?: string;
   }) => void;
-  onTaskCreate?: (task: Omit<any, 'userId' | 'groupId'>) => Promise<void>;
+  onTaskCreate?: (task: Omit<Task, 'userId' | 'groupId'>) => Promise<void>;
   defaultAssigneeId?: string;
   groupMembers?: Array<{ id: string; name: string; avatar?: string }>;
   groups?: Array<{ id: string; name: string }>;
@@ -265,7 +265,7 @@ const QuickAddTask: React.FC<QuickAddTaskProps> = ({
           setTags(prev => [...new Set([...prev, ...parsed.tags])]);
       }
     }
-  }, [input, enhancedParsing, showSuggestions, mode]);
+  }, [input, enhancedParsing, showSuggestions, mode, category, dueDate, generateSuggestions, parseNaturalLanguage, priority]);
 
   const handleSubmit = async () => {
     if (!input.trim()) return;
@@ -322,7 +322,7 @@ const QuickAddTask: React.FC<QuickAddTaskProps> = ({
 
       // Reset form
       resetForm();
-    } catch (error) {
+    } catch {
         // Handle error silently
       } finally {
       setIsLoading(false);
