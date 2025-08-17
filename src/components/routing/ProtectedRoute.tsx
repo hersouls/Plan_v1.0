@@ -3,6 +3,7 @@ import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { LoadingSpinner } from '../common/LoadingSpinner';
 import { WaveBackground } from '../layout/WaveBackground';
+import { DEFAULT_REDIRECT_TO, DEFAULT_REQUIRE_AUTH } from './routeConstants';
 
 interface ProtectedRouteProps {
   children: ReactNode;
@@ -12,8 +13,8 @@ interface ProtectedRouteProps {
 
 export function ProtectedRoute({ 
   children, 
-  requireAuth = true, 
-  redirectTo = '/login' 
+  requireAuth = DEFAULT_REQUIRE_AUTH, 
+  redirectTo = DEFAULT_REDIRECT_TO 
 }: ProtectedRouteProps) {
   const { user, loading } = useAuth();
   const location = useLocation();

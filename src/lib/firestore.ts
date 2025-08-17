@@ -78,8 +78,7 @@ function createSafeSnapshot<T>(
           (error.message.includes('INTERNAL ASSERTION FAILED') ||
             error.message.includes('Unexpected state'))
         ) {
-          `
-          );
+          console.warn(`Retrying snapshot subscription (attempt ${retryCount + 1})`);
 
           setTimeout(() => {
             try {

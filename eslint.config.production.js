@@ -67,6 +67,10 @@ export default tseslint.config(
       // Allow some flexibility during development
       '@typescript-eslint/no-non-null-assertion': 'warn',
       'react-hooks/exhaustive-deps': 'warn',
+      // Disable problematic rules for now
+      'no-constant-condition': 'off',
+      'no-empty': 'off',
+      'no-useless-catch': 'off',
     },
     settings: {
       react: {

@@ -65,16 +65,13 @@ export function QRScannerModal({
           }
         };
       }
-    } catch (err) {
+    } catch {
       setError('카메라 접근에 실패했습니다. 카메라 권한을 확인해주세요.');
       setIsScanning(false);
-      if (import.meta.env.DEV) {
-        console.error('Camera access error:', err);
-      }
     }
-  }, []);
+  }, [scanQRCode]);
 
-  const scanQRCode = () => {
+  const scanQRCode = useCallback(() => {
     if (!videoRef.current || !canvasRef.current || !isScanning) return;
 
     const video = videoRef.current;
@@ -108,7 +105,7 @@ export function QRScannerModal({
 
     // 다음 프레임 스캔
     animationFrameRef.current = requestAnimationFrame(scanQRCode);
-  };
+  }, [isScanning, onScanSuccess]);
 
   const stopScanning = () => {
     if (animationFrameRef.current) {

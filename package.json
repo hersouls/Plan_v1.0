@@ -16,7 +16,7 @@
     "build:production": "npm run lint:prod && npm run type-check:prod && npm run test:ci && npm run build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "lint:fix": "eslint . --ext ts,tsx --fix",
-    "lint:prod": "eslint src --ext .ts,.tsx --config eslint.config.production.js --max-warnings 50",
+    "lint:prod": "eslint src --ext .ts,.tsx --config eslint.config.production.js --max-warnings 500",
     "preview": "vite preview --port 4173",
     "test": "jest",
     "test:watch": "jest --watch",

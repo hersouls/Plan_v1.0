@@ -1,5 +1,5 @@
 import { CheckCircle, Clock, RefreshCw, Tag, User } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useTasks } from '../../hooks/useTasks';
 import { Group } from '../../types/group';
 import { Task } from '../../types/task';
@@ -51,7 +51,7 @@ export const CompletedTasksList = ({
       setLoading(true);
       try {
         await refresh();
-      } catch (error) {
+      } catch {
         // Handle error silently
       } finally {
         setLoading(false);
@@ -100,9 +100,9 @@ export const CompletedTasksList = ({
   };
 
   // 총 포인트 계산
-  const calculateTotalPoints = (tasks: Task[]): number => {
+  const calculateTotalPoints = useCallback((tasks: Task[]): number => {
     return tasks.reduce((total, task) => total + calculateTaskPoints(task), 0);
-  };
+  }, []);
 
   // 날짜 포맷팅
   const formatDate = (_timestamp: unknown) => {
@@ -171,7 +171,7 @@ export const CompletedTasksList = ({
     }
 
     setGroupedTasks(grouped);
-  }, [selectedGroupId, groups, selectedMemberId, completedTasks]);
+  }, [selectedGroupId, groups, selectedMemberId, completedTasks, calculateTotalPoints]);
 
   if (loading || tasksLoading) {
     return (

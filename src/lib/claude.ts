@@ -9,9 +9,6 @@ const getClaudeConfig = () => {
     enabled: import.meta.env.VITE_ENABLE_CLAUDE_AI === 'true'
   };
 
-  if (!config.apiKey && config.enabled) {
-    console.warn('Claude API key is not configured but Claude AI is enabled');
-  }
 
   return config;
 };

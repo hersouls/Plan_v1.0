@@ -12,6 +12,10 @@ export default defineConfig(({ mode }) => {
     // Use root path for Vercel deployment
     base: '/',
     plugins: [react(), tsconfigPaths()],
+    esbuild: {
+      jsx: 'automatic',
+      jsxImportSource: 'react',
+    },
     resolve: {
       alias: {
         '@': path.resolve(__dirname, './src'),
@@ -108,11 +112,7 @@ export default defineConfig(({ mode }) => {
       __BUILD_DATE__: JSON.stringify(new Date().toISOString()),
     },
     envPrefix: ['VITE_'],
-    // TypeScript 모듈 처리 설정
-    esbuild: {
-      loader: 'tsx',
-      include: ['src/**/*.ts', 'src/**/*.tsx'],
-    },
+    // TypeScript 모듈 처리 설정 - esbuild 설정 제거하여 기본 설정 사용
     // 추가 설정
     css: {
       devSourcemap: true,

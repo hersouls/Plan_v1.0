@@ -48,9 +48,6 @@ class FCMService {
 
     try {
       const permission = await Notification.requestPermission();
-      if (import.meta.env.DEV) {
-        console.log('Notification permission requested:', permission);
-      }
       return permission;
     } catch (error) {
       if (import.meta.env.DEV) {
@@ -69,9 +66,6 @@ class FCMService {
     try {
       const permission = await this.requestPermission();
       if (permission !== 'granted') {
-        if (import.meta.env.DEV) {
-          console.log('Notification permission not granted');
-        }
         return null;
       }
 
@@ -80,17 +74,10 @@ class FCMService {
       });
 
       if (token) {
-        if (import.meta.env.DEV) {
-          console.log('FCM token obtained successfully');
-        }
-        this.token = token;
         return token;
-      } else {
-        if (import.meta.env.DEV) {
-          console.log('Failed to obtain FCM token');
-        }
-        return null;
       }
+      
+      return null;
     } catch (error) {
       if (import.meta.env.DEV) {
         console.error('Error getting registration token:', error);
@@ -122,9 +109,6 @@ class FCMService {
     }
 
     return onMessage(messaging, payload => {
-      if (import.meta.env.DEV) {
-        console.log('Foreground message received:', payload);
-      }
       callback(payload);
 
       // Show notification if the app is in focus
@@ -162,12 +146,9 @@ class FCMService {
   // Initialize FCM for a user
   async initialize(userId: string): Promise<boolean> {
     if (!this.isSupported) {
-      if (import.meta.env.DEV) {
-        console.log('FCM not supported');
-      }
       return false;
     }
-
+    
     try {
       const token = await this.getRegistrationToken();
       if (token) {
@@ -176,9 +157,6 @@ class FCMService {
         // Set up foreground message listener
         await this.setupForegroundMessageListener(payload => {
           // Handle custom notification behavior here
-          if (import.meta.env.DEV) {
-            console.log('FCM message received:', payload);
-          }
 
           // Dispatch custom event for app-specific handling
           window.dispatchEvent(

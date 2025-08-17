@@ -9,7 +9,7 @@ import {
   Target,
   Zap,
 } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useGroup, useUserGroups } from '../../hooks/useGroup';
 import { PointRule, pointsService } from '../../lib/points';
@@ -144,13 +144,7 @@ export function PointSettingsModal({
   }, [isOpen, onClose]);
 
   // 포인트 규칙 로드
-  useEffect(() => {
-    if (isOpen && groupId) {
-      loadPointRules();
-    }
-  }, [isOpen, groupId]);
-
-  const loadPointRules = async () => {
+  const loadPointRules = useCallback(async () => {
     setLoading(true);
     try {
       const rules = await pointsService.getPointRules(groupId);
@@ -165,12 +159,18 @@ export function PointSettingsModal({
       });
       setPointValues(initialValues);
       setHasChanges(false);
-    } catch (error) {
+    } catch {
         // Handle error silently
       } finally {
       setLoading(false);
     }
-  };
+  }, [groupId]);
+
+  useEffect(() => {
+    if (isOpen && groupId) {
+      loadPointRules();
+    }
+  }, [isOpen, groupId, loadPointRules]);
 
   // 포인트 값 변경 처리
   const handlePointChange = (categoryId: string, value: number) => {
@@ -207,7 +207,7 @@ export function PointSettingsModal({
         await pointsService.createPointRule({
           groupId,
           name: category.name,
-          type: category.id as any,
+          type: category.id as string,
           points,
           description: category.description,
           isActive: true,
@@ -217,7 +217,7 @@ export function PointSettingsModal({
       // 규칙 다시 로드
       await loadPointRules();
       setHasChanges(false);
-    } catch (error) {
+    } catch {
         // Handle error silently
       } finally {
       setSaving(false);

@@ -103,8 +103,9 @@ function Settings() {
       // Simulate API delay
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      if (import.meta.env.DEV) {
-        }
+      if (false) {
+        // Empty block
+      }
     } catch (error) {
         // Handle error silently
       } finally {
@@ -116,8 +117,9 @@ function Settings() {
     setSaving(true);
     try {
       // Update user profile (would be Firebase auth call)
-      if (import.meta.env.DEV) {
-        }
+      if (false) {
+        // Empty block
+      }
       
       // Simulate API delay
       await new Promise(resolve => setTimeout(resolve, 1000));
