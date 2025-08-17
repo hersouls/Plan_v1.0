@@ -17,7 +17,7 @@ import {
 import { Typography } from '@/components/ui/typography-utils';
 import { cn } from '@/components/ui/utils';
 import { useAuth } from '@/hooks/useAuth';
-import { useData } from '@/contexts/DataContext';
+import { useData } from '@/hooks/useData';
 import { Comment, useComments } from '@/hooks/useComments';
 import { formatDistanceToNow } from 'date-fns';
 import { ko } from 'date-fns/locale';
@@ -295,7 +295,7 @@ export const TaskCommentSection: React.FC<TaskCommentSectionProps> = ({
     } catch {
       setIsSubmitting(false);
     }
-  }, [commentText, user, taskId, replyToId, addComment, groupMembers]);
+  }, [commentText, user, taskId, replyToId, groupMembers]);
 
   const handleReply = useCallback((commentId: string) => {
     setReplyToId(commentId);
