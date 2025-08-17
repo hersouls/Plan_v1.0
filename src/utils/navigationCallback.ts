@@ -60,7 +60,7 @@ export class NavigationCallback {
     if (returnQuery) {
       try {
         state.returnQuery = JSON.parse(returnQuery);
-      } catch (_error) {
+      } catch {
         // Handle error silently
       }
     }
@@ -76,7 +76,7 @@ export class NavigationCallback {
     if (contextData) {
       try {
         state.contextData = JSON.parse(contextData);
-      } catch (_error) {
+      } catch {
         // Handle error silently
       }
     }
@@ -145,7 +145,7 @@ export class NavigationCallback {
     options?: {
       preserveQuery?: boolean;
       preserveFragment?: boolean;
-      contextData?: Record<string, any>;
+      contextData?: Record<string, unknown>;
     }
   ): string {
     const currentPath = window.location.pathname;

@@ -30,7 +30,7 @@ export const measurePerformance = async (name: string) => {
       }
       }
     };
-  } catch (_error) {
+  } catch {
     return {
       start: () => {},
       stop: () => {}
