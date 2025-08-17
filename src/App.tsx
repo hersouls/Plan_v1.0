@@ -8,7 +8,6 @@ import { WaveBackground } from './components/layout/WaveBackground';
 import { ProtectedRoute } from './components/routing/ProtectedRoute';
 import {
   AppProvider,
-  AuthProvider,
   DataProvider,
   TaskProvider,
 } from './contexts';
@@ -42,154 +41,152 @@ const LoadingFallback = () => (
 function App() {
   return (
     <ErrorBoundary>
-      <AuthProvider>
-        <DataProvider>
-          <AppProvider>
-            <TaskProvider>
-              <Router
-                future={{
-                  v7_startTransition: true,
-                  v7_relativeSplatPath: true,
-                }}
-              >
-                <div className="min-h-screen relative">
-                  <WaveBackground />
+      <DataProvider>
+        <AppProvider>
+          <TaskProvider>
+            <Router
+              future={{
+                v7_startTransition: true,
+                v7_relativeSplatPath: true,
+              }}
+            >
+              <div className="min-h-screen relative">
+                <WaveBackground />
 
-                  {/* Conditional Header */}
-                  <ConditionalHeader />
+                {/* Conditional Header */}
+                <ConditionalHeader />
 
-                  <div className="relative z-10 min-h-screen flex flex-col">
-                    <div className="flex-1">
-                      <Suspense fallback={<LoadingFallback />}>
-                        <Routes>
-                          {/* Public routes */}
-                          <Route
-                            path="/login"
-                            element={
-                              <ProtectedRoute requireAuth={false}>
-                                <Login />
-                              </ProtectedRoute>
-                            }
-                          />
-                          <Route path="/about" element={<AboutUs />} />
-                          <Route
-                            path="/terms-of-service"
-                            element={<TermsOfService />}
-                          />
-                          <Route
-                            path="/project-detail/:projectId"
-                            element={<ProjectDetail />}
-                          />
+                <div className="relative z-10 min-h-screen flex flex-col">
+                  <div className="flex-1">
+                    <Suspense fallback={<LoadingFallback />}>
+                      <Routes>
+                        {/* Public routes */}
+                        <Route
+                          path="/login"
+                          element={
+                            <ProtectedRoute requireAuth={false}>
+                              <Login />
+                            </ProtectedRoute>
+                          }
+                        />
+                        <Route path="/about" element={<AboutUs />} />
+                        <Route
+                          path="/terms-of-service"
+                          element={<TermsOfService />}
+                        />
+                        <Route
+                          path="/project-detail/:projectId"
+                          element={<ProjectDetail />}
+                        />
 
 
-                          {/* Protected routes - Todo App */}
-                          <Route
-                            path="/"
-                            element={
-                              <ProtectedRoute>
-                                <TodoHome />
-                              </ProtectedRoute>
-                            }
-                          />
+                        {/* Protected routes - Todo App */}
+                        <Route
+                          path="/"
+                          element={
+                            <ProtectedRoute>
+                              <TodoHome />
+                            </ProtectedRoute>
+                          }
+                        />
 
-                          <Route
-                            path="/todo"
-                            element={
-                              <ProtectedRoute>
-                                <TodoHome />
-                              </ProtectedRoute>
-                            }
-                          />
+                        <Route
+                          path="/todo"
+                          element={
+                            <ProtectedRoute>
+                              <TodoHome />
+                            </ProtectedRoute>
+                          }
+                        />
 
-                          <Route
-                            path="/tasks/create"
-                            element={
-                              <ProtectedRoute>
-                                <TaskCreate mode="create" />
-                              </ProtectedRoute>
-                            }
-                          />
+                        <Route
+                          path="/tasks/create"
+                          element={
+                            <ProtectedRoute>
+                              <TaskCreate mode="create" />
+                            </ProtectedRoute>
+                          }
+                        />
 
-                          <Route
-                            path="/tasks/:taskId/edit"
-                            element={
-                              <ProtectedRoute>
-                                <TaskCreate mode="edit" />
-                              </ProtectedRoute>
-                            }
-                          />
+                        <Route
+                          path="/tasks/:taskId/edit"
+                          element={
+                            <ProtectedRoute>
+                              <TaskCreate mode="edit" />
+                            </ProtectedRoute>
+                          }
+                        />
 
-                          <Route
-                            path="/tasks/:taskId"
-                            element={
-                              <ProtectedRoute>
-                                <TaskDetailPage />
-                              </ProtectedRoute>
-                            }
-                          />
+                        <Route
+                          path="/tasks/:taskId"
+                          element={
+                            <ProtectedRoute>
+                              <TaskDetailPage />
+                            </ProtectedRoute>
+                          }
+                        />
 
-                          <Route
-                            path="/family"
-                            element={
-                              <ProtectedRoute>
-                                <FamilyManage />
-                              </ProtectedRoute>
-                            }
-                          />
+                        <Route
+                          path="/family"
+                          element={
+                            <ProtectedRoute>
+                              <FamilyManage />
+                            </ProtectedRoute>
+                          }
+                        />
 
-                          <Route
-                            path="/points"
-                            element={
-                              <ProtectedRoute>
-                                <PointsManagement />
-                              </ProtectedRoute>
-                            }
-                          />
+                        <Route
+                          path="/points"
+                          element={
+                            <ProtectedRoute>
+                              <PointsManagement />
+                            </ProtectedRoute>
+                          }
+                        />
 
-                          <Route
-                            path="/statistics"
-                            element={
-                              <ProtectedRoute>
-                                <Statistics />
-                              </ProtectedRoute>
-                            }
-                          />
+                        <Route
+                          path="/statistics"
+                          element={
+                            <ProtectedRoute>
+                              <Statistics />
+                            </ProtectedRoute>
+                          }
+                        />
 
-                          <Route
-                            path="/settings"
-                            element={
-                              <ProtectedRoute>
-                                <Settings />
-                              </ProtectedRoute>
-                            }
-                          />
+                        <Route
+                          path="/settings"
+                          element={
+                            <ProtectedRoute>
+                              <Settings />
+                            </ProtectedRoute>
+                          }
+                        />
 
-                          <Route
-                            path="/notifications"
-                            element={
-                              <ProtectedRoute>
-                                <Notifications />
-                              </ProtectedRoute>
-                            }
-                          />
+                        <Route
+                          path="/notifications"
+                          element={
+                            <ProtectedRoute>
+                              <Notifications />
+                            </ProtectedRoute>
+                          }
+                        />
 
-                          {/* Legacy routes removed - focusing on task management only */}
+                        {/* Legacy routes removed - focusing on task management only */}
 
-                          {/* 404 route */}
-                          <Route path="*" element={<NotFound />} />
-                        </Routes>
-                      </Suspense>
-                    </div>
-
-                    {/* Footer */}
-                    <Footer />
+                        {/* 404 route */}
+                        <Route path="*" element={<NotFound />} />
+                      </Routes>
+                    </Suspense>
                   </div>
+
+                  {/* Footer */}
+                  <Footer />
                 </div>
-              </Router>
-            </TaskProvider>
-          </AppProvider>
-        </DataProvider>
-      </AuthProvider>
+              </div>
+            </Router>
+          </TaskProvider>
+        </AppProvider>
+      </DataProvider>
     </ErrorBoundary>
   );
 }

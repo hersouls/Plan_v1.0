@@ -242,7 +242,14 @@ export function DataSection({
     try {
       const backupService = new BackupService(authContext.user.uid);
       const backups = await backupService.getBackupList();
-      setBackupList(backups);
+      // FIX: Map Record<string, unknown>[] to proper type
+      const typedBackups = backups.map(backup => ({
+        name: backup.name as string,
+        timestamp: backup.timestamp as number,
+        frequency: backup.frequency as string,
+        path: backup.path as string,
+      }));
+      setBackupList(typedBackups);
     } catch {
         // Handle error silently
       } finally {

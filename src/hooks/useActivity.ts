@@ -211,7 +211,7 @@ export const usePresence = (_groupId: string): UsePresenceReturn => {
       status: UserPresence['status'],
       metadata?: Partial<UserPresence>
     ): Promise<void> => {
-      if (!user || !groupId) return;
+      if (!user || !_groupId) return;
 
       try {
         const presenceDoc = {
@@ -220,7 +220,7 @@ export const usePresence = (_groupId: string): UsePresenceReturn => {
           userAvatar: user.photoURL || undefined,
           status,
           lastSeen: serverTimestamp(),
-          groupId,
+          groupId: _groupId,
           ...metadata,
         };
 
@@ -230,11 +230,11 @@ export const usePresence = (_groupId: string): UsePresenceReturn => {
         // Handle error silently
       }
     },
-    [user]
+    [user, _groupId]
   );
 
   useEffect(() => {
-    if (!user || !groupId) return;
+    if (!user || !_groupId) return;
 
     let unsubscribe: (() => void) | undefined;
     let heartbeatInterval: NodeJS.Timeout;
@@ -243,7 +243,7 @@ export const usePresence = (_groupId: string): UsePresenceReturn => {
       // Track presence changes
       const q = query(
         collection(db, 'presence'),
-        where('groupId', '==', groupId),
+        where('groupId', '==', _groupId),
         orderBy('lastSeen', 'desc'),
         firestoreLimit(20)
       );
@@ -285,7 +285,7 @@ export const usePresence = (_groupId: string): UsePresenceReturn => {
       // Mark user as offline when component unmounts
       updatePresence('offline');
     };
-  }, [user, updatePresence]);
+  }, [user, updatePresence, _groupId]);
 
   return {
     presence,

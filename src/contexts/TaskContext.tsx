@@ -593,3 +593,6 @@ export function TaskProvider({ children }: { children: React.ReactNode }) {
 
 export type { TaskAction } from '../types/taskContext';
 
+// FIX: Export TaskContext for use in utility files
+export { TaskContext } from './TaskContextTypes';
+

@@ -220,21 +220,21 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
 
       try {
         setError(null);
-        await groupService.removeMemberFromGroup(groupId, user.uid);
+        await groupService.removeMemberFromGroup(_groupId, user.uid);
 
         // Update user profile to remove group
         const updatedGroupIds = userProfile.groupIds.filter(
-          id => id !== groupId
+          id => id !== _groupId
         );
         await userService.createOrUpdateUserProfile(user.uid, {
           groupIds: updatedGroupIds,
         });
 
         // Update local state
-        setGroups(prev => prev.filter(group => group.id !== groupId));
+        setGroups(prev => prev.filter(group => group.id !== _groupId));
 
         // Clear current group if user left it
-        if (currentGroup && currentGroup.id === groupId) {
+        if (currentGroup && currentGroup.id === _groupId) {
           setCurrentGroupState(null);
         }
       } catch (err) {
@@ -379,3 +379,6 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
 
   return <DataContext.Provider value={value}>{children}</DataContext.Provider>;
 }
+
+// FIX: Export DataContext for use in utility files
+export { DataContext } from './DataContextTypes';

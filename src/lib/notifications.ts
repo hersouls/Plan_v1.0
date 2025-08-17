@@ -136,36 +136,34 @@ export class NotificationService {
         })) as Notification[];
         callback(notifications);
       },
-        ) {
-          // 기본 쿼리로 재시도
-          const basicQuery = query(
-            collection(db, this.COLLECTION),
-            where('userId', '==', userId),
-            orderBy('createdAt', 'desc'),
-            limit(limitCount)
-          );
+      (_error: unknown) => {
+        // 기본 쿼리로 재시도
+        const basicQuery = query(
+          collection(db, this.COLLECTION),
+          where('userId', '==', userId),
+          orderBy('createdAt', 'desc'),
+          limit(limitCount)
+        );
 
-          return onSnapshot(
-            basicQuery,
-            snapshot => {
-              let notifications = snapshot.docs.map(doc => ({
-                id: doc.id,
-                ...doc.data(),
-              })) as Notification[];
+        return onSnapshot(
+          basicQuery,
+          snapshot => {
+            let notifications = snapshot.docs.map(doc => ({
+              id: doc.id,
+              ...doc.data(),
+            })) as Notification[];
 
-              // 클라이언트 사이드에서 필터링
-              if (status !== 'all') {
-                notifications = notifications.filter(n => n.status === status);
-              }
-
-              callback(notifications);
-            },
-              callback([]); // 빈 배열 반환
+            // 클라이언트 사이드에서 필터링
+            if (status !== 'all') {
+              notifications = notifications.filter(n => n.status === status);
             }
-          );
-        } else {
-          callback([]); // 빈 배열 반환
-        }
+
+            callback(notifications);
+          },
+          (_error: unknown) => {
+            callback([]); // 빈 배열 반환
+          }
+        );
       }
     );
 
@@ -184,6 +182,7 @@ export class NotificationService {
         createdAt: Timestamp.now(),
       });
       return docRef.id;
+    } catch (_error: unknown) {
       throw new Error('알림을 생성할 수 없습니다.');
     }
   }
@@ -191,12 +190,13 @@ export class NotificationService {
   /**
    * 알림 읽음 처리
    */
-  static async markAsRead(_notificationId: string): Promise<void> {
+  static async markAsRead(notificationId: string): Promise<void> {
     try {
       await updateDoc(doc(db, this.COLLECTION, notificationId), {
         status: 'read',
         readAt: Timestamp.now(),
       });
+    } catch (_error: unknown) {
       throw new Error('알림을 읽음 처리할 수 없습니다.');
     }
   }
@@ -220,6 +220,7 @@ export class NotificationService {
       });
 
       await batch.commit();
+    } catch (_error: unknown) {
       throw new Error('알림을 읽음 처리할 수 없습니다.');
     }
   }
@@ -227,9 +228,10 @@ export class NotificationService {
   /**
    * 알림 삭제
    */
-  static async deleteNotification(_notificationId: string): Promise<void> {
+  static async deleteNotification(notificationId: string): Promise<void> {
     try {
       await deleteDoc(doc(db, this.COLLECTION, notificationId));
+    } catch (_error: unknown) {
       throw new Error('알림을 삭제할 수 없습니다.');
     }
   }
@@ -258,6 +260,7 @@ export class NotificationService {
       };
 
       return stats;
+    } catch (_error: unknown) {
       throw new Error('알림 통계를 가져올 수 없습니다.');
     }
   }
@@ -277,6 +280,7 @@ export class NotificationService {
       }
 
       return null;
+    } catch (_error: unknown) {
       throw new Error('알림 설정을 가져올 수 없습니다.');
     }
   }
@@ -292,6 +296,7 @@ export class NotificationService {
         doc(db, this.SETTINGS_COLLECTION, settings.userId),
         settings as Record<string, unknown>
       );
+    } catch (_error: unknown) {
       throw new Error('알림 설정을 저장할 수 없습니다.');
     }
   }
@@ -321,6 +326,7 @@ export class NotificationService {
         doc(db, this.SETTINGS_COLLECTION, userId),
         defaultSettings as Record<string, unknown>
       );
+    } catch (_error: unknown) {
       throw new Error('기본 알림 설정을 생성할 수 없습니다.');
     }
   }

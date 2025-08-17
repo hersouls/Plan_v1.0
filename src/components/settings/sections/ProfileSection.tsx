@@ -188,7 +188,7 @@ export function ProfileSection({
       // Validate profile data using validation service
       const validationRules = validationService.getProfileValidationRules();
       const validationResult = validationService.validateFields(
-        localEditData,
+        localEditData as Record<string, unknown>,
         validationRules
       );
 
