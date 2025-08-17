@@ -207,6 +207,10 @@ ${JSON.stringify(timePatterns, null, 2)}
           return this.getDefaultPrediction(targetPeriod);
         }
       }
+    } catch (error) {
+      // FIX: Added missing catch block
+      return this.getDefaultPrediction(targetPeriod);
+    }
 
     return this.getDefaultPrediction(targetPeriod);
   }

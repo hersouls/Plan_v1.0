@@ -97,6 +97,9 @@ class PointsService {
       // await this.updatePointStats(history.userId, history.groupId);
 
       return docRef.id;
+    } catch (error) {
+      // FIX: Added missing catch block
+      throw new Error('포인트 내역을 추가할 수 없습니다.');
     }
   }
 
@@ -120,6 +123,9 @@ class PointsService {
         id: doc.id,
         ...doc.data(),
       })) as PointHistory[];
+    } catch (error) {
+      // FIX: Added missing catch block
+      throw new Error('포인트 내역을 가져올 수 없습니다.');
     }
   }
 
@@ -137,6 +143,9 @@ class PointsService {
         id: doc.id,
         ...doc.data(),
       })) as PointHistory[];
+    } catch (error) {
+      // FIX: Added missing catch block
+      throw new Error('그룹 포인트 내역을 가져올 수 없습니다.');
     }
   }
 
@@ -153,6 +162,9 @@ class PointsService {
 
       const docRef = await addDoc(collection(db, 'pointRules'), ruleData);
       return docRef.id;
+    } catch (error) {
+      // FIX: Added missing catch block
+      throw new Error('포인트 규칙을 생성할 수 없습니다.');
     }
   }
 
@@ -171,6 +183,9 @@ class PointsService {
         id: doc.id,
         ...doc.data(),
       })) as PointRule[];
+    } catch (error) {
+      // FIX: Added missing catch block
+      throw new Error('포인트 규칙을 가져올 수 없습니다.');
     }
   }
 
@@ -185,6 +200,9 @@ class PointsService {
         ...updates,
         updatedAt: Timestamp.now(),
       });
+    } catch (error) {
+      // FIX: Added missing catch block
+      throw new Error('포인트 규칙을 업데이트할 수 없습니다.');
     }
   }
 
@@ -202,6 +220,9 @@ class PointsService {
       }
 
       return null;
+    } catch (error) {
+      // FIX: Added missing catch block
+      throw new Error('포인트 통계를 가져올 수 없습니다.');
     }
   }
 
@@ -259,6 +280,9 @@ class PointsService {
       // Firestore에 저장
       const statsRef = doc(db, 'pointStats', `${userId}_${groupId}`);
       await setDoc(statsRef, stats);
+    } catch (error) {
+      // FIX: Added missing catch block
+      throw new Error('포인트 통계를 업데이트할 수 없습니다.');
     }
   }
 
@@ -297,6 +321,9 @@ class PointsService {
       await batch.commit();
 
       return updatedStats;
+    } catch (error) {
+      // FIX: Added missing catch block
+      throw new Error('그룹 포인트 통계를 가져올 수 없습니다.');
     }
   }
 
@@ -322,6 +349,9 @@ class PointsService {
 
       // 추가 보너스 포인트 규칙 확인 (승인 대기 상태)
       await this.checkAndAwardBonusPoints(userId, groupId);
+    } catch (error) {
+      // FIX: Added missing catch block
+      throw new Error('할일 완료 시 포인트를 지급할 수 없습니다.');
     }
   }
 
@@ -366,6 +396,9 @@ class PointsService {
           }
         }
       }
+    } catch (error) {
+      // FIX: Added missing catch block
+      throw new Error('보너스 포인트를 지급할 수 없습니다.');
     }
   }
 
@@ -396,6 +429,9 @@ class PointsService {
 
       // 포인트 통계 업데이트
       await this.updatePointStats(userId, groupId);
+    } catch (error) {
+      // FIX: Added missing catch block
+      throw new Error('수동 포인트를 조정할 수 없습니다.');
     }
   }
 
@@ -431,6 +467,9 @@ class PointsService {
 
       // 사용자 프로필의 포인트 업데이트
       await this.updateUserPoints(history.userId, history.groupId, pointAmount);
+    } catch (error) {
+      // FIX: Added missing catch block
+      throw new Error('포인트 내역을 승인할 수 없습니다.');
     }
   }
 
@@ -446,6 +485,9 @@ class PointsService {
         approvedAt: Timestamp.now(),
         approvedBy: rejectedBy,
       });
+    } catch (error) {
+      // FIX: Added missing catch block
+      throw new Error('포인트 내역을 거부할 수 없습니다.');
     }
   }
 
@@ -477,6 +519,9 @@ class PointsService {
       );
 
       return unapprovedHistory;
+    } catch (error) {
+      // FIX: Added missing catch block
+      throw new Error('미승인된 포인트 내역을 가져올 수 없습니다.');
     }
   }
 
@@ -507,6 +552,9 @@ class PointsService {
       );
 
       return approvedHistory;
+    } catch (error) {
+      // FIX: Added missing catch block
+      throw new Error('승인된 포인트 내역을 가져올 수 없습니다.');
     }
   }
 
@@ -521,6 +569,9 @@ class PointsService {
         amount: newAmount,
         updatedAt: Timestamp.now(),
       });
+    } catch (error) {
+      // FIX: Added missing catch block
+      throw new Error('포인트 내역 금액을 수정할 수 없습니다.');
     }
   }
 
@@ -544,6 +595,9 @@ class PointsService {
           points: newPoints,
         });
       }
+    } catch (error) {
+      // FIX: Added missing catch block
+      throw new Error('사용자 포인트를 업데이트할 수 없습니다.');
     }
   }
 }

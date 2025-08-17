@@ -167,6 +167,9 @@ export async function optimizeImage(file: File): Promise<File> {
 
     try {
       const resizedFile = await resizeImage(file, options);
+      return resizedFile;
+    } catch (error) {
+      // FIX: Added missing catch block
       throw new Error('이미지 크기 조정에 실패했습니다.');
     }
   }

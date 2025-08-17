@@ -70,6 +70,9 @@ function createSafeSnapshot<T>(
               onNext(null as T);
             }
           }
+        } catch (error) {
+          // FIX: Added missing catch block
+          if (onError) onError(error as Error);
         }
       },
       error: error => {
@@ -93,6 +96,10 @@ function createSafeSnapshot<T>(
       },
     });
     // 빈 unsubscribe 함수 반환
+    return () => {};
+  } catch (error) {
+    // FIX: Added missing catch block
+    if (onError) onError(error as Error);
     return () => {};
   }
 }
@@ -125,6 +132,9 @@ export const taskService = {
       // 디버깅용 로그
       const docRef = await addDoc(collection(db, 'tasks'), finalData);
       return docRef.id;
+    } catch (error) {
+      // FIX: Added missing catch block
+      throw new Error('할일을 생성할 수 없습니다.');
     }
   },
 
@@ -138,13 +148,20 @@ export const taskService = {
         updatedAt: serverTimestamp(),
       });
       await updateDoc(taskRef, sanitizedUpdates);
+    } catch (error) {
+      // FIX: Added missing catch block
+      throw new Error('할일을 업데이트할 수 없습니다.');
     }
   },
 
   // Delete a task
   async deleteTask(taskId: string): Promise<void> {
-    await deleteDoc(doc(db, 'tasks', taskId));
-    
+    try {
+      await deleteDoc(doc(db, 'tasks', taskId));
+    } catch (error) {
+      // FIX: Added missing catch block
+      throw new Error('할일을 삭제할 수 없습니다.');
+    }
   },
 
   // Get a single task
@@ -155,6 +172,9 @@ export const taskService = {
         return { id: docSnap.id, ...docSnap.data() } as Task;
       }
       return null;
+    } catch (error) {
+      // FIX: Added missing catch block
+      throw new Error('할일을 가져올 수 없습니다.');
     }
   },
 
@@ -172,6 +192,9 @@ export const taskService = {
       );
 
       return createSafeSnapshot<Task[]>(q, callback, onError);
+    } catch (error) {
+      // FIX: Added missing catch block
+      if (onError) onError(error as Error);
       return () => {};
     }
   },
@@ -190,6 +213,9 @@ export const taskService = {
       );
 
       return createSafeSnapshot<Task[]>(q, callback, onError);
+    } catch (error) {
+      // FIX: Added missing catch block
+      if (onError) onError(error as Error);
       return () => {};
     }
   },
@@ -219,6 +245,9 @@ export const taskService = {
         },
         onError
       );
+    } catch (error) {
+      // FIX: Added missing catch block
+      if (onError) onError(error as Error);
       return () => {};
     }
   },
@@ -228,7 +257,7 @@ export const taskService = {
     try {
       const q = query(
         collection(db, 'tasks'),
-        where('groupId', '==', groupId),
+        where('groupId', '==', _groupId),
         orderBy('createdAt', 'desc')
       );
 
@@ -237,6 +266,9 @@ export const taskService = {
         id: doc.id,
         ...doc.data(),
       })) as Task[];
+    } catch (error) {
+      // FIX: Added missing catch block
+      throw new Error('그룹 할일을 가져올 수 없습니다.');
     }
   },
 
@@ -253,6 +285,10 @@ export const taskService = {
       return querySnapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data(),
+      })) as Task[];
+    } catch (error) {
+      // FIX: Added missing catch block
+      throw new Error('사용자 할일을 가져올 수 없습니다.');
     }
   },
 };
@@ -270,6 +306,9 @@ export const groupService = {
         updatedAt: serverTimestamp(),
       });
       return docRef.id;
+    } catch (error) {
+      // FIX: Added missing catch block
+      throw new Error('그룹을 생성할 수 없습니다.');
     }
   },
 
@@ -281,6 +320,9 @@ export const groupService = {
         ...updates,
         updatedAt: serverTimestamp(),
       });
+    } catch (error) {
+      // FIX: Added missing catch block
+      throw new Error('그룹을 업데이트할 수 없습니다.');
     }
   },
 
@@ -299,6 +341,9 @@ export const groupService = {
         return { id: docSnap.id, ...docSnap.data() } as FamilyGroup;
       }
       return null;
+    } catch (error) {
+      // FIX: Added missing catch block
+      throw new Error('그룹을 가져올 수 없습니다.');
     }
   },
 
@@ -321,6 +366,9 @@ export const groupService = {
         callback,
         onError
       );
+    } catch (error) {
+      // FIX: Added missing catch block
+      if (onError) onError(error as Error);
       return () => {};
     }
   },
@@ -338,6 +386,9 @@ export const groupService = {
         [`memberRoles.${userId}`]: role,
         updatedAt: serverTimestamp(),
       });
+    } catch (error) {
+      // FIX: Added missing catch block
+      throw new Error('그룹 멤버를 추가할 수 없습니다.');
     }
   },
 
@@ -363,6 +414,9 @@ export const groupService = {
       }
 
       await batch.commit();
+    } catch (error) {
+      // FIX: Added missing catch block
+      throw new Error('그룹 멤버를 제거할 수 없습니다.');
     }
   },
 
@@ -396,11 +450,15 @@ export const groupService = {
       );
 
       return createSafeSnapshot<FamilyGroup[]>(q, callback, onError);
+    } catch (error) {
+      // FIX: Added missing catch block
+      if (onError) onError(error as Error);
       return () => {};
     }
   },
 
   // Get group members with details
+  async getGroupMembers(groupId: string | null | undefined): Promise<GroupMember[]> {
     try {
       // groupId가 null이거나 undefined이면 빈 배열 반환
       if (!groupId) {
@@ -452,10 +510,14 @@ export const groupService = {
       });
 
       return await Promise.all(memberPromises);
+    } catch (error) {
+      // FIX: Added missing catch block
+      throw new Error('그룹 멤버를 가져올 수 없습니다.');
     }
   },
 
   // Get group statistics
+  async getGroupStats(groupId: string | null | undefined): Promise<GroupStats> {
     try {
       // groupId가 null이거나 undefined이면 빈 통계 반환
       if (!groupId) {
@@ -534,6 +596,9 @@ export const groupService = {
           totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0,
         memberStats,
       };
+    } catch (error) {
+      // FIX: Added missing catch block
+      throw new Error('그룹 통계를 가져올 수 없습니다.');
     }
   },
 
@@ -567,6 +632,9 @@ export const groupService = {
       batch.delete(doc(db, 'groups', groupId));
 
       await batch.commit();
+    } catch (error) {
+      // FIX: Added missing catch block
+      throw new Error('그룹을 삭제할 수 없습니다.');
     }
   },
 
@@ -587,6 +655,9 @@ export const groupService = {
         createdAt: serverTimestamp(),
         expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
       });
+    } catch (error) {
+      // FIX: Added missing catch block
+      throw new Error('멤버를 초대할 수 없습니다.');
     }
   },
 
@@ -602,6 +673,9 @@ export const groupService = {
         [`memberRoles.${userId}`]: newRole,
         updatedAt: serverTimestamp(),
       });
+    } catch (error) {
+      // FIX: Added missing catch block
+      throw new Error('멤버 역할을 변경할 수 없습니다.');
     }
   },
 
@@ -612,7 +686,7 @@ export const groupService = {
       const code = Math.random().toString(36).substring(2, 8).toUpperCase();
 
       // Update the group with the new invite code
-      const groupRef = doc(db, 'groups', groupId);
+      const groupRef = doc(db, 'groups', _groupId);
       await updateDoc(groupRef, {
         inviteCode: code,
         inviteCodeExpiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
@@ -620,6 +694,9 @@ export const groupService = {
       });
 
       return code;
+    } catch (error) {
+      // FIX: Added missing catch block
+      throw new Error('초대 코드를 생성할 수 없습니다.');
     }
   },
 
@@ -653,6 +730,9 @@ export const groupService = {
       await this.addMemberToGroup(groupId, userId, 'member');
 
       return groupId;
+    } catch (error) {
+      // FIX: Added missing catch block
+      throw new Error('초대 코드로 그룹에 참여할 수 없습니다.');
     }
   },
 };
@@ -718,13 +798,20 @@ export const commentService = {
         createdAt: serverTimestamp(),
       });
       return docRef.id;
+    } catch (error) {
+      // FIX: Added missing catch block
+      throw new Error('댓글을 추가할 수 없습니다.');
     }
   },
 
   // Delete a comment
   async deleteComment(taskId: string, commentId: string) {
-    await deleteDoc(doc(db, 'tasks', taskId, 'comments', commentId));
-    
+    try {
+      await deleteDoc(doc(db, 'tasks', taskId, 'comments', commentId));
+    } catch (error) {
+      // FIX: Added missing catch block
+      throw new Error('댓글을 삭제할 수 없습니다.');
+    }
   },
 
   // Subscribe to comments for a task
@@ -738,6 +825,10 @@ export const commentService = {
         collection(db, 'tasks', taskId, 'comments'),
         orderBy('createdAt', 'asc')
       );
+      return () => {};
+    } catch (error) {
+      // FIX: Added missing catch block
+      if (onError) onError(error as Error);
       return () => {};
     }
   },
@@ -766,6 +857,9 @@ export const commentService = {
           await updateDoc(commentRef, { reactions });
         }
       }
+    } catch (error) {
+      // FIX: Added missing catch block
+      throw new Error('댓글에 반응을 추가할 수 없습니다.');
     }
   },
 
@@ -789,6 +883,9 @@ export const commentService = {
           updatedAt: serverTimestamp(),
         });
       }
+    } catch (error) {
+      // FIX: Added missing catch block
+      throw new Error('댓글에 파일 첨부를 추가할 수 없습니다.');
     }
   },
 
@@ -814,6 +911,9 @@ export const commentService = {
           updatedAt: serverTimestamp(),
         });
       }
+    } catch (error) {
+      // FIX: Added missing catch block
+      throw new Error('댓글에서 파일 첨부를 제거할 수 없습니다.');
     }
   },
 };
@@ -877,6 +977,9 @@ export const userService = {
         },
         { merge: true }
       );
+    } catch (error) {
+      // FIX: Added missing catch block
+      throw new Error('사용자 프로필을 생성하거나 업데이트할 수 없습니다.');
     }
   },
 
@@ -888,6 +991,9 @@ export const userService = {
         return { id: docSnap.id, ...docSnap.data() } as User;
       }
       return null;
+    } catch (error) {
+      // FIX: Added missing catch block
+      throw new Error('사용자 프로필을 가져올 수 없습니다.');
     }
   },
 
@@ -899,7 +1005,10 @@ export const userService = {
   ) {
     try {
       const userRef = doc(db, 'users', userId);
-      return createSafeSnapshot<User | null>(userRef, callback, onError);in
+      return createSafeSnapshot<User | null>(userRef, callback, onError);
+    } catch (error) {
+      // FIX: Added missing catch block
+      if (onError) onError(error as Error);
       return () => {};
     }
   },

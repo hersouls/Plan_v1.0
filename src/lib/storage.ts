@@ -80,6 +80,10 @@ export async function uploadAvatarImage(
 
   // 이미지 최적화 (파일 용량 제한 없음)
   let optimizedFile = file;
+  try {
+    optimizedFile = await optimizeAvatarImage(file);
+  } catch (error) {
+    // FIX: Added missing catch block
     throw new Error('이미지 처리에 실패했습니다.');
   }
 
@@ -109,6 +113,8 @@ export async function uploadAvatarImage(
             storageUrl: avatarPath,
             downloadUrl: downloadURL,
           });
+        } catch (error) {
+          // FIX: Added missing catch block
           reject(
             new Error('아바타 업로드 완료 후 URL을 가져오는데 실패했습니다.')
           );
@@ -135,6 +141,8 @@ export async function deleteAvatarImage(
   try {
     const storageRef = ref(storage, storageUrl);
     await deleteObject(storageRef);
+  } catch (error) {
+    // FIX: Added missing catch block
     throw new Error('아바타 삭제에 실패했습니다.');
   }
 }

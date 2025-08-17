@@ -98,9 +98,9 @@ ${JSON.stringify(recentHistories, null, 2)}
           return this.getDefaultAnalysis();
         }
       }
-    } catch {
-        // Handle error silently
-      }
+    } catch (error) {
+      // Handle error silently
+    }
 
     return this.getDefaultAnalysis();
   }
@@ -166,7 +166,7 @@ ${i + 1}. ID: ${h.id}
         // Handle error silently
               }
       }
-    } catch {
+    } catch (error) {
         // Handle error silently
       }
 
@@ -224,8 +224,9 @@ ${histories.map(h => `
           return [];
         }
       }
-        // Handle error silently
-      }
+    } catch (error) {
+      // Handle error silently
+    }
 
     return [];
   }
@@ -266,8 +267,9 @@ ${histories.map(h => `
         const points = parseInt(content.text.trim());
         return isNaN(points) ? 10 : Math.max(1, Math.min(100, points));
       }
-        // Handle error silently
-      }
+    } catch (error) {
+      // Handle error silently
+    }
 
     return 10;
   }
