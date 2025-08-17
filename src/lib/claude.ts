@@ -71,13 +71,13 @@ export const claudeAIService: ClaudeAIService = {
       if (content.type === 'text') {
         try {
           return JSON.parse(content.text);
-        } catch (parseError) {
+        } catch {
           // Error parsing task suggestions
           return [];
         }
       }
       return [];
-    } catch (error) {
+    } catch (_error) {
       // Error generating task suggestions
       return [];
     }
