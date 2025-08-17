@@ -194,6 +194,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-2" align="start">
                       <div className="flex space-x-1">
+                        {reactionEmojis.map(({ emoji, label }) => (
                           <Button
                             key={emoji}
                             size="sm"
