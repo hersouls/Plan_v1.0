@@ -4,21 +4,14 @@ export const trackEvent = async (eventName: string, parameters?: Record<string, 
   try {
     const analytics = await loadAnalytics();
     if (!analytics) {
-      if (false) {
-        // Empty block
-      }
       return;
     }
 
     const { logEvent } = await import('firebase/analytics');
     logEvent(analytics, eventName, parameters);
-    
-    if (false) {
-        // Empty block
-      }
   } catch {
-        // Handle error silently
-      }
+    // Handle error silently
+  }
 };
 
 export const trackPageView = async (pageName: string, userId?: string) => {

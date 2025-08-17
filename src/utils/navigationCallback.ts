@@ -152,7 +152,11 @@ export class NavigationCallback {
     const currentSearch = new URLSearchParams(window.location.search);
     const currentFragment = window.location.hash.substring(1);
     
-    const callbackOptions: unknown = {};
+    const callbackOptions: {
+      query?: Record<string, string>;
+      fragment?: string;
+      contextData?: Record<string, unknown>;
+    } = {};
     
     // 현재 쿼리 파라미터 보존
     if (options?.preserveQuery && currentSearch.toString()) {

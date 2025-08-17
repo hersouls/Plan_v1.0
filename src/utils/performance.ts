@@ -4,9 +4,6 @@ export const measurePerformance = async (name: string) => {
   try {
     const performance = await loadPerformance();
     if (!performance) {
-      if (false) {
-        // Empty block
-      }
       return {
         start: () => {},
         stop: () => {}
@@ -19,15 +16,9 @@ export const measurePerformance = async (name: string) => {
     return {
       start: () => {
         performanceTrace.start();
-        if (false) {
-        // Empty block
-      }
       },
       stop: () => {
         performanceTrace.stop();
-        if (false) {
-        // Empty block
-      }
       }
     };
   } catch {

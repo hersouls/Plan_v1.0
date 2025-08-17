@@ -160,7 +160,7 @@ export async function seedPlansForTrip(tripId: string) {
       }
     
     return true;
-  } catch (_error) {
+  } catch {
     return false;
   }
 }
