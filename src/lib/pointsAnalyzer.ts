@@ -224,7 +224,6 @@ ${histories.map(h => `
           return [];
         }
       }
-    } catch (error) {
         // Handle error silently
       }
 
@@ -267,7 +266,6 @@ ${histories.map(h => `
         const points = parseInt(content.text.trim());
         return isNaN(points) ? 10 : Math.max(1, Math.min(100, points));
       }
-    } catch (error) {
         // Handle error silently
       }
 

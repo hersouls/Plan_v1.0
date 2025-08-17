@@ -5,7 +5,8 @@ import {
   getDocs, 
   query, 
   where, 
-  Timestamp 
+  Timestamp,
+  writeBatch
 } from 'firebase/firestore';
 import { 
   ref, 
@@ -294,8 +295,49 @@ export class BackupService {
     try {
       const backupRef = ref(storage, backupPath);
       await deleteObject(backupRef);
-      } catch (_error) {
-      throw new Error('백업 삭제에 실패했습니다.');
+              } catch {
+        throw new Error('백업 삭제에 실패했습니다.');
+      }
+  }
+
+  // Restore data from backup
+  async restoreFromBackup(backupData: BackupData): Promise<void> {
+    try {
+      const batch = writeBatch(db);
+
+      // Restore users
+      if (backupData.data.profile) {
+        const userRef = doc(db, 'users', this.userId);
+        batch.set(userRef, backupData.data.profile);
+      }
+
+      // Restore groups
+      if (backupData.data.groups) {
+        for (const group of backupData.data.groups) {
+          const groupRef = doc(db, 'groups', group.id);
+          batch.set(groupRef, group);
+        }
+      }
+
+      // Restore tasks
+      if (backupData.data.tasks) {
+        for (const task of backupData.data.tasks) {
+          const taskRef = doc(db, 'tasks', task.id);
+          batch.set(taskRef, task);
+        }
+      }
+
+      // Restore activities
+      if (backupData.data.activities) {
+        for (const activity of backupData.data.activities) {
+          const activityRef = doc(db, 'activities', activity.id);
+          batch.set(activityRef, activity);
+        }
+      }
+
+      await batch.commit();
+    } catch {
+      throw new Error('백업 데이터 복원에 실패했습니다.');
     }
   }
 }
@@ -324,7 +366,7 @@ export class BackupScheduler {
       try {
         const backupService = new BackupService(userId);
         await backupService.createAutoBackup(frequency);
-        } catch (_error) {
+        } catch {
         // Handle error silently
       }
     }, interval);
