@@ -470,7 +470,6 @@ export function useSettings(): UseSettingsReturn {
                 fileSize: 0,
                 mimeType: 'image/jpeg',
                 storageUrl: decodedPath,
-                uploadedBy: currentUser.uid,
                 uploadedAt: Timestamp.now(),
                 isImage: true,
               });
@@ -567,7 +566,6 @@ export function useSettings(): UseSettingsReturn {
               fileSize: 0,
               mimeType: 'image/jpeg',
               storageUrl: decodedPath,
-              uploadedBy: currentUser.uid,
               uploadedAt: Timestamp.now(),
               isImage: true,
             });
