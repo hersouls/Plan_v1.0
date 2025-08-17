@@ -730,7 +730,7 @@ export const commentService = {
   async addComment(taskId: string, _commentData: unknown) {
     try {
       // 데이터 검증 및 정리
-      const cleanData = { ...commentData };
+      const cleanData = { ..._commentData };
 
       // undefined 값 제거
       Object.keys(cleanData).forEach(key => {

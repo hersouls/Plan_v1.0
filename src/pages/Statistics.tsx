@@ -144,7 +144,7 @@ function Statistics() {
               profiles[member.userId] = profile;
             }
           } catch (error) {
-            :`, error);
+            console.error('Error loading user profile:', error);
           }
         }
 
@@ -174,7 +174,7 @@ function Statistics() {
             );
             return { userId: member.userId, stats };
           } catch (error) {
-            :`, error);
+            console.error('Error loading point stats:', error);
             return { userId: member.userId, stats: null };
           }
         });

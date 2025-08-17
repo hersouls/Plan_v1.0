@@ -351,8 +351,8 @@ function PointsManagement() {
         <div className="relative">
           <img
             src={avatarUrl}
-            alt={`${displayName} 아바타`}
-            className={`${sizeClasses[size]} rounded-full object-cover shadow-lg`}
+            alt={displayName + " 아바타"}
+                          className={sizeClasses[size] + " rounded-full object-cover shadow-lg"}
             onError={e => {
               // 이미지 로드 실패 시 기본 아바타로 대체
               const target = e.target as HTMLImageElement;
@@ -369,7 +369,7 @@ function PointsManagement() {
             }}
           />
           <div
-            className={`${sizeClasses[size]} bg-gradient-to-br from-blue-400 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold ${textSizes[size]} shadow-lg avatar-fallback absolute inset-0`}
+                          className={sizeClasses[size] + " bg-gradient-to-br from-blue-400 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold " + textSizes[size] + " shadow-lg avatar-fallback absolute inset-0"}
             style={{ display: 'none' }}
           >
             {displayName?.charAt(0) || 'U'}
@@ -380,7 +380,7 @@ function PointsManagement() {
 
     return (
       <div
-        className={`${sizeClasses[size]} bg-gradient-to-br from-blue-400 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold ${textSizes[size]} shadow-lg avatar-fallback`}
+                  className={sizeClasses[size] + " bg-gradient-to-br from-blue-400 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold " + textSizes[size] + " shadow-lg avatar-fallback"}
       >
         {displayName?.charAt(0) || 'U'}
       </div>
@@ -527,11 +527,10 @@ function PointsManagement() {
                     >
                       <Star
                         size={16}
-                        className={`sm:w-4 sm:h-4 lg:w-5 lg:h-5 ${
-                          favoriteGroups.includes(selectedGroupId)
+                        className={"sm:w-4 sm:h-4 lg:w-5 lg:h-5 " + 
+                          (favoriteGroups.includes(selectedGroupId)
                             ? 'text-yellow-400 fill-yellow-400'
-                            : 'text-white/60'
-                        }`}
+                            : 'text-white/60')}
                       />
                     </WaveButton>
                   )}
@@ -653,17 +652,13 @@ function PointsManagement() {
                         <button
                           key={member.userId}
                           onClick={() => setSelectedMember(member.userId)}
-                          className={`
-                           w-full p-4 rounded-xl cursor-pointer transition-all duration-300 text-left font-pretendard
-                           ${
-                             isSelected
+                                                      className={"w-full p-4 rounded-xl cursor-pointer transition-all duration-300 text-left font-pretendard " + 
+                             (isSelected
                                ? 'bg-gradient-to-r from-blue-500/20 to-purple-500/20 border-2 border-blue-400/50 shadow-lg'
                                : member.userId === user?.uid
                                ? 'bg-gradient-to-r from-yellow-400/10 to-orange-400/10 border-2 border-yellow-400/30 hover:bg-yellow-400/20 hover:border-yellow-400/50'
-                               : 'bg-white/10 border-2 border-transparent hover:bg-white/20 hover:border-white/30'
-                           }
-                         `}
-                          aria-label={`${member.userName || 'Unknown'} 선택`}
+                               : 'bg-white/10 border-2 border-transparent hover:bg-white/20 hover:border-white/30')}
+                                                      aria-label={(member.userName || 'Unknown') + " 선택"}
                           aria-pressed={isSelected}
                         >
                           <div className="flex items-center justify-between">
@@ -884,9 +879,7 @@ function PointsManagement() {
                           aria-label="미승인 포인트 내역 새로고침"
                         >
                           <RefreshCw
-                            className={`w-4 h-4 ${
-                              loading ? 'animate-spin' : ''
-                            }`}
+                            className={"w-4 h-4 " + (loading ? 'animate-spin' : '')}
                           />
                         </WaveButton>
                       </div>
@@ -927,7 +920,7 @@ function PointsManagement() {
                               } else if (diffDays === 2) {
                                 return '어제';
                               } else if (diffDays <= 7) {
-                                return `${diffDays - 1}일 전`;
+                                return (diffDays - 1) + "일 전";
                               } else {
                                 return date.toLocaleDateString('ko-KR', {
                                   month: 'short',
@@ -942,21 +935,15 @@ function PointsManagement() {
                           return (
                             <div
                               key={history.id}
-                              className={`
-                                flex items-center justify-between p-4 rounded-xl transition-all duration-200 hover:scale-[1.02] hover:shadow-lg point-history-card
-                                ${
-                                  history.taskId
-                                    ? 'cursor-pointer hover:ring-2 hover:ring-blue-300'
-                                    : 'cursor-default'
-                                }
-                                ${
-                                  isEarned
-                                    ? 'point-history-bg-earned'
-                                    : isDeducted
-                                    ? 'point-history-bg-deducted'
-                                    : 'point-history-bg-manual'
-                                }
-                              `}
+                              className={"flex items-center justify-between p-4 rounded-xl transition-all duration-200 hover:scale-[1.02] hover:shadow-lg point-history-card " + 
+                                (history.taskId
+                                  ? 'cursor-pointer hover:ring-2 hover:ring-blue-300'
+                                  : 'cursor-default') + " " +
+                                (isEarned
+                                  ? 'point-history-bg-earned'
+                                  : isDeducted
+                                  ? 'point-history-bg-deducted'
+                                  : 'point-history-bg-manual')}
                               role="listitem"
                               onClick={
                                 history.taskId
@@ -975,7 +962,7 @@ function PointsManagement() {
                               tabIndex={history.taskId ? 0 : -1}
                               aria-label={
                                 history.taskId
-                                  ? `${history.description} 할일 수정하기`
+                                  ? (history.description + " 할일 수정하기")
                                   : history.description
                               }
                             >
