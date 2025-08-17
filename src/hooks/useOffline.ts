@@ -184,11 +184,23 @@ export const withOfflineSupport = <T extends (...args: unknown[]) => Promise<unk
   offlineAction: Omit<OfflineAction, 'id' | 'timestamp' | 'retry'>
 ): T => {
   return ((...args: unknown[]) => {
-    const { isOnline, queueOfflineAction } = useOffline();
+    // Check if we're online using navigator.onLine
+    const isOnline = navigator.onLine;
     
     if (!isOnline) {
-      // Queue action for later execution
-      queueOfflineAction(offlineAction);
+      // Queue action for later execution by storing in localStorage
+      const pendingAction: OfflineAction = {
+        ...offlineAction,
+        id: crypto.randomUUID(),
+        timestamp: Date.now(),
+        retry: 0,
+      };
+      
+      const existingActions = localStorage.getItem(OFFLINE_QUEUE_KEY);
+      const actions = existingActions ? JSON.parse(existingActions) : [];
+      actions.push(pendingAction);
+      localStorage.setItem(OFFLINE_QUEUE_KEY, JSON.stringify(actions));
+      
       return Promise.resolve();
     }
     
