@@ -57,7 +57,7 @@ export async function resizeImage(
           options.quality
         );
       } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
-          // FIX: Handle error silently - intentionally unused
+        // FIX: Handle error silently - intentionally unused
         reject(_error);
       }
     };
@@ -126,8 +126,7 @@ export function getImageInfo(file: File): Promise<{
         sizeInMB: getFileSizeInMB(file),
       });
     };
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    img.onerror = (error) => {
+    img.onerror = () => {
       reject(new Error('이미지 정보를 가져올 수 없습니다.'));
     };
     img.src = URL.createObjectURL(file);
@@ -163,8 +162,8 @@ export async function optimizeImage(file: File): Promise<File> {
     try {
       const resizedFile = await resizeImage(file, options);
       return resizedFile;
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (error) {
+    } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
+      // FIX: Handle error silently - intentionally unused
       throw new Error('이미지 크기 조정에 실패했습니다.');
     }
   }

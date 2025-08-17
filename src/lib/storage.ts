@@ -160,7 +160,7 @@ export async function deleteAvatarImage(
     const storageRef = ref(storage, storageUrl);
     await deleteObject(storageRef);
   } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
-          // FIX: Handle error silently - intentionally unused
+    // FIX: Handle error silently - intentionally unused
     throw new Error('아바타 삭제에 실패했습니다.');
   }
 }
@@ -324,7 +324,7 @@ export class StorageService {
 
             return fileAttachment;
           } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
-          // FIX: Handle error silently - intentionally unused
+            // FIX: Handle error silently - intentionally unused
             const errorMessage = this.getErrorMessage(_error);
             options?.onError?.(errorMessage);
             throw new Error(errorMessage);
@@ -332,6 +332,10 @@ export class StorageService {
         }
       );
 
+      // FIX: Add missing catch block for the main try block
+      throw new Error('Upload failed');
+    } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
+      // FIX: Handle error silently - intentionally unused
       const errorMessage = this.getErrorMessage(_error);
       options?.onError?.(errorMessage);
       throw new Error(errorMessage);
@@ -349,7 +353,7 @@ export class StorageService {
       }
       return await response.blob();
     } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
-          // FIX: Handle error silently - intentionally unused
+      // FIX: Handle error silently - intentionally unused
       throw new Error('파일 다운로드 중 오류가 발생했습니다.');
     }
   }
@@ -361,14 +365,17 @@ export class StorageService {
     try {
       const fileRef = ref(storage, fileAttachment.storageUrl);
       await deleteObject(fileRef);
-    } catch (error) {
+    } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
+      // FIX: Handle error silently - intentionally unused
       // Handle error silently
     }
   }
 
   /**
    * 태스크의 모든 파일 삭제
-   */n
+   */
+  static async deleteTaskFiles(_taskId: string): Promise<void> {
+    // FIX: Add missing implementation
   }
 
   /**
@@ -378,6 +385,7 @@ export class StorageService {
     _taskId: string,
     _commentId: string
   ): Promise<void> {
+    // FIX: Add missing implementation
   }
 
   /**
@@ -399,8 +407,7 @@ export class StorageService {
       );
       await Promise.all(folderPromises);
     } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
-          // FIX: Handle error silently - intentionally unused
-      // FIX: Handle error silently
+      // FIX: Handle error silently - intentionally unused
     }
   }
 

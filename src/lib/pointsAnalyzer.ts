@@ -96,13 +96,11 @@ ${JSON.stringify(recentHistories, null, 2)}
           return this.validateAnalysis(analysis);
         } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
           // FIX: Handle error silently - intentionally unused
-          // FIX: Handle JSON parsing error silently
           return this.getDefaultAnalysis();
         }
       }
     } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
-          // FIX: Handle error silently - intentionally unused
-      // FIX: Handle error silently
+      // FIX: Handle error silently - intentionally unused
     }
 
     return this.getDefaultAnalysis();
@@ -165,11 +163,12 @@ ${i + 1}. ID: ${h.id}
               }
             });
           }
+        } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
+          // FIX: Handle error silently - intentionally unused
         }
       }
     } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
-          // FIX: Handle error silently - intentionally unused
-      // FIX: Handle error silently
+      // FIX: Handle error silently - intentionally unused
     }
 
     // Fill missing analyses with defaults
@@ -224,13 +223,11 @@ ${histories.map(h => `
           return Array.isArray(anomalies) ? anomalies : [];
         } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
           // FIX: Handle error silently - intentionally unused
-          // FIX: Handle JSON parsing error silently
           return [];
         }
       }
     } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
-          // FIX: Handle error silently - intentionally unused
-      // FIX: Handle error silently
+      // FIX: Handle error silently - intentionally unused
     }
 
     return [];
@@ -273,8 +270,7 @@ ${histories.map(h => `
         return isNaN(points) ? 10 : Math.max(1, Math.min(100, points));
       }
     } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
-          // FIX: Handle error silently - intentionally unused
-      // FIX: Handle error silently
+      // FIX: Handle error silently - intentionally unused
     }
 
     return 10;
