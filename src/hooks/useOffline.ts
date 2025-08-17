@@ -50,9 +50,9 @@ export const useOffline = (): UseOfflineReturn => {
   }, [pendingActions]);
 
   // FIX: Add missing executeAction function
-  const executeAction = useCallback(async (action: OfflineAction): Promise<void> => {
+  const executeAction = useCallback(async (_action: OfflineAction): Promise<void> => {
     // Placeholder implementation - should be implemented based on actual needs
-    console.log('Executing offline action:', action);
+    // console.log('Executing offline action:', action);
     /* noop */
   }, []);
 

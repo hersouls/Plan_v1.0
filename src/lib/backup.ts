@@ -190,7 +190,7 @@ export class BackupService {
       
       for (const item of result.items) {
         const metadata = await this.getFileMetadata(item.fullPath);
-        if (metadata && metadata.timeCreated < cutoffDate.getTime()) {
+        if (metadata && (metadata.timeCreated as number) < cutoffDate.getTime()) {
           await deleteObject(item);
         }
       }
@@ -253,7 +253,7 @@ export class BackupService {
           return {
             name: item.name,
             path: item.fullPath,
-            timestamp: metadata?.timeCreated || 0,
+            timestamp: (metadata?.timeCreated as number) || 0,
             size: 0, // 실제 크기는 별도 API 호출 필요
             frequency: item.fullPath.includes('/weekly/') ? 'weekly' : 'monthly'
           };
@@ -313,7 +313,7 @@ export class BackupService {
 
       // Restore groups
       if (backupData.data.groups) {
-        for (const group of backupData.data.groups) {
+        for (const group of backupData.data.groups as any[]) {
           const groupRef = doc(db, 'groups', group.id);
           batch.set(groupRef, group);
         }
@@ -321,7 +321,7 @@ export class BackupService {
 
       // Restore tasks
       if (backupData.data.tasks) {
-        for (const task of backupData.data.tasks) {
+        for (const task of backupData.data.tasks as any[]) {
           const taskRef = doc(db, 'tasks', task.id);
           batch.set(taskRef, task);
         }
@@ -329,7 +329,7 @@ export class BackupService {
 
       // Restore activities
       if (backupData.data.activities) {
-        for (const activity of backupData.data.activities) {
+        for (const activity of backupData.data.activities as any[]) {
           const activityRef = doc(db, 'activities', activity.id);
           batch.set(activityRef, activity);
         }

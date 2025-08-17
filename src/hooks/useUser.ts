@@ -31,7 +31,7 @@ export function useUser(options: UseUserOptions = {}): UseUserReturn {
       setLoading(true);
       setError(null);
       const userProfile = await enhancedUserService.getUserProfile(userId);
-      setUser(userProfile);
+      setUser(userProfile as User);
     } catch {
       setError('사용자 프로필을 불러오는 중 오류가 발생했습니다.');
     } finally {

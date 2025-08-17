@@ -161,7 +161,7 @@ export const useTask = (options: UseTaskOptions): UseTaskReturn => {
           dueDate: taskData.dueDate || null,
           completedAt: taskData.completedAt || null,
         };
-        setTask(sanitizedTask);
+        setTask(sanitizedTask as Task);
       } else {
         setTask(null);
       }
@@ -204,12 +204,12 @@ export const useTask = (options: UseTaskOptions): UseTaskReturn => {
             // Validate and sanitize date fields
             const sanitizedTask: Task = {
               ...taskData,
-              createdAt: taskData.createdAt || null,
-              updatedAt: taskData.updatedAt || null,
-              dueDate: taskData.dueDate || null,
-              completedAt: taskData.completedAt || null,
+              createdAt: taskData.createdAt || undefined,
+              updatedAt: taskData.updatedAt || undefined,
+              dueDate: taskData.dueDate || undefined,
+              completedAt: taskData.completedAt || undefined,
             };
-            setTask(sanitizedTask);
+            setTask(sanitizedTask as Task);
           } else {
             setTask(null);
           }
