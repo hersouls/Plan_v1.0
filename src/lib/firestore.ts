@@ -433,6 +433,10 @@ export const groupService = {
       return querySnapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data(),
+      })) as Task[];
+    } catch (error) {
+      // FIX: Added missing catch block
+      throw new Error('사용자 할일을 가져올 수 없습니다.');
     }
   },
 
@@ -554,6 +558,7 @@ export const groupService = {
       const tasks = tasksSnapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data(),
+      })) as Task[];
 
       // Calculate stats
       const totalTasks = tasks.length;
