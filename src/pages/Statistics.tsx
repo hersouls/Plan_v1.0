@@ -144,7 +144,7 @@ function Statistics() {
               profiles[member.userId] = profile;
             }
           } catch (error) {
-            :`, error);
+            // Handle error silently
           }
         }
 
@@ -174,7 +174,7 @@ function Statistics() {
             );
             return { userId: member.userId, stats };
           } catch (error) {
-            :`, error);
+            // Handle error silently
             return { userId: member.userId, stats: null };
           }
         });

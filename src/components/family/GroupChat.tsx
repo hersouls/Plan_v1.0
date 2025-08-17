@@ -461,9 +461,6 @@ export function GroupChat({
       setShowEmojiPicker(false);
       inputRef.current?.focus();
     } catch (error) {
-      const errorObj = error as { code?: string; message?: string; name?: string };
-      // Error logging can be added here if needed
-      alert(`메시지 전송에 실패했습니다: ${errorObj?.message || error}`);
     } finally {
       setIsSending(false);
     }

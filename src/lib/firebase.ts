@@ -54,9 +54,6 @@ const getFirebaseConfig = () => {
 const firebaseConfig = getFirebaseConfig();
 
 // 디버깅: 환경 변수 확인
-if (import.meta.env.DEV) {
-  // Debug logging can be added here if needed
-}
 
 // 설정 유효성 검사
 const isValidConfig = (_config: unknown) => {
@@ -74,12 +71,6 @@ const isValidConfig = (_config: unknown) => {
 
 // Initialize Firebase
 let app;
-if (!isValidConfig(firebaseConfig)) {
-  throw new Error('Invalid Firebase configuration - 환경 변수를 확인해주세요');
-}
-app = initializeApp(firebaseConfig);
-if (import.meta.env.DEV) {
-  // Debug logging can be added here if needed
 }
 
 // Initialize Firebase services
@@ -113,8 +104,6 @@ export const loadAnalytics = async () => {
     
     if (supported && firebaseConfig.measurementId && shouldEnableAnalytics) {
       analytics = getAnalytics(app);
-      if (import.meta.env.DEV) {
-        // Debug logging can be added here if needed
       }
       return analytics;
     }
@@ -132,8 +121,6 @@ export const loadPerformance = async () => {
     
     if (shouldEnableAnalytics) {
       performance = getPerformance(app);
-      if (import.meta.env.DEV) {
-        // Debug logging can be added here if needed
       }
       return performance;
     }
@@ -152,8 +139,6 @@ export const loadMessaging = async () => {
     
     if (supported) {
       messaging = getMessaging(app);
-      if (import.meta.env.DEV) {
-        // Debug logging can be added here if needed
       }
       return messaging;
     }
@@ -163,8 +148,5 @@ export const loadMessaging = async () => {
   return null;
 };
 
-if (import.meta.env.DEV) {
-  // Debug logging can be added here if needed
-}
 
 export default app;
