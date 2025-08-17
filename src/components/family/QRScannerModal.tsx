@@ -245,7 +245,6 @@ export function QRScannerModal({
       <ManualInviteModal
         isOpen={showManualModal}
         onClose={() => setShowManualModal(false)}
-        onInvite={(inviteCode: string) => {
           onScanSuccess(inviteCode);
           setShowManualModal(false);
         }}
