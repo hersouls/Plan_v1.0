@@ -12,7 +12,6 @@ import {
 } from 'lucide-react';
 import { Typography } from '../components/ui/typography-utils';
 import { useEffect, useMemo, useState } from 'react';
-
 import {
   CartesianGrid,
   Cell,
@@ -54,6 +53,7 @@ const COLORS = [
 
 function StatisticsEnhanced() {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [selectedGroupId, setSelectedGroupId] = useState<string | null>(null);
   const [dateRange, setDateRange] = useState<DateRange>('30days');
   // Use real Firebase data
@@ -176,9 +176,6 @@ function StatisticsEnhanced() {
   // Enhanced chart data with multiple metrics
   const { categoryData } = useMemo(() => {
     if (!filteredTasks.length) {
-          return {
-      categoryData: [],
-    };
     }
 
     // Category distribution
@@ -195,11 +192,6 @@ function StatisticsEnhanced() {
         percentage: Math.round((count / filteredTasks.length) * 100),
       })
     );
-
-
-
-
-
     return {
       categoryData: categoryChart,
     };
@@ -233,7 +225,7 @@ function StatisticsEnhanced() {
   }, [filteredTasks]);
 
   const loading =
-    groupsLoading || groupLoading || tasksLoading || settingsLoading;
+    groupsLoading || groupLoading || tasksLoading;
   const completedTasks = filteredTasks.filter(task => isTaskCompleted(task)).length;
   const completionRate =
     filteredTasks.length > 0
