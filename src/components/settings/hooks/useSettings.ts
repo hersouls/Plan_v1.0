@@ -468,9 +468,9 @@ export function useSettings(): UseSettingsReturn {
                 storageUrl: decodedPath,
               } as { storageUrl: string });
             }
-                      } catch {
-              // 이전 아바타 삭제 실패는 무시하고 계속 진행
-            }
+          } catch {
+            // 이전 아바타 삭제 실패는 무시하고 계속 진행
+          }
         }
 
         // 새 아바타 업로드
@@ -556,7 +556,7 @@ export function useSettings(): UseSettingsReturn {
             const decodedPath = decodeURIComponent(pathMatch[1]);
             await StorageService.deleteFile({ storageUrl: decodedPath } as { storageUrl: string });
           }
-        } catch (_error) {
+        } catch {
           // Handle error silently
         }
       }
@@ -601,7 +601,7 @@ export function useSettings(): UseSettingsReturn {
       isInitializedRef.current = true;
       loadSettingsInternal();
     }
-  }, [currentUser?.uid]); // loadSettingsInternal 의존성 제거 (무한 루프 방지)
+  }, [currentUser?.uid, loadSettingsInternal]); // Added loadSettingsInternal to dependencies
 
   // 1시간마다 자동 동기화 설정
   useEffect(() => {
@@ -620,7 +620,7 @@ export function useSettings(): UseSettingsReturn {
         }
       };
     }
-  }, [currentUser?.uid]); // loadSettingsInternal을 의존성에서 제거
+  }, [currentUser?.uid, loadSettingsInternal]); // Added loadSettingsInternal to dependencies
 
   // 편의 함수들
   const updateProfile = useCallback((updates: Partial<UserProfile>) => {

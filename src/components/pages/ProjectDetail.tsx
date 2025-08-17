@@ -15,7 +15,7 @@ interface ProjectData {
   technologies: string[];
   status: string;
   launchDate: string;
-  icon: React.ComponentType<{ size?: number; className?: string }>; // Properly typed icon property
+  icon: React.ForwardRefExoticComponent<React.SVGProps<SVGSVGElement> & { size?: number; className?: string }>; // Fixed icon type to match Lucide icons
 }
 
 export function ProjectDetail() {

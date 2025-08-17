@@ -29,7 +29,7 @@ export function DataSection({
     'idle' | 'running' | 'completed' | 'error'
   >('idle');
   const [backupMessage, setBackupMessage] = useState('');
-  const [backupList, setBackupList] = useState<any[]>([]);
+  const [backupList, setBackupList] = useState<Array<{ id: string; name: string; date: string; size: string }>>([]);
   const [loadingBackups, setLoadingBackups] = useState(false);
 
   // AuthContext 접근을 안전하게 처리
@@ -38,7 +38,7 @@ export function DataSection({
   useEffect(() => {
     try {
       setSignOut(() => authContext.signOut);
-    } catch (_error) {
+    } catch {
       // Auth context가 없어도 기본적으로 작동
     }
   }, [authContext.signOut]);
