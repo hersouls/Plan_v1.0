@@ -1,4 +1,3 @@
-import { useState, useEffect, useCallback } from 'react';
 import { 
   Brain, 
   TrendingUp, 
@@ -92,10 +91,6 @@ export function StatisticsInsights({
       setLoading(false);
     }
   }, [tasks, members, pointStats, period, userId]);
-
-  useEffect(() => {
-    loadInsights();
-  }, [loadInsights]);
 
   const getInsightIcon = (type: string) => {
     switch (type) {
