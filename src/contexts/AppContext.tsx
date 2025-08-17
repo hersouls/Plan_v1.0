@@ -1,7 +1,8 @@
-import React, { createContext, useEffect, useReducer } from 'react';
+import React, { useEffect, useReducer } from 'react';
 import * as firestoreServices from '../lib/firestore';
 import { FamilyGroup } from '../types/group';
 import { useAuth } from '../hooks/useAuth';
+import { AppContext } from './AppContextDef';
 
 // App State Interface
 export interface AppState {
@@ -259,9 +260,6 @@ export interface AppContextType {
   showWarningMessage: (message: string) => void;
 }
 
-// Create Context
-export const AppContext = createContext<AppContextType | undefined>(undefined);
-
 // App Provider Component
 export function AppProvider({ children }: { children: React.ReactNode }) {
   const [state, dispatch] = useReducer(appReducer, initialState);
@@ -346,7 +344,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
             payload: { group: defaultGroup, groupId: defaultGroup.id },
           });
         }
-      } catch (_error) {
+      } catch {
         dispatch({
           type: 'SET_ERROR',
           payload: {

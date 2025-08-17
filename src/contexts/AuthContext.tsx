@@ -12,14 +12,13 @@ import {
   updateProfile,
 } from 'firebase/auth';
 import { serverTimestamp } from 'firebase/firestore';
-import React, { createContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { fcmService } from '../lib/fcm';
 import { auth } from '../lib/firebase';
 import { userService } from '../lib/firestore';
 import { AuthContextType, ExtendedUser } from '../types/auth';
 import { User } from '../types/user';
-
-export const AuthContext = createContext<AuthContextType | undefined>(undefined);
+import { AuthContext } from './AuthContextDef';
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<ExtendedUser | null>(null);
@@ -92,7 +91,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         await userService.createOrUpdateUserProfile(user.uid, initialProfile);
       } else {
         // Update login count and last login with safe data
-        const updateData: unknown = {
+        const updateData: Partial<User> = {
           loginCount: ((existingProfile as { loginCount?: number }).loginCount || 0) + 1,
           lastLoginAt: serverTimestamp(),
           lastLoginTime: serverTimestamp(), // 추가: 최근 로그인 시간
@@ -104,7 +103,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
         await userService.createOrUpdateUserProfile(user.uid, updateData);
       }
-    } catch (_error) {
+    } catch {
         // Handle error silently
       }
   };
@@ -141,15 +140,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
                 // Initialize FCM for notifications
                 try {
-                  const success = await fcmService.initialize(user.uid);
-                  if (success) {
-
-                  }
-                } catch (error) {
+                  await fcmService.initialize(user.uid);
+                } catch {
                   // Handle error silently
-                  if (import.meta.env.DEV) {
-                    console.error('Error initializing FCM:', error);
-                  }
                 }
 
                 if (!isSubscribed) return;
@@ -161,7 +154,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
                     setUserProfile(profile);
                   }
-                } catch (profileError) {
+                } catch {
                   if (isSubscribed) {
                     setUserProfile(null);
                   }
@@ -177,34 +170,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                         setUserProfile(profile);
                       }
                     },
-                    (error) => {
-                      if (import.meta.env.DEV) {
-                        console.error('Error in profile subscription:', error);
-                      }
+                    () => {
+                      // Handle error silently
                     }
                   );
-                } catch (error) {
+                } catch {
                   // Handle error silently
-                  if (import.meta.env.DEV) {
-                    console.error('Error setting up profile subscription:', error);
-                  }
                 }
-              } catch (error) {
+              } catch {
                 // Handle error silently
-                if (import.meta.env.DEV) {
-                  console.error('Error in auth state change handler:', error);
-                }
               }
             } else {
               setUserProfile(null);
               if (profileUnsubscribe) {
                 try {
                   profileUnsubscribe();
-                } catch (error) {
+                } catch {
                   // Handle error silently
-                  if (import.meta.env.DEV) {
-                    console.error('Error unsubscribing from profile:', error);
-                  }
                 }
                 profileUnsubscribe = null;
               }
@@ -215,7 +197,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             }
           }
         );
-      } catch (error) {
+      } catch {
         if (isSubscribed) {
           setLoading(false);
         }
@@ -230,22 +212,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (authUnsubscribe) {
         try {
           authUnsubscribe();
-        } catch (error) {
+        } catch {
           // Handle error silently
-          if (import.meta.env.DEV) {
-            console.error('Error unsubscribing from auth:', error);
-          }
         }
       }
 
       if (profileUnsubscribe) {
         try {
           profileUnsubscribe();
-        } catch (error) {
+        } catch {
           // Handle error silently
-          if (import.meta.env.DEV) {
-            console.error('Error unsubscribing from profile:', error);
-          }
         }
       }
     };
@@ -387,7 +363,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       const profile = await userService.getUserProfile(user.uid);
       setUserProfile(profile);
-    } catch (error) {
+    } catch {
         // Handle error silently
       }
   };
