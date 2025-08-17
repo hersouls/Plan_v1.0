@@ -16,8 +16,9 @@ import React, { createContext, useEffect, useState } from 'react';
 import { fcmService } from '../lib/fcm';
 import { auth } from '../lib/firebase';
 import { userService } from '../lib/firestore';
-import { AuthContextType, ExtendedUser } from '../types/auth';
+import { ExtendedUser } from '../types/auth';
 import { User } from '../types/user';
+import { AuthContextType } from './AuthContextTypes';
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -104,7 +105,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
         await userService.createOrUpdateUserProfile(user.uid, updateData);
       }
-    } catch (_error) {
+    } catch {
         // Handle error silently
       }
   };
@@ -143,13 +144,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                 try {
                   const success = await fcmService.initialize(user.uid);
                   if (success) {
-
+                    // FCM initialized successfully
                   }
-                } catch (error) {
+                } catch {
                   // Handle error silently
-                  if (import.meta.env.DEV) {
-                    console.error('Error initializing FCM:', error);
-                  }
+                  // FCM initialization error - can be ignored in production
                 }
 
                 if (!isSubscribed) return;
@@ -158,10 +157,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                 try {
                   const profile = await userService.getUserProfile(user.uid);
                   if (isSubscribed) {
-
                     setUserProfile(profile);
                   }
-                } catch (profileError) {
+                } catch {
                   if (isSubscribed) {
                     setUserProfile(null);
                   }
@@ -173,38 +171,29 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                     user.uid,
                     (profile) => {
                       if (isSubscribed) {
-
                         setUserProfile(profile);
                       }
                     },
                     (error) => {
-                      if (import.meta.env.DEV) {
-                        console.error('Error in profile subscription:', error);
-                      }
+                      // Profile subscription error - can be ignored in production
                     }
                   );
-                } catch (error) {
+                } catch {
                   // Handle error silently
-                  if (import.meta.env.DEV) {
-                    console.error('Error setting up profile subscription:', error);
-                  }
+                  // Profile subscription setup error - can be ignored in production
                 }
-              } catch (error) {
+              } catch {
                 // Handle error silently
-                if (import.meta.env.DEV) {
-                  console.error('Error in auth state change handler:', error);
-                }
+                // Auth state change handler error - can be ignored in production
               }
             } else {
               setUserProfile(null);
               if (profileUnsubscribe) {
                 try {
                   profileUnsubscribe();
-                } catch (error) {
+                } catch {
                   // Handle error silently
-                  if (import.meta.env.DEV) {
-                    console.error('Error unsubscribing from profile:', error);
-                  }
+                  // Profile unsubscribe error - can be ignored in production
                 }
                 profileUnsubscribe = null;
               }
@@ -215,7 +204,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             }
           }
         );
-      } catch (error) {
+      } catch {
         if (isSubscribed) {
           setLoading(false);
         }
@@ -230,22 +219,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (authUnsubscribe) {
         try {
           authUnsubscribe();
-        } catch (error) {
+        } catch {
           // Handle error silently
-          if (import.meta.env.DEV) {
-            console.error('Error unsubscribing from auth:', error);
-          }
+          // Auth unsubscribe error - can be ignored in production
         }
       }
 
       if (profileUnsubscribe) {
         try {
           profileUnsubscribe();
-        } catch (error) {
+        } catch {
           // Handle error silently
-          if (import.meta.env.DEV) {
-            console.error('Error unsubscribing from profile:', error);
-          }
+          // Profile unsubscribe error - can be ignored in production
         }
       }
     };
@@ -387,7 +372,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       const profile = await userService.getUserProfile(user.uid);
       setUserProfile(profile);
-    } catch (error) {
+    } catch {
         // Handle error silently
       }
   };

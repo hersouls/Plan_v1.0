@@ -26,7 +26,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { LoadingSpinner } from '../components/common/LoadingSpinner';
 import { WaveBackground } from '../components/layout/WaveBackground';
 import { TaskDetail } from '../components/task/TaskDetail';
-import { WaveButton } from '../components/ui/WaveButton';n
+import { WaveButton } from '../components/ui/WaveButton';
 import { useAuth } from '../hooks/useAuth';
 import { useGroup } from '../hooks/useGroup';
 import { useTask } from '../hooks/useTask';
