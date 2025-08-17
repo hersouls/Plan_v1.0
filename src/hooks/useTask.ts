@@ -85,11 +85,11 @@ export const useTask = (options: UseTaskOptions): UseTaskReturn => {
         };
 
         await commentService.addComment(taskId, finalData);
-              } catch (_err) {
-          const errorMessage = '댓글 추가 중 오류가 발생했습니다.';
-          setError(errorMessage);
-          throw new Error(errorMessage);
-        }
+      } catch {
+        const errorMessage = '댓글 추가 중 오류가 발생했습니다.';
+        setError(errorMessage);
+        throw new Error(errorMessage);
+      }
     },
     [user, taskId]
   );
@@ -101,7 +101,7 @@ export const useTask = (options: UseTaskOptions): UseTaskReturn => {
       try {
         setError(null);
         await commentService.deleteComment(taskId, commentId);
-      } catch (_err) {
+      } catch {
         const errorMessage = '댓글 삭제 중 오류가 발생했습니다.';
         setError(errorMessage);
         throw new Error(errorMessage);
@@ -117,7 +117,7 @@ export const useTask = (options: UseTaskOptions): UseTaskReturn => {
       try {
         setError(null);
         await commentService.addReaction(taskId, commentId, user.uid, emoji);
-      } catch (_err) {
+      } catch {
         const errorMessage = '반응 추가 중 오류가 발생했습니다.';
         setError(errorMessage);
         throw new Error(errorMessage);
@@ -136,7 +136,7 @@ export const useTask = (options: UseTaskOptions): UseTaskReturn => {
       try {
         // Activity logging would need to be implemented in the Firestore service
         // For now, just log to console as a placeholder
-        } catch (_err) {
+      } catch {
         // Don't throw error for activity logging failures
       }
     },
@@ -165,7 +165,7 @@ export const useTask = (options: UseTaskOptions): UseTaskReturn => {
       } else {
         setTask(null);
       }
-    } catch (_err) {
+    } catch {
       const errorMessage = '할일을 새로고침하는 중 오류가 발생했습니다.';
       setError(errorMessage);
     } finally {
@@ -189,7 +189,7 @@ export const useTask = (options: UseTaskOptions): UseTaskReturn => {
     let taskUnsubscribe: (() => void) | undefined;
     let commentsUnsubscribe: (() => void) | undefined;
 
-    const handleError = (error: Error) => {
+    const handleError = (_error: Error) => {
       setError('할일을 불러오는 중 오류가 발생했습니다.');
       setLoading(false);
     };
@@ -214,8 +214,8 @@ export const useTask = (options: UseTaskOptions): UseTaskReturn => {
             setTask(null);
           }
           setLoading(false);
-        } catch (_err) {
-          handleError(_err as Error);
+        } catch {
+          handleError(new Error('할일을 불러오는 중 오류가 발생했습니다.'));
         }
       };
 
@@ -231,8 +231,8 @@ export const useTask = (options: UseTaskOptions): UseTaskReturn => {
           handleError
         );
       }
-    } catch (_err) {
-      handleError(_err as Error);
+    } catch {
+      handleError(new Error('할일을 불러오는 중 오류가 발생했습니다.'));
     }
 
     return () => {

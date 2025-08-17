@@ -119,3 +119,27 @@ export function useNotifications() {
     deleteNotification,
   };
 }
+
+// Export types
+export type NotificationData = {
+  id: string;
+  type: 'task' | 'group' | 'system' | 'reminder';
+  title: string;
+  message: string;
+  status: 'read' | 'unread';
+  createdAt: Date;
+  readAt?: Date;
+  data?: Record<string, any>;
+};
+
+export type NotificationPermissionState = 'granted' | 'denied' | 'default';
+
+export type UseNotificationsReturn = {
+  notifications: NotificationData[];
+  stats: NotificationStats | null;
+  loading: boolean;
+  error: string | null;
+  markAsRead: (notificationId: string) => Promise<void>;
+  markAllAsRead: () => Promise<void>;
+  deleteNotification: (notificationId: string) => Promise<void>;
+};
