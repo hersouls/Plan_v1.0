@@ -1,4 +1,5 @@
 import { MessagePayload, getToken, onMessage } from 'firebase/messaging';
+import { Timestamp } from 'firebase/firestore';
 import { messaging } from './firebase';
 
 // FCM VAPID key - should be set in environment variables
@@ -31,6 +32,7 @@ interface ExtendedNotificationOptions extends NotificationOptions {
     title: string;
     icon?: string;
   }>;
+  vibrate?: number | number[];
 }
 
 class FCMService {
@@ -98,7 +100,7 @@ class FCMService {
       const { userService } = await import('./firestore');
       await userService.createOrUpdateUserProfile(userId, {
         fcmTokens: [token], // Array to support multiple devices
-        updatedAt: new Date().toISOString(),
+        updatedAt: Timestamp.now(),
       });
     } catch {
       // Handle error silently
@@ -140,7 +142,6 @@ class FCMService {
           actions: notificationPayload.actions,
           data: notificationPayload.data,
           vibrate: [100, 50, 100],
-          timestamp: Date.now(),
         };
         registration.showNotification(notificationPayload.title, options);
       });
