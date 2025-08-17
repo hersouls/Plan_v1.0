@@ -379,10 +379,7 @@ export function GroupChat({
       (!newMessage.trim() && attachments.length === 0) ||
       isSending
     ) {
-      ,
-        attachments: attachments.length,
-        isSending,
-      });
+      // Skip if already sending
       return;
     }
 
@@ -465,10 +462,6 @@ export function GroupChat({
       setShowEmojiPicker(false);
       inputRef.current?.focus();
     } catch (error) {
-      ?.code,
-        message: (error as any)?.message,
-        name: (error as any)?.name,
-      });
       alert(`메시지 전송에 실패했습니다: ${(error as any)?.message || error}`);
     } finally {
       setIsSending(false);
