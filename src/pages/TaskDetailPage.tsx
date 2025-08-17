@@ -235,7 +235,7 @@ function TaskDetailPage() {
       } else {
         await updateTask(task.id, { status: newStatus });
       }
-    } catch (error) {
+    } catch {
       alert('상태 변경에 실패했습니다.');
       } finally {
       setActionLoading(null);
@@ -251,7 +251,7 @@ function TaskDetailPage() {
     try {
       await deleteTask(task.id);
       navigate('/');
-    } catch (error) {
+    } catch {
       alert('할일 삭제에 실패했습니다.');
       } finally {
       setActionLoading(null);
