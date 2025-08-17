@@ -48,7 +48,6 @@ class FCMService {
 
     try {
       const permission = await Notification.requestPermission();
-      }
       return permission;
     } catch (error) {
       if (import.meta.env.DEV) {
