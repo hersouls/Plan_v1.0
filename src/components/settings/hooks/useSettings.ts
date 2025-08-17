@@ -380,7 +380,7 @@ export function useSettings(): UseSettingsReturn {
     } finally {
       setLoading(false);
     }
-  }, [currentUser?.uid, authContext.user]);
+  }, [currentUser?.uid, authContext.user, currentUser]);
 
   // 외부에서 호출할 수 있는 loadSettings 함수
   const loadSettings = useCallback(async () => {
