@@ -93,8 +93,8 @@ const mockUser = {
 };
 
 describe('E2E User Workflows', () => {
-  let mockAuth: any;
-  let mockTaskService: any;
+  let mockAuth: unknown;
+  let mockTaskService: unknown;
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -108,7 +108,7 @@ describe('E2E User Workflows', () => {
     global.confirm = jest.fn().mockReturnValue(true);
     
     // Mock auth state initially as logged out
-    mockAuth.onAuthStateChanged.mockImplementation((callback: any) => {
+    mockAuth.onAuthStateChanged.mockImplementation((_callback: unknown) => {
       callback(null); // No user initially
       return jest.fn(); // unsubscribe function
     });
@@ -135,7 +135,7 @@ describe('E2E User Workflows', () => {
       });
 
       // Mock auth state change to logged in
-      mockAuth.onAuthStateChanged.mockImplementation((callback: any) => {
+      mockAuth.onAuthStateChanged.mockImplementation((_callback: unknown) => {
         callback(mockUser);
         return jest.fn();
       });
@@ -159,7 +159,7 @@ describe('E2E User Workflows', () => {
       mockAuth.signOut.mockResolvedValue(undefined);
       
       // Mock auth state change to logged out
-      mockAuth.onAuthStateChanged.mockImplementation((callback: any) => {
+      mockAuth.onAuthStateChanged.mockImplementation((_callback: unknown) => {
         callback(null);
         return jest.fn();
       });
@@ -235,7 +235,7 @@ describe('E2E User Workflows', () => {
   describe('할일 관리 완전한 플로우', () => {
     beforeEach(() => {
       // 로그인된 상태로 시작
-      mockAuth.onAuthStateChanged.mockImplementation((callback: any) => {
+      mockAuth.onAuthStateChanged.mockImplementation((_callback: unknown) => {
         callback(mockUser);
         return jest.fn();
       });
@@ -402,7 +402,7 @@ describe('E2E User Workflows', () => {
 
   describe('필터링 및 뷰 전환 플로우', () => {
     beforeEach(() => {
-      mockAuth.onAuthStateChanged.mockImplementation((callback: any) => {
+      mockAuth.onAuthStateChanged.mockImplementation((_callback: unknown) => {
         callback(mockUser);
         return jest.fn();
       });
@@ -457,7 +457,7 @@ describe('E2E User Workflows', () => {
 
   describe('네비게이션 플로우', () => {
     beforeEach(() => {
-      mockAuth.onAuthStateChanged.mockImplementation((callback: any) => {
+      mockAuth.onAuthStateChanged.mockImplementation((_callback: unknown) => {
         callback(mockUser);
         return jest.fn();
       });
@@ -491,7 +491,7 @@ describe('E2E User Workflows', () => {
 
   describe('에러 처리 플로우', () => {
     beforeEach(() => {
-      mockAuth.onAuthStateChanged.mockImplementation((callback: any) => {
+      mockAuth.onAuthStateChanged.mockImplementation((_callback: unknown) => {
         callback(mockUser);
         return jest.fn();
       });
@@ -548,7 +548,7 @@ describe('E2E User Workflows', () => {
 
   describe('접근성 플로우', () => {
     beforeEach(() => {
-      mockAuth.onAuthStateChanged.mockImplementation((callback: any) => {
+      mockAuth.onAuthStateChanged.mockImplementation((_callback: unknown) => {
         callback(mockUser);
         return jest.fn();
       });
@@ -590,7 +590,7 @@ describe('E2E User Workflows', () => {
 
   describe('성능 및 최적화 플로우', () => {
     it('대량의 할일 목록에서도 원활한 렌더링', async () => {
-      mockAuth.onAuthStateChanged.mockImplementation((callback: any) => {
+      mockAuth.onAuthStateChanged.mockImplementation((_callback: unknown) => {
         callback(mockUser);
         return jest.fn();
       });

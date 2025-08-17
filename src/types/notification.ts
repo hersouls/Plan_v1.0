@@ -6,8 +6,8 @@ export interface Notification {
   type: 'task' | 'group' | 'system' | 'reminder';
   status: 'unread' | 'read';
   priority: 'low' | 'medium' | 'high';
-  createdAt: any; // Firestore Timestamp
-  readAt?: any; // Firestore Timestamp
+  createdAt: unknown; // Firestore Timestamp
+  readAt?: unknown; // Firestore Timestamp
   data?: {
     taskId?: string;
     groupId?: string;

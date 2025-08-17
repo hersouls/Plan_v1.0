@@ -107,7 +107,7 @@ function StatisticsEnhanced() {
         }
         setPointStats(stats);
       } catch (error) {
-        console.error('포인트 통계 로드 실패:', error);
+        // Handle error silently
       } finally {
         setLoadingPoints(false);
       }

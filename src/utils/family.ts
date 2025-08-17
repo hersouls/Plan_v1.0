@@ -41,7 +41,6 @@ export const formatRelativeTime = (
       locale: ko,
     });
   } catch (error) {
-    console.warn('Error formatting relative time:', error);
     return '날짜 정보 없음';
   }
 };
@@ -64,7 +63,6 @@ export const formatDateTime = (
 
     return format(dateObj, formatString);
   } catch (error) {
-    console.warn('Error formatting date time:', error);
     return '날짜 정보 없음';
   }
 };
@@ -98,7 +96,6 @@ export const isWithinTimeRange = (
         return false;
     }
   } catch (error) {
-    console.warn('Error checking time range:', error);
     return false;
   }
 };
@@ -468,7 +465,7 @@ export const calculateEngagementScore = (
 };
 
 // Data Validation and Sanitization
-export const validateFamilyMember = (member: any): member is FamilyMember => {
+export const validateFamilyMember = (_member: unknown): member is FamilyMember => {
   return (
     member &&
     typeof member.id === 'string' &&
@@ -480,8 +477,7 @@ export const validateFamilyMember = (member: any): member is FamilyMember => {
 };
 
 export const validateFamilyActivity = (
-  activity: any
-): activity is FamilyActivity => {
+  _activity: unknown): activity is FamilyActivity => {
   return (
     activity &&
     typeof activity.id === 'string' &&

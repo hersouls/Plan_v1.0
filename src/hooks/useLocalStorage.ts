@@ -18,7 +18,6 @@ export function useLocalStorage<T>(
       const item = window.localStorage.getItem(key);
       return item ? deserialize(item) : defaultValue;
     } catch (error) {
-      console.warn(`Error reading localStorage key "${key}":`, error);
       return defaultValue;
     }
   });
@@ -30,7 +29,7 @@ export function useLocalStorage<T>(
         setState(valueToStore);
         window.localStorage.setItem(key, serialize(valueToStore));
       } catch (error) {
-        console.warn(`Error setting localStorage key "${key}":`, error);
+        // Handle error silently
       }
     },
     [key, serialize]
@@ -41,8 +40,8 @@ export function useLocalStorage<T>(
       window.localStorage.removeItem(key);
       setState(defaultValue);
     } catch (error) {
-      console.warn(`Error removing localStorage key "${key}":`, error);
-    }
+        // Handle error silently
+      }
   }, [key, defaultValue]);
 
   // Listen for changes to this key in other windows
@@ -52,8 +51,8 @@ export function useLocalStorage<T>(
         try {
           setState(deserialize(e.newValue));
         } catch (error) {
-          console.warn(`Error parsing localStorage key "${key}" from storage event:`, error);
-        }
+        // Handle error silently
+      }
       }
     };
 

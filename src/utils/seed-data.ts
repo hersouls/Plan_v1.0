@@ -157,13 +157,10 @@ export async function seedPlansForTrip(tripId: string) {
       });
       
       await batch.commit();
-      console.log(`✅ Day ${day}: ${plans.length}개 일정 등록 완료`);
-    }
+      }
     
-    console.log('🎉 모든 일정 등록 완료!');
     return true;
   } catch (error) {
-    console.error('❌ 일정 등록 실패:', error);
     return false;
   }
 }

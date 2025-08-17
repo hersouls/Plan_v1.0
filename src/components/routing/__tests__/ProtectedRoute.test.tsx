@@ -9,7 +9,7 @@ import { useAuth } from '../../../contexts/AuthContext';
 jest.mock('../../../contexts/AuthContext');
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
-  Navigate: ({ to, state, replace }: { to: string; state?: any; replace?: boolean }) => (
+  Navigate: ({ to, state, replace }: { to: string; state?: unknown; replace?: boolean }) => (
     <div data-testid="navigate" data-to={to} data-state={JSON.stringify(state)} data-replace={replace}>
       Navigate to {to}
     </div>

@@ -72,12 +72,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
 
   // Load user's groups when user profile changes
   useEffect(() => {
-    console.log('DataContext - useEffect triggered');
-    console.log('DataContext - user:', user);
-    console.log('DataContext - userProfile:', userProfile);
-
     if (!user || !userProfile) {
-      console.log('DataContext - No user or userProfile, clearing groups');
       setGroups([]);
       setCurrentGroupState(null);
       setLoading(false);
@@ -85,24 +80,18 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
       return;
     }
 
-    console.log('DataContext - userProfile.groupIds:', userProfile.groupIds);
     setLoading(true);
 
     // Check localStorage for saved current group
     const savedGroupId = localStorage.getItem('currentGroupId');
-    console.log('DataContext - savedGroupId from localStorage:', savedGroupId);
-
     // Load all groups that user belongs to
     const loadGroups = async () => {
       try {
         const groupPromises = userProfile.groupIds.map(async groupId => {
           try {
-            console.log(`Loading group with ID: ${groupId}`);
             const group = await groupService.getGroup(groupId);
-            console.log(`Successfully loaded group:`, group);
             return group;
           } catch (error) {
-            console.error(`Failed to load group ${groupId}:`, error);
             // 그룹 로딩 실패 시에도 계속 진행
             return null;
           }
@@ -113,7 +102,6 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
           group => group !== null
         ) as FamilyGroup[];
 
-        console.log('DataContext - validGroups loaded:', validGroups);
         setGroups(validGroups);
 
         // Set current group logic
@@ -124,17 +112,12 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
           if (savedGroupId) {
             const savedGroup = validGroups.find(g => g.id === savedGroupId);
             if (savedGroup) {
-              console.log('DataContext - Restoring saved group:', savedGroup);
               groupToSet = savedGroup;
             }
           }
 
           // If no saved group or saved group not found, use first group
           if (!groupToSet && isInitialLoad.current) {
-            console.log(
-              'DataContext - Setting current group to first group:',
-              validGroups[0]
-            );
             groupToSet = validGroups[0];
           }
 
@@ -143,10 +126,8 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
             isInitialLoad.current = false;
           }
         } else {
-          console.log('DataContext - No valid groups found');
-        }
+          }
       } catch (err) {
-        console.error('Error loading groups:', err);
         setError('그룹 정보를 불러오는데 실패했습니다.');
       } finally {
         setLoading(false);

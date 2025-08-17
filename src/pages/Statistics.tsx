@@ -81,7 +81,6 @@ function Statistics() {
       try {
         setFavoriteGroups(JSON.parse(savedFavorites));
       } catch {
-        console.error('Failed to parse favorite groups');
         setFavoriteGroups([]);
       }
     }
@@ -145,13 +144,13 @@ function Statistics() {
               profiles[member.userId] = profile;
             }
           } catch (error) {
-            console.error(`사용자 프로필 로드 실패 (${member.userId}):`, error);
+            :`, error);
           }
         }
 
         setUserProfiles(profiles);
       } catch (error) {
-        console.error('사용자 프로필 로드 실패:', error);
+        // Handle error silently
       } finally {
         setLoadingProfiles(false);
       }
@@ -175,7 +174,7 @@ function Statistics() {
             );
             return { userId: member.userId, stats };
           } catch (error) {
-            console.error(`포인트 통계 로드 실패 (${member.userId}):`, error);
+            :`, error);
             return { userId: member.userId, stats: null };
           }
         });
@@ -190,7 +189,7 @@ function Statistics() {
 
         setPointStats(statsMap);
       } catch (error) {
-        console.error('포인트 통계 로드 실패:', error);
+        // Handle error silently
       } finally {
         setLoadingPoints(false);
       }
@@ -234,7 +233,6 @@ function Statistics() {
           const taskDate = format(toDate(task.createdAt), 'yyyy-MM-dd');
           return taskDate === dateStr;
         } catch (error) {
-          console.warn('Invalid createdAt date:', task.createdAt);
           return false;
         }
       });
@@ -245,7 +243,6 @@ function Statistics() {
           const completedDate = format(toDate(task.completedAt), 'yyyy-MM-dd');
           return completedDate === dateStr;
         } catch (error) {
-          console.warn('Invalid completedAt date:', task.completedAt);
           return false;
         }
       });
@@ -860,11 +857,6 @@ function Statistics() {
                         // If it's already a Date object or string
                         return new Date(task.dueDate as any) < new Date();
                       } catch (error) {
-                        console.warn(
-                          'Invalid dueDate format:',
-                          task.dueDate,
-                          error
-                        );
                         return false;
                       }
                     });

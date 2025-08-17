@@ -92,7 +92,6 @@ export const useComments = ({ taskId, realtime = true }: UseCommentsOptions): Us
             setLoading(false);
           },
           (err) => {
-            console.error('Comments subscription error:', err);
             setError('댓글을 불러오는 중 오류가 발생했습니다.');
             setLoading(false);
           }
@@ -101,7 +100,6 @@ export const useComments = ({ taskId, realtime = true }: UseCommentsOptions): Us
         return unsubscribe;
       }
     } catch (err) {
-      console.error('Fetch comments error:', err);
       setError('댓글을 불러오는 중 오류가 발생했습니다.');
       setLoading(false);
     }
@@ -140,7 +138,6 @@ export const useComments = ({ taskId, realtime = true }: UseCommentsOptions): Us
 
       return docRef.id;
     } catch (err) {
-      console.error('Add comment error:', err);
       throw new Error('댓글 추가 중 오류가 발생했습니다.');
     }
   }, [user]);
@@ -150,7 +147,7 @@ export const useComments = ({ taskId, realtime = true }: UseCommentsOptions): Us
 
     try {
       const commentRef = doc(db, 'comments', commentId);
-      const updateData: any = {
+      const updateData: unknown = {
         ...updates,
         updatedAt: serverTimestamp(),
       };
@@ -162,7 +159,6 @@ export const useComments = ({ taskId, realtime = true }: UseCommentsOptions): Us
 
       await updateDoc(commentRef, updateData);
     } catch (err) {
-      console.error('Update comment error:', err);
       throw new Error('댓글 수정 중 오류가 발생했습니다.');
     }
   }, [user]);
@@ -174,7 +170,6 @@ export const useComments = ({ taskId, realtime = true }: UseCommentsOptions): Us
       const commentRef = doc(db, 'comments', commentId);
       await deleteDoc(commentRef);
     } catch (err) {
-      console.error('Delete comment error:', err);
       throw new Error('댓글 삭제 중 오류가 발생했습니다.');
     }
   }, [user]);
@@ -197,7 +192,6 @@ export const useComments = ({ taskId, realtime = true }: UseCommentsOptions): Us
 
       await updateComment(commentId, { reactions });
     } catch (err) {
-      console.error('Add reaction error:', err);
       throw new Error('반응 추가 중 오류가 발생했습니다.');
     }
   }, [user, comments, updateComment]);
@@ -219,7 +213,6 @@ export const useComments = ({ taskId, realtime = true }: UseCommentsOptions): Us
 
       await updateComment(commentId, { reactions });
     } catch (err) {
-      console.error('Remove reaction error:', err);
       throw new Error('반응 제거 중 오류가 발생했습니다.');
     }
   }, [user, comments, updateComment]);

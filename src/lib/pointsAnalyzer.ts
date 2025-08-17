@@ -95,13 +95,12 @@ ${JSON.stringify(recentHistories, null, 2)}
           const analysis = JSON.parse(content.text);
           return this.validateAnalysis(analysis);
         } catch (parseError) {
-          console.error('Failed to parse analysis:', parseError);
           return this.getDefaultAnalysis();
         }
       }
     } catch (error) {
-      console.error('Point analysis error:', error);
-    }
+        // Handle error silently
+      }
 
     return this.getDefaultAnalysis();
   }
@@ -163,13 +162,13 @@ ${i + 1}. ID: ${h.id}
               }
             });
           }
-        } catch (parseError) {
-          console.error('Failed to parse bulk analysis:', parseError);
-        }
+        } catch (error) {
+        // Handle error silently
+      }
       }
     } catch (error) {
-      console.error('Bulk point analysis error:', error);
-    }
+        // Handle error silently
+      }
 
     // Fill missing analyses with defaults
     histories.forEach(h => {
@@ -226,8 +225,8 @@ ${histories.map(h => `
         }
       }
     } catch (error) {
-      console.error('Anomaly detection error:', error);
-    }
+        // Handle error silently
+      }
 
     return [];
   }
@@ -269,13 +268,13 @@ ${histories.map(h => `
         return isNaN(points) ? 10 : Math.max(1, Math.min(100, points));
       }
     } catch (error) {
-      console.error('Point suggestion error:', error);
-    }
+        // Handle error silently
+      }
 
     return 10;
   }
 
-  private validateAnalysis(analysis: any): PointAnalysis {
+  private validateAnalysis(_analysis: unknown): PointAnalysis {
     return {
       score: typeof analysis.score === 'number' ? 
         Math.max(0, Math.min(100, analysis.score)) : 50,

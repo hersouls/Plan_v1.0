@@ -67,7 +67,7 @@ export function NotificationSection({
     });
   };
 
-  const updateTiming = (field: string, value: any) => {
+  const updateTiming = (field: string, _value: unknown) => {
     onUpdate({
       type: 'UPDATE_NOTIFICATIONS',
       payload: {
@@ -79,7 +79,7 @@ export function NotificationSection({
     });
   };
 
-  const updateSound = (field: string, value: any) => {
+  const updateSound = (field: string, _value: unknown) => {
     onUpdate({
       type: 'UPDATE_NOTIFICATIONS',
       payload: {

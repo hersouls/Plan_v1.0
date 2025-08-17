@@ -85,21 +85,9 @@ export async function uploadAvatarImage(
   const originalSizeMB = getFileSizeInMB(file);
 
   try {
-    console.log(
-      `원본 이미지 크기: ${originalSizeMB.toFixed(2)}MB (용량 제한 없음)`
-    );
     optimizedFile = await optimizeAvatarImage(file);
     const optimizedSizeMB = getFileSizeInMB(optimizedFile);
-
-    if (originalSizeMB !== optimizedSizeMB) {
-      console.log(
-        `이미지 최적화 완료: ${originalSizeMB.toFixed(
-          2
-        )}MB → ${optimizedSizeMB.toFixed(2)}MB`
-      );
-    }
   } catch (error) {
-    console.error('이미지 최적화 실패:', error);
     throw new Error('이미지 처리에 실패했습니다.');
   }
 
@@ -120,7 +108,6 @@ export async function uploadAvatarImage(
         onProgress?.(progress);
       },
       error => {
-        console.error('Avatar upload error:', error);
         reject(new Error(getAvatarUploadErrorMessage(error)));
       },
       async () => {
@@ -158,7 +145,6 @@ export async function deleteAvatarImage(
     const storageRef = ref(storage, storageUrl);
     await deleteObject(storageRef);
   } catch (error) {
-    console.error('Avatar deletion error:', error);
     throw new Error('아바타 삭제에 실패했습니다.');
   }
 }
@@ -166,7 +152,7 @@ export async function deleteAvatarImage(
 /**
  * 아바타 업로드 에러 메시지 변환
  */
-function getAvatarUploadErrorMessage(error: any): string {
+function getAvatarUploadErrorMessage(_error: unknown): string {
   if (error.code === 'storage/unauthorized') {
     return '아바타 업로드 권한이 없습니다.';
   } else if (error.code === 'storage/canceled') {
@@ -187,7 +173,6 @@ function getAvatarUploadErrorMessage(error: any): string {
     return '서버 파일 크기가 일치하지 않습니다.';
   }
 
-  console.error('Avatar upload error:', error);
   return error.message || '아바타 업로드 중 오류가 발생했습니다.';
 }
 
@@ -234,15 +219,10 @@ export class StorageService {
         );
       }
 
-      console.log('현재 인증된 사용자:', currentUser.uid);
-      console.log('인증 토큰 확인 중...');
-
       // 토큰 갱신 시도
       try {
         await currentUser.getIdToken(true);
-        console.log('토큰 갱신 완료');
-      } catch (tokenError) {
-        console.error('토큰 갱신 실패:', tokenError);
+        } catch (tokenError) {
         throw new Error('인증 토큰이 만료되었습니다. 다시 로그인해주세요.');
       }
 
@@ -274,11 +254,6 @@ export class StorageService {
           });
         },
         error => {
-          console.error('Upload error details:', error);
-          console.error('Error code:', error.code);
-          console.error('Error message:', error.message);
-          console.error('Error serverResponse:', error.serverResponse);
-
           const errorMessage = this.getErrorMessage(error);
           options?.onError?.(errorMessage);
           options?.onProgress?.({
@@ -463,8 +438,8 @@ export class StorageService {
       );
       await Promise.all(folderPromises);
     } catch (error) {
-      console.error('폴더 삭제 중 오류:', error);
-    }
+        // Handle error silently
+      }
   }
 
   /**
@@ -499,10 +474,9 @@ export class StorageService {
   /**
    * 에러 메시지 변환
    */
-  private static getErrorMessage(error: any): string {
+  private static getErrorMessage(_error: unknown): string {
     // CORS 오류 처리
     if (error.message && error.message.includes('CORS')) {
-      console.error('CORS 오류 발생:', error);
       return '브라우저 보안 정책으로 인해 파일 업로드가 차단되었습니다. 개발자에게 문의해주세요.';
     }
 
@@ -511,7 +485,6 @@ export class StorageService {
       error.code === 'storage/network-request-failed' ||
       error.message?.includes('ERR_FAILED')
     ) {
-      console.error('네트워크 오류 발생:', error);
       return '네트워크 연결을 확인하고 다시 시도해주세요.';
     }
 
@@ -535,7 +508,6 @@ export class StorageService {
       return '서버 파일 크기가 일치하지 않습니다.';
     }
 
-    console.error('Storage 오류:', error);
     return error.message || '파일 처리 중 오류가 발생했습니다.';
   }
 

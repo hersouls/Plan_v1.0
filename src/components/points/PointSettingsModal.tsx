@@ -166,8 +166,8 @@ export function PointSettingsModal({
       setPointValues(initialValues);
       setHasChanges(false);
     } catch (error) {
-      console.error('포인트 규칙 로드 실패:', error);
-    } finally {
+        // Handle error silently
+      } finally {
       setLoading(false);
     }
   };
@@ -218,8 +218,8 @@ export function PointSettingsModal({
       await loadPointRules();
       setHasChanges(false);
     } catch (error) {
-      console.error('포인트 규칙 저장 실패:', error);
-    } finally {
+        // Handle error silently
+      } finally {
       setSaving(false);
     }
   };

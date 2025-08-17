@@ -80,13 +80,6 @@ export const SettingsContainer: React.FC<SettingsContainerProps> = ({
               <div className="flex gap-2 sm:gap-3 flex-shrink-0">
                 <WaveButton
                   onClick={() => {
-                    console.log(
-                      'SettingsContainer - Global save button clicked'
-                    );
-                    console.log(
-                      'SettingsContainer - Current settings:',
-                      settings
-                    );
                     saveSettings();
                   }}
                   disabled={saving}
@@ -145,8 +138,6 @@ export const SettingsContainer: React.FC<SettingsContainerProps> = ({
           </h2>
           <WaveButton
             onClick={() => {
-              console.log('SettingsContainer - Modal save button clicked');
-              console.log('SettingsContainer - Current settings:', settings);
               saveSettings();
             }}
             disabled={saving}

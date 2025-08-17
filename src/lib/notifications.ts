@@ -59,13 +59,12 @@ export class NotificationService {
         id: doc.id,
         ...doc.data(),
       })) as Notification[];
-    } catch (error: any) {
+    } catch (_error: unknown) {
       // 인덱스 빌드 중 오류인 경우 기본 쿼리로 재시도
       if (
         error.code === 'failed-precondition' &&
         error.message.includes('index')
       ) {
-        console.warn('인덱스 빌드 중 - 기본 쿼리로 재시도:', error.message);
         try {
           const { limit: limitCount = 50, status = 'all', type } = options;
 
@@ -94,14 +93,12 @@ export class NotificationService {
 
           return notifications;
         } catch (fallbackError) {
-          console.error('기본 쿼리도 실패:', fallbackError);
           throw new Error(
             '알림 목록을 가져올 수 없습니다. 잠시 후 다시 시도해주세요.'
           );
         }
       }
 
-      console.error('알림 목록 가져오기 실패:', error);
       throw new Error('알림 목록을 가져올 수 없습니다.');
     }
   }
@@ -139,17 +136,12 @@ export class NotificationService {
         })) as Notification[];
         callback(notifications);
       },
-      (error: any) => {
+      (_error: unknown) => {
         // 인덱스 빌드 중 오류인 경우 기본 쿼리로 재시도
         if (
           error.code === 'failed-precondition' &&
           error.message.includes('index')
         ) {
-          console.warn(
-            '실시간 구독 인덱스 빌드 중 - 기본 쿼리로 재시도:',
-            error.message
-          );
-
           // 기본 쿼리로 재시도
           const basicQuery = query(
             collection(db, this.COLLECTION),
@@ -174,12 +166,10 @@ export class NotificationService {
               callback(notifications);
             },
             fallbackError => {
-              console.error('실시간 구독 기본 쿼리도 실패:', fallbackError);
               callback([]); // 빈 배열 반환
             }
           );
         } else {
-          console.error('실시간 알림 구독 실패:', error);
           callback([]); // 빈 배열 반환
         }
       }
@@ -201,7 +191,6 @@ export class NotificationService {
       });
       return docRef.id;
     } catch (error) {
-      console.error('알림 생성 실패:', error);
       throw new Error('알림을 생성할 수 없습니다.');
     }
   }
@@ -216,7 +205,6 @@ export class NotificationService {
         readAt: Timestamp.now(),
       });
     } catch (error) {
-      console.error('알림 읽음 처리 실패:', error);
       throw new Error('알림을 읽음 처리할 수 없습니다.');
     }
   }
@@ -241,7 +229,6 @@ export class NotificationService {
 
       await batch.commit();
     } catch (error) {
-      console.error('모든 알림 읽음 처리 실패:', error);
       throw new Error('알림을 읽음 처리할 수 없습니다.');
     }
   }
@@ -253,7 +240,6 @@ export class NotificationService {
     try {
       await deleteDoc(doc(db, this.COLLECTION, notificationId));
     } catch (error) {
-      console.error('알림 삭제 실패:', error);
       throw new Error('알림을 삭제할 수 없습니다.');
     }
   }
@@ -283,7 +269,6 @@ export class NotificationService {
 
       return stats;
     } catch (error) {
-      console.error('알림 통계 가져오기 실패:', error);
       throw new Error('알림 통계를 가져올 수 없습니다.');
     }
   }
@@ -304,7 +289,6 @@ export class NotificationService {
 
       return null;
     } catch (error) {
-      console.error('알림 설정 가져오기 실패:', error);
       throw new Error('알림 설정을 가져올 수 없습니다.');
     }
   }
@@ -321,7 +305,6 @@ export class NotificationService {
         settings as any
       );
     } catch (error) {
-      console.error('알림 설정 저장 실패:', error);
       throw new Error('알림 설정을 저장할 수 없습니다.');
     }
   }
@@ -352,7 +335,6 @@ export class NotificationService {
         defaultSettings as any
       );
     } catch (error) {
-      console.error('기본 알림 설정 생성 실패:', error);
       throw new Error('기본 알림 설정을 생성할 수 없습니다.');
     }
   }

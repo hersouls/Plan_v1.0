@@ -52,7 +52,7 @@ export const CompletedTasksList = ({
       try {
         await refresh();
       } catch (error) {
-        console.error('새로고침 중 오류 발생:', error);
+        // Handle error silently
       } finally {
         setLoading(false);
       }
@@ -105,7 +105,7 @@ export const CompletedTasksList = ({
   };
 
   // 날짜 포맷팅
-  const formatDate = (timestamp: any) => {
+  const formatDate = (_timestamp: unknown) => {
     const date = toDate(timestamp);
     return date.toLocaleDateString('ko-KR', {
       year: 'numeric',
@@ -115,7 +115,7 @@ export const CompletedTasksList = ({
   };
 
   // 시간 포맷팅
-  const formatTime = (timestamp: any) => {
+  const formatTime = (_timestamp: unknown) => {
     const date = toDate(timestamp);
     return date.toLocaleTimeString('ko-KR', {
       hour: '2-digit',

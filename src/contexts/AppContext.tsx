@@ -340,7 +340,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
           !firestoreServices.groupService ||
           typeof firestoreServices.groupService.getUserGroups !== 'function'
         ) {
-          console.error('groupService or getUserGroups method not available');
           throw new Error('groupService is not properly loaded');
         }
 
@@ -357,7 +356,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
           });
         }
       } catch (error) {
-        console.error('Error loading default group:', error);
         dispatch({
           type: 'SET_ERROR',
           payload: {

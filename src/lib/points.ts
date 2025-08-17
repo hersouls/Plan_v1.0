@@ -98,7 +98,6 @@ class PointsService {
 
       return docRef.id;
     } catch (error) {
-      console.error('포인트 내역 추가 실패:', error);
       throw error;
     }
   }
@@ -124,7 +123,6 @@ class PointsService {
         ...doc.data(),
       })) as PointHistory[];
     } catch (error) {
-      console.error('포인트 내역 조회 실패:', error);
       throw error;
     }
   }
@@ -144,7 +142,6 @@ class PointsService {
         ...doc.data(),
       })) as PointHistory[];
     } catch (error) {
-      console.error('그룹 포인트 내역 조회 실패:', error);
       throw error;
     }
   }
@@ -163,7 +160,6 @@ class PointsService {
       const docRef = await addDoc(collection(db, 'pointRules'), ruleData);
       return docRef.id;
     } catch (error) {
-      console.error('포인트 규칙 생성 실패:', error);
       throw error;
     }
   }
@@ -184,7 +180,6 @@ class PointsService {
         ...doc.data(),
       })) as PointRule[];
     } catch (error) {
-      console.error('포인트 규칙 조회 실패:', error);
       throw error;
     }
   }
@@ -201,7 +196,6 @@ class PointsService {
         updatedAt: Timestamp.now(),
       });
     } catch (error) {
-      console.error('포인트 규칙 업데이트 실패:', error);
       throw error;
     }
   }
@@ -221,7 +215,6 @@ class PointsService {
 
       return null;
     } catch (error) {
-      console.error('포인트 통계 조회 실패:', error);
       throw error;
     }
   }
@@ -281,7 +274,6 @@ class PointsService {
       const statsRef = doc(db, 'pointStats', `${userId}_${groupId}`);
       await setDoc(statsRef, stats);
     } catch (error) {
-      console.error('포인트 통계 업데이트 실패:', error);
       throw error;
     }
   }
@@ -322,7 +314,6 @@ class PointsService {
 
       return updatedStats;
     } catch (error) {
-      console.error('그룹 포인트 통계 조회 실패:', error);
       throw error;
     }
   }
@@ -350,7 +341,6 @@ class PointsService {
       // 추가 보너스 포인트 규칙 확인 (승인 대기 상태)
       await this.checkAndAwardBonusPoints(userId, groupId);
     } catch (error) {
-      console.error('할일 완료 포인트 지급 실패:', error);
       throw error;
     }
   }
@@ -397,7 +387,6 @@ class PointsService {
         }
       }
     } catch (error) {
-      console.error('보너스 포인트 확인 실패:', error);
       throw error;
     }
   }
@@ -430,7 +419,6 @@ class PointsService {
       // 포인트 통계 업데이트
       await this.updatePointStats(userId, groupId);
     } catch (error) {
-      console.error('수동 포인트 조정 실패:', error);
       throw error;
     }
   }
@@ -441,10 +429,6 @@ class PointsService {
     approvedBy: string
   ): Promise<void> {
     try {
-      console.log(
-        `포인트 내역 승인 시작: historyId=${historyId}, approvedBy=${approvedBy}`
-      );
-
       const historyRef = doc(db, 'pointHistory', historyId);
 
       // 현재 내역 조회
@@ -454,16 +438,12 @@ class PointsService {
       }
 
       const history = historyDoc.data() as PointHistory;
-      console.log(`승인할 포인트 내역:`, history);
-
       // 승인 상태 업데이트
       await updateDoc(historyRef, {
         isApproved: true,
         approvedAt: Timestamp.now(),
         approvedBy: approvedBy,
       });
-
-      console.log(`포인트 내역 승인 완료: historyId=${historyId}`);
 
       // 승인된 포인트를 사용자에게 실제로 지급
       const pointAmount =
@@ -475,11 +455,7 @@ class PointsService {
 
       // 사용자 프로필의 포인트 업데이트
       await this.updateUserPoints(history.userId, history.groupId, pointAmount);
-      console.log(
-        `사용자 포인트 업데이트 완료: userId=${history.userId}, amount=${pointAmount}`
-      );
-    } catch (error) {
-      console.error('포인트 내역 승인 실패:', error);
+      } catch (error) {
       throw error;
     }
   }
@@ -497,7 +473,6 @@ class PointsService {
         approvedBy: rejectedBy,
       });
     } catch (error) {
-      console.error('포인트 내역 승인 취소 실패:', error);
       throw error;
     }
   }
@@ -509,10 +484,6 @@ class PointsService {
     limitCount: number = 50
   ): Promise<PointHistory[]> {
     try {
-      console.log(
-        `미승인 포인트 내역 조회: userId=${userId}, groupId=${groupId}`
-      );
-
       const q = query(
         collection(db, 'pointHistory'),
         where('userId', '==', userId),
@@ -533,13 +504,8 @@ class PointsService {
           history.isApproved === false || history.isApproved === undefined
       );
 
-      console.log(
-        `전체 포인트 내역: ${allHistory.length}개, 미승인: ${unapprovedHistory.length}개`
-      );
-
       return unapprovedHistory;
     } catch (error) {
-      console.error('미승인 포인트 내역 조회 실패:', error);
       throw error;
     }
   }
@@ -551,10 +517,6 @@ class PointsService {
     limitCount: number = 50
   ): Promise<PointHistory[]> {
     try {
-      console.log(
-        `승인된 포인트 내역 조회: userId=${userId}, groupId=${groupId}`
-      );
-
       const q = query(
         collection(db, 'pointHistory'),
         where('userId', '==', userId),
@@ -574,13 +536,8 @@ class PointsService {
         history => history.isApproved === true
       );
 
-      console.log(
-        `전체 포인트 내역: ${allHistory.length}개, 승인된: ${approvedHistory.length}개`
-      );
-
       return approvedHistory;
     } catch (error) {
-      console.error('승인된 포인트 내역 조회 실패:', error);
       throw error;
     }
   }
@@ -597,7 +554,6 @@ class PointsService {
         updatedAt: Timestamp.now(),
       });
     } catch (error) {
-      console.error('포인트 내역 금액 수정 실패:', error);
       throw error;
     }
   }
@@ -623,7 +579,6 @@ class PointsService {
         });
       }
     } catch (error) {
-      console.error('사용자 포인트 업데이트 실패:', error);
       throw error;
     }
   }

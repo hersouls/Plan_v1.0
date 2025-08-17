@@ -22,7 +22,7 @@ export class RealtimeService {
    */
   subscribeToUserProfile(
     userId: string,
-    callback: (userData: any) => void,
+    callback: (_userData: unknown) => void,
     onError?: (error: Error) => void
   ): string {
     const subscriptionId = `user-${userId}`;
@@ -45,7 +45,6 @@ export class RealtimeService {
           }
         },
         (error) => {
-          console.error('Error listening to user profile:', error);
           if (onError) {
             onError(new Error('사용자 프로필 실시간 동기화 중 오류가 발생했습니다.'));
           }
@@ -55,7 +54,6 @@ export class RealtimeService {
       this.subscriptions.set(subscriptionId, unsubscribe);
       return subscriptionId;
     } catch (error) {
-      console.error('Failed to subscribe to user profile:', error);
       if (onError) {
         onError(new Error('사용자 프로필 구독에 실패했습니다.'));
       }
@@ -68,7 +66,7 @@ export class RealtimeService {
    */
   subscribeToUserGroups(
     userId: string,
-    callback: (groups: any[]) => void,
+    callback: (groups: unknown[]) => void,
     onError?: (error: Error) => void
   ): string {
     const subscriptionId = `groups-${userId}`;
@@ -93,7 +91,6 @@ export class RealtimeService {
           callback(groups);
         },
         (error) => {
-          console.error('Error listening to user groups:', error);
           if (onError) {
             onError(new Error('그룹 목록 실시간 동기화 중 오류가 발생했습니다.'));
           }
@@ -103,7 +100,6 @@ export class RealtimeService {
       this.subscriptions.set(subscriptionId, unsubscribe);
       return subscriptionId;
     } catch (error) {
-      console.error('Failed to subscribe to user groups:', error);
       if (onError) {
         onError(new Error('그룹 목록 구독에 실패했습니다.'));
       }
@@ -116,7 +112,7 @@ export class RealtimeService {
    */
   subscribeToGroup(
     groupId: string,
-    callback: (groupData: any) => void,
+    callback: (_groupData: unknown) => void,
     onError?: (error: Error) => void
   ): string {
     const subscriptionId = `group-${groupId}`;
@@ -139,7 +135,6 @@ export class RealtimeService {
           }
         },
         (error) => {
-          console.error('Error listening to group:', error);
           if (onError) {
             onError(new Error('그룹 정보 실시간 동기화 중 오류가 발생했습니다.'));
           }
@@ -149,7 +144,6 @@ export class RealtimeService {
       this.subscriptions.set(subscriptionId, unsubscribe);
       return subscriptionId;
     } catch (error) {
-      console.error('Failed to subscribe to group:', error);
       if (onError) {
         onError(new Error('그룹 정보 구독에 실패했습니다.'));
       }
@@ -163,7 +157,7 @@ export class RealtimeService {
   subscribeToUserTasks(
     userId: string,
     groupId?: string,
-    callback: (tasks: any[]) => void,
+    callback: (tasks: unknown[]) => void,
     onError?: (error: Error) => void
   ): string {
     const subscriptionId = `tasks-${userId}-${groupId || 'personal'}`;
@@ -201,7 +195,6 @@ export class RealtimeService {
           callback(tasks);
         },
         (error) => {
-          console.error('Error listening to tasks:', error);
           if (onError) {
             onError(new Error('할일 목록 실시간 동기화 중 오류가 발생했습니다.'));
           }
@@ -211,7 +204,6 @@ export class RealtimeService {
       this.subscriptions.set(subscriptionId, unsubscribe);
       return subscriptionId;
     } catch (error) {
-      console.error('Failed to subscribe to tasks:', error);
       if (onError) {
         onError(new Error('할일 목록 구독에 실패했습니다.'));
       }
@@ -224,7 +216,7 @@ export class RealtimeService {
    */
   subscribeToGroupActivities(
     groupId: string,
-    callback: (activities: any[]) => void,
+    callback: (activities: unknown[]) => void,
     onError?: (error: Error) => void
   ): string {
     const subscriptionId = `activities-${groupId}`;
@@ -249,7 +241,6 @@ export class RealtimeService {
           callback(activities);
         },
         (error) => {
-          console.error('Error listening to group activities:', error);
           if (onError) {
             onError(new Error('그룹 활동 실시간 동기화 중 오류가 발생했습니다.'));
           }
@@ -259,7 +250,6 @@ export class RealtimeService {
       this.subscriptions.set(subscriptionId, unsubscribe);
       return subscriptionId;
     } catch (error) {
-      console.error('Failed to subscribe to group activities:', error);
       if (onError) {
         onError(new Error('그룹 활동 구독에 실패했습니다.'));
       }
@@ -272,7 +262,7 @@ export class RealtimeService {
    */
   subscribeToUserSettings(
     userId: string,
-    callback: (settings: any) => void,
+    callback: (_settings: unknown) => void,
     onError?: (error: Error) => void
   ): string {
     const subscriptionId = `settings-${userId}`;
@@ -296,7 +286,6 @@ export class RealtimeService {
           }
         },
         (error) => {
-          console.error('Error listening to user settings:', error);
           if (onError) {
             onError(new Error('사용자 설정 실시간 동기화 중 오류가 발생했습니다.'));
           }
@@ -306,7 +295,6 @@ export class RealtimeService {
       this.subscriptions.set(subscriptionId, unsubscribe);
       return subscriptionId;
     } catch (error) {
-      console.error('Failed to subscribe to user settings:', error);
       if (onError) {
         onError(new Error('사용자 설정 구독에 실패했습니다.'));
       }
@@ -321,8 +309,8 @@ export class RealtimeService {
     subscriptions: Array<{
       id: string;
       type: 'user' | 'groups' | 'group' | 'tasks' | 'activities' | 'settings';
-      params: any;
-      callback: (data: any) => void;
+      params: unknown;
+      callback: (_data: unknown) => void;
       onError?: (error: Error) => void;
     }>
   ): string[] {

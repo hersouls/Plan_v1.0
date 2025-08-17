@@ -10,8 +10,7 @@ const getClaudeConfig = () => {
   };
 
   if (!config.apiKey && config.enabled) {
-    console.warn('Claude AI is enabled but API key is missing. Please set VITE_CLAUDE_API_KEY in your environment variables.');
-  }
+    }
 
   return config;
 };
@@ -46,7 +45,6 @@ export interface TaskSuggestion {
 export const claudeAIService: ClaudeAIService = {
   async generateTaskSuggestions(input: string): Promise<TaskSuggestion[]> {
     if (!anthropic || !config.enabled) {
-      console.warn('Claude AI is not available');
       return [];
     }
 
@@ -76,13 +74,11 @@ export const claudeAIService: ClaudeAIService = {
         try {
           return JSON.parse(content.text);
         } catch (parseError) {
-          console.error('Failed to parse Claude response:', parseError);
           return [];
         }
       }
       return [];
     } catch (error) {
-      console.error('Claude AI task suggestions error:', error);
       return [];
     }
   },
@@ -115,7 +111,6 @@ export const claudeAIService: ClaudeAIService = {
       }
       return 'other';
     } catch (error) {
-      console.error('Claude AI categorization error:', error);
       return 'other';
     }
   },
@@ -151,7 +146,6 @@ export const claudeAIService: ClaudeAIService = {
       }
       return description || '';
     } catch (error) {
-      console.error('Claude AI description improvement error:', error);
       return description || '';
     }
   },
@@ -193,7 +187,6 @@ export const claudeAIService: ClaudeAIService = {
       }
       return [];
     } catch (error) {
-      console.error('Claude AI subtasks generation error:', error);
       return [];
     }
   },
@@ -226,7 +219,6 @@ export const claudeAIService: ClaudeAIService = {
       }
       return 30;
     } catch (error) {
-      console.error('Claude AI duration estimation error:', error);
       return 30;
     }
   },
@@ -262,7 +254,6 @@ export const claudeAIService: ClaudeAIService = {
       }
       return 'medium';
     } catch (error) {
-      console.error('Claude AI priority suggestion error:', error);
       return 'medium';
     }
   }

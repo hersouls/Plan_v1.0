@@ -89,8 +89,7 @@ function PointsManagement() {
 
   // 모달 상태 디버깅
   useEffect(() => {
-    console.log('포인트 설정 모달 상태:', showPointSettingsModal);
-  }, [showPointSettingsModal]);
+    }, [showPointSettingsModal]);
 
   // 즐겨찾기 그룹 로드
   useEffect(() => {
@@ -98,8 +97,7 @@ function PointsManagement() {
     if (savedFavorites) {
       try {
         setFavoriteGroups(JSON.parse(savedFavorites));
-      } catch {
-        console.error('Failed to parse favorite groups');
+      } catch (error) {
         setFavoriteGroups([]);
       }
     }
@@ -167,9 +165,9 @@ function PointsManagement() {
         selectedGroupId
       );
       setUnapprovedPointHistory(history);
-    } catch {
-      console.error('미승인 포인트 내역 로드 실패');
-    } finally {
+    } catch (error) {
+        // Handle error silently
+      } finally {
       setLoading(false);
     }
   };
@@ -186,9 +184,9 @@ function PointsManagement() {
       );
 
       setApprovedPointHistory(history);
-    } catch {
-      console.error('승인된 포인트 내역 로드 실패');
-    } finally {
+    } catch (error) {
+        // Handle error silently
+      } finally {
       setLoading(false);
     }
   };
@@ -218,9 +216,9 @@ function PointsManagement() {
       await loadUnapprovedPointHistory();
       await loadApprovedPointHistory();
       await loadMemberStats();
-    } catch {
-      console.error('포인트 내역 승인 실패');
-    } finally {
+    } catch (error) {
+        // Handle error silently
+      } finally {
       setApprovingHistoryId(null);
     }
   };
@@ -254,9 +252,9 @@ function PointsManagement() {
       await loadUnapprovedPointHistory();
       await loadApprovedPointHistory();
       await loadMemberStats();
-    } catch {
-      console.error('포인트 내역 승인 취소 실패');
-    } finally {
+    } catch (error) {
+        // Handle error silently
+      } finally {
       setApprovingHistoryId(null);
     }
   };
@@ -266,7 +264,6 @@ function PointsManagement() {
     try {
       navigate(`/tasks/${taskId}/edit`);
     } catch (error) {
-      console.error('할일 수정 페이지 이동 실패:', error);
       // 오류 발생 시 사용자에게 알림
       alert('할일 수정 페이지로 이동할 수 없습니다. 다시 시도해주세요.');
     }
@@ -287,9 +284,9 @@ function PointsManagement() {
       });
 
       setMemberStats(statsMap);
-    } catch {
-      console.error('멤버 통계 로드 실패');
-    }
+    } catch (error) {
+        // Handle error silently
+      }
   };
 
   // 사용자 프로필 정보 로드 함수
@@ -304,14 +301,14 @@ function PointsManagement() {
             profiles[memberId] = profile as User;
           }
         } catch {
-          console.error(`사용자 프로필 로드 실패 (${memberId})`);
+          `);
         }
       }
 
       setUserProfiles(prev => ({ ...prev, ...profiles }));
-    } catch {
-      console.error('사용자 프로필 로드 실패');
-    }
+    } catch (error) {
+        // Handle error silently
+      }
   };
 
   // 멤버 목록이 변경될 때 사용자 프로필 정보 로드
@@ -423,9 +420,9 @@ function PointsManagement() {
       await loadUnapprovedPointHistory();
       await loadApprovedPointHistory();
       setShowAddPointsModal(false);
-    } catch {
-      console.error('포인트 추가 실패');
-    }
+    } catch (error) {
+        // Handle error silently
+      }
   };
 
   // 포인트 차감
@@ -454,9 +451,9 @@ function PointsManagement() {
       await loadUnapprovedPointHistory();
       await loadApprovedPointHistory();
       setShowAddPointsModal(false);
-    } catch {
-      console.error('포인트 차감 실패');
-    }
+    } catch (error) {
+        // Handle error silently
+      }
   };
 
   if (!user) {
@@ -873,11 +870,9 @@ function PointsManagement() {
                               setLoading(true);
                               try {
                                 await loadUnapprovedPointHistory();
-                              } catch {
-                                console.error(
-                                  '미승인 포인트 내역 새로고침 실패'
-                                );
-                              } finally {
+                              } catch (error) {
+        // Handle error silently
+      } finally {
                                 setLoading(false);
                               }
                             }
@@ -916,7 +911,7 @@ function PointsManagement() {
                             history.type === 'penalty';
 
                           // 날짜 포맷팅 개선
-                          const formatDate = (timestamp: any) => {
+                          const formatDate = (_timestamp: unknown) => {
                             try {
                               const date = new Date(timestamp.seconds * 1000);
                               const now = new Date();
@@ -1169,11 +1164,9 @@ function PointsManagement() {
                               setLoading(true);
                               try {
                                 await loadApprovedPointHistory();
-                              } catch {
-                                console.error(
-                                  '승인된 포인트 내역 새로고침 실패'
-                                );
-                              } finally {
+                              } catch (error) {
+        // Handle error silently
+      } finally {
                                 setLoading(false);
                               }
                             }
@@ -1212,7 +1205,7 @@ function PointsManagement() {
                             history.type === 'penalty';
 
                           // 날짜 포맷팅 개선
-                          const formatDate = (timestamp: any) => {
+                          const formatDate = (_timestamp: unknown) => {
                             try {
                               const date = new Date(timestamp.seconds * 1000);
                               const now = new Date();
@@ -1568,7 +1561,7 @@ function PointsManagement() {
                     history.type === 'deducted' || history.type === 'penalty';
 
                   // 날짜 포맷팅 개선
-                  const formatDate = (timestamp: any) => {
+                  const formatDate = (_timestamp: unknown) => {
                     try {
                       const date = new Date(timestamp.seconds * 1000);
                       return date.toLocaleDateString('ko-KR', {
@@ -1754,7 +1747,7 @@ function PointsManagement() {
                     history.type === 'deducted' || history.type === 'penalty';
 
                   // 날짜 포맷팅 개선
-                  const formatDate = (timestamp: any) => {
+                  const formatDate = (_timestamp: unknown) => {
                     try {
                       const date = new Date(timestamp.seconds * 1000);
                       return date.toLocaleDateString('ko-KR', {

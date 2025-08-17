@@ -34,9 +34,9 @@ export function QRInviteModal({
       await navigator.clipboard.writeText(inviteUrl);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
-    } catch (err) {
-      console.error('Failed to copy link:', err);
-    }
+    } catch (error) {
+        // Handle error silently
+      }
   };
 
   const handleCopyCode = async () => {
@@ -44,9 +44,9 @@ export function QRInviteModal({
       await navigator.clipboard.writeText(inviteCode);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
-    } catch (err) {
-      console.error('Failed to copy code:', err);
-    }
+    } catch (error) {
+        // Handle error silently
+      }
   };
 
   const handleShare = async () => {
@@ -57,8 +57,8 @@ export function QRInviteModal({
           text: `${groupName} 가족 그룹에 초대합니다. 아래 링크로 참여해주세요!`,
           url: inviteUrl,
         });
-      } catch (err) {
-        console.error('Failed to share:', err);
+      } catch (error) {
+        // Handle error silently
       }
     } else {
       // Fallback to copy link

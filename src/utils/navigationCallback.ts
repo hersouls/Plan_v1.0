@@ -60,8 +60,8 @@ export class NavigationCallback {
     if (returnQuery) {
       try {
         state.returnQuery = JSON.parse(returnQuery);
-      } catch (e) {
-        console.warn('Failed to parse returnQuery:', e);
+      } catch (error) {
+        // Handle error silently
       }
     }
     
@@ -76,8 +76,8 @@ export class NavigationCallback {
     if (contextData) {
       try {
         state.contextData = JSON.parse(contextData);
-      } catch (e) {
-        console.warn('Failed to parse contextData:', e);
+      } catch (error) {
+        // Handle error silently
       }
     }
     
@@ -149,7 +149,7 @@ export class NavigationCallback {
     const currentSearch = new URLSearchParams(window.location.search);
     const currentFragment = window.location.hash.substring(1);
     
-    const callbackOptions: any = {};
+    const callbackOptions: unknown = {};
     
     // 현재 쿼리 파라미터 보존
     if (options?.preserveQuery && currentSearch.toString()) {

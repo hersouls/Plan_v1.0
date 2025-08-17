@@ -30,7 +30,7 @@ import { db } from './firebase';
 
 // 안전한 실시간 구독을 위한 헬퍼 함수 - 재시도 로직 포함
 function createSafeSnapshot<T>(
-  queryOrDoc: any,
+  _queryOrDoc: unknown,
   onNext: (data: T) => void,
   onError?: (error: Error) => void,
   retryCount: number = 0
@@ -50,7 +50,7 @@ function createSafeSnapshot<T>(
             }
 
             // QuerySnapshot
-            const data = snapshot.docs.map((doc: any) => ({
+            const data = snapshot.docs.map((_doc: unknown) => ({
               id: doc.id,
               ...doc.data(),
             })) as T;
@@ -68,28 +68,23 @@ function createSafeSnapshot<T>(
             }
           }
         } catch (error) {
-          console.error('Error processing snapshot data:', error);
           if (onError) onError(error as Error);
         }
       },
       error: error => {
-        console.error('Firestore snapshot error:', error);
-
         // 재시도 로직 - assertion 에러나 네트워크 에러의 경우
         if (
           retryCount < MAX_RETRIES &&
           (error.message.includes('INTERNAL ASSERTION FAILED') ||
             error.message.includes('Unexpected state'))
         ) {
-          console.log(
-            `Retrying snapshot connection... (${retryCount + 1}/${MAX_RETRIES})`
+          `
           );
 
           setTimeout(() => {
             try {
               createSafeSnapshot(queryOrDoc, onNext, onError, retryCount + 1);
             } catch (retryError) {
-              console.error('Retry failed:', retryError);
               if (onError) onError(retryError as Error);
             }
           }, RETRY_DELAY * (retryCount + 1));
@@ -99,7 +94,6 @@ function createSafeSnapshot<T>(
       },
     });
   } catch (error) {
-    console.error('Error creating snapshot listener:', error);
     if (onError) onError(error as Error);
     // 빈 unsubscribe 함수 반환
     return () => {};
@@ -131,11 +125,10 @@ export const taskService = {
         )
       );
 
-      console.log('Final task data:', finalData); // 디버깅용 로그
+      // 디버깅용 로그
       const docRef = await addDoc(collection(db, 'tasks'), finalData);
       return docRef.id;
     } catch (error) {
-      console.error('Error creating task:', error);
       throw error;
     }
   },
@@ -151,19 +144,14 @@ export const taskService = {
       });
       await updateDoc(taskRef, sanitizedUpdates);
     } catch (error) {
-      console.error('Error updating task:', error);
       throw error;
     }
   },
 
   // Delete a task
   async deleteTask(taskId: string): Promise<void> {
-    try {
-      await deleteDoc(doc(db, 'tasks', taskId));
-    } catch (error) {
-      console.error('Error deleting task:', error);
-      throw error;
-    }
+    await deleteDoc(doc(db, 'tasks', taskId));
+    
   },
 
   // Get a single task
@@ -175,7 +163,6 @@ export const taskService = {
       }
       return null;
     } catch (error) {
-      console.error('Error getting task:', error);
       throw error;
     }
   },
@@ -195,7 +182,6 @@ export const taskService = {
 
       return createSafeSnapshot<Task[]>(q, callback, onError);
     } catch (error) {
-      console.error('Error subscribing to group tasks:', error);
       if (onError) onError(error as Error);
       return () => {};
     }
@@ -216,7 +202,6 @@ export const taskService = {
 
       return createSafeSnapshot<Task[]>(q, callback, onError);
     } catch (error) {
-      console.error('Error subscribing to user tasks:', error);
       if (onError) onError(error as Error);
       return () => {};
     }
@@ -248,7 +233,6 @@ export const taskService = {
         onError
       );
     } catch (error) {
-      console.error('Error subscribing to personal tasks:', error);
       if (onError) onError(error as Error);
       return () => {};
     }
@@ -269,7 +253,6 @@ export const taskService = {
         ...doc.data(),
       })) as Task[];
     } catch (error) {
-      console.error('Error getting group tasks:', error);
       throw error;
     }
   },
@@ -289,7 +272,6 @@ export const taskService = {
         ...doc.data(),
       })) as Task[];
     } catch (error) {
-      console.error('Error getting user tasks:', error);
       throw error;
     }
   },
@@ -309,7 +291,6 @@ export const groupService = {
       });
       return docRef.id;
     } catch (error) {
-      console.error('Error creating group:', error);
       throw error;
     }
   },
@@ -323,7 +304,6 @@ export const groupService = {
         updatedAt: serverTimestamp(),
       });
     } catch (error) {
-      console.error('Error updating group:', error);
       throw error;
     }
   },
@@ -344,7 +324,6 @@ export const groupService = {
       }
       return null;
     } catch (error) {
-      console.error('Error getting group:', error);
       throw error;
     }
   },
@@ -369,7 +348,6 @@ export const groupService = {
         onError
       );
     } catch (error) {
-      console.error('Error subscribing to group:', error);
       if (onError) onError(error as Error);
       return () => {};
     }
@@ -389,7 +367,6 @@ export const groupService = {
         updatedAt: serverTimestamp(),
       });
     } catch (error) {
-      console.error('Error adding member to group:', error);
       throw error;
     }
   },
@@ -417,7 +394,6 @@ export const groupService = {
 
       await batch.commit();
     } catch (error) {
-      console.error('Error removing member from group:', error);
       throw error;
     }
   },
@@ -437,7 +413,6 @@ export const groupService = {
         ...doc.data(),
       })) as FamilyGroup[];
     } catch (error) {
-      console.error('Error getting user groups:', error);
       throw error;
     }
   },
@@ -457,7 +432,6 @@ export const groupService = {
 
       return createSafeSnapshot<FamilyGroup[]>(q, callback, onError);
     } catch (error) {
-      console.error('Error subscribing to user groups:', error);
       if (onError) onError(error as Error);
       return () => {};
     }
@@ -474,9 +448,6 @@ export const groupService = {
       const groupDoc = await getDoc(doc(db, 'groups', groupId));
       if (!groupDoc.exists()) {
         // 그룹이 존재하지 않는 경우 빈 배열 반환
-        console.warn(
-          `Group ${groupId} not found, returning empty members array`
-        );
         return [];
       }
 
@@ -520,7 +491,6 @@ export const groupService = {
 
       return await Promise.all(memberPromises);
     } catch (error) {
-      console.error('Error getting group members:', error);
       throw error;
     }
   },
@@ -543,7 +513,6 @@ export const groupService = {
       // 먼저 그룹이 존재하는지 확인
       const groupDoc = await getDoc(doc(db, 'groups', groupId));
       if (!groupDoc.exists()) {
-        console.warn(`Group ${groupId} not found, returning empty stats`);
         return {
           totalTasks: 0,
           completedTasks: 0,
@@ -569,12 +538,12 @@ export const groupService = {
       // Calculate stats
       const totalTasks = tasks.length;
       const completedTasks = tasks.filter(
-        (task: any) => task.status === 'completed'
+        (_task: unknown) => task.status === 'completed'
       ).length;
       const pendingTasks = tasks.filter(
-        (task: any) => task.status === 'pending'
+        (_task: unknown) => task.status === 'pending'
       ).length;
-      const overdueTasks = tasks.filter((task: any) => {
+      const overdueTasks = tasks.filter((_task: unknown) => {
         if (task.status === 'completed') return false;
         const dueDate = task.dueDate?.toDate
           ? task.dueDate.toDate()
@@ -587,17 +556,17 @@ export const groupService = {
       const memberStats = members.map(member => {
         // 해당 멤버가 생성한 할일
         const createdTasks = tasks.filter(
-          (task: any) => task.userId === member.userId
+          (_task: unknown) => task.userId === member.userId
         );
 
         // 해당 멤버에게 할당된 할일
         const assignedTasks = tasks.filter(
-          (task: any) => task.assigneeId === member.userId
+          (_task: unknown) => task.assigneeId === member.userId
         );
 
         // 해당 멤버가 완료한 할일
         const completedTasks = tasks.filter(
-          (task: any) =>
+          (_task: unknown) =>
             task.assigneeId === member.userId && task.status === 'completed'
         );
 
@@ -621,7 +590,6 @@ export const groupService = {
         memberStats,
       };
     } catch (error) {
-      console.error('Error getting group stats:', error);
       throw error;
     }
   },
@@ -657,7 +625,6 @@ export const groupService = {
 
       await batch.commit();
     } catch (error) {
-      console.error('Error deleting group:', error);
       throw error;
     }
   },
@@ -680,7 +647,6 @@ export const groupService = {
         expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
       });
     } catch (error) {
-      console.error('Error inviting member by email:', error);
       throw error;
     }
   },
@@ -698,7 +664,6 @@ export const groupService = {
         updatedAt: serverTimestamp(),
       });
     } catch (error) {
-      console.error('Error changing member role:', error);
       throw error;
     }
   },
@@ -719,7 +684,6 @@ export const groupService = {
 
       return code;
     } catch (error) {
-      console.error('Error generating invite code:', error);
       throw error;
     }
   },
@@ -755,7 +719,6 @@ export const groupService = {
 
       return groupId;
     } catch (error) {
-      console.error('Error joining group by code:', error);
       throw error;
     }
   },
@@ -764,7 +727,7 @@ export const groupService = {
 // Comment-related Firestore operations
 export const commentService = {
   // Add a comment to a task
-  async addComment(taskId: string, commentData: any) {
+  async addComment(taskId: string, _commentData: unknown) {
     try {
       // 데이터 검증 및 정리
       const cleanData = { ...commentData };
@@ -787,9 +750,9 @@ export const commentService = {
         : [];
 
       // attachments 배열 내부의 객체들도 검증
-      const validatedAttachments = cleanAttachments.map((att: any) => {
+      const validatedAttachments = cleanAttachments.map((_att: unknown) => {
         if (typeof att === 'object' && att !== null) {
-          const cleanAtt: any = {};
+          const cleanAtt: unknown = {};
           Object.keys(att).forEach(key => {
             if (att[key] !== undefined && att[key] !== null) {
               cleanAtt[key] = att[key];
@@ -811,14 +774,9 @@ export const commentService = {
         reactions: cleanData.reactions || {},
       };
 
-      console.log('Final Firestore data:', finalData);
-      console.log('Attachments detail:', finalData.attachments);
-      console.log('Validated attachments:', validatedAttachments);
-
       // undefined 값이 있는지 최종 확인 (재귀적 검사)
       const hasUndefined = checkForUndefined(finalData);
       if (hasUndefined) {
-        console.error('Undefined values found in final data:', finalData);
         throw new Error('데이터에 undefined 값이 포함되어 있습니다.');
       }
 
@@ -828,25 +786,20 @@ export const commentService = {
       });
       return docRef.id;
     } catch (error) {
-      console.error('Error adding comment:', error);
       throw error;
     }
   },
 
   // Delete a comment
   async deleteComment(taskId: string, commentId: string) {
-    try {
-      await deleteDoc(doc(db, 'tasks', taskId, 'comments', commentId));
-    } catch (error) {
-      console.error('Error deleting comment:', error);
-      throw error;
-    }
+    await deleteDoc(doc(db, 'tasks', taskId, 'comments', commentId));
+    
   },
 
   // Subscribe to comments for a task
   subscribeToTaskComments(
     taskId: string,
-    callback: (comments: any[]) => void,
+    callback: (comments: unknown[]) => void,
     onError?: (error: Error) => void
   ) {
     try {
@@ -857,7 +810,6 @@ export const commentService = {
 
       return createSafeSnapshot<any[]>(q, callback, onError);
     } catch (error) {
-      console.error('Error subscribing to task comments:', error);
       if (onError) onError(error as Error);
       return () => {};
     }
@@ -888,7 +840,6 @@ export const commentService = {
         }
       }
     } catch (error) {
-      console.error('Error adding reaction:', error);
       throw error;
     }
   },
@@ -897,8 +848,7 @@ export const commentService = {
   async addFileAttachment(
     taskId: string,
     commentId: string,
-    fileAttachment: any
-  ) {
+    _fileAttachment: unknown) {
     try {
       const commentRef = doc(db, 'tasks', taskId, 'comments', commentId);
       const commentSnap = await getDoc(commentRef);
@@ -914,7 +864,6 @@ export const commentService = {
         });
       }
     } catch (error) {
-      console.error('Error adding file attachment:', error);
       throw error;
     }
   },
@@ -933,7 +882,7 @@ export const commentService = {
         const commentData = commentSnap.data();
         const attachments = commentData.attachments || [];
         const updatedAttachments = attachments.filter(
-          (att: any) => att.id !== fileId
+          (_att: unknown) => att.id !== fileId
         );
 
         await updateDoc(commentRef, {
@@ -942,14 +891,13 @@ export const commentService = {
         });
       }
     } catch (error) {
-      console.error('Error removing file attachment:', error);
       throw error;
     }
   },
 };
 
 // Helper function to deep filter undefined values
-function filterUndefinedValues(obj: any): any {
+function filterUndefinedValues(_obj: unknown): unknown {
   if (obj === null || typeof obj !== 'object') {
     return obj === undefined ? null : obj;
   }
@@ -960,7 +908,7 @@ function filterUndefinedValues(obj: any): any {
       .map(item => filterUndefinedValues(item));
   }
 
-  const result: any = {};
+  const result: unknown = {};
   for (const [key, value] of Object.entries(obj)) {
     if (value !== undefined) {
       if (value === null || typeof value !== 'object') {
@@ -974,7 +922,7 @@ function filterUndefinedValues(obj: any): any {
 }
 
 // Helper function to check for undefined values recursively
-function checkForUndefined(obj: any): boolean {
+function checkForUndefined(_obj: unknown): boolean {
   if (obj === undefined) {
     return true;
   }
@@ -1008,7 +956,6 @@ export const userService = {
         { merge: true }
       );
     } catch (error) {
-      console.error('Error creating/updating user profile:', error);
       throw error;
     }
   },
@@ -1022,7 +969,6 @@ export const userService = {
       }
       return null;
     } catch (error) {
-      console.error('Error getting user profile:', error);
       throw error;
     }
   },
@@ -1037,7 +983,6 @@ export const userService = {
       const userRef = doc(db, 'users', userId);
       return createSafeSnapshot<User | null>(userRef, callback, onError);
     } catch (error) {
-      console.error('Error subscribing to user profile:', error);
       if (onError) onError(error as Error);
       return () => {};
     }
@@ -1047,9 +992,9 @@ export const userService = {
 // Batch operations
 export const batchService = {
   // Create multiple tasks at once
-  async createMultipleTasks(tasks: any[]) {
+  async createMultipleTasks(tasks: unknown[]) {
     const batch = writeBatch(db);
-    const taskRefs: any[] = [];
+    const taskRefs: unknown[] = [];
 
     tasks.forEach(taskData => {
       const taskRef = doc(collection(db, 'tasks'));
@@ -1066,7 +1011,7 @@ export const batchService = {
   },
 
   // Update multiple tasks
-  async updateMultipleTasks(updates: Array<{ id: string; data: any }>) {
+  async updateMultipleTasks(updates: Array<{ id: string; data: unknown }>) {
     const batch = writeBatch(db);
 
     updates.forEach(({ id, data }) => {

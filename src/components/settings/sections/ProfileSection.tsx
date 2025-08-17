@@ -117,7 +117,6 @@ export function ProfileSection({
         await onSave();
       }
     } catch (error) {
-      console.error('Failed to upload avatar:', error);
       alert(
         error instanceof Error ? error.message : '아바타 업로드에 실패했습니다.'
       );
@@ -178,7 +177,6 @@ export function ProfileSection({
       setEditingField(null);
       setFormErrors({});
     } catch (error) {
-      console.error('Failed to save field:', error);
       alert('저장에 실패했습니다.');
     }
   };
@@ -216,7 +214,6 @@ export function ProfileSection({
       setIsEditing(false);
       setEditingField(null);
     } catch (error) {
-      console.error('Failed to save profile:', error);
       alert('프로필 저장에 실패했습니다.');
     }
   };
@@ -232,7 +229,7 @@ export function ProfileSection({
     return name.substring(0, 2).toUpperCase();
   };
 
-  const renderField = (fieldKey: keyof UserProfile, label: string, icon: any, placeholder: string, type: string = 'text') => {
+  const renderField = (fieldKey: keyof UserProfile, label: string, _icon: unknown, placeholder: string, type: string = 'text') => {
     const isFieldEditing = editingField === fieldKey;
     const value = isFieldEditing ? (editData[fieldKey as keyof UserProfile] || '') : (settings.profile[fieldKey as keyof UserProfile] || '');
     const hasError = formErrors[fieldKey];
@@ -471,7 +468,6 @@ export function ProfileSection({
                                 await onSave();
                               }
                             } catch (error) {
-                              console.error('Failed to delete avatar:', error);
                               alert('사진 삭제에 실패했습니다.');
                             }
                           }

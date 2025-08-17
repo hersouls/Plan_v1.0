@@ -5,8 +5,7 @@ export const trackEvent = async (eventName: string, parameters?: Record<string, 
     const analytics = await loadAnalytics();
     if (!analytics) {
       if (import.meta.env.DEV) {
-        console.warn('Analytics not available');
-      }
+        }
       return;
     }
 
@@ -14,11 +13,10 @@ export const trackEvent = async (eventName: string, parameters?: Record<string, 
     logEvent(analytics, eventName, parameters);
     
     if (import.meta.env.DEV) {
-      console.log(`📊 Event tracked: ${eventName}`, parameters);
-    }
+      }
   } catch (error) {
-    console.warn('Analytics event tracking failed:', error);
-  }
+        // Handle error silently
+      }
 };
 
 export const trackPageView = async (pageName: string, userId?: string) => {

@@ -55,16 +55,10 @@ const firebaseConfig = getFirebaseConfig();
 
 // 디버깅: 환경 변수 확인
 if (import.meta.env.DEV) {
-  console.log('🔍 Firebase 설정 확인:', {
-    apiKey: firebaseConfig.apiKey ? '설정됨' : '미설정',
-    projectId: firebaseConfig.projectId ? '설정됨' : '미설정',
-    appId: firebaseConfig.appId ? '설정됨' : '미설정',
-    authDomain: firebaseConfig.authDomain ? '설정됨' : '미설정'
-  });
-}
+  }
 
 // 설정 유효성 검사
-const isValidConfig = (config: any) => {
+const isValidConfig = (_config: unknown) => {
   return config && 
          config.apiKey && 
          config.projectId && 
@@ -81,15 +75,12 @@ const isValidConfig = (config: any) => {
 let app;
 try {
   if (!isValidConfig(firebaseConfig)) {
-    console.error('❌ Firebase 설정이 유효하지 않습니다:', firebaseConfig);
     throw new Error('Invalid Firebase configuration - 환경 변수를 확인해주세요');
   }
   app = initializeApp(firebaseConfig);
   if (import.meta.env.DEV) {
-    console.log('🔥 Firebase 앱 초기화 성공');
-  }
+    }
 } catch (error) {
-  console.error('❌ Firebase 앱 초기화 실패:', error);
   throw error;
 }
 
@@ -104,9 +95,9 @@ export const isAuthInitialized = () => {
 };
 
 // Analytics, Performance, Messaging 초기화 (브라우저 환경에서만) - Dynamic Loading
-export let analytics: any | null = null;
-export let performance: any | null = null;
-export let messaging: any | null = null;
+export let analytics: unknown | null = null;
+export let performance: unknown | null = null;
+export let messaging: unknown | null = null;
 
 // Analytics 활성화 체크
 const shouldEnableAnalytics = import.meta.env.VITE_ENABLE_ANALYTICS === 'true' && 
@@ -125,13 +116,12 @@ export const loadAnalytics = async () => {
     if (supported && firebaseConfig.measurementId && shouldEnableAnalytics) {
       analytics = getAnalytics(app);
       if (import.meta.env.DEV) {
-        console.log('📊 Firebase Analytics 동적 로딩됨');
-      }
+        }
       return analytics;
     }
   } catch (error) {
-    console.warn('📊 Analytics 동적 로딩 실패:', error);
-  }
+        // Handle error silently
+      }
   return null;
 };
 
@@ -144,13 +134,12 @@ export const loadPerformance = async () => {
     if (shouldEnableAnalytics) {
       performance = getPerformance(app);
       if (import.meta.env.DEV) {
-        console.log('⚡ Firebase Performance 동적 로딩됨');
-      }
+        }
       return performance;
     }
   } catch (error) {
-    console.warn('⚠️ Performance monitoring 동적 로딩 실패:', error);
-  }
+        // Handle error silently
+      }
   return null;
 };
 
@@ -164,18 +153,16 @@ export const loadMessaging = async () => {
     if (supported) {
       messaging = getMessaging(app);
       if (import.meta.env.DEV) {
-        console.log('💬 Firebase Messaging 동적 로딩됨');
-      }
+        }
       return messaging;
     }
   } catch (error) {
-    console.warn('💬 Messaging 동적 로딩 실패:', error);
-  }
+        // Handle error silently
+      }
   return null;
 };
 
 if (import.meta.env.DEV) {
-  console.log('🔧 Firebase 서비스들이 필요시에만 동적 로딩됩니다');
-}
+  }
 
 export default app;

@@ -290,7 +290,6 @@ export function GroupChat({
         setIsLoading(false);
       },
       error => {
-        console.error('채팅 메시지 로드 실패:', error);
         setIsLoading(false);
       }
     );
@@ -359,7 +358,6 @@ export function GroupChat({
         },
       ]);
     } catch (error) {
-      console.error('파일 처리 실패:', error);
       alert('파일 처리에 실패했습니다.');
     }
   };
@@ -376,21 +374,12 @@ export function GroupChat({
 
   // 메시지 전송
   const handleSendMessage = async () => {
-    console.log('메시지 전송 시도:', {
-      user: user?.uid,
-      message: newMessage,
-      groupId,
-      attachments: attachments.length,
-    });
-
     if (
       !user?.uid ||
       (!newMessage.trim() && attachments.length === 0) ||
       isSending
     ) {
-      console.log('전송 조건 미충족:', {
-        user: !!user?.uid,
-        message: newMessage.trim(),
+      ,
         attachments: attachments.length,
         isSending,
       });
@@ -401,8 +390,6 @@ export function GroupChat({
     try {
       const db = getFirestore();
       const chatRef = collection(db, 'groups', groupId, 'chat');
-      console.log('Firestore 참조 생성:', chatRef.path);
-
       const currentMember = members.find(m => m.userId === user.uid);
       const userName =
         currentUserProfile?.displayName ||
@@ -447,7 +434,6 @@ export function GroupChat({
                 size: attachment.size,
               };
             } catch (error) {
-              console.error('파일 업로드 실패:', error);
               throw new Error(
                 `파일 "${attachment.name}" 업로드에 실패했습니다.`
               );
@@ -473,19 +459,13 @@ export function GroupChat({
         attachments: uploadedAttachments,
       };
 
-      console.log('전송할 메시지 데이터:', messageData);
-
       const docRef = await addDoc(chatRef, messageData);
-      console.log('메시지 전송 성공:', docRef.id);
-
       setNewMessage('');
       setAttachments([]);
       setShowEmojiPicker(false);
       inputRef.current?.focus();
     } catch (error) {
-      console.error('메시지 전송 실패:', error);
-      console.error('오류 상세:', {
-        code: (error as any)?.code,
+      ?.code,
         message: (error as any)?.message,
         name: (error as any)?.name,
       });
@@ -504,7 +484,7 @@ export function GroupChat({
   };
 
   // 시간 포맷팅
-  const formatTime = (timestamp: any) => {
+  const formatTime = (_timestamp: unknown) => {
     if (!timestamp) return '';
 
     const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
@@ -572,7 +552,6 @@ export function GroupChat({
           {onOpenFullscreen && (
             <button
               onClick={() => {
-                console.log('GroupChat에서 모달 닫기 요청');
                 // 부모 컴포넌트에 모달 닫기 이벤트 전달
                 const event = new CustomEvent('groupChatFullscreenClose');
                 window.dispatchEvent(event);

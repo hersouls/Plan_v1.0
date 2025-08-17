@@ -237,8 +237,7 @@ function TaskDetailPage() {
       }
     } catch (error) {
       alert('상태 변경에 실패했습니다.');
-      console.error('Status change error:', error);
-    } finally {
+      } finally {
       setActionLoading(null);
     }
   };
@@ -254,8 +253,7 @@ function TaskDetailPage() {
       navigate('/');
     } catch (error) {
       alert('할일 삭제에 실패했습니다.');
-      console.error('Delete error:', error);
-    } finally {
+      } finally {
       setActionLoading(null);
     }
   };
@@ -284,7 +282,7 @@ function TaskDetailPage() {
 
   // 그룹 멤버 정보 가져오기
   const getGroupMemberInfo = (memberId: string) => {
-    const member = groupMembers?.find((m: any) => m.userId === memberId);
+    const member = groupMembers?.find((_m: unknown) => m.userId === memberId);
     return member
       ? {
           name: member.userName || '알 수 없음',
@@ -603,7 +601,7 @@ function TaskDetailPage() {
                               <div className="flex -space-x-2">
                                 {groupMembers
                                   .slice(0, 3)
-                                  .map((member: any, _index: number) => (
+                                  .map((_member: unknown, _index: number) => (
                                     <div
                                       key={member.userId}
                                       className="w-6 h-6 rounded-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-white text-xs font-bold border-2 border-white/20"

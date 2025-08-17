@@ -160,7 +160,6 @@ export function useInfinitePagination<T>(
       setHasMore(result.hasMore);
       setCurrentPage(prev => prev + 1);
     } catch (err) {
-      console.error('Error loading more data:', err);
       setError(err instanceof Error ? err.message : '데이터를 불러오는 중 오류가 발생했습니다.');
     } finally {
       setLoading(false);

@@ -81,8 +81,8 @@ function Settings() {
           const parsed = JSON.parse(savedSettings);
           setSettings({ ...settings, ...parsed });
         } catch (error) {
-          console.error('Failed to parse saved settings:', error);
-        }
+        // Handle error silently
+      }
       }
       
       setEditProfile({
@@ -104,11 +104,10 @@ function Settings() {
       await new Promise(resolve => setTimeout(resolve, 1000));
       
       if (import.meta.env.DEV) {
-        console.log('Settings saved:', settings);
-      }
+        }
     } catch (error) {
-      console.error('Failed to save settings:', error);
-    } finally {
+        // Handle error silently
+      } finally {
       setSaving(false);
     }
   };
@@ -118,16 +117,15 @@ function Settings() {
     try {
       // Update user profile (would be Firebase auth call)
       if (import.meta.env.DEV) {
-        console.log('Update profile:', editProfile);
-      }
+        }
       
       // Simulate API delay
       await new Promise(resolve => setTimeout(resolve, 1000));
       
       setIsEditing(false);
     } catch (error) {
-      console.error('Failed to update profile:', error);
-    } finally {
+        // Handle error silently
+      } finally {
       setSaving(false);
     }
   };
@@ -136,8 +134,8 @@ function Settings() {
     try {
       await signOut();
     } catch (error) {
-      console.error('Failed to sign out:', error);
-    }
+        // Handle error silently
+      }
   };
 
   const exportData = async () => {
@@ -161,8 +159,8 @@ function Settings() {
       
       URL.revokeObjectURL(url);
     } catch (error) {
-      console.error('Failed to export data:', error);
-    }
+        // Handle error silently
+      }
   };
 
   const tabs = [

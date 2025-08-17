@@ -20,7 +20,7 @@ import type {
 } from '../types';
 
 // 기본 설정값
-const getDefaultSettings = (user: any): SettingsState => {
+const getDefaultSettings = (_user: unknown): SettingsState => {
   try {
     return {
       profile: {
@@ -76,7 +76,6 @@ const getDefaultSettings = (user: any): SettingsState => {
       },
     };
   } catch (error) {
-    console.error('Error creating default settings:', error);
     // 기본값 반환
     return {
       profile: {
@@ -164,7 +163,6 @@ function settingsReducer(
       };
 
     case 'UPDATE_APPEARANCE':
-      console.log('settingsReducer - UPDATE_APPEARANCE:', action.payload);
       return {
         ...state,
         appearance: { ...state.appearance, ...action.payload },
@@ -236,7 +234,6 @@ export function useSettings(): UseSettingsReturn {
     try {
       return authContext.user;
     } catch (error) {
-      console.error('Error accessing auth context:', error);
       return null;
     }
   }, [authContext.user?.uid]); // uid만 의존
@@ -376,11 +373,9 @@ export function useSettings(): UseSettingsReturn {
           lastSyncRef.current = now; // 동기화 시간 업데이트
         }
       } catch (error) {
-        console.error('Error processing user profile:', error);
         setError('사용자 프로필을 처리하는 중 오류가 발생했습니다.');
       }
     } catch (error) {
-      console.error('Error loading user profile:', error);
       setError('사용자 프로필을 불러오는 중 오류가 발생했습니다.');
     } finally {
       setLoading(false);
@@ -395,16 +390,12 @@ export function useSettings(): UseSettingsReturn {
   // 설정 저장
   const saveSettings = useCallback(async () => {
     const userId = currentUser?.uid;
-    console.log('useSettings - saveSettings called');
-    console.log('useSettings - current settings:', settings);
     setSaving(true);
     setError(null);
 
     try {
       // 현재 settings 상태를 안전하게 참조
       const currentSettings = settings;
-      console.log('useSettings - saving current settings:', currentSettings);
-
       // localStorage에 저장
       localStorage.setItem(STORAGE_KEY, JSON.stringify(currentSettings));
 
@@ -441,10 +432,8 @@ export function useSettings(): UseSettingsReturn {
       }
 
       if (import.meta.env.DEV) {
-        console.log('Settings saved successfully:', settings);
-      }
+        }
     } catch (err) {
-      console.error('Failed to save settings:', err);
       setError('설정을 저장하는데 실패했습니다.');
       throw err;
     } finally {
@@ -483,7 +472,6 @@ export function useSettings(): UseSettingsReturn {
               } as any);
             }
           } catch (deleteError) {
-            console.warn('Failed to delete old avatar:', deleteError);
             // 이전 아바타 삭제 실패는 무시하고 계속 진행
           }
         }
@@ -535,7 +523,6 @@ export function useSettings(): UseSettingsReturn {
 
         return result.downloadURL;
       } catch (error) {
-        console.error('Failed to upload avatar:', error);
         const errorMessage =
           error instanceof Error
             ? error.message
@@ -572,9 +559,9 @@ export function useSettings(): UseSettingsReturn {
             const decodedPath = decodeURIComponent(pathMatch[1]);
             await StorageService.deleteFile({ storageUrl: decodedPath } as any);
           }
-        } catch (deleteError) {
-          console.warn('Failed to delete avatar from storage:', deleteError);
-        }
+        } catch (error) {
+        // Handle error silently
+      }
       }
 
       // 프로필에서 아바타 제거
@@ -602,7 +589,6 @@ export function useSettings(): UseSettingsReturn {
         });
       }
     } catch (error) {
-      console.error('Failed to delete avatar:', error);
       const errorMessage =
         error instanceof Error ? error.message : '아바타 삭제에 실패했습니다.';
       setError(errorMessage);
@@ -664,7 +650,6 @@ export function useSettings(): UseSettingsReturn {
   }, []);
 
   const updateSettings = useCallback((action: SettingsAction) => {
-    console.log('useSettings - updateSettings called with action:', action);
     dispatch(action);
   }, []);
 

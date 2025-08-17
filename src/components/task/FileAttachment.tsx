@@ -93,7 +93,6 @@ export function AttachmentSection({
 
         newAttachments.push(attachment);
       } catch (error) {
-        console.error('File upload failed:', error);
         // 에러 처리
       }
     }

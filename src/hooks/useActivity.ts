@@ -131,7 +131,6 @@ export const useActivity = (
             setLoading(false);
           },
           err => {
-            console.error('Activities subscription error:', err);
             setError('활동 정보를 불러오는 중 오류가 발생했습니다.');
             setLoading(false);
           }
@@ -140,7 +139,6 @@ export const useActivity = (
         return unsubscribe;
       }
     } catch (err) {
-      console.error('Fetch activities error:', err);
       setError('활동 정보를 불러오는 중 오류가 발생했습니다.');
       setLoading(false);
     }
@@ -161,7 +159,6 @@ export const useActivity = (
 
         await addDoc(collection(db, 'activities'), activityDoc);
       } catch (err) {
-        console.error('Log activity error:', err);
         // Don't throw error to prevent disrupting main functionality
       }
     },
@@ -226,8 +223,8 @@ export const usePresence = (groupId: string): UsePresenceReturn => {
         };
 
         await addDoc(collection(db, 'presence'), presenceDoc);
-      } catch (err) {
-        console.error('Update presence error:', err);
+      } catch (error) {
+        // Handle error silently
       }
     },
     [user, groupId]

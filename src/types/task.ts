@@ -202,8 +202,8 @@ export interface TaskActivity {
 
   changes?: {
     field: string;
-    oldValue: any;
-    newValue: any;
+    oldValue: unknown;
+    newValue: unknown;
   }[];
 
   details?: {

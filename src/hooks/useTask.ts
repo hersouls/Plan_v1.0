@@ -16,7 +16,7 @@ export interface UseTaskReturn {
   activities: TaskActivity[];
   loading: boolean;
   error: string | null;
-  addComment: (content: string, attachments?: any[]) => Promise<void>;
+  addComment: (content: string, attachments?: unknown[]) => Promise<void>;
   deleteComment: (commentId: string) => Promise<void>;
   toggleReaction: (commentId: string, emoji: string) => Promise<void>;
   logActivity: (
@@ -42,7 +42,7 @@ export const useTask = (options: UseTaskOptions): UseTaskReturn => {
   const [error, setError] = useState<string | null>(null);
 
   const addComment = useCallback(
-    async (content: string, attachments?: any[]): Promise<void> => {
+    async (content: string, attachments?: unknown[]): Promise<void> => {
       if (!user || !taskId) throw new Error('인증이 필요합니다.');
       if (!content.trim() && (!attachments || attachments.length === 0)) {
         throw new Error('댓글 내용이나 첨부파일을 입력해주세요.');
@@ -86,21 +86,9 @@ export const useTask = (options: UseTaskOptions): UseTaskReturn => {
           reactions: sanitizedData.reactions || {},
         };
 
-        console.log('Final comment data:', finalData);
-        console.log('Data validation check:', {
-          taskId: typeof finalData.taskId,
-          userId: typeof finalData.userId,
-          userName: typeof finalData.userName,
-          userAvatar: typeof finalData.userAvatar,
-          content: typeof finalData.content,
-          attachments: Array.isArray(finalData.attachments),
-          reactions: typeof finalData.reactions,
-        });
-
         await commentService.addComment(taskId, finalData);
       } catch (err) {
         const errorMessage = '댓글 추가 중 오류가 발생했습니다.';
-        console.error('Add comment error:', err);
         setError(errorMessage);
         throw new Error(errorMessage);
       }
@@ -117,7 +105,6 @@ export const useTask = (options: UseTaskOptions): UseTaskReturn => {
         await commentService.deleteComment(taskId, commentId);
       } catch (err) {
         const errorMessage = '댓글 삭제 중 오류가 발생했습니다.';
-        console.error('Delete comment error:', err);
         setError(errorMessage);
         throw new Error(errorMessage);
       }
@@ -134,7 +121,6 @@ export const useTask = (options: UseTaskOptions): UseTaskReturn => {
         await commentService.addReaction(taskId, commentId, user.uid, emoji);
       } catch (err) {
         const errorMessage = '반응 추가 중 오류가 발생했습니다.';
-        console.error('Toggle reaction error:', err);
         setError(errorMessage);
         throw new Error(errorMessage);
       }
@@ -152,14 +138,7 @@ export const useTask = (options: UseTaskOptions): UseTaskReturn => {
       try {
         // Activity logging would need to be implemented in the Firestore service
         // For now, just log to console as a placeholder
-        console.log('Activity logged:', {
-          taskId,
-          userId: user.uid,
-          action,
-          details,
-        });
-      } catch (err) {
-        console.error('Log activity error:', err);
+        } catch (err) {
         // Don't throw error for activity logging failures
       }
     },
@@ -190,7 +169,6 @@ export const useTask = (options: UseTaskOptions): UseTaskReturn => {
       }
     } catch (err) {
       const errorMessage = '할일을 새로고침하는 중 오류가 발생했습니다.';
-      console.error('Refresh task error:', err);
       setError(errorMessage);
     } finally {
       setLoading(false);
@@ -214,7 +192,6 @@ export const useTask = (options: UseTaskOptions): UseTaskReturn => {
     let commentsUnsubscribe: (() => void) | undefined;
 
     const handleError = (error: Error) => {
-      console.error('Task subscription error:', error);
       setError('할일을 불러오는 중 오류가 발생했습니다.');
       setLoading(false);
     };
@@ -250,7 +227,7 @@ export const useTask = (options: UseTaskOptions): UseTaskReturn => {
       if (includeComments) {
         commentsUnsubscribe = commentService.subscribeToTaskComments(
           taskId,
-          (commentList: any[]) => {
+          (commentList: unknown[]) => {
             setComments(commentList);
           },
           handleError

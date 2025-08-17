@@ -23,7 +23,7 @@ export interface ApiResponse<T = any> {
   error?: {
     code: string;
     message: string;
-    details?: any;
+    details?: unknown;
   };
   meta?: {
     timestamp: string;
@@ -52,7 +52,7 @@ export interface SortConfig<T = string> {
 export interface FilterConfig {
   field: string;
   operator: 'eq' | 'neq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'contains';
-  value: any;
+  value: unknown;
 }
 
 // Search configuration
@@ -279,7 +279,7 @@ export interface RetryConfig {
   maxRetries: number;
   delay: number;
   backoff: 'linear' | 'exponential';
-  retryCondition?: (error: any) => boolean;
+  retryCondition?: (_error: unknown) => boolean;
 }
 
 // UI Component Base Props

@@ -38,7 +38,7 @@ import type {
 } from '../types';
 
 // Enhanced helper function to filter undefined values deeply
-function sanitizeData(obj: any): any {
+function sanitizeData(_obj: unknown): unknown {
   if (obj === null || obj === undefined) {
     return null;
   }
@@ -48,7 +48,7 @@ function sanitizeData(obj: any): any {
   }
   
   if (typeof obj === 'object' && obj.constructor === Object) {
-    const result: any = {};
+    const result: unknown = {};
     for (const [key, value] of Object.entries(obj)) {
       if (value !== undefined) {
         result[key] = sanitizeData(value);
@@ -121,7 +121,6 @@ export const enhancedTaskService = {
       
       return docRef.id;
     } catch (error) {
-      console.error('Error creating task:', error);
       throw error;
     }
   },
@@ -172,7 +171,6 @@ export const enhancedTaskService = {
         });
       });
     } catch (error) {
-      console.error('Error updating task:', error);
       throw error;
     }
   },
@@ -196,7 +194,6 @@ export const enhancedTaskService = {
         entityId: taskId,
       });
     } catch (error) {
-      console.error('Error deleting task:', error);
       throw error;
     }
   },
@@ -219,7 +216,6 @@ export const enhancedTaskService = {
       
       return { id: docSnap.id, ...data } as Task;
     } catch (error) {
-      console.error('Error getting task:', error);
       throw error;
     }
   },
@@ -252,7 +248,6 @@ export const enhancedTaskService = {
         callback(tasks);
       },
       (error) => {
-        console.error('Error in task subscription:', error);
         callback([]);
       }
     );
@@ -266,7 +261,7 @@ export const enhancedTaskService = {
     action: string;
     entityType: string;
     entityId: string;
-    changes?: Array<{ field: string; oldValue: any; newValue: any; }>;
+    changes?: Array<{ field: string; oldValue: unknown; newValue: unknown; }>;
   }): Promise<void> {
     try {
       const sanitizedData = sanitizeData({
@@ -276,7 +271,6 @@ export const enhancedTaskService = {
       
       await addDoc(collection(db, 'activities'), sanitizedData);
     } catch (error) {
-      console.error('Error logging activity:', error);
       // Don't throw - activity logging shouldn't break main operations
     }
   },
@@ -296,7 +290,7 @@ export const enhancedTaskService = {
       tasks.forEach(validateTaskInput);
       
       const batch = writeBatch(db);
-      const taskRefs: any[] = [];
+      const taskRefs: unknown[] = [];
 
       tasks.forEach(taskData => {
         const taskRef = doc(collection(db, 'tasks'));
@@ -321,7 +315,6 @@ export const enhancedTaskService = {
       await batch.commit();
       return taskRefs.map(ref => ref.id);
     } catch (error) {
-      console.error('Error creating multiple tasks:', error);
       throw error;
     }
   },
@@ -342,7 +335,7 @@ export const enhancedTaskService = {
           throw new Error('Task not found');
         }
         
-        const updates: any = {
+        const updates: unknown = {
           status: completed ? 'completed' : 'pending',
           version: increment(1),
           updatedAt: serverTimestamp(),
@@ -383,7 +376,6 @@ export const enhancedTaskService = {
         entityId: taskId,
       });
     } catch (error) {
-      console.error('Error toggling task completion:', error);
       throw error;
     }
   },
@@ -428,7 +420,6 @@ export const enhancedGroupService = {
       
       return docRef.id;
     } catch (error) {
-      console.error('Error creating group:', error);
       throw error;
     }
   },
@@ -446,7 +437,6 @@ export const enhancedGroupService = {
       const groupRef = doc(db, 'groups', groupId);
       await updateDoc(groupRef, sanitizedUpdates);
     } catch (error) {
-      console.error('Error updating group:', error);
       throw error;
     }
   },
@@ -466,7 +456,6 @@ export const enhancedGroupService = {
         ...doc.data()
       })) as FamilyGroup[];
     } catch (error) {
-      console.error('Error getting user groups:', error);
       throw error;
     }
   },
@@ -491,7 +480,6 @@ export const enhancedGroupService = {
         }
       });
     } catch (error) {
-      console.error('Error adding user to group:', error);
       throw error;
     }
   },
@@ -508,7 +496,6 @@ export const enhancedGroupService = {
         }
       },
       (error) => {
-        console.error('Error in group subscription:', error);
         callback(null);
       }
     );
@@ -518,7 +505,7 @@ export const enhancedGroupService = {
 // Enhanced User Service with consistent field names
 export const enhancedUserService = {
   // Create or update user profile with proper data sanitization
-  async createOrUpdateUserProfile(userId: string, profileData: any): Promise<void> {
+  async createOrUpdateUserProfile(userId: string, _profileData: unknown): Promise<void> {
     try {
       const userRef = doc(db, 'users', userId);
       
@@ -549,7 +536,6 @@ export const enhancedUserService = {
         });
       }
     } catch (error) {
-      console.error('Error in createOrUpdateUserProfile:', error);
       throw error;
     }
   },
@@ -560,7 +546,6 @@ export const enhancedUserService = {
       const docSnap = await getDoc(doc(db, 'users', userId));
       return docSnap.exists() ? { id: docSnap.id, ...docSnap.data() } as UserProfile : null;
     } catch (error) {
-      console.error('Error getting user profile:', error);
       throw error;
     }
   },
@@ -569,7 +554,7 @@ export const enhancedUserService = {
   async updateUserStats(userId: string, statsUpdate: Partial<UserProfile['stats']>): Promise<void> {
     try {
       const userRef = doc(db, 'users', userId);
-      const updateData: any = { updatedAt: serverTimestamp() };
+      const updateData: unknown = { updatedAt: serverTimestamp() };
       
       Object.entries(statsUpdate).forEach(([key, value]) => {
         if (typeof value === 'number') {
@@ -579,7 +564,6 @@ export const enhancedUserService = {
       
       await updateDoc(userRef, updateData);
     } catch (error) {
-      console.error('Error updating user stats:', error);
       throw error;
     }
   },
@@ -596,7 +580,6 @@ export const enhancedUserService = {
         }
       },
       (error) => {
-        console.error('Error in user profile subscription:', error);
         callback(null);
       }
     );
@@ -617,7 +600,6 @@ export const enhancedNotificationService = {
       const docRef = await addDoc(collection(db, 'notifications'), sanitizedData);
       return docRef.id;
     } catch (error) {
-      console.error('Error creating notification:', error);
       throw error;
     }
   },
@@ -631,7 +613,6 @@ export const enhancedNotificationService = {
         readAt: serverTimestamp(),
       });
     } catch (error) {
-      console.error('Error marking notification as read:', error);
       throw error;
     }
   },
@@ -654,7 +635,6 @@ export const enhancedNotificationService = {
         callback(notifications);
       },
       (error) => {
-        console.error('Error in notifications subscription:', error);
         callback([]);
       }
     );

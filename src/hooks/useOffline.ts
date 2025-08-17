@@ -7,7 +7,7 @@ export interface OfflineAction {
   type: 'create' | 'update' | 'delete';
   collection: string;
   docId?: string;
-  data: any;
+  data: unknown;
   timestamp: number;
   retry: number;
 }
@@ -39,7 +39,6 @@ export const useOffline = (): UseOfflineReturn => {
         const actions = JSON.parse(saved);
         setPendingActions(actions);
       } catch (error) {
-        console.error('Failed to load offline queue:', error);
         localStorage.removeItem(OFFLINE_QUEUE_KEY);
       }
     }
@@ -59,9 +58,8 @@ export const useOffline = (): UseOfflineReturn => {
       // Re-enable Firestore network
       try {
         await enableNetwork(db);
-        console.log('Firestore network re-enabled');
-      } catch (error) {
-        console.error('Failed to enable Firestore network:', error);
+        } catch (error) {
+        // Handle error silently
       }
 
       // Sync pending actions when coming back online
@@ -72,8 +70,7 @@ export const useOffline = (): UseOfflineReturn => {
 
     const handleOffline = async () => {
       setIsOnline(false);
-      console.log('Device went offline');
-    };
+      };
 
     // Check Firestore connection status
     const checkFirestoreConnection = () => {
@@ -108,14 +105,11 @@ export const useOffline = (): UseOfflineReturn => {
     };
 
     setPendingActions(prev => [...prev, offlineAction]);
-    console.log('Queued offline action:', offlineAction);
-  }, []);
+    }, []);
 
   const syncPendingActions = useCallback(async (): Promise<void> => {
     if (!isOnline || pendingActions.length === 0) return;
 
-    console.log(`Syncing ${pendingActions.length} pending actions...`);
-    
     for (const action of pendingActions) {
       try {
         // Attempt to execute the action
@@ -124,18 +118,14 @@ export const useOffline = (): UseOfflineReturn => {
         // Remove successful action from queue
         setPendingActions(prev => prev.filter(a => a.id !== action.id));
         
-        console.log('Successfully synced action:', action.id);
-      } catch (error) {
-        console.error('Failed to sync action:', action.id, error);
-        
+        } catch (error) {
         // Increment retry count
         const updatedAction = { ...action, retry: action.retry + 1 };
         
         if (updatedAction.retry >= MAX_RETRY_ATTEMPTS) {
           // Remove failed action after max retries
           setPendingActions(prev => prev.filter(a => a.id !== action.id));
-          console.error('Action failed permanently after retries:', action.id);
-        } else {
+          } else {
           // Update retry count
           setPendingActions(prev => 
             prev.map(a => a.id === action.id ? updatedAction : a)
@@ -186,20 +176,18 @@ export const useOffline = (): UseOfflineReturn => {
     try {
       await disableNetwork(db);
       setIsConnected(false);
-      console.log('Offline mode enabled');
-    } catch (error) {
-      console.error('Failed to enable offline mode:', error);
-    }
+      } catch (error) {
+        // Handle error silently
+      }
   }, []);
 
   const disableOfflineMode = useCallback(async (): Promise<void> => {
     try {
       await enableNetwork(db);
       setIsConnected(true);
-      console.log('Offline mode disabled');
-    } catch (error) {
-      console.error('Failed to disable offline mode:', error);
-    }
+      } catch (error) {
+        // Handle error silently
+      }
   }, []);
 
   return {
@@ -215,11 +203,11 @@ export const useOffline = (): UseOfflineReturn => {
 };
 
 // Higher-order component to wrap operations with offline support
-export const withOfflineSupport = <T extends (...args: any[]) => Promise<any>>(
+export const withOfflineSupport = <T extends (...args: unknown[]) => Promise<any>>(
   operation: T,
   offlineAction: Omit<OfflineAction, 'id' | 'timestamp' | 'retry'>
 ): T => {
-  return ((...args: any[]) => {
+  return ((...args: unknown[]) => {
     const { isOnline, queueOfflineAction } = useOffline();
     
     if (!isOnline) {

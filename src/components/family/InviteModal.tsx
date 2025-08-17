@@ -62,8 +62,8 @@ export function InviteModal({
       setMessage('');
       // Show success message or close modal
     } catch (error) {
-      console.error('Failed to send invitation:', error);
-    } finally {
+        // Handle error silently
+      } finally {
       setIsLoading(false);
     }
   };
@@ -76,8 +76,8 @@ export function InviteModal({
       const link = await onGenerateInviteLink();
       setInviteLink(link);
     } catch (error) {
-      console.error('Failed to generate invite link:', error);
-    } finally {
+        // Handle error silently
+      } finally {
       setIsLoading(false);
     }
   };
@@ -88,8 +88,8 @@ export function InviteModal({
       setCopied(type);
       setTimeout(() => setCopied(null), 2000);
     } catch (error) {
-      console.error('Failed to copy:', error);
-    }
+        // Handle error silently
+      }
   };
 
   return (
