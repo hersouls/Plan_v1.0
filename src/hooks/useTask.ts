@@ -202,7 +202,7 @@ export const useTask = (options: UseTaskOptions): UseTaskReturn => {
           const taskData = await taskService.getTask(taskId);
           if (taskData) {
             // Validate and sanitize date fields
-            const sanitizedTask = {
+            const sanitizedTask: Task = {
               ...taskData,
               createdAt: taskData.createdAt || null,
               updatedAt: taskData.updatedAt || null,

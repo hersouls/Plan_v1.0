@@ -11,6 +11,7 @@ import {
   doc,
   serverTimestamp,
   Timestamp,
+  FieldValue,
 } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 import { useAuth } from './useAuth';
