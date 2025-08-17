@@ -189,7 +189,7 @@ export const useTask = (options: UseTaskOptions): UseTaskReturn => {
     let taskUnsubscribe: (() => void) | undefined;
     let commentsUnsubscribe: (() => void) | undefined;
 
-    const handleError = (error: Error) => {
+    const handleError = (_error: Error) => {
       setError('할일을 불러오는 중 오류가 발생했습니다.');
       setLoading(false);
     };
@@ -256,3 +256,15 @@ export const useTask = (options: UseTaskOptions): UseTaskReturn => {
 };
 
 export default useTask;
+
+// Hook to use Task Context
+import { useContext } from 'react';
+import { TaskContext, TaskContextType } from '../contexts/TaskContextTypes';
+
+export function useTaskContext(): TaskContextType {
+  const context = useContext(TaskContext);
+  if (context === undefined) {
+    throw new Error('useTaskContext must be used within a TaskProvider');
+  }
+  return context;
+}

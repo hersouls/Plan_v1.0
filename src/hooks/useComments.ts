@@ -158,7 +158,6 @@ export const useComments = ({ taskId, realtime = true }: UseCommentsOptions): Us
 
     try {
       const commentRef = doc(db, 'comments', commentId);
-      const updateData: CommentUpdateData = {
         ...updates,
         updatedAt: serverTimestamp(),
       };

@@ -150,13 +150,17 @@ jobs:
     needs: [build, test]
     if: github.event_name == 'pull_request'
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       - name: Deploy to Vercel (Preview)
         uses: vercel/action@v1
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-        # 👉 프리뷰는 기본 브랜치/PR에 맞춰 Vercel이 빌드/배포합니다.
+          working-directory: ./
+          vercel-args: '--yes --confirm'
 
   deploy-production:
     name: Deploy to Production
@@ -164,6 +168,9 @@ jobs:
     needs: [build, test, security]
     if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       - name: Final deployment checks
         run: npm run deploy:ready
 
@@ -173,7 +180,8 @@ jobs:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-          vercel-args: '--prod'
+          working-directory: ./
+          vercel-args: '--prod --yes --confirm'
 
       - name: Deploy Firebase (Production)
         run: npm run firebase:deploy

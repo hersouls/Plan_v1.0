@@ -65,7 +65,7 @@ export function useGroup(options: UseGroupOptions = {}): UseGroupReturn {
   }, []);
 
   const loadGroupData = useCallback(
-    async (targetGroupId: string | null) => {
+    async (targetGroupId: string | null): Promise<void> => {
       try {
         setLoading(true);
         setError(null);
@@ -114,7 +114,6 @@ export function useGroup(options: UseGroupOptions = {}): UseGroupReturn {
               setMembers(prevMembers =>
                 prevMembers.map(member => {
                   const memberStat = statsData.memberStats.find(
-                    (memberStat: any) => memberStat.userId === member.userId
                   );
                   return {
                     ...member,
