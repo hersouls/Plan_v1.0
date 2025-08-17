@@ -114,10 +114,6 @@ export async function uploadAvatarImage(
             storageUrl: avatarPath,
             downloadUrl: downloadURL,
           });
-        } catch {
-          reject(
-            new Error('아바타 업로드 완료 후 URL을 가져오는데 실패했습니다.')
-          );
         }
       }
     );
@@ -141,7 +137,6 @@ export async function deleteAvatarImage(
   try {
     const storageRef = ref(storage, storageUrl);
     await deleteObject(storageRef);
-  } catch {
     throw new Error('아바타 삭제에 실패했습니다.');
   }
 }
@@ -428,7 +423,7 @@ export class StorageService {
         this.deleteFolder(prefix)
       );
       await Promise.all(folderPromises);
-    } catch (error) {
+    } catch (_error) {
       // Handle error silently
     }
   }
