@@ -196,6 +196,8 @@ export const calculateFamilyStats = (
     const activityDate =
       typeof activity.timestamp === 'string'
         ? new Date(activity.timestamp)
+        : activity.timestamp instanceof Date
+        ? activity.timestamp
         : activity.timestamp?.toDate
         ? activity.timestamp.toDate()
         : new Date(activity.timestamp);
@@ -261,6 +263,8 @@ export const calculateMemberPerformance = (
       const activityDate =
         typeof activity.timestamp === 'string'
           ? new Date(activity.timestamp)
+          : activity.timestamp instanceof Date
+          ? activity.timestamp
           : activity.timestamp?.toDate
           ? activity.timestamp.toDate()
           : new Date(activity.timestamp);
@@ -440,6 +444,8 @@ export const calculateEngagementScore = (
       const date =
         typeof a.timestamp === 'string'
           ? new Date(a.timestamp)
+          : a.timestamp instanceof Date
+          ? a.timestamp
           : a.timestamp?.toDate
           ? a.timestamp.toDate()
           : new Date(a.timestamp);
@@ -465,25 +471,25 @@ export const calculateEngagementScore = (
 };
 
 // Data Validation and Sanitization
-export const validateFamilyMember = (_member: unknown): member is FamilyMember => {
+export const validateFamilyMember = (member: unknown): member is FamilyMember => {
   return (
     member &&
-    typeof member.id === 'string' &&
-    typeof member.userId === 'string' &&
-    typeof member.name === 'string' &&
-    member.stats &&
-    typeof member.stats.completedTasks === 'number'
+    typeof (member as any).id === 'string' &&
+    typeof (member as any).userId === 'string' &&
+    typeof (member as any).name === 'string' &&
+    (member as any).stats &&
+    typeof (member as any).stats.completedTasks === 'number'
   );
 };
 
 export const validateFamilyActivity = (
-  _activity: unknown): activity is FamilyActivity => {
+  activity: unknown): activity is FamilyActivity => {
   return (
     activity &&
-    typeof activity.id === 'string' &&
-    typeof activity.userId === 'string' &&
-    typeof activity.type === 'string' &&
-    activity.timestamp
+    typeof (activity as any).id === 'string' &&
+    typeof (activity as any).userId === 'string' &&
+    typeof (activity as any).type === 'string' &&
+    (activity as any).timestamp
   );
 };
 

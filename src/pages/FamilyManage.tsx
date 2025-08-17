@@ -13,6 +13,7 @@ import {
   Trash2,
   UserPlus,
 } from 'lucide-react';
+import { Typography } from '../components/ui/typography';
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { LoadingSpinner } from '../components/common/LoadingSpinner';

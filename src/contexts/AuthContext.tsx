@@ -16,8 +16,9 @@ import React, { useEffect, useState } from 'react';
 import { fcmService } from '../lib/fcm';
 import { auth } from '../lib/firebase';
 import { userService } from '../lib/firestore';
-import { ExtendedUser } from '../types/auth';
+import { ExtendedUser, AuthContextType } from '../types/auth';
 import { User } from '../types/user';
+import { AuthContext } from './AuthContextDef';
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<ExtendedUser | null>(null);
@@ -137,12 +138,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
                 if (!isSubscribed) return;
 
-                // Initialize FCM for notifications
-                try {
-                }
-
-                if (!isSubscribed) return;
-
                 // 실시간 구독 대신 일회성 데이터 읽기 사용 (assertion 에러 방지)
                 try {
                   const profile = await userService.getUserProfile(user.uid);
@@ -163,11 +158,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                       if (isSubscribed) {
                         setUserProfile(profile);
                       }
-                    },
                     }
                   );
                 } catch {
                   // Handle error silently
+                }
+              } catch {
+                // Handle error silently
               }
             } else {
               setUserProfile(null);

@@ -23,8 +23,8 @@ export interface Analytics {
     byPriority: Record<string, PriorityStats>;
     byMember?: Record<string, MemberStats>;
     
-    completionsByHour?: number[24];
-    completionsByDay?: number[7];
+    completionsByHour?: number[];
+    completionsByDay?: number[];
   };
   
   generatedAt: Timestamp;

@@ -15,6 +15,7 @@ import {
   UserIcon,
   X,
 } from 'lucide-react';
+import { Typography } from '../components/ui/typography';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { LoadingSpinner } from '../components/common/LoadingSpinner';
