@@ -141,7 +141,7 @@ ${JSON.stringify(timePatterns, null, 2)}
           return Array.isArray(insights) ? 
             insights.map(i => this.validateInsight(i)) : 
             this.getDefaultInsights();
-        } catch {
+        } catch (parseError) {
           return this.getDefaultInsights();
         }
       }

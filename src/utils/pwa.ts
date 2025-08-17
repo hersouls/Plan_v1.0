@@ -133,7 +133,6 @@ export class PWAManager {
           // Handle controller change
         });
       }
-    } catch {
       // Handle error silently
     }
   }
