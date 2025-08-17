@@ -58,7 +58,7 @@ export const useOffline = (): UseOfflineReturn => {
       // Re-enable Firestore network
       try {
         await enableNetwork(db);
-        } catch (error) {
+        } catch {
         // Handle error silently
       }
 
@@ -118,7 +118,7 @@ export const useOffline = (): UseOfflineReturn => {
         // Remove successful action from queue
         setPendingActions(prev => prev.filter(a => a.id !== action.id));
         
-        } catch (error) {
+        } catch {
         // Increment retry count
         const updatedAction = { ...action, retry: action.retry + 1 };
         
@@ -176,7 +176,7 @@ export const useOffline = (): UseOfflineReturn => {
     try {
       await disableNetwork(db);
       setIsConnected(false);
-      } catch (error) {
+      } catch {
         // Handle error silently
       }
   }, []);
@@ -185,7 +185,7 @@ export const useOffline = (): UseOfflineReturn => {
     try {
       await enableNetwork(db);
       setIsConnected(true);
-      } catch (error) {
+      } catch {
         // Handle error silently
       }
   }, []);
