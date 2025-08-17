@@ -167,6 +167,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                 } catch (error) {
                   // Handle error silently
                 }
+              } catch (error) {
+                // Handle error silently
+              }
             } else {
               setUserProfile(null);
               if (profileUnsubscribe) {
