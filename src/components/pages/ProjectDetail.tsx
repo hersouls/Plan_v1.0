@@ -15,7 +15,7 @@ interface ProjectData {
   technologies: string[];
   status: string;
   launchDate: string;
-  icon: React.ForwardRefExoticComponent<Omit<React.SVGProps<SVGSVGElement>, "ref"> & { size?: number; className?: string }>;
+  icon: React.ComponentType<{ size?: number; className?: string }>;
 }
 
 export function ProjectDetail() {
