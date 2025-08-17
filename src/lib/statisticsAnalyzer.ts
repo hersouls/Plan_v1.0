@@ -145,7 +145,7 @@ ${JSON.stringify(timePatterns, null, 2)}
           return this.getDefaultInsights();
         }
       }
-    } catch (error) {
+    } catch (_error) {
       // Handle error silently
     }
 
@@ -214,7 +214,7 @@ ${JSON.stringify(timePatterns, null, 2)}
           return this.getDefaultPrediction(targetPeriod);
         }
       }
-    } catch (error) {
+    } catch (_error) {
       // Handle error silently
     }
 
@@ -303,7 +303,7 @@ ${JSON.stringify(memberPerformance, null, 2)}
           return this.getDefaultTeamAnalysis();
         }
       }
-    } catch (error) {
+    } catch (_error) {
       // Handle error silently
     }
 
@@ -365,7 +365,7 @@ ${JSON.stringify(memberPerformance, null, 2)}
           return this.getDefaultActivityPattern();
         }
       }
-    } catch (error) {
+    } catch (_error) {
       // Handle error silently
     }
 
