@@ -113,13 +113,15 @@ export function useGroup(options: UseGroupOptions = {}): UseGroupReturn {
             if (loadMembers && statsData.memberStats) {
               setMembers(prevMembers =>
                 prevMembers.map(member => {
-                  const memberStat = statsData.memberStats.find(
+                  const memberStat = statsData.memberStats?.find(
+                    stat => stat.userId === member.userId
                   );
                   return {
                     ...member,
-                    tasksCreated: memberStat?.tasksCreated || 0,
-                    tasksAssigned: memberStat?.tasksAssigned || 0,
                     tasksCompleted: memberStat?.tasksCompleted || 0,
+                    totalTasks: memberStat?.totalTasks || 0,
+                    points: memberStat?.points || 0,
+                    rank: memberStat?.rank || 0,
                   };
                 })
               );

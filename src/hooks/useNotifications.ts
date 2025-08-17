@@ -147,26 +147,4 @@ export function useNotifications(): UseNotificationsReturn {
   };
 }
 
-// Export types
-export type NotificationData = {
-  id: string;
-  type: 'task' | 'group' | 'system' | 'reminder';
-  title: string;
-  message: string;
-  status: 'read' | 'unread';
-  createdAt: Date;
-  readAt?: Date;
-  data?: Record<string, unknown>;
-};
 
-export type NotificationPermissionState = 'granted' | 'denied' | 'default';
-
-export type UseNotificationsReturn = {
-  notifications: NotificationData[];
-  stats: NotificationStats | null;
-  loading: boolean;
-  error: string | null;
-  markAsRead: (_notificationId: string) => Promise<void>;
-  markAllAsRead: () => Promise<void>;
-  deleteNotification: (_notificationId: string) => Promise<void>;
-};

@@ -70,7 +70,7 @@ function createSafeSnapshot<T>(
               onNext(null as T);
             }
           }
-        } catch (error) {
+        } catch (_error) {
           // Handle error silently
         }
       },
@@ -129,7 +129,7 @@ export const taskService = {
       // 디버깅용 로그
       const docRef = await addDoc(collection(db, 'tasks'), finalData);
       return docRef.id;
-    } catch (error) {
+    } catch (_error) {
       // Handle error silently
       return '';
     }
@@ -145,7 +145,7 @@ export const taskService = {
         updatedAt: serverTimestamp(),
       });
       await updateDoc(taskRef, sanitizedUpdates);
-    } catch (error) {
+    } catch (_error) {
       // Handle error silently
     }
   },
@@ -154,7 +154,7 @@ export const taskService = {
   async deleteTask(taskId: string): Promise<void> {
     try {
       await deleteDoc(doc(db, 'tasks', taskId));
-    } catch (error) {
+    } catch (_error) {
       // Handle error silently
     }
   },
@@ -167,7 +167,7 @@ export const taskService = {
         return { id: docSnap.id, ...docSnap.data() } as Task;
       }
       return null;
-    } catch (error) {
+    } catch (_error) {
       // Handle error silently
       return null;
     }
@@ -187,8 +187,8 @@ export const taskService = {
       );
 
       return createSafeSnapshot<Task[]>(q, callback, onError);
-    } catch (error) {
-      if (onError) onError(error as Error);
+    } catch (_error) {
+      if (onError) onError(_error as Error);
       return () => {};
     }
   },
@@ -207,8 +207,8 @@ export const taskService = {
       );
 
       return createSafeSnapshot<Task[]>(q, callback, onError);
-    } catch (error) {
-      if (onError) onError(error as Error);
+    } catch (_error) {
+      if (onError) onError(_error as Error);
       return () => {};
     }
   },
@@ -238,8 +238,8 @@ export const taskService = {
         },
         onError
       );
-    } catch (error) {
-      if (onError) onError(error as Error);
+    } catch (_error) {
+      if (onError) onError(_error as Error);
       return () => {};
     }
   },
@@ -249,7 +249,7 @@ export const taskService = {
     try {
       const q = query(
         collection(db, 'tasks'),
-        where('groupId', '==', _groupId),
+        where('groupId', '==', groupId),
         orderBy('createdAt', 'desc')
       );
 
@@ -258,7 +258,7 @@ export const taskService = {
         id: doc.id,
         ...doc.data(),
       })) as Task[];
-    } catch (error) {
+    } catch (_error) {
       // Handle error silently
     }
   },
@@ -277,7 +277,7 @@ export const taskService = {
         id: doc.id,
         ...doc.data(),
       })) as Task[];
-    } catch (error) {
+    } catch (_error) {
       // Handle error silently
     }
   },
@@ -296,7 +296,7 @@ export const groupService = {
         updatedAt: serverTimestamp(),
       });
       return docRef.id;
-    } catch (error) {
+    } catch (_error) {
       // Handle error silently
     }
   },
@@ -309,7 +309,7 @@ export const groupService = {
         ...updates,
         updatedAt: serverTimestamp(),
       });
-    } catch (error) {
+    } catch (_error) {
       // Handle error silently
     }
   },
@@ -329,7 +329,7 @@ export const groupService = {
         return { id: docSnap.id, ...docSnap.data() } as FamilyGroup;
       }
       return null;
-    } catch (error) {
+    } catch (_error) {
       // Handle error silently
     }
   },
@@ -353,8 +353,8 @@ export const groupService = {
         callback,
         onError
       );
-    } catch (error) {
-      if (onError) onError(error as Error);
+    } catch (_error) {
+      if (onError) onError(_error as Error);
       return () => {};
     }
   },
@@ -372,7 +372,7 @@ export const groupService = {
         [`memberRoles.${userId}`]: role,
         updatedAt: serverTimestamp(),
       });
-    } catch (error) {
+    } catch (_error) {
       // Handle error silently
     }
   },
@@ -399,7 +399,7 @@ export const groupService = {
       }
 
       await batch.commit();
-    } catch (error) {
+    } catch (_error) {
       // Handle error silently
     }
   },
@@ -418,7 +418,7 @@ export const groupService = {
         id: doc.id,
         ...doc.data(),
       })) as FamilyGroup[];
-    } catch (error) {
+    } catch (_error) {
       // Handle error silently
     }
   },
@@ -437,8 +437,8 @@ export const groupService = {
       );
 
       return createSafeSnapshot<FamilyGroup[]>(q, callback, onError);
-    } catch (error) {
-      if (onError) onError(error as Error);
+    } catch (_error) {
+      if (onError) onError(_error as Error);
       return () => {};
     }
   },
