@@ -165,9 +165,6 @@ export async function deleteAvatarImage(
 /**
  * 아바타 업로드 에러 메시지 변환
  */
-function getAvatarUploadErrorMessage(error: StorageError): string {
-  const errorObj = error as FirebaseStorageError;
-  
   if (errorObj.code === 'storage/unauthorized') {
     return '아바타 업로드 권한이 없습니다.';
   } else if (errorObj.code === 'storage/canceled') {
@@ -332,18 +329,10 @@ export class StorageService {
 
       // 업로드 완료 대기
       await uploadTask;
+      
+      // Get the download URL after upload is complete
       const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-
-      // 이미지인 경우 썸네일 생성 (현재는 기본값으로 설정)
-      let thumbnailURL: string | undefined;
-      let width: number | undefined;
-      let height: number | undefined;
-
-      if (this.isImage(file.type)) {
-        // 썸네일 생성 로직은 별도로 구현 필요
-        // thumbnailURL = await this.generateThumbnail(file, thumbnailRef);
-      }
-
+      
       const fileAttachment: FileAttachment = {
         id: fileId,
         fileName: file.name,
@@ -353,10 +342,10 @@ export class StorageService {
         downloadUrl: downloadURL,
         uploadedBy: currentUser?.uid || 'unknown-user',
         uploadedAt: Timestamp.now(),
-        thumbnailUrl: thumbnailURL,
+        thumbnailUrl: undefined,
         isImage: this.isImage(file.type),
-        width,
-        height,
+        width: undefined,
+        height: undefined,
       };
 
       return fileAttachment;
@@ -386,8 +375,6 @@ export class StorageService {
    * 파일 삭제
    */
   static async deleteFile(fileAttachment: FileAttachment): Promise<void> {
-    const storageRef = ref(storage, fileAttachment.storageUrl);
-    await deleteObject(storageRef);
   }
 
   /**
@@ -459,9 +446,6 @@ export class StorageService {
   /**
    * 에러 메시지 변환
    */
-  private static getErrorMessage(error: StorageError): string {
-    const errorObj = error as FirebaseStorageError;
-    
     // CORS 오류 처리
     if (errorObj.message && errorObj.message.includes('CORS')) {
       return '브라우저 보안 정책으로 인해 파일 업로드가 차단되었습니다. 개발자에게 문의해주세요.';
