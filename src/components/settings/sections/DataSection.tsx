@@ -240,7 +240,8 @@ export function DataSection({
 
     setLoadingBackups(true);
     try {
-      const backupService = new BackupService(authContext.user.uid);
+      // TODO: Implement backup list loading
+      // const backupService = new BackupService(authContext.user.uid);
     } catch {
         // Handle error silently
       } finally {
