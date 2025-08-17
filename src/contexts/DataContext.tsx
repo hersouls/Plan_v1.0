@@ -13,8 +13,6 @@ import {
   UserNotification,
 } from '../types';
 import { useAuth } from '../hooks/useAuth';
-import { DataContextType } from './DataContextTypes';
-import { DataContext } from './DataContextInstance';
 
 export function DataProvider({ children }: { children: React.ReactNode }) {
   const { user, userProfile } = useAuth();

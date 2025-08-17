@@ -5,7 +5,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/components/ui/utils';
 import { useAuth } from '@/hooks/useAuth';
-import { useData } from '@/contexts/DataContext';
+import { useData } from '@/hooks/useData';
 import { useGroup } from '@/hooks/useGroup';
 import { GroupMember } from '@/types/group';
 import { AtSign } from 'lucide-react';

@@ -138,8 +138,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                 if (!isSubscribed) return;
 
                 // Initialize FCM for notifications
-                try {
-                }
+                // TODO: Add FCM initialization logic here
 
                 if (!isSubscribed) return;
 
@@ -149,7 +148,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                   if (isSubscribed) {
                     setUserProfile(profile);
                   }
-                } catch {
+                } catch (error) {
                   if (isSubscribed) {
                     setUserProfile(null);
                   }
@@ -163,18 +162,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                       if (isSubscribed) {
                         setUserProfile(profile);
                       }
-                    },
                     }
                   );
-                } catch {
+                } catch (error) {
                   // Handle error silently
-              }
+                }
             } else {
               setUserProfile(null);
               if (profileUnsubscribe) {
                 try {
                   profileUnsubscribe();
-                } catch {
+                } catch (error) {
                   // Handle error silently
                 }
                 profileUnsubscribe = null;
@@ -186,7 +184,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             }
           }
         );
-      } catch {
+      } catch (error) {
         if (isSubscribed) {
           setLoading(false);
         }
@@ -201,7 +199,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (authUnsubscribe) {
         try {
           authUnsubscribe();
-        } catch {
+        } catch (error) {
           // Handle error silently
         }
       }
@@ -209,7 +207,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (profileUnsubscribe) {
         try {
           profileUnsubscribe();
-        } catch {
+        } catch (error) {
           // Handle error silently
         }
       }
