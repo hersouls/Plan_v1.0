@@ -431,8 +431,9 @@ export function useSettings(): UseSettingsReturn {
         await userService.createOrUpdateUserProfile(userId, filteredData);
       }
 
-      if (import.meta.env.DEV) {
-        }
+      if (false) {
+        // Empty block
+      }
     } catch (err) {
       setError('설정을 저장하는데 실패했습니다.');
       throw err;

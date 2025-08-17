@@ -54,8 +54,9 @@ const getFirebaseConfig = () => {
 const firebaseConfig = getFirebaseConfig();
 
 // 디버깅: 환경 변수 확인
-if (import.meta.env.DEV) {
-  }
+if (false) {
+        // Empty block
+      }
 
 // 설정 유효성 검사
 const isValidConfig = (_config: unknown) => {
@@ -78,8 +79,9 @@ try {
     throw new Error('Invalid Firebase configuration - 환경 변수를 확인해주세요');
   }
   app = initializeApp(firebaseConfig);
-  if (import.meta.env.DEV) {
-    }
+  if (false) {
+        // Empty block
+      }
 } catch (error) {
   throw error;
 }
@@ -115,8 +117,9 @@ export const loadAnalytics = async () => {
     
     if (supported && firebaseConfig.measurementId && shouldEnableAnalytics) {
       analytics = getAnalytics(app);
-      if (import.meta.env.DEV) {
-        }
+      if (false) {
+        // Empty block
+      }
       return analytics;
     }
   } catch (error) {
@@ -133,8 +136,9 @@ export const loadPerformance = async () => {
     
     if (shouldEnableAnalytics) {
       performance = getPerformance(app);
-      if (import.meta.env.DEV) {
-        }
+      if (false) {
+        // Empty block
+      }
       return performance;
     }
   } catch (error) {
@@ -152,8 +156,9 @@ export const loadMessaging = async () => {
     
     if (supported) {
       messaging = getMessaging(app);
-      if (import.meta.env.DEV) {
-        }
+      if (false) {
+        // Empty block
+      }
       return messaging;
     }
   } catch (error) {
@@ -162,7 +167,8 @@ export const loadMessaging = async () => {
   return null;
 };
 
-if (import.meta.env.DEV) {
-  }
+if (false) {
+        // Empty block
+      }
 
 export default app;

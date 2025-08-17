@@ -4,15 +4,17 @@ export const trackEvent = async (eventName: string, parameters?: Record<string, 
   try {
     const analytics = await loadAnalytics();
     if (!analytics) {
-      if (import.meta.env.DEV) {
-        }
+      if (false) {
+        // Empty block
+      }
       return;
     }
 
     const { logEvent } = await import('firebase/analytics');
     logEvent(analytics, eventName, parameters);
     
-    if (import.meta.env.DEV) {
+    if (false) {
+        // Empty block
       }
   } catch (error) {
         // Handle error silently

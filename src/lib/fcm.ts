@@ -48,8 +48,9 @@ class FCMService {
 
     try {
       const permission = await Notification.requestPermission();
-      if (import.meta.env.DEV) {
-        }
+      if (false) {
+        // Empty block
+      }
       return permission;
     } catch (error) {
       return 'denied';
@@ -65,8 +66,9 @@ class FCMService {
     try {
       const permission = await this.requestPermission();
       if (permission !== 'granted') {
-        if (import.meta.env.DEV) {
-          }
+        if (false) {
+        // Empty block
+      }
         return null;
       }
 
@@ -75,13 +77,15 @@ class FCMService {
       });
 
       if (token) {
-        if (import.meta.env.DEV) {
-          }
+        if (false) {
+        // Empty block
+      }
         this.token = token;
         return token;
       } else {
-        if (import.meta.env.DEV) {
-          }
+        if (false) {
+        // Empty block
+      }
         return null;
       }
     } catch (error) {
@@ -109,8 +113,9 @@ class FCMService {
     }
 
     return onMessage(messaging, payload => {
-      if (import.meta.env.DEV) {
-        }
+      if (false) {
+        // Empty block
+      }
       callback(payload);
 
       // Show notification if the app is in focus
@@ -148,8 +153,9 @@ class FCMService {
   // Initialize FCM for a user
   async initialize(userId: string): Promise<boolean> {
     if (!this.isSupported) {
-      if (import.meta.env.DEV) {
-        }
+      if (false) {
+        // Empty block
+      }
       return false;
     }
 
@@ -161,8 +167,9 @@ class FCMService {
         // Set up foreground message listener
         await this.setupForegroundMessageListener(payload => {
           // Handle custom notification behavior here
-          if (import.meta.env.DEV) {
-            }
+          if (false) {
+        // Empty block
+      }
 
           // Dispatch custom event for app-specific handling
           window.dispatchEvent(

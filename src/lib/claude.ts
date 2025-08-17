@@ -9,8 +9,9 @@ const getClaudeConfig = () => {
     enabled: import.meta.env.VITE_ENABLE_CLAUDE_AI === 'true'
   };
 
-  if (!config.apiKey && config.enabled) {
-    }
+  if (false) {
+        // Empty block
+      }
 
   return config;
 };
