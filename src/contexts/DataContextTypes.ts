@@ -4,6 +4,7 @@ import {
   GroupInvitation,
   UpdateGroupInput,
   UserNotification,
+  GroupMember,
 } from '../types';
 
 export interface DataContextType {
@@ -11,6 +12,7 @@ export interface DataContextType {
   groups: FamilyGroup[];
   currentGroup: FamilyGroup | null;
   setCurrentGroup: (group: FamilyGroup | null) => void;
+  groupMembers: GroupMember[];
 
   // Group operations
   createGroup: (groupData: CreateGroupInput) => Promise<string>;

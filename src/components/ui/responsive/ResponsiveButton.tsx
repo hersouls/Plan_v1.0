@@ -7,6 +7,7 @@ import {
 import { cn } from '../../../lib/utils';
 import { WaveButton } from '../WaveButton';
 import { ButtonProps } from '../button';
+import { WaveButtonProps } from '../../../types/ui';
 
 interface ResponsiveButtonProps extends Omit<ButtonProps, 'className'> {
   children: React.ReactNode;
@@ -90,17 +91,21 @@ export const ResponsiveButton: React.FC<ResponsiveButtonProps> = ({
     </div>
   );
 
-  return (
-    <WaveButton
-      className={cn(
-        responsive && paddingClasses,
-        responsive && touchTargetClasses,
-        fullWidthClasses,
-        className
-      )}
-      {...props}
-    >
-      {buttonContent}
-    </WaveButton>
-  );
+  // Filter props to only include valid WaveButtonProps
+  const waveButtonProps: WaveButtonProps = {
+    children: buttonContent,
+    className: cn(
+      responsive && paddingClasses,
+      responsive && touchTargetClasses,
+      fullWidthClasses,
+      className
+    ),
+    ...Object.fromEntries(
+      Object.entries(props).filter(([key]) => 
+        key in ({} as WaveButtonProps)
+      )
+    )
+  };
+
+  return <WaveButton {...waveButtonProps} />;
 };

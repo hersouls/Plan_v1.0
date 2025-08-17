@@ -64,9 +64,9 @@ export const MentionInput: React.FC<MentionInputProps> = ({
         if (member.userId !== user?.uid) {
           users.push({
             id: member.userId,
-            name: member.displayName || member.email || '사용자',
-            email: member.email || '',
-            avatar: member.photoURL || undefined,
+            name: member.userName || member.userEmail || '사용자',
+            email: member.userEmail || '',
+            avatar: member.userAvatar || undefined,
           });
         }
       });
