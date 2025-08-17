@@ -67,8 +67,8 @@ function createSafeSnapshot<T>(
               onNext(null as T);
             }
           }
-        } catch (_error) {
-          if (onError) onError(error as Error);
+        } catch {
+          if (onError) onError(new Error('Snapshot error'));
         }
       },
       error: error => {
@@ -78,7 +78,7 @@ function createSafeSnapshot<T>(
           (error.message.includes('INTERNAL ASSERTION FAILED') ||
             error.message.includes('Unexpected state'))
         ) {
-          if (import.meta.env?.DEV) if (import.meta.env?.DEV) console.warn(`Retrying snapshot subscription (attempt ${retryCount + 1})`);
+          if (import.meta.env?.DEV) console.warn(`Retrying snapshot subscription (attempt ${retryCount + 1})`);
 
           setTimeout(() => {
             try {
@@ -92,8 +92,8 @@ function createSafeSnapshot<T>(
         }
       },
     });
-  } catch (_error) {
-    if (onError) onError(error as Error);
+  } catch {
+    if (onError) onError(new Error('Subscription error'));
     // 빈 unsubscribe 함수 반환
     return () => {};
   }
@@ -127,8 +127,8 @@ export const taskService = {
       // 디버깅용 로그
       const docRef = await addDoc(collection(db, 'tasks'), finalData);
       return docRef.id;
-    } catch (_error) {
-      throw error;
+    } catch {
+      throw new Error('Failed to create task');
     }
   },
 
@@ -142,8 +142,8 @@ export const taskService = {
         updatedAt: serverTimestamp(),
       });
       await updateDoc(taskRef, sanitizedUpdates);
-    } catch (_error) {
-      throw error;
+    } catch {
+      throw new Error('Failed to update task');
     }
   },
 
@@ -161,8 +161,8 @@ export const taskService = {
         return { id: docSnap.id, ...docSnap.data() } as Task;
       }
       return null;
-    } catch (_error) {
-      throw error;
+    } catch {
+      throw new Error('Failed to get task');
     }
   },
 
@@ -180,8 +180,8 @@ export const taskService = {
       );
 
       return createSafeSnapshot<Task[]>(q, callback, onError);
-    } catch (_error) {
-      if (onError) onError(error as Error);
+    } catch {
+      if (onError) onError(new Error('Failed to subscribe to group tasks'));
       return () => {};
     }
   },
@@ -200,8 +200,8 @@ export const taskService = {
       );
 
       return createSafeSnapshot<Task[]>(q, callback, onError);
-    } catch (_error) {
-      if (onError) onError(error as Error);
+    } catch {
+      if (onError) onError(new Error('Failed to subscribe to user tasks'));
       return () => {};
     }
   },
@@ -231,8 +231,8 @@ export const taskService = {
         },
         onError
       );
-    } catch (_error) {
-      if (onError) onError(error as Error);
+    } catch {
+      if (onError) onError(new Error('Failed to subscribe to personal tasks'));
       return () => {};
     }
   },
@@ -251,8 +251,8 @@ export const taskService = {
         id: doc.id,
         ...doc.data(),
       })) as Task[];
-    } catch (_error) {
-      throw error;
+    } catch {
+      throw new Error('Failed to get group tasks');
     }
   },
 
@@ -269,9 +269,9 @@ export const taskService = {
       return querySnapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data(),
-      })) as Task[];
-    } catch (_error) {
-      throw error;
+      }      )) as Task[];
+    } catch {
+      throw new Error('Failed to get user tasks');
     }
   },
 };
@@ -289,8 +289,8 @@ export const groupService = {
         updatedAt: serverTimestamp(),
       });
       return docRef.id;
-    } catch (_error) {
-      throw error;
+    } catch {
+      throw new Error('Failed to create group');
     }
   },
 
@@ -302,8 +302,8 @@ export const groupService = {
         ...updates,
         updatedAt: serverTimestamp(),
       });
-    } catch (_error) {
-      throw error;
+    } catch {
+      throw new Error('Failed to update group');
     }
   },
 
@@ -322,8 +322,8 @@ export const groupService = {
         return { id: docSnap.id, ...docSnap.data() } as FamilyGroup;
       }
       return null;
-    } catch (_error) {
-      throw error;
+    } catch {
+      throw new Error('Failed to get group');
     }
   },
 
@@ -346,8 +346,8 @@ export const groupService = {
         callback,
         onError
       );
-    } catch (_error) {
-      if (onError) onError(error as Error);
+    } catch {
+      if (onError) onError(new Error('Failed to subscribe to group'));
       return () => {};
     }
   },
@@ -365,8 +365,8 @@ export const groupService = {
         [`memberRoles.${userId}`]: role,
         updatedAt: serverTimestamp(),
       });
-    } catch (_error) {
-      throw error;
+    } catch {
+      throw new Error('Failed to add member to group');
     }
   },
 
@@ -392,8 +392,8 @@ export const groupService = {
       }
 
       await batch.commit();
-    } catch (_error) {
-      throw error;
+    } catch {
+      throw new Error('Failed to remove member from group');
     }
   },
 
@@ -410,9 +410,9 @@ export const groupService = {
       return querySnapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data(),
-      })) as FamilyGroup[];
-    } catch (_error) {
-      throw error;
+      }      )) as FamilyGroup[];
+    } catch {
+      throw new Error('Failed to get user groups');
     }
   },
 
@@ -430,14 +430,14 @@ export const groupService = {
       );
 
       return createSafeSnapshot<FamilyGroup[]>(q, callback, onError);
-    } catch (_error) {
-      if (onError) onError(error as Error);
+    } catch {
+      if (onError) onError(new Error('Failed to subscribe to groups'));
       return () => {};
     }
   },
 
   // Get group members with details
-  async getGroupMembers(groupId: string | null | undefined): Promise<any[]> {
+  async getGroupMembers(groupId: string | null | undefined): Promise<Record<string, unknown>[]> {
     try {
       // groupId가 null이거나 undefined이면 빈 배열 반환
       if (!groupId) {
@@ -489,13 +489,13 @@ export const groupService = {
       });
 
       return await Promise.all(memberPromises);
-    } catch (_error) {
-      throw error;
+    } catch {
+      throw new Error('Failed to get group members');
     }
   },
 
   // Get group statistics
-  async getGroupStats(groupId: string | null | undefined): Promise<any> {
+  async getGroupStats(groupId: string | null | undefined): Promise<Record<string, unknown>> {
     try {
       // groupId가 null이거나 undefined이면 빈 통계 반환
       if (!groupId) {
@@ -532,7 +532,7 @@ export const groupService = {
       const tasks = tasksSnapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data(),
-      }));
+      })) as Record<string, unknown>[];
 
       // Calculate stats
       const totalTasks = tasks.length;
@@ -588,8 +588,8 @@ export const groupService = {
           totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0,
         memberStats,
       };
-    } catch (_error) {
-      throw error;
+    } catch {
+      throw new Error('Failed to get group statistics');
     }
   },
 
@@ -623,8 +623,8 @@ export const groupService = {
       batch.delete(doc(db, 'groups', groupId));
 
       await batch.commit();
-    } catch (_error) {
-      throw error;
+    } catch {
+      throw new Error('Failed to delete group');
     }
   },
 
@@ -645,8 +645,8 @@ export const groupService = {
         createdAt: serverTimestamp(),
         expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
       });
-    } catch (_error) {
-      throw error;
+    } catch {
+      throw new Error('Failed to invite member by email');
     }
   },
 
@@ -662,8 +662,8 @@ export const groupService = {
         [`memberRoles.${userId}`]: newRole,
         updatedAt: serverTimestamp(),
       });
-    } catch (_error) {
-      throw error;
+    } catch {
+      throw new Error('Failed to change member role');
     }
   },
 
@@ -682,8 +682,8 @@ export const groupService = {
       });
 
       return code;
-    } catch (_error) {
-      throw error;
+    } catch {
+      throw new Error('Failed to generate invite code');
     }
   },
 
@@ -717,8 +717,8 @@ export const groupService = {
       await this.addMemberToGroup(groupId, userId, 'member');
 
       return groupId;
-    } catch (_error) {
-      throw error;
+    } catch {
+      throw new Error('Failed to join group by code');
     }
   },
 };
@@ -784,8 +784,8 @@ export const commentService = {
         createdAt: serverTimestamp(),
       });
       return docRef.id;
-    } catch (_error) {
-      throw error;
+    } catch {
+      throw new Error('Failed to add comment');
     }
   },
 
@@ -808,8 +808,8 @@ export const commentService = {
       );
 
       return createSafeSnapshot<any[]>(q, callback, onError);
-    } catch (_error) {
-      if (onError) onError(error as Error);
+    } catch {
+      if (onError) onError(new Error('Failed to subscribe to task comments'));
       return () => {};
     }
   },
@@ -838,8 +838,8 @@ export const commentService = {
           await updateDoc(commentRef, { reactions });
         }
       }
-    } catch (_error) {
-      throw error;
+    } catch {
+      throw new Error('Failed to add reaction');
     }
   },
 
@@ -862,8 +862,8 @@ export const commentService = {
           updatedAt: serverTimestamp(),
         });
       }
-    } catch (_error) {
-      throw error;
+    } catch {
+      throw new Error('Failed to add file attachment');
     }
   },
 
@@ -889,8 +889,8 @@ export const commentService = {
           updatedAt: serverTimestamp(),
         });
       }
-    } catch (_error) {
-      throw error;
+    } catch {
+      throw new Error('Failed to remove file attachment');
     }
   },
 };
@@ -954,8 +954,8 @@ export const userService = {
         },
         { merge: true }
       );
-    } catch (_error) {
-      throw error;
+    } catch {
+      throw new Error('Failed to create or update user profile');
     }
   },
 
@@ -967,8 +967,8 @@ export const userService = {
         return { id: docSnap.id, ...docSnap.data() } as User;
       }
       return null;
-    } catch (_error) {
-      throw error;
+    } catch {
+      throw new Error('Failed to get user profile');
     }
   },
 
@@ -981,8 +981,8 @@ export const userService = {
     try {
       const userRef = doc(db, 'users', userId);
       return createSafeSnapshot<User | null>(userRef, callback, onError);
-    } catch (_error) {
-      if (onError) onError(error as Error);
+    } catch {
+      if (onError) onError(new Error('Failed to subscribe to user profile'));
       return () => {};
     }
   },
