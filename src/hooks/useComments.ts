@@ -158,7 +158,13 @@ export const useComments = ({ taskId, realtime = true }: UseCommentsOptions): Us
 
     try {
       const commentRef = doc(db, 'comments', commentId);
-      const updateData = {
+      const updateData: {
+        updatedAt: FieldValue;
+        content?: string;
+        reactions?: Record<string, string[]>;
+        isEdited?: boolean;
+        editedAt?: FieldValue;
+      } = {
         ...updates,
         updatedAt: serverTimestamp(),
       };
@@ -168,7 +174,7 @@ export const useComments = ({ taskId, realtime = true }: UseCommentsOptions): Us
         updateData.editedAt = serverTimestamp();
       }
 
-      await updateDoc(commentRef, updateData as Record<string, unknown>);
+      await updateDoc(commentRef, updateData);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (_err) {
       throw new Error('댓글 수정 중 오류가 발생했습니다.');
