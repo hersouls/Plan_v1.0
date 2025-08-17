@@ -1,4 +1,3 @@
-import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, ExternalLink, Mail, Globe, Music, CreditCard, Coins, Gift, TrendingUp, Crown } from 'lucide-react';
 import { Header } from '../layout/Header';
@@ -16,6 +15,7 @@ interface ProjectData {
   technologies: string[];
   status: string;
   launchDate: string;
+  icon: any; // Add icon property to fix TypeScript errors
 }
 
 export function ProjectDetail() {
