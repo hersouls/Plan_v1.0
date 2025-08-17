@@ -207,7 +207,7 @@ export function PointSettingsModal({
         await pointsService.createPointRule({
           groupId,
           name: category.name,
-          type: category.id as string,
+          type: category.id as "manual" | "task_completion" | "streak_bonus" | "completion_rate" | "custom",
           points,
           description: category.description,
           isActive: true,

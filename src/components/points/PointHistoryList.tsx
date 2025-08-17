@@ -136,7 +136,7 @@ export function PointHistoryList({
   // 날짜 포맷팅
   const formatDate = (_timestamp: unknown) => {
     try {
-      const date = new Date(timestamp.seconds * 1000);
+      const date = new Date((_timestamp as any).seconds * 1000);
       const now = new Date();
       const diffTime = Math.abs(now.getTime() - date.getTime());
       const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));

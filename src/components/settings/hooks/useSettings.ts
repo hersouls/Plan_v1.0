@@ -24,12 +24,12 @@ const getDefaultSettings = (_user: unknown): SettingsState => {
   try {
     return {
       profile: {
-        displayName: user?.displayName || '',
-        email: user?.email || '',
+        displayName: '',
+        email: '',
         phone: '',
         location: 'Seoul, South Korea',
         bio: '',
-        avatar: user?.photoURL || undefined,
+        avatar: undefined,
       },
       notifications: {
         channels: {
@@ -380,7 +380,7 @@ export function useSettings(): UseSettingsReturn {
     } finally {
       setLoading(false);
     }
-  }, [currentUser?.uid, authContext.user, currentUser]);
+  }, [currentUser?.uid, authContext.user]);
 
   // 외부에서 호출할 수 있는 loadSettings 함수
   const loadSettings = useCallback(async () => {
@@ -556,7 +556,7 @@ export function useSettings(): UseSettingsReturn {
             const decodedPath = decodeURIComponent(pathMatch[1]);
             await StorageService.deleteFile({ storageUrl: decodedPath } as { storageUrl: string });
           }
-        } catch (error) {
+        } catch (_error) {
           // Handle error silently
         }
       }
@@ -601,7 +601,7 @@ export function useSettings(): UseSettingsReturn {
       isInitializedRef.current = true;
       loadSettingsInternal();
     }
-  }, [currentUser?.uid, loadSettingsInternal]); // loadSettingsInternal 의존성 추가
+  }, [currentUser?.uid]); // loadSettingsInternal 의존성 제거 (무한 루프 방지)
 
   // 1시간마다 자동 동기화 설정
   useEffect(() => {
