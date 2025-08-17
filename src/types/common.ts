@@ -17,7 +17,7 @@ export interface FirebaseTimestamp {
 }
 
 // API Response wrapper
-export interface ApiResponse<T = any> {
+export interface ApiResponse<T = unknown> {
   success: boolean;
   data?: T;
   error?: {
@@ -70,7 +70,7 @@ export interface LoadingState {
 }
 
 // Action result
-export interface ActionResult<T = any> {
+export interface ActionResult<T = unknown> {
   success: boolean;
   data?: T;
   error?: string;
@@ -225,7 +225,7 @@ export interface AnalyticsEvent {
   action: string;
   label?: string;
   value?: number;
-  properties?: Record<string, any>;
+  properties?: Record<string, unknown>;
   timestamp?: Date;
 }
 
@@ -255,7 +255,7 @@ export interface ABTestVariant {
   id: string;
   name: string;
   weight: number;
-  config: Record<string, any>;
+  config: Record<string, unknown>;
 }
 
 // Performance metrics

@@ -5,7 +5,6 @@ import {
   ArrowLeft,
   Award,
   BarChart3,
-  Brain,
   Clock,
   TrendingUp,
   Trophy,
@@ -54,14 +53,9 @@ const COLORS = [
 ];
 
 function StatisticsEnhanced() {
-  const navigate = useNavigate();
   const { user } = useAuth();
   const [selectedGroupId, setSelectedGroupId] = useState<string | null>(null);
   const [dateRange, setDateRange] = useState<DateRange>('30days');
-  const [activeMetric, setActiveMetric] = useState<
-    'tasks' | 'groups' | 'personal'
-  >('tasks');
-
   // Use real Firebase data
   const { groups, loading: groupsLoading } = useUserGroups();
 
@@ -79,8 +73,6 @@ function StatisticsEnhanced() {
     realtime: true,
     groupId: selectedGroupId || undefined,
   });
-
-  const { settings, loading: settingsLoading } = useSettings();
 
   // 포인트 통계 상태
   const [pointStats, setPointStats] = useState<Record<string, PointStats>>({});
@@ -108,7 +100,7 @@ function StatisticsEnhanced() {
           }
         }
         setPointStats(stats);
-      } catch (_error) {
+      } catch (error) {
         // Handle error silently
       } finally {
         setLoadingPoints(false);
@@ -281,7 +273,6 @@ function StatisticsEnhanced() {
 
     return {
       categoryData: categoryChart,
-      priorityData: priorityChart,
       statusData: statusChart,
       memberData: memberChart,
     };
@@ -289,7 +280,6 @@ function StatisticsEnhanced() {
 
   // Quick stats calculations
   const quickStats = useMemo(() => {
-    const today = new Date();
     const todayTasks = filteredTasks.filter(task => {
       const taskDate = toDate(task.createdAt);
       return isToday(taskDate);

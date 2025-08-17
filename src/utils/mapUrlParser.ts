@@ -77,7 +77,7 @@ export class MapUrlParser {
       if (genericResult.success) return genericResult;
 
       return { success: false, error: 'Unsupported map URL format' };
-    } catch (_error) {
+    } catch (error) {
       return { success: false, error: `Parsing failed: ${error}` };
     }
   }

@@ -143,7 +143,7 @@ export function useInfinitePagination<T>(
       setData(prev => [...prev, ...result.data]);
       setHasMore(result.hasMore);
       setCurrentPage(prev => prev + 1);
-    } catch (_err) {
+    } catch (err) {
       setError(err instanceof Error ? err.message : '데이터를 불러오는 중 오류가 발생했습니다.');
     } finally {
       setLoading(false);

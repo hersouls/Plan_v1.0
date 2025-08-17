@@ -90,7 +90,6 @@ function PointsManagement() {
   // 모달 상태 디버깅
   useEffect(() => {
     // 모달 상태 변경 시 로그 출력 (디버깅용)
-    if (import.meta.env?.DEV) console.log('Point settings modal state:', showPointSettingsModal);
   }, [showPointSettingsModal]);
 
   // 즐겨찾기 그룹 로드
@@ -99,7 +98,7 @@ function PointsManagement() {
     if (savedFavorites) {
       try {
         setFavoriteGroups(JSON.parse(savedFavorites));
-      } catch (_error) {
+      } catch (error) {
         setFavoriteGroups([]);
       }
     }
@@ -135,7 +134,7 @@ function PointsManagement() {
   };
 
   // 즐겨찾기 토글
-  const toggleFavorite = (_groupId: string) => {
+  const toggleFavorite = (groupId: string) => {
     const newFavorites = favoriteGroups.includes(groupId)
       ? favoriteGroups.filter(id => id !== groupId)
       : [...favoriteGroups, groupId];
@@ -167,7 +166,7 @@ function PointsManagement() {
         selectedGroupId
       );
       setUnapprovedPointHistory(history);
-    } catch (_error) {
+    } catch (error) {
         // Handle error silently
       } finally {
       setLoading(false);
@@ -186,7 +185,7 @@ function PointsManagement() {
       );
 
       setApprovedPointHistory(history);
-    } catch (_error) {
+    } catch (error) {
         // Handle error silently
       } finally {
       setLoading(false);
@@ -218,7 +217,7 @@ function PointsManagement() {
       await loadUnapprovedPointHistory();
       await loadApprovedPointHistory();
       await loadMemberStats();
-    } catch (_error) {
+    } catch (error) {
         // Handle error silently
       } finally {
       setApprovingHistoryId(null);
@@ -254,7 +253,7 @@ function PointsManagement() {
       await loadUnapprovedPointHistory();
       await loadApprovedPointHistory();
       await loadMemberStats();
-    } catch (_error) {
+    } catch (error) {
         // Handle error silently
       } finally {
       setApprovingHistoryId(null);
@@ -265,7 +264,7 @@ function PointsManagement() {
   const handleTaskCardClick = (taskId: string) => {
     try {
       navigate(`/tasks/${taskId}/edit`);
-    } catch (_error) {
+    } catch (error) {
       // 오류 발생 시 사용자에게 알림
       alert('할일 수정 페이지로 이동할 수 없습니다. 다시 시도해주세요.');
     }
@@ -286,7 +285,7 @@ function PointsManagement() {
       });
 
       setMemberStats(statsMap);
-    } catch (_error) {
+    } catch (error) {
         // Handle error silently
       }
   };
@@ -308,7 +307,7 @@ function PointsManagement() {
       }
 
       setUserProfiles(prev => ({ ...prev, ...profiles }));
-    } catch (_error) {
+    } catch (error) {
         // Handle error silently
       }
   };
@@ -334,19 +333,9 @@ function PointsManagement() {
   const renderAvatar = (
     memberId: string,
     displayName: string,
-    size: 'sm' | 'md' | 'lg' = 'md'
+    _size: 'sm' | 'md' | 'lg' = 'md'
   ) => {
     const avatarUrl = getAvatarUrl(memberId);
-    const sizeClasses = {
-      sm: 'w-8 h-8 sm:w-10 sm:h-10',
-      md: 'w-10 h-10 sm:w-12 sm:h-12',
-      lg: 'w-12 h-12 sm:w-16 sm:h-16',
-    };
-    const textSizes = {
-      sm: 'text-sm sm:text-base',
-      md: 'text-base sm:text-lg',
-      lg: 'text-lg sm:text-xl',
-    };
 
     if (avatarUrl && avatarUrl !== null) {
       return (
@@ -393,7 +382,7 @@ function PointsManagement() {
       loadApprovedPointHistory();
       loadMemberStats();
     }
-  }, [selectedGroupId, selectedMember]);
+  }, [selectedGroupId, selectedMember, loadApprovedPointHistory, loadMemberStats, loadUnapprovedPointHistory]);
 
   // 포인트 수동 추가/차감
   const handleAddPoints = async (amount: number, reason: string) => {
@@ -420,9 +409,8 @@ function PointsManagement() {
       await loadUnapprovedPointHistory();
       await loadApprovedPointHistory();
       setShowAddPointsModal(false);
-    } catch (_error) {
+    } catch (error) {
         // Handle error silently
-        if (import.meta.env?.DEV) console.error('Error adding points:', error);
     }
   };
 
@@ -452,9 +440,8 @@ function PointsManagement() {
       await loadUnapprovedPointHistory();
       await loadApprovedPointHistory();
       setShowAddPointsModal(false);
-    } catch (_error) {
+    } catch (error) {
         // Handle error silently
-        if (import.meta.env?.DEV) console.error('Error deducting points:', error);
     }
   };
 
@@ -858,7 +845,7 @@ function PointsManagement() {
                               setLoading(true);
                               try {
                                 await loadUnapprovedPointHistory();
-                              } catch (_error) {
+                              } catch (error) {
         // Handle error silently
       } finally {
                                 setLoading(false);
@@ -1112,7 +1099,7 @@ function PointsManagement() {
                               setLoading(true);
                               try {
                                 await loadApprovedPointHistory();
-                              } catch (_error) {
+                              } catch (error) {
         // Handle error silently
       } finally {
                                 setLoading(false);

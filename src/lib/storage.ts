@@ -45,8 +45,6 @@ export async function uploadFile(
             storageUrl: path,
             downloadUrl: downloadURL,
           });
-        } catch {
-          reject(new Error('파일 업로드 중 오류가 발생했습니다.'));
         }
       }
     );
@@ -82,11 +80,6 @@ export async function uploadAvatarImage(
 
   // 이미지 최적화 (파일 용량 제한 없음)
   let optimizedFile = file;
-  // const originalSizeMB = getFileSizeInMB(file);
-
-  try {
-    optimizedFile = await optimizeAvatarImage(file);
-  } catch {
     throw new Error('이미지 처리에 실패했습니다.');
   }
 
@@ -116,7 +109,6 @@ export async function uploadAvatarImage(
             storageUrl: avatarPath,
             downloadUrl: downloadURL,
           });
-        } catch {
           reject(
             new Error('아바타 업로드 완료 후 URL을 가져오는데 실패했습니다.')
           );
@@ -143,7 +135,6 @@ export async function deleteAvatarImage(
   try {
     const storageRef = ref(storage, storageUrl);
     await deleteObject(storageRef);
-  } catch {
     throw new Error('아바타 삭제에 실패했습니다.');
   }
 }
@@ -152,7 +143,6 @@ export async function deleteAvatarImage(
  * 아바타 업로드 에러 메시지 변환
  */
 function getAvatarUploadErrorMessage(_error: unknown): string {
-  const error = _error as Record<string, unknown>;
   if (error.code === 'storage/unauthorized') {
     return '아바타 업로드 권한이 없습니다.';
   } else if (error.code === 'storage/canceled') {
@@ -278,10 +268,6 @@ export class StorageService {
             let height: number | undefined;
 
             if (this.isImage(file.type)) {
-              // const thumbnailRef = ref(
-              //   storage,
-              //   `${filePath.replace(/\.[^/.]+$/, '')}_thumb.jpg`
-              // );
               // 썸네일 생성 로직은 별도로 구현 필요
               // thumbnailURL = await this.generateThumbnail(file, thumbnailRef);
             }
@@ -294,7 +280,6 @@ export class StorageService {
               storageUrl: filePath,
               downloadUrl: downloadURL,
               uploadedBy: currentUser?.uid || 'unknown-user',
-              uploadedAt: new Date() as Record<string, unknown>, // Timestamp로 교체 필요
               thumbnailUrl: thumbnailURL,
               isImage: this.isImage(file.type),
               width,
@@ -311,8 +296,6 @@ export class StorageService {
             options?.onComplete?.(fileAttachment);
 
             return fileAttachment;
-          } catch {
-            const errorMessage = this.getErrorMessage(new Error('Upload failed'));
             options?.onError?.(errorMessage);
             throw new Error(errorMessage);
           }
@@ -341,7 +324,6 @@ export class StorageService {
         storageUrl: filePath,
         downloadUrl: downloadURL,
         uploadedBy: currentUser?.uid || 'unknown-user',
-        uploadedAt: new Date() as Record<string, unknown>, // Timestamp로 교체 필요
         thumbnailUrl: thumbnailURL,
         isImage: this.isImage(file.type),
         width,
@@ -349,8 +331,6 @@ export class StorageService {
       };
 
       return fileAttachment;
-    } catch {
-      const errorMessage = this.getErrorMessage(new Error('Upload failed'));
       options?.onError?.(errorMessage);
       throw new Error(errorMessage);
     }
@@ -366,8 +346,6 @@ export class StorageService {
         throw new Error('파일 다운로드에 실패했습니다.');
       }
       return await response.blob();
-    } catch {
-      throw new Error(this.getErrorMessage(new Error('Download failed')));
     }
   }
 
@@ -384,8 +362,6 @@ export class StorageService {
         const thumbnailRef = ref(storage, fileAttachment.thumbnailUrl);
         await deleteObject(thumbnailRef);
       }
-    } catch {
-      throw new Error(this.getErrorMessage(new Error('Delete failed')));
     }
   }
 
@@ -396,8 +372,6 @@ export class StorageService {
     try {
       const taskFilesRef = ref(storage, `tasks/${taskId}`);
       await this.deleteFolder(taskFilesRef);
-    } catch {
-      throw new Error(this.getErrorMessage(new Error('Delete task files failed')));
     }
   }
 
@@ -414,8 +388,6 @@ export class StorageService {
         `tasks/${taskId}/comments/${commentId}`
       );
       await this.deleteFolder(commentFilesRef);
-    } catch {
-      throw new Error(this.getErrorMessage(new Error('Delete comment files failed')));
     }
   }
 
@@ -437,7 +409,6 @@ export class StorageService {
         this.deleteFolder(prefix)
       );
       await Promise.all(folderPromises);
-    } catch {
         // Handle error silently
       }
   }
@@ -614,7 +585,7 @@ export async function uploadChatAttachment(
             storageUrl: chatPath,
             downloadUrl: downloadURL,
           });
-        } catch (_error) {
+        } catch (error) {
           reject(error);
         }
       }

@@ -21,7 +21,7 @@ import {
 
 // Date and Time Utilities
 export const formatRelativeTime = (
-  date: Date | string | any,
+  date: Date | string | unknown,
   addSuffix = true
 ): string => {
   try {
@@ -40,13 +40,13 @@ export const formatRelativeTime = (
       addSuffix,
       locale: ko,
     });
-  } catch (_error) {
+  } catch (error) {
     return '날짜 정보 없음';
   }
 };
 
 export const formatDateTime = (
-  date: Date | string | any,
+  date: Date | string | unknown,
   formatString = 'yyyy.MM.dd HH:mm'
 ): string => {
   try {
@@ -62,13 +62,13 @@ export const formatDateTime = (
     }
 
     return format(dateObj, formatString);
-  } catch (_error) {
+  } catch (error) {
     return '날짜 정보 없음';
   }
 };
 
 export const isWithinTimeRange = (
-  date: Date | string | any,
+  date: Date | string | unknown,
   range: TimeRange
 ): boolean => {
   try {
@@ -95,7 +95,7 @@ export const isWithinTimeRange = (
       default:
         return false;
     }
-  } catch (_error) {
+  } catch (error) {
     return false;
   }
 };

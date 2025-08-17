@@ -21,7 +21,7 @@ export interface AuthContextType {
   error: string | null;
   signInAnonymously: () => Promise<void>;
   signInWithEmailAndPassword: (email: string, password: string) => Promise<void>;
-  signUpWithEmailAndPassword: (email: string, password: string, displayName?: string) => Promise<any>;
+  signUpWithEmailAndPassword: (email: string, password: string, displayName?: string) => Promise<{ user: ExtendedUser }>;
   signInWithGoogle: () => Promise<void>;
   signInWithGithub: () => Promise<void>;
   resetPassword: (email: string) => Promise<void>;

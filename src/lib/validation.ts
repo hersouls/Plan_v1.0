@@ -270,7 +270,6 @@ export class ValidationService {
     } = {}
   ): string | null {
     const {
-      // maxSize = Number.MAX_SAFE_INTEGER, // 파일 용량 제한 없음
       allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'],
     } = options;
 

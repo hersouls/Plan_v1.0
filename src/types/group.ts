@@ -153,7 +153,7 @@ export interface GroupNotification {
   type: 'task_assigned' | 'task_completed' | 'member_joined' | 'member_left' | 'invite_sent';
   title: string;
   message: string;
-  data?: Record<string, any>;
+  data?: Record<string, unknown>;
   readBy: string[];
   createdAt: Timestamp;
 }

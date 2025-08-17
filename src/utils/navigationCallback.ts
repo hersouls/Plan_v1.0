@@ -95,7 +95,10 @@ export class NavigationCallback {
       scrollToElement?: string;
     }
   ): void {
-    let targetPath = state.returnPath!;
+    if (!state.returnPath) {
+      throw new Error('Return path is required');
+    }
+    let targetPath = state.returnPath;
     
     // 쿼리 파라미터 추가
     if (state.returnQuery) {
