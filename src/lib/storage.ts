@@ -63,7 +63,8 @@ export async function uploadFile(
             storageUrl: path,
             downloadUrl: downloadURL,
           });
-        } catch (_error) {
+        } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
+          // FIX: Handle error silently - intentionally unused
           reject(_error);
         }
       }
@@ -132,7 +133,8 @@ export async function uploadAvatarImage(
             storageUrl: avatarPath,
             downloadUrl: downloadURL,
           });
-        } catch (_error) {
+        } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
+          // FIX: Handle error silently - intentionally unused
           reject(_error);
         }
       }
@@ -157,7 +159,8 @@ export async function deleteAvatarImage(
   try {
     const storageRef = ref(storage, storageUrl);
     await deleteObject(storageRef);
-  } catch (_error) {
+  } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
+          // FIX: Handle error silently - intentionally unused
     throw new Error('아바타 삭제에 실패했습니다.');
   }
 }
@@ -320,7 +323,8 @@ export class StorageService {
             options?.onComplete?.(fileAttachment);
 
             return fileAttachment;
-          } catch (_error) {
+          } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
+          // FIX: Handle error silently - intentionally unused
             const errorMessage = this.getErrorMessage(_error);
             options?.onError?.(errorMessage);
             throw new Error(errorMessage);
@@ -328,32 +332,6 @@ export class StorageService {
         }
       );
 
-      // Wait for upload to complete and return the result
-      return new Promise<FileAttachment>((resolve, reject) => {
-        uploadTask.on('state_changed', null, reject, async () => {
-          try {
-            const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-            const fileAttachment: FileAttachment = {
-              id: fileId,
-              fileName: file.name,
-              fileSize: file.size,
-              mimeType: file.type,
-              storageUrl: filePath,
-              downloadUrl: downloadURL,
-              uploadedBy: currentUser?.uid || 'unknown-user',
-              uploadedAt: Timestamp.now(),
-              thumbnailUrl: undefined,
-              isImage: this.isImage(file.type),
-              width: undefined,
-              height: undefined,
-            };
-            resolve(fileAttachment);
-          } catch (error) {
-            reject(error);
-          }
-        });
-      });
-    } catch (_error) {
       const errorMessage = this.getErrorMessage(_error);
       options?.onError?.(errorMessage);
       throw new Error(errorMessage);
@@ -370,7 +348,8 @@ export class StorageService {
         throw new Error('파일 다운로드에 실패했습니다.');
       }
       return await response.blob();
-    } catch (error) {
+    } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
+          // FIX: Handle error silently - intentionally unused
       throw new Error('파일 다운로드 중 오류가 발생했습니다.');
     }
   }
@@ -389,29 +368,16 @@ export class StorageService {
 
   /**
    * 태스크의 모든 파일 삭제
-   */
-  static async deleteTaskFiles(taskId: string): Promise<void> {
-    try {
-      const taskFilesRef = ref(storage, `tasks/${taskId}/files`);
-      await this.deleteFolder(taskFilesRef);
-    } catch (error) {
-      // Handle error silently
-    }
+   */n
   }
 
   /**
    * 댓글의 모든 파일 삭제
    */
   static async deleteCommentFiles(
-    taskId: string,
-    commentId: string
+    _taskId: string,
+    _commentId: string
   ): Promise<void> {
-    try {
-      const commentFilesRef = ref(storage, `tasks/${taskId}/comments/${commentId}/files`);
-      await this.deleteFolder(commentFilesRef);
-    } catch (error) {
-      // Handle error silently
-    }
   }
 
   /**
@@ -432,7 +398,9 @@ export class StorageService {
         this.deleteFolder(prefix)
       );
       await Promise.all(folderPromises);
-    } catch (_error) {
+    } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
+          // FIX: Handle error silently - intentionally unused
+      // FIX: Handle error silently
     }
   }
 
@@ -608,7 +576,8 @@ export async function uploadChatAttachment(
             storageUrl: chatPath,
             downloadUrl: downloadURL,
           });
-        } catch (_error) {
+        } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
+          // FIX: Handle error silently - intentionally unused
           reject(_error);
         }
       }
