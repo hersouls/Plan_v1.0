@@ -94,8 +94,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         const updateData: Partial<User> = {
           loginCount: ((existingProfile as { loginCount?: number }).loginCount || 0) + 1,
           lastLoginAt: serverTimestamp() as Timestamp,
-          lastLoginTime: serverTimestamp() as Timestamp, // 추가: 최근 로그인 시간
-          lastSignInTime: serverTimestamp() as Timestamp, // 추가: 최근 로그인 시간 (다른 필드명)
           updatedAt: serverTimestamp() as Timestamp, // 추가: 업데이트 시간
           // Only update photoURL if it's not undefined/null
           ...(user.photoURL && { photoURL: user.photoURL }),

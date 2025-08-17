@@ -11,9 +11,14 @@ import {
   GroupInvitation,
   UpdateGroupInput,
   UserNotification,
+  GroupMember,
 } from '../types';
 import { useAuth } from '../hooks/useAuth';
 import { DataContextType } from './DataContextTypes';
+import { createContext } from 'react';
+
+// Create the context
+const DataContext = createContext<DataContextType | undefined>(undefined);
 
 export function DataProvider({ children }: { children: React.ReactNode }) {
   const { user, userProfile } = useAuth();
@@ -21,6 +26,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   const [currentGroup, setCurrentGroupState] = useState<FamilyGroup | null>(
     null
   );
+  const [groupMembers, setGroupMembers] = useState<GroupMember[]>([]);
   const [invitations] = useState<GroupInvitation[]>([]);
   const [notifications] = useState<UserNotification[]>([]);
   const [loading, setLoading] = useState(true);
@@ -351,6 +357,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     groups,
     currentGroup,
     setCurrentGroup,
+    groupMembers,
 
     // Group operations
     createGroup,
@@ -377,4 +384,14 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   return <DataContext.Provider value={value}>{children}</DataContext.Provider>;
 }
 
+// Hook to use the data context
+export function useData() {
+  const context = React.useContext(DataContext);
+  if (context === undefined) {
+    throw new Error('useData must be used within a DataProvider');
+  }
+  return context;
+}
+
+export { DataContext };
 export default DataProvider;
