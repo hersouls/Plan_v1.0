@@ -69,7 +69,7 @@ export function useGroup(options: UseGroupOptions = {}): UseGroupReturn {
     } else {
       loadGroupData(null);
     }
-  }, [groupId]);
+  }, [groupId, loadGroupData]);
 
   const loadGroupData = useCallback(
     async (targetGroupId: string | null) => {
@@ -105,7 +105,7 @@ export function useGroup(options: UseGroupOptions = {}): UseGroupReturn {
               targetGroupId
             );
             setMembers(membersData);
-          } catch (error) {
+          } catch (_error) {
             setMembers([]);
           }
         }
@@ -132,7 +132,7 @@ export function useGroup(options: UseGroupOptions = {}): UseGroupReturn {
                 })
               );
             }
-          } catch (error) {
+          } catch (_error) {
             setStats(null);
           }
         }
@@ -186,7 +186,7 @@ export function useGroup(options: UseGroupOptions = {}): UseGroupReturn {
           try {
             const membersData = await groupService.getGroupMembers(groupId);
             setMembers(membersData);
-          } catch (error) {
+          } catch (_error) {
             // 그룹이 존재하지 않는 경우 빈 배열로 설정
             setMembers([]);
           }
@@ -199,7 +199,7 @@ export function useGroup(options: UseGroupOptions = {}): UseGroupReturn {
         const interval = setInterval(updateMembers, 30000);
         unsubscribeMembers = () => clearInterval(interval);
       }
-    } catch (error) {
+    } catch (_error) {
         // Handle error silently
       }
 
@@ -236,7 +236,7 @@ export function useGroup(options: UseGroupOptions = {}): UseGroupReturn {
               groupIds: updatedGroupIds,
             });
           }
-        } catch (profileError) {
+        } catch (_profileError) {
           // Don't throw error as group creation was successful
         }
 
@@ -415,9 +415,9 @@ export function useGroup(options: UseGroupOptions = {}): UseGroupReturn {
 
         // Load the newly joined group data
         await loadGroupData(joinedGroupId);
-      } catch (err) {
+      } catch (_err) {
         setError('그룹에 참여하는 중 오류가 발생했습니다.');
-        throw err;
+        throw _err;
       }
     },
     [user, loadGroupData]

@@ -98,7 +98,14 @@ export const ResponsiveButton: React.FC<ResponsiveButtonProps> = ({
         fullWidthClasses,
         className
       )}
-      {...props}
+      onClick={props.onClick}
+      disabled={props.disabled}
+      type={props.type}
+      aria-label={props['aria-label']}
+      aria-describedby={props['aria-describedby']}
+      aria-labelledby={props['aria-labelledby']}
+      style={props.style}
+      title={props.title}
     >
       {buttonContent}
     </WaveButton>

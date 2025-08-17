@@ -60,13 +60,13 @@ export const MentionInput: React.FC<MentionInputProps> = ({
 
     // 그룹 멤버 추가
     if (currentGroup && groupMembers) {
-      groupMembers.forEach((member: GroupMember) => {
+      groupMembers.forEach((member: any) => {
         if (member.userId !== user?.uid) {
           users.push({
             id: member.userId,
             name: member.displayName || member.email || '사용자',
             email: member.email || '',
-            avatar: member.photoURL || undefined,
+            avatar: member.avatar || undefined,
           });
         }
       });
