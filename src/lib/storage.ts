@@ -45,7 +45,7 @@ export async function uploadFile(
             storageUrl: path,
             downloadUrl: downloadURL,
           });
-        } catch (error) {
+        } catch (_error) {
           reject(error);
         }
       }
@@ -115,7 +115,7 @@ export async function uploadAvatarImage(
             storageUrl: avatarPath,
             downloadUrl: downloadURL,
           });
-        } catch (error) {
+        } catch (_error) {
           reject(
             new Error('아바타 업로드 완료 후 URL을 가져오는데 실패했습니다.')
           );
@@ -142,7 +142,7 @@ export async function deleteAvatarImage(
   try {
     const storageRef = ref(storage, storageUrl);
     await deleteObject(storageRef);
-  } catch (error) {
+  } catch (_error) {
     throw new Error('아바타 삭제에 실패했습니다.');
   }
 }
@@ -151,7 +151,6 @@ export async function deleteAvatarImage(
  * 아바타 업로드 에러 메시지 변환
  */
 function getAvatarUploadErrorMessage(_error: unknown): string {
-  const error = _error as Error;
   if (error.code === 'storage/unauthorized') {
     return '아바타 업로드 권한이 없습니다.';
   } else if (error.code === 'storage/canceled') {
@@ -178,7 +177,7 @@ function getAvatarUploadErrorMessage(_error: unknown): string {
 export interface UploadOptions {
   onProgress?: (progress: FileUploadProgress) => void;
   onComplete?: (fileAttachment: FileAttachment) => void;
-  onError?: (error: string) => void;
+  onError?: (_error: string) => void;
 }
 
 export class StorageService {
@@ -293,7 +292,6 @@ export class StorageService {
               storageUrl: filePath,
               downloadUrl: downloadURL,
               uploadedBy: currentUser?.uid || 'unknown-user',
-              uploadedAt: new Date() as unknown as Timestamp, // Timestamp로 교체 필요
               thumbnailUrl: thumbnailURL,
               isImage: this.isImage(file.type),
               width,
@@ -310,7 +308,7 @@ export class StorageService {
             options?.onComplete?.(fileAttachment);
 
             return fileAttachment;
-          } catch (error) {
+          } catch (_error) {
             const errorMessage = this.getErrorMessage(error);
             options?.onError?.(errorMessage);
             throw new Error(errorMessage);
@@ -340,7 +338,6 @@ export class StorageService {
         storageUrl: filePath,
         downloadUrl: downloadURL,
         uploadedBy: currentUser?.uid || 'unknown-user',
-        uploadedAt: new Date() as unknown as Timestamp, // Timestamp로 교체 필요
         thumbnailUrl: thumbnailURL,
         isImage: this.isImage(file.type),
         width,
@@ -348,7 +345,7 @@ export class StorageService {
       };
 
       return fileAttachment;
-    } catch (error) {
+    } catch (_error) {
       const errorMessage = this.getErrorMessage(error);
       options?.onError?.(errorMessage);
       throw new Error(errorMessage);
@@ -360,15 +357,12 @@ export class StorageService {
    */
   static async downloadFile(fileAttachment: FileAttachment): Promise<Blob> {
     try {
-      if (!fileAttachment.downloadUrl) {
-        throw new Error('다운로드 URL이 없습니다.');
-      }
       const response = await fetch(fileAttachment.downloadUrl);
       if (!response.ok) {
         throw new Error('파일 다운로드에 실패했습니다.');
       }
       return await response.blob();
-    } catch (error) {
+    } catch (_error) {
       throw new Error(this.getErrorMessage(error));
     }
   }
@@ -386,7 +380,7 @@ export class StorageService {
         const thumbnailRef = ref(storage, fileAttachment.thumbnailUrl);
         await deleteObject(thumbnailRef);
       }
-    } catch (error) {
+    } catch (_error) {
       throw new Error(this.getErrorMessage(error));
     }
   }
@@ -398,7 +392,7 @@ export class StorageService {
     try {
       const taskFilesRef = ref(storage, `tasks/${taskId}`);
       await this.deleteFolder(taskFilesRef);
-    } catch (error) {
+    } catch (_error) {
       throw new Error(this.getErrorMessage(error));
     }
   }
@@ -416,7 +410,7 @@ export class StorageService {
         `tasks/${taskId}/comments/${commentId}`
       );
       await this.deleteFolder(commentFilesRef);
-    } catch (error) {
+    } catch (_error) {
       throw new Error(this.getErrorMessage(error));
     }
   }
@@ -616,7 +610,7 @@ export async function uploadChatAttachment(
             storageUrl: chatPath,
             downloadUrl: downloadURL,
           });
-        } catch (error) {
+        } catch (_error) {
           reject(error);
         }
       }

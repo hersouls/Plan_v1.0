@@ -135,7 +135,7 @@ function FamilyManage() {
     if (savedFavorites) {
       try {
         setFavoriteGroups(JSON.parse(savedFavorites));
-      } catch (error) {
+      } catch (_error) {
         setFavoriteGroups([]);
       }
     }
@@ -206,7 +206,7 @@ function FamilyManage() {
   };
 
   // 즐겨찾기 토글
-  const toggleFavorite = (groupId: string) => {
+  const toggleFavorite = (_groupId: string) => {
     const newFavorites = favoriteGroups.includes(groupId)
       ? favoriteGroups.filter(id => id !== groupId)
       : [...favoriteGroups, groupId];
@@ -353,7 +353,7 @@ function FamilyManage() {
             }
         } else {
           }
-      } catch (error) {
+      } catch (_error) {
         // Handle error silently
       }
 
@@ -409,7 +409,7 @@ function FamilyManage() {
       }
 
       return { isOnline: false, lastLoginTime: null };
-    } catch (error) {
+    } catch (_error) {
       return { isOnline: false, lastLoginTime: null };
     }
   };
@@ -462,7 +462,7 @@ function FamilyManage() {
       }
 
       return { isOnline: false, lastLoginTime: null };
-    } catch (error) {
+    } catch (_error) {
       return { isOnline: false, lastLoginTime: null };
     }
   };
@@ -538,7 +538,7 @@ function FamilyManage() {
 
       // 성공 메시지 표시
       alert('새 그룹이 성공적으로 생성되었습니다!');
-    } catch (error) {
+    } catch (_error) {
       const errorMessage =
         error instanceof Error
           ? error.message
@@ -552,7 +552,7 @@ function FamilyManage() {
   const handleCopyInviteCode = async () => {
     try {
       // Type assertion with proper interface
-      const groupWithInvite = group as any;
+      const groupWithInvite = group as Record<string, unknown>;
       if (groupWithInvite?.inviteCode) {
         await navigator.clipboard.writeText(groupWithInvite.inviteCode);
         alert('초대 코드가 복사되었습니다!');
@@ -562,7 +562,7 @@ function FamilyManage() {
         await navigator.clipboard.writeText(newCode);
         alert('새 초대 코드가 생성되고 복사되었습니다!');
       }
-    } catch (error) {
+    } catch (_error) {
       alert('초대 코드 복사에 실패했습니다.');
     }
   };
@@ -588,15 +588,15 @@ function FamilyManage() {
 
       setShowQRScannerModal(false);
       alert('가족 그룹에 성공적으로 참여했습니다!');
-    } catch (error) {
+    } catch (_error) {
       const errorMessage =
-        error instanceof Error ? error.message : '그룹 참여에 실패했습니다.';
+        _error instanceof Error ? _error.message : '그룹 참여에 실패했습니다.';
       alert(errorMessage);
     }
   };
 
-  const handleQRScanError = (error: string) => {
-    alert(error);
+  const handleQRScanError = (_error: string) => {
+    alert(_error);
     setShowQRScannerModal(false);
   };
 
@@ -642,7 +642,7 @@ function FamilyManage() {
           await removeMember(selectedGroupId, memberId);
           alert('멤버가 제거되었습니다.');
         }
-      } catch (error) {
+      } catch (_error) {
         alert('멤버 제거에 실패했습니다.');
       }
     }
@@ -681,7 +681,7 @@ function FamilyManage() {
           await changeMemberRole(selectedGroupId, memberId, newRole);
           alert(`멤버 역할이 ${roleLabels[newRole]}로 변경되었습니다.`);
         }
-      } catch (error) {
+      } catch (_error) {
         alert('멤버 역할 변경에 실패했습니다.');
       }
     }
@@ -716,7 +716,7 @@ function FamilyManage() {
           }
           alert('그룹장 권한이 양도되었습니다.');
         }
-      } catch (error) {
+      } catch (_error) {
         alert('그룹장 권한 양도에 실패했습니다.');
       }
     }
@@ -734,7 +734,7 @@ function FamilyManage() {
           setSelectedGroupId(null);
           alert('그룹이 삭제되었습니다.');
         }
-      } catch (error) {
+      } catch (_error) {
         alert('그룹 삭제에 실패했습니다.');
       }
     }
@@ -759,7 +759,7 @@ function FamilyManage() {
         alert(`${inviteEmail}에게 초대장을 보냈습니다.`);
         setInviteEmail('');
         setShowInviteModal(false);
-      } catch (error) {
+      } catch (_error) {
         alert('초대장 발송에 실패했습니다.');
       }
     }
@@ -798,7 +798,7 @@ function FamilyManage() {
       if (selectedGroupId) {
         await refetchGroups();
       }
-    } catch (error) {
+    } catch (_error) {
       alert('멤버 정보 업데이트에 실패했습니다.');
     }
   };
@@ -806,11 +806,11 @@ function FamilyManage() {
   const handleUpdateGroup = async (_updates: unknown) => {
     try {
       if (selectedGroupId) {
-        await updateGroup(selectedGroupId, updates);
+        await updateGroup(selectedGroupId, updateData);
         alert('그룹 정보가 업데이트되었습니다.');
         setShowEditGroupModal(false);
       }
-    } catch (error) {
+    } catch (_error) {
       alert('그룹 업데이트에 실패했습니다.');
     }
   };
@@ -819,12 +819,12 @@ function FamilyManage() {
     try {
       if (selectedGroupId && group) {
         await updateGroup(selectedGroupId, {
-          settings: { ...group.settings, ...settings },
+          settings: { ...group.settings, ...groupSettings },
         });
         alert('그룹 설정이 업데이트되었습니다.');
         setShowSettingsModal(false);
       }
-    } catch (error) {
+    } catch (_error) {
       alert('설정 업데이트에 실패했습니다.');
     }
   };
@@ -1349,12 +1349,12 @@ function FamilyManage() {
                   초대 코드
                 </p>
                 <p className="text-white text-lg lg:text-xl font-mono font-bold">
-                  {(group as any)?.inviteCode || '코드 생성 필요'}
+                  {(group as Record<string, unknown>)?.inviteCode || '코드 생성 필요'}
                 </p>
               </div>
               <div className="text-right">
                 <p className="text-white/60 text-sm font-pretendard">
-                  최대 {(group.settings as any)?.maxMembers || 10}명
+                  최대 {(group.settings as Record<string, unknown>)?.maxMembers || 10}명
                 </p>
               </div>
             </div>
@@ -2079,7 +2079,7 @@ function FamilyManage() {
                 <input
                   type="checkbox"
                   checked={
-                    (group.settings as any)?.allowChildrenToInvite || false
+                    (group.settings as Record<string, unknown>)?.allowChildrenToInvite || false
                   }
                   onChange={e =>
                     handleUpdateSettings({
@@ -2093,7 +2093,7 @@ function FamilyManage() {
                 <span className="text-white/80">초대 승인 필요</span>
                 <input
                   type="checkbox"
-                  checked={(group.settings as any)?.requireApproval || false}
+                  checked={(group.settings as Record<string, unknown>)?.requireApproval || false}
                   onChange={e =>
                     handleUpdateSettings({ requireApproval: e.target.checked })
                   }
@@ -2104,7 +2104,7 @@ function FamilyManage() {
                 <span className="text-white/80">부그룹장 권한 활성화</span>
                 <input
                   type="checkbox"
-                  checked={(group.settings as any)?.enableViceOwner || false}
+                  checked={(group.settings as Record<string, unknown>)?.enableViceOwner || false}
                   onChange={e =>
                     handleUpdateSettings({ enableViceOwner: e.target.checked })
                   }
@@ -2116,7 +2116,7 @@ function FamilyManage() {
                 <input
                   type="checkbox"
                   checked={
-                    (group.settings as any)?.enablePointsManagement || false
+                    (group.settings as Record<string, unknown>)?.enablePointsManagement || false
                   }
                   onChange={e =>
                     handleUpdateSettings({
@@ -2193,7 +2193,7 @@ function FamilyManage() {
                 </label>
                 <input
                   type="number"
-                  value={(group.settings as any)?.maxMembers || 10}
+                  value={(group.settings as Record<string, unknown>)?.maxMembers || 10}
                   onChange={e =>
                     handleUpdateSettings({
                       maxMembers: parseInt(e.target.value),
@@ -2584,10 +2584,10 @@ function FamilyManage() {
         <QRInviteModal
           isOpen={showQRInviteModal}
           onClose={() => setShowQRInviteModal(false)}
-          inviteCode={(group as any)?.inviteCode || '코드 생성 필요'}
+          inviteCode={(group as Record<string, unknown>)?.inviteCode || '코드 생성 필요'}
           groupName={group.name}
           inviteUrl={`${window.location.origin}/join/${
-            (group as any)?.inviteCode || 'code'
+            (group as Record<string, unknown>)?.inviteCode || 'code'
           }`}
         />
       )}

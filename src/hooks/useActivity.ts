@@ -202,7 +202,7 @@ export const useActivity = (
 };
 
 // Real-time presence tracking
-export const usePresence = (groupId: string): UsePresenceReturn => {
+export const usePresence = (_groupId: string): UsePresenceReturn => {
   const { user } = useAuth();
   const [presence, setPresence] = useState<UserPresence[]>([]);
 

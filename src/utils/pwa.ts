@@ -27,7 +27,7 @@ export class PWAManager {
     if ('serviceWorker' in navigator) {
       try {
         await this.registerServiceWorker();
-      } catch (error) {
+      } catch (_error) {
         // Handle error silently
       }
     }
@@ -78,7 +78,7 @@ export class PWAManager {
       });
 
       return registration;
-    } catch (error) {
+    } catch (_error) {
       return null;
     }
   }
@@ -99,7 +99,7 @@ export class PWAManager {
       this.installPrompt = null;
 
       return result.outcome === 'accepted';
-    } catch (error) {
+    } catch (_error) {
       return false;
     }
   }
@@ -111,7 +111,7 @@ export class PWAManager {
   isStandalone(): boolean {
     return (
       window.matchMedia('(display-mode: standalone)').matches ||
-      (window.navigator as any).standalone === true
+      (window.navigator as Record<string, unknown>).standalone === true
     );
   }
 
@@ -133,7 +133,7 @@ export class PWAManager {
           window.location.reload();
         });
       }
-    } catch (error) {
+    } catch (_error) {
         // Handle error silently
       }
   }
@@ -178,7 +178,7 @@ export class PWAManager {
         await Promise.all(
           cacheNames.map(cacheName => caches.delete(cacheName))
         );
-        } catch (error) {
+        } catch (_error) {
         // Handle error silently
       }
     }
@@ -195,7 +195,7 @@ export class PWAManager {
 
     try {
       await this.registration.sync.register(tag);
-      } catch (error) {
+      } catch (_error) {
         // Handle error silently
       }
   }
@@ -248,7 +248,7 @@ export class PWAManager {
     try {
       await navigator.share(data);
       return true;
-    } catch (error) {
+    } catch (_error) {
       if ((error as Error).name !== 'AbortError') {
         }
       return false;

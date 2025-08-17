@@ -90,9 +90,6 @@ function PointsManagement() {
   // 모달 상태 디버깅
   useEffect(() => {
     // 모달 상태 변경 시 로그 출력 (디버깅용)
-    if (import.meta.env?.DEV) {
-      console.log('Point settings modal state:', showPointSettingsModal);
-    }
   }, [showPointSettingsModal]);
 
   // 즐겨찾기 그룹 로드
@@ -101,7 +98,7 @@ function PointsManagement() {
     if (savedFavorites) {
       try {
         setFavoriteGroups(JSON.parse(savedFavorites));
-      } catch (error) {
+      } catch (_error) {
         setFavoriteGroups([]);
       }
     }
@@ -137,7 +134,7 @@ function PointsManagement() {
   };
 
   // 즐겨찾기 토글
-  const toggleFavorite = (groupId: string) => {
+  const toggleFavorite = (_groupId: string) => {
     const newFavorites = favoriteGroups.includes(groupId)
       ? favoriteGroups.filter(id => id !== groupId)
       : [...favoriteGroups, groupId];
@@ -169,7 +166,7 @@ function PointsManagement() {
         selectedGroupId
       );
       setUnapprovedPointHistory(history);
-    } catch (error) {
+    } catch (_error) {
         // Handle error silently
       } finally {
       setLoading(false);
@@ -188,7 +185,7 @@ function PointsManagement() {
       );
 
       setApprovedPointHistory(history);
-    } catch (error) {
+    } catch (_error) {
         // Handle error silently
       } finally {
       setLoading(false);
@@ -220,7 +217,7 @@ function PointsManagement() {
       await loadUnapprovedPointHistory();
       await loadApprovedPointHistory();
       await loadMemberStats();
-    } catch (error) {
+    } catch (_error) {
         // Handle error silently
       } finally {
       setApprovingHistoryId(null);
@@ -256,7 +253,7 @@ function PointsManagement() {
       await loadUnapprovedPointHistory();
       await loadApprovedPointHistory();
       await loadMemberStats();
-    } catch (error) {
+    } catch (_error) {
         // Handle error silently
       } finally {
       setApprovingHistoryId(null);
@@ -267,7 +264,7 @@ function PointsManagement() {
   const handleTaskCardClick = (taskId: string) => {
     try {
       navigate(`/tasks/${taskId}/edit`);
-    } catch (error) {
+    } catch (_error) {
       // 오류 발생 시 사용자에게 알림
       alert('할일 수정 페이지로 이동할 수 없습니다. 다시 시도해주세요.');
     }
@@ -288,7 +285,7 @@ function PointsManagement() {
       });
 
       setMemberStats(statsMap);
-    } catch (error) {
+    } catch (_error) {
         // Handle error silently
       }
   };
@@ -310,7 +307,7 @@ function PointsManagement() {
       }
 
       setUserProfiles(prev => ({ ...prev, ...profiles }));
-    } catch (error) {
+    } catch (_error) {
         // Handle error silently
       }
   };
@@ -414,9 +411,6 @@ function PointsManagement() {
       setShowAddPointsModal(false);
     } catch (_error) {
         // Handle error silently
-        if (import.meta.env?.DEV) {
-          console.error('Error adding points:', _error);
-        }
     }
   };
 
@@ -448,9 +442,6 @@ function PointsManagement() {
       setShowAddPointsModal(false);
     } catch (_error) {
         // Handle error silently
-        if (import.meta.env?.DEV) {
-          console.error('Error deducting points:', _error);
-        }
     }
   };
 
@@ -854,7 +845,7 @@ function PointsManagement() {
                               setLoading(true);
                               try {
                                 await loadUnapprovedPointHistory();
-                              } catch (error) {
+                              } catch (_error) {
         // Handle error silently
       } finally {
                                 setLoading(false);
@@ -891,7 +882,7 @@ function PointsManagement() {
                             history.type === 'penalty';
 
                           // 날짜 포맷팅 개선
-                          const formatDate = (_timestamp: any) => {
+                          const formatDate = (_timestamp: unknown) => {
                             try {
                               const date = new Date(_timestamp.seconds * 1000);
                               const now = new Date();
@@ -1108,7 +1099,7 @@ function PointsManagement() {
                               setLoading(true);
                               try {
                                 await loadApprovedPointHistory();
-                              } catch (error) {
+                              } catch (_error) {
         // Handle error silently
       } finally {
                                 setLoading(false);
@@ -1145,7 +1136,7 @@ function PointsManagement() {
                             history.type === 'penalty';
 
                           // 날짜 포맷팅 개선
-                          const formatDate = (_timestamp: any) => {
+                          const formatDate = (_timestamp: unknown) => {
                             try {
                               const date = new Date(_timestamp.seconds * 1000);
                               const now = new Date();
@@ -1497,7 +1488,7 @@ function PointsManagement() {
                     history.type === 'deducted' || history.type === 'penalty';
 
                   // 날짜 포맷팅 개선
-                  const formatDate = (_timestamp: any) => {
+                  const formatDate = (_timestamp: unknown) => {
                     try {
                       const date = new Date(_timestamp.seconds * 1000);
                       return date.toLocaleDateString('ko-KR', {
@@ -1683,7 +1674,7 @@ function PointsManagement() {
                     history.type === 'deducted' || history.type === 'penalty';
 
                   // 날짜 포맷팅 개선
-                  const formatDate = (_timestamp: any) => {
+                  const formatDate = (_timestamp: unknown) => {
                     try {
                       const date = new Date(_timestamp.seconds * 1000);
                       return date.toLocaleDateString('ko-KR', {

@@ -830,12 +830,12 @@ export const FilterUtils = {
     key: string
   ) => {
     const option = FilterUtils.getFilterOption(type, key);
-    return (option as any)?.description || '';
+    return (option as Record<string, unknown>)?.description || '';
   },
 
   // 필터 색상 가져오기 (우선순위, 상태용)
   getFilterColor: (type: 'priority' | 'status', key: string) => {
     const option = FilterUtils.getFilterOption(type, key);
-    return (option as any)?.color || 'gray';
+    return (option as Record<string, unknown>)?.color || 'gray';
   },
 };

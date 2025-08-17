@@ -25,9 +25,9 @@ export interface UseNotificationsReturn {
   stats: NotificationStats | null;
   loading: boolean;
   error: string | null;
-  markAsRead: (notificationId: string) => Promise<void>;
+  markAsRead: (_notificationId: string) => Promise<void>;
   markAllAsRead: () => Promise<void>;
-  deleteNotification: (notificationId: string) => Promise<void>;
+  deleteNotification: (_notificationId: string) => Promise<void>;
 }
 
 export function useNotifications(): UseNotificationsReturn {
@@ -97,7 +97,7 @@ export function useNotifications(): UseNotificationsReturn {
   }, [user?.uid]);
 
   // 알림 읽음 처리
-  const markAsRead = async (notificationId: string) => {
+  const markAsRead = async (_notificationId: string) => {
     try {
       await NotificationService.markAsRead(notificationId);
       setNotifications(prev =>
@@ -127,7 +127,7 @@ export function useNotifications(): UseNotificationsReturn {
   };
 
   // 알림 삭제
-  const deleteNotification = async (notificationId: string) => {
+  const deleteNotification = async (_notificationId: string) => {
     try {
       await NotificationService.deleteNotification(notificationId);
       setNotifications(prev => prev.filter(n => n.id !== notificationId));
@@ -166,7 +166,7 @@ export type UseNotificationsReturn = {
   stats: NotificationStats | null;
   loading: boolean;
   error: string | null;
-  markAsRead: (notificationId: string) => Promise<void>;
+  markAsRead: (_notificationId: string) => Promise<void>;
   markAllAsRead: () => Promise<void>;
-  deleteNotification: (notificationId: string) => Promise<void>;
+  deleteNotification: (_notificationId: string) => Promise<void>;
 };

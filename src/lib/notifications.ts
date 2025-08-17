@@ -60,7 +60,6 @@ export class NotificationService {
         ...doc.data(),
       })) as Notification[];
     } catch (_error: unknown) {
-      const error = _error as Error;
       // 인덱스 빌드 중 오류인 경우 기본 쿼리로 재시도
       if (
         error.code === 'failed-precondition' &&
@@ -138,7 +137,6 @@ export class NotificationService {
         callback(notifications);
       },
       (_error: unknown) => {
-        const error = _error as Error;
         // 인덱스 빌드 중 오류인 경우 기본 쿼리로 재시도
         if (
           error.code === 'failed-precondition' &&
@@ -200,7 +198,7 @@ export class NotificationService {
   /**
    * 알림 읽음 처리
    */
-  static async markAsRead(notificationId: string): Promise<void> {
+  static async markAsRead(_notificationId: string): Promise<void> {
     try {
       await updateDoc(doc(db, this.COLLECTION, notificationId), {
         status: 'read',
@@ -238,7 +236,7 @@ export class NotificationService {
   /**
    * 알림 삭제
    */
-  static async deleteNotification(notificationId: string): Promise<void> {
+  static async deleteNotification(_notificationId: string): Promise<void> {
     try {
       await deleteDoc(doc(db, this.COLLECTION, notificationId));
     } catch (_error) {

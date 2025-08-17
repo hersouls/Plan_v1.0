@@ -117,7 +117,7 @@ function Statistics() {
   };
 
   // 즐겨찾기 토글
-  const toggleFavorite = (groupId: string) => {
+  const toggleFavorite = (_groupId: string) => {
     const newFavorites = favoriteGroups.includes(groupId)
       ? favoriteGroups.filter(id => id !== groupId)
       : [...favoriteGroups, groupId];
@@ -144,12 +144,12 @@ function Statistics() {
             if (profile) {
               profiles[member.userId] = profile;
             }
-          } catch (error) {
+          } catch (_error) {
           }
         }
 
         setUserProfiles(profiles);
-      } catch (error) {
+      } catch (_error) {
         // Handle error silently
       } finally {
         setLoadingProfiles(false);
@@ -173,7 +173,7 @@ function Statistics() {
               selectedGroupId
             );
             return { userId: member.userId, stats };
-          } catch (error) {
+          } catch (_error) {
             return { userId: member.userId, stats: null };
           }
         });
@@ -187,7 +187,7 @@ function Statistics() {
         }, {} as Record<string, PointStats>);
 
         setPointStats(statsMap);
-      } catch (error) {
+      } catch (_error) {
         // Handle error silently
       } finally {
         setLoadingPoints(false);
@@ -231,7 +231,7 @@ function Statistics() {
         try {
           const taskDate = format(toDate(task.createdAt), 'yyyy-MM-dd');
           return taskDate === dateStr;
-        } catch (error) {
+        } catch (_error) {
           return false;
         }
       });
@@ -241,7 +241,7 @@ function Statistics() {
         try {
           const completedDate = format(toDate(task.completedAt), 'yyyy-MM-dd');
           return completedDate === dateStr;
-        } catch (error) {
+        } catch (_error) {
           return false;
         }
       });
@@ -854,8 +854,8 @@ function Statistics() {
                           return task.dueDate.toDate() < new Date();
                         }
                         // If it's already a Date object or string
-                        return new Date(task.dueDate as any) < new Date();
-                      } catch (error) {
+                        return new Date(task.dueDate as Record<string, unknown>) < new Date();
+                      } catch (_error) {
                         return false;
                       }
                     });

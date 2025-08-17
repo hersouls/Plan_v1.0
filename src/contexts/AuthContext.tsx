@@ -218,7 +218,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setError(null);
       setLoading(true);
       await firebaseSignInAnonymously(auth);
-    } catch (err) {
+    } catch (_err) {
       setError(
         err instanceof Error ? err.message : '익명 로그인에 실패했습니다.'
       );
@@ -235,7 +235,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setError(null);
       setLoading(true);
       await firebaseSignInWithEmailAndPassword(auth, email, password);
-    } catch (err) {
+    } catch (_err) {
       setError(
         err instanceof Error ? err.message : '이메일 로그인에 실패했습니다.'
       );
@@ -267,7 +267,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
 
       return result;
-    } catch (err) {
+    } catch (_err) {
       setError(err instanceof Error ? err.message : '회원가입에 실패했습니다.');
       throw err;
     } finally {
@@ -279,7 +279,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       setError(null);
       await sendPasswordResetEmail(auth, email);
-    } catch (err) {
+    } catch (_err) {
       setError(
         err instanceof Error ? err.message : '비밀번호 재설정에 실패했습니다.'
       );
@@ -293,7 +293,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setLoading(true);
       const provider = new GoogleAuthProvider();
       await signInWithPopup(auth, provider);
-    } catch (err) {
+    } catch (_err) {
       setError(
         err instanceof Error ? err.message : 'Google 로그인에 실패했습니다.'
       );
@@ -309,7 +309,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setLoading(true);
       const provider = new GithubAuthProvider();
       await signInWithPopup(auth, provider);
-    } catch (err) {
+    } catch (_err) {
       setError(
         err instanceof Error ? err.message : 'GitHub 로그인에 실패했습니다.'
       );
@@ -324,7 +324,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setError(null);
       await firebaseSignOut(auth);
       return { success: true };
-    } catch (err) {
+    } catch (_err) {
       const errorMessage =
         err instanceof Error ? err.message : '로그아웃에 실패했습니다.';
       setError(errorMessage);
@@ -362,7 +362,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setError(null);
       setLoading(true);
       await firebaseUpdatePassword(user, newPassword);
-    } catch (err) {
+    } catch (_err) {
       const errorMessage =
         err instanceof Error
           ? err.message

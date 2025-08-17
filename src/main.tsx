@@ -4,11 +4,6 @@ import '../styles/globals.css';
 import App from './App.tsx';
 import './index.css';
 
-const rootElement = document.getElementById('root');
-if (!rootElement) {
-  throw new Error('Root element not found');
-}
-ReactDOM.createRoot(rootElement).render(
   <React.StrictMode>
     <App />
   </React.StrictMode>
@@ -20,8 +15,5 @@ if ('serviceWorker' in navigator && import.meta.env.PROD) {
     navigator.serviceWorker
       .register(`${import.meta.env.BASE_URL}sw.js`)
       .then(_registration => {
-        })
-      .catch(_registrationError => {
-        });
   });
 }

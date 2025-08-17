@@ -50,7 +50,7 @@ function Notifications() {
         
         setNotifications(notificationsData);
         setStats(statsData);
-      } catch (err) {
+      } catch (_err) {
         setError('알림을 불러올 수 없습니다.');
       } finally {
         setLoading(false);
@@ -68,17 +68,17 @@ function Notifications() {
   });
 
   // 알림 읽음 처리
-  const handleMarkAsRead = async (notificationId: string) => {
+  const handleMarkAsRead = async (_notificationId: string) => {
     try {
-      await NotificationService.markAsRead(notificationId);
+      await NotificationService.markAsRead(n.id);
       setNotifications(prev => 
         prev.map(n => 
-          n.id === notificationId 
+          n.id === _notificationId 
             ? { ...n, status: 'read' as const, readAt: new Date() }
             : n
         )
       );
-    } catch (error) {
+    } catch (_error) {
         // Handle error silently
       }
   };
@@ -92,19 +92,19 @@ function Notifications() {
       setNotifications(prev => 
         prev.map(n => ({ ...n, status: 'read' as const, readAt: new Date() }))
       );
-    } catch (error) {
+    } catch (_error) {
         // Handle error silently
       }
   };
 
   // 알림 삭제
-  const handleDeleteNotification = async (notificationId: string) => {
+  const handleDeleteNotification = async (_notificationId: string) => {
     if (!confirm('이 알림을 삭제하시겠습니까?')) return;
     
     try {
-      await NotificationService.deleteNotification(notificationId);
-      setNotifications(prev => prev.filter(n => n.id !== notificationId));
-    } catch (error) {
+      await NotificationService.deleteNotification(_notificationId);
+      setNotifications(prev => prev.filter(n => n.id !== _notificationId));
+    } catch (_error) {
         // Handle error silently
       }
   };
@@ -142,7 +142,7 @@ function Notifications() {
   // 날짜 포맷팅
   const formatDate = (_timestamp: unknown) => {
     try {
-      const timestamp = _timestamp as any;
+      const timestamp = _timestamp as Record<string, unknown>;
       const date = timestamp?.seconds ? new Date(timestamp.seconds * 1000) : new Date(timestamp);
       const now = new Date();
       const diffTime = Math.abs(now.getTime() - date.getTime());
@@ -272,7 +272,7 @@ function Notifications() {
                     ].map(option => (
                       <button
                         key={option.key}
-                        onClick={() => setFilter(option.key as any)}
+                        onClick={() => setFilter(option.key as Record<string, unknown>)}
                         className={cn(
                           'px-3 py-1 rounded-lg text-sm font-medium transition-all duration-200',
                           filter === option.key
