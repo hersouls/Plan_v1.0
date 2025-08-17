@@ -92,7 +92,7 @@ export function AttachmentSection({
         };
 
         newAttachments.push(attachment);
-      } catch (error) {
+      } catch {
         // 에러 처리
       }
     }

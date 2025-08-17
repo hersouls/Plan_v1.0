@@ -55,9 +55,9 @@ export function StatisticsInsights({
     if (statisticsAnalyzer.isAvailable()) {
       loadInsights();
     }
-  }, [tasks, members, pointStats, period]);
+  }, [tasks, members, pointStats, period, loadInsights]);
 
-  const loadInsights = async () => {
+  const loadInsights = useCallback(async () => {
     setLoading(true);
     try {
       // 기본 인사이트 로드
@@ -93,12 +93,12 @@ export function StatisticsInsights({
         );
         setActivityPattern(patternData);
       }
-    } catch (error) {
+    } catch {
         // Handle error silently
       } finally {
       setLoading(false);
     }
-  };
+  }, [tasks, members, pointStats, period, userId]);
 
   const getInsightIcon = (type: string) => {
     switch (type) {
