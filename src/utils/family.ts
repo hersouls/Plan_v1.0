@@ -40,7 +40,7 @@ export const formatRelativeTime = (
       addSuffix,
       locale: ko,
     });
-  } catch (error) {
+  } catch {
     return '날짜 정보 없음';
   }
 };
@@ -62,7 +62,7 @@ export const formatDateTime = (
     }
 
     return format(dateObj, formatString);
-  } catch (error) {
+  } catch {
     return '날짜 정보 없음';
   }
 };
@@ -95,7 +95,7 @@ export const isWithinTimeRange = (
       default:
         return false;
     }
-  } catch (error) {
+  } catch {
     return false;
   }
 };

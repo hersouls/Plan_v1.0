@@ -7,7 +7,7 @@ export interface NavigationState {
   returnPath?: string;
   returnQuery?: Record<string, string>;
   returnFragment?: string;
-  contextData?: Record<string, any>;
+  contextData?: Record<string, unknown>;
 }
 
 export class NavigationCallback {
@@ -20,7 +20,7 @@ export class NavigationCallback {
     options?: {
       query?: Record<string, string>;
       fragment?: string;
-      contextData?: Record<string, any>;
+      contextData?: Record<string, unknown>;
     }
   ): string {
     const url = new URL(targetPath, window.location.origin);
