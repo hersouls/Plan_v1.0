@@ -230,7 +230,7 @@ export const usePresence = (_groupId: string): UsePresenceReturn => {
         // Handle error silently
       }
     },
-    [user]
+    [user, _groupId]
   );
 
   useEffect(() => {
@@ -285,7 +285,7 @@ export const usePresence = (_groupId: string): UsePresenceReturn => {
       // Mark user as offline when component unmounts
       updatePresence('offline');
     };
-  }, [user, updatePresence]);
+  }, [user, updatePresence, _groupId]);
 
   return {
     presence,

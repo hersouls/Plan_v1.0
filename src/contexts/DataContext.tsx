@@ -379,3 +379,6 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
 
   return <DataContext.Provider value={value}>{children}</DataContext.Provider>;
 }
+
+// FIX: Export DataContext for use in utility files
+export { DataContext } from './DataContextTypes';

@@ -242,7 +242,6 @@ export function DataSection({
     try {
       const backupService = new BackupService(authContext.user.uid);
       const backups = await backupService.getBackupList();
-      setBackupList(backups as Array<{ name: string; timestamp: number; frequency: string; path: string }>);
     } catch {
         // Handle error silently
       } finally {
