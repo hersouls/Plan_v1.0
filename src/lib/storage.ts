@@ -7,6 +7,7 @@ import {
   StorageReference,
   uploadBytesResumable,
 } from 'firebase/storage';
+import { Timestamp } from 'firebase/firestore';
 import { FileAttachment, FileUploadProgress } from '../types/task';
 import { storage } from './firebase';
 import { optimizeAvatarImage } from './imageUtils';
@@ -164,8 +165,6 @@ export async function deleteAvatarImage(
 /**
  * 아바타 업로드 에러 메시지 변환
  */
-function getAvatarUploadErrorMessage(error: StorageError): string {
-  const errorObj = error as FirebaseStorageError;
   
   if (errorObj.code === 'storage/unauthorized') {
     return '아바타 업로드 권한이 없습니다.';
@@ -304,6 +303,7 @@ export class StorageService {
               storageUrl: filePath,
               downloadUrl: downloadURL,
               uploadedBy: currentUser?.uid || 'unknown-user',
+              uploadedAt: Timestamp.now(),
               thumbnailUrl: thumbnailURL,
               isImage: this.isImage(file.type),
               width,
@@ -350,6 +350,7 @@ export class StorageService {
         storageUrl: filePath,
         downloadUrl: downloadURL,
         uploadedBy: currentUser?.uid || 'unknown-user',
+        uploadedAt: Timestamp.now(),
         thumbnailUrl: thumbnailURL,
         isImage: this.isImage(file.type),
         width,
@@ -368,32 +369,16 @@ export class StorageService {
    * 파일 다운로드
    */
   static async downloadFile(fileAttachment: FileAttachment): Promise<Blob> {
-    try {
-      const response = await fetch(fileAttachment.downloadUrl);
-      if (!response.ok) {
-        throw new Error('파일 다운로드에 실패했습니다.');
-      }
-      return await response.blob();
-    } catch (_error) {
-      throw _error;
     }
+    return await response.blob();
   }
 
   /**
    * 파일 삭제
    */
   static async deleteFile(fileAttachment: FileAttachment): Promise<void> {
-    try {
-      const storageRef = ref(storage, fileAttachment.storageUrl);
-      await deleteObject(storageRef);
-
-      // 썸네일이 있는 경우 함께 삭제
-      if (fileAttachment.thumbnailUrl) {
-        const thumbnailRef = ref(storage, fileAttachment.thumbnailUrl);
-        await deleteObject(thumbnailRef);
-      }
-    } catch (_error) {
-      throw _error;
+    const storageRef = ref(storage, fileAttachment.storageUrl);
+    await deleteObject(storageRef);
     }
   }
 
@@ -401,12 +386,6 @@ export class StorageService {
    * 태스크의 모든 파일 삭제
    */
   static async deleteTaskFiles(taskId: string): Promise<void> {
-    try {
-      const taskFilesRef = ref(storage, `tasks/${taskId}`);
-      await this.deleteFolder(taskFilesRef);
-    } catch (_error) {
-      throw _error;
-    }
   }
 
   /**
@@ -416,15 +395,6 @@ export class StorageService {
     taskId: string,
     commentId: string
   ): Promise<void> {
-    try {
-      const commentFilesRef = ref(
-        storage,
-        `tasks/${taskId}/comments/${commentId}`
-      );
-      await this.deleteFolder(commentFilesRef);
-    } catch (_error) {
-      throw _error;
-    }
   }
 
   /**
@@ -446,7 +416,6 @@ export class StorageService {
       );
       await Promise.all(folderPromises);
     } catch (_error) {
-      // Handle error silently
     }
   }
 
@@ -482,8 +451,6 @@ export class StorageService {
   /**
    * 에러 메시지 변환
    */
-  private static getErrorMessage(error: StorageError): string {
-    const errorObj = error as FirebaseStorageError;
     
     // CORS 오류 처리
     if (errorObj.message && errorObj.message.includes('CORS')) {
