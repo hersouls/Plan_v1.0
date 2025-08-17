@@ -8,7 +8,8 @@ import {
   TaskSortBy, 
   TaskStats, 
   TaskAction, 
-  initialState 
+  initialState,
+  initialFilters
 } from '../types/taskContext';
 import { TaskContext, TaskContextType } from './TaskContextTypes';
 
@@ -25,19 +26,19 @@ const calculateStats = (tasks: Task[]): TaskStats => {
   
   const overdue = tasks.filter(task => 
     task.dueDate && 
-    (task.dueDate instanceof Date ? task.dueDate : new Date(task.dueDate.toDate ? task.dueDate.toDate() : task.dueDate)) < today && 
+    (task.dueDate instanceof Date ? task.dueDate : task.dueDate.toDate()) < today && 
     task.status !== 'completed'
   ).length;
   
   const dueToday = tasks.filter(task => {
     if (!task.dueDate) return false;
-    const dueDate = task.dueDate instanceof Date ? task.dueDate : new Date(task.dueDate.toDate ? task.dueDate.toDate() : task.dueDate);
+    const dueDate = task.dueDate instanceof Date ? task.dueDate : task.dueDate.toDate();
     return dueDate.toDateString() === today.toDateString();
   }).length;
   
   const dueThisWeek = tasks.filter(task => {
     if (!task.dueDate) return false;
-    const dueDate = task.dueDate instanceof Date ? task.dueDate : new Date(task.dueDate.toDate ? task.dueDate.toDate() : task.dueDate);
+    const dueDate = task.dueDate instanceof Date ? task.dueDate : task.dueDate.toDate();
     return dueDate >= today && dueDate <= weekFromNow;
   }).length;
   
@@ -95,7 +96,7 @@ const applyFiltersAndSort = (
     const { start, end } = filters.dateRange;
     filteredTasks = filteredTasks.filter(task => {
       if (!task.dueDate) return false;
-      const dueDate = task.dueDate instanceof Date ? task.dueDate : new Date(task.dueDate.toDate ? task.dueDate.toDate() : task.dueDate);
+      const dueDate = task.dueDate instanceof Date ? task.dueDate : task.dueDate.toDate();
       return dueDate >= start && dueDate <= end;
     });
   }
@@ -124,8 +125,8 @@ const applyFiltersAndSort = (
 
     switch (sortBy) {
       case 'dueDate':
-        aValue = a.dueDate ? (a.dueDate instanceof Date ? a.dueDate : new Date(a.dueDate.toDate ? a.dueDate.toDate() : a.dueDate)).getTime() : Infinity;
-        bValue = b.dueDate ? (b.dueDate instanceof Date ? b.dueDate : new Date(b.dueDate.toDate ? b.dueDate.toDate() : b.dueDate)).getTime() : Infinity;
+        aValue = a.dueDate ? (a.dueDate instanceof Date ? a.dueDate : a.dueDate.toDate()).getTime() : Infinity;
+        bValue = b.dueDate ? (b.dueDate instanceof Date ? b.dueDate : b.dueDate.toDate()).getTime() : Infinity;
         break;
       case 'priority': {
         const priorityOrder: Record<string, number> = { high: 3, medium: 2, low: 1 };
@@ -134,8 +135,8 @@ const applyFiltersAndSort = (
         break;
       }
       case 'createdAt':
-        aValue = (a.createdAt instanceof Date ? a.createdAt : new Date(a.createdAt.toDate ? a.createdAt.toDate() : a.createdAt)).getTime();
-        bValue = (b.createdAt instanceof Date ? b.createdAt : new Date(b.createdAt.toDate ? b.createdAt.toDate() : b.createdAt)).getTime();
+        aValue = (a.createdAt instanceof Date ? a.createdAt : a.createdAt.toDate()).getTime();
+        bValue = (b.createdAt instanceof Date ? b.createdAt : b.createdAt.toDate()).getTime();
         break;
       case 'title':
         aValue = a.title.toLowerCase();
@@ -288,9 +289,10 @@ function taskReducer(state: TaskState, action: TaskAction): TaskState {
     }
 
     case 'CLEAR_FILTERS': {
+      const clearedFilters = initialFilters;
       const filteredTasks = applyFiltersAndSort(
         state.tasks,
-        filters,
+        clearedFilters,
         state.sortBy,
         state.sortOrder,
         state.showCompleted
@@ -298,7 +300,7 @@ function taskReducer(state: TaskState, action: TaskAction): TaskState {
 
       return {
         ...state,
-        filters,
+        filters: clearedFilters,
         filteredTasks,
       };
     }
@@ -532,7 +534,7 @@ export function TaskProvider({ children }: { children: React.ReactNode }) {
     const today = new Date().toISOString().split('T')[0];
     return state.tasks.filter(task => {
       if (!task.dueDate) return false;
-      const taskDate = (task.dueDate instanceof Date ? task.dueDate : new Date(task.dueDate.toDate ? task.dueDate.toDate() : task.dueDate)).toISOString().split('T')[0];
+      const taskDate = (task.dueDate instanceof Date ? task.dueDate : task.dueDate.toDate()).toISOString().split('T')[0];
       return taskDate === today;
     });
   };
@@ -543,7 +545,7 @@ export function TaskProvider({ children }: { children: React.ReactNode }) {
     
     return state.tasks.filter(task => {
       if (!task.dueDate) return false;
-      const taskDate = task.dueDate instanceof Date ? task.dueDate : new Date(task.dueDate.toDate ? task.dueDate.toDate() : task.dueDate);
+      const taskDate = task.dueDate instanceof Date ? task.dueDate : task.dueDate.toDate();
       return taskDate > now && taskDate <= futureDate;
     });
   };
@@ -552,7 +554,7 @@ export function TaskProvider({ children }: { children: React.ReactNode }) {
     const now = new Date();
     return state.tasks.filter(task => {
       if (!task.dueDate || task.status === 'completed') return false;
-      return (task.dueDate instanceof Date ? task.dueDate : new Date(task.dueDate.toDate ? task.dueDate.toDate() : task.dueDate)) < now;
+      return (task.dueDate instanceof Date ? task.dueDate : task.dueDate.toDate()) < now;
     });
   };
 
