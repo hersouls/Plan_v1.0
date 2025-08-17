@@ -194,7 +194,6 @@ const CommentItem: React.FC<CommentItemProps> = ({
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-2" align="start">
                       <div className="flex space-x-1">
-                        {EMOJI_REACTIONS.map(({ emoji, label, icon: _Icon }) => (
                           <Button
                             key={emoji}
                             size="sm"
@@ -258,7 +257,7 @@ export const TaskCommentSection: React.FC<TaskCommentSectionProps> = ({
   className,
 }) => {
   const { user } = useAuth();
-  const { currentGroup, groupMembers } = useData();
+  const { groupMembers } = useData();
   const { comments, loading, error, addComment, updateComment, deleteComment } =
     useComments({
       taskId,
@@ -301,7 +300,7 @@ export const TaskCommentSection: React.FC<TaskCommentSectionProps> = ({
       });
       setCommentText('');
       setReplyToId(null);
-    } catch (error) {
+    } catch {
         // Handle error silently
       } finally {
       setIsSubmitting(false);
@@ -317,7 +316,7 @@ export const TaskCommentSection: React.FC<TaskCommentSectionProps> = ({
     async (commentId: string, content: string) => {
       try {
         await updateComment(commentId, { content });
-      } catch (error) {
+      } catch {
         // Handle error silently
       }
     },
@@ -330,7 +329,7 @@ export const TaskCommentSection: React.FC<TaskCommentSectionProps> = ({
 
       try {
         await deleteComment(commentId);
-      } catch (error) {
+      } catch {
         // Handle error silently
       }
     },
@@ -359,7 +358,7 @@ export const TaskCommentSection: React.FC<TaskCommentSectionProps> = ({
         };
 
         await updateComment(commentId, { reactions: newReactions });
-      } catch (error) {
+      } catch {
         // Handle error silently
       }
     },

@@ -36,17 +36,17 @@ export function DataSection({
 
   useEffect(() => {
     try {
-      setSignOut(() => authContext.signOut);
+      setSignOut(() => () => authContext.signOut());
     } catch {
       // Auth context가 없어도 기본적으로 작동
     }
-  }, [authContext.signOut]);
+  }, [authContext]);
 
   const updateData = (field: keyof typeof settings.data, _value: unknown) => {
     onUpdate({
       type: 'UPDATE_DATA',
       payload: {
-        [field]: value,
+        [field]: _value,
       },
     });
   };

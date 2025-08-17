@@ -60,7 +60,7 @@ export function QRScannerModal({
 
     // 다음 프레임 스캔
     animationFrameRef.current = requestAnimationFrame(scanQRCode);
-  }, [isScanning, onScanSuccess]);
+  }, [isScanning, onScanSuccess, stopScanning]);
 
   const startScanning = useCallback(async () => {
     try {
@@ -94,6 +94,27 @@ export function QRScannerModal({
     }
   }, [scanQRCode]);
 
+  const stopScanning = useCallback(() => {
+    setIsScanning(false);
+    
+    // Stop animation frame
+    if (animationFrameRef.current) {
+      cancelAnimationFrame(animationFrameRef.current);
+      animationFrameRef.current = null;
+    }
+    
+    // Stop video stream
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach(track => track.stop());
+      streamRef.current = null;
+    }
+    
+    // Clear video source
+    if (videoRef.current) {
+      videoRef.current.srcObject = null;
+    }
+  }, []);
+
   useEffect(() => {
     if (isOpen) {
       startScanning();
@@ -104,7 +125,7 @@ export function QRScannerModal({
     return () => {
       stopScanning();
     };
-  }, [isOpen, startScanning]);
+  }, [isOpen, startScanning, stopScanning]);
 
   useEffect(() => {
     if (isOpen) {
@@ -116,7 +137,7 @@ export function QRScannerModal({
     return () => {
       stopScanning();
     };
-  }, [isOpen, startScanning]);
+  }, [isOpen, startScanning, stopScanning]);
 
   const handleClose = () => {
     stopScanning();

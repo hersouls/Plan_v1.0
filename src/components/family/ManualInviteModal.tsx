@@ -26,15 +26,6 @@ export function ManualInviteModal({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <GlassCard className="w-full max-w-md p-6">
-        <div className="text-center mb-6">
-          <Typography variant="h3" className="mb-2">
-            초대 코드 입력
-          </Typography>
-          <Typography variant="body2" className="text-gray-600">
-            초대 코드를 입력하여 가족에 가입하세요
-          </Typography>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">

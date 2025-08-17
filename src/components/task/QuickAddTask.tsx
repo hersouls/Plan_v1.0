@@ -62,7 +62,6 @@ interface QuickAddTaskProps {
     taskType?: 'personal' | 'group';
     groupId?: string;
   }) => void;
-  onTaskCreate?: (task: Omit<Task, 'userId' | 'groupId'>) => Promise<void>;
   defaultAssigneeId?: string;
   groupMembers?: Array<{ id: string; name: string; avatar?: string }>;
   groups?: Array<{ id: string; name: string }>;
@@ -109,7 +108,7 @@ const QuickAddTask: React.FC<QuickAddTaskProps> = ({
   }>({});
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const parseNaturalLanguage = (text: string) => {
+  const parseNaturalLanguage = useCallback((text: string) => {
     if (!enhancedParsing) {
       return {
         title: text.trim(),
@@ -214,10 +213,10 @@ const QuickAddTask: React.FC<QuickAddTaskProps> = ({
       tags: parsedTags,
       dueDate: parsedDueDate,
     };
-  };
+  }, [enhancedParsing, priority, category, dueDate, tags, taskType, selectedGroupId]);
 
   // Real-time suggestions based on input
-  const generateSuggestions = (text: string) => {
+  const generateSuggestions = useCallback((text: string) => {
     if (!showSuggestions || text.length < 2) return [];
 
     const suggestions: string[] = [];
@@ -244,7 +243,7 @@ const QuickAddTask: React.FC<QuickAddTaskProps> = ({
     }
 
     return suggestions.slice(0, 3);
-  };
+  }, [showSuggestions]);
 
   // Real-time parsing effect
   useEffect(() => {
