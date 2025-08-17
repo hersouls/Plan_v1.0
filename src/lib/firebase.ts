@@ -1,5 +1,4 @@
 // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
@@ -55,19 +54,7 @@ const firebaseConfig = getFirebaseConfig();
 
 // 디버깅: 환경 변수 확인
 
-// 설정 유효성 검사
-const isValidConfig = (_config: unknown) => {
-  return config && 
-         config.apiKey && 
-         config.projectId && 
-         config.appId &&
-         config.apiKey !== "your-api-key" &&
-         config.projectId !== "your-project-id" &&
-         config.appId !== "your-app-id" &&
-         config.apiKey !== undefined &&
-         config.projectId !== undefined &&
-         config.appId !== undefined;
-};
+// 설정 유효성 검사 (사용하지 않음)
 
 // Initialize Firebase
 let app;
@@ -105,7 +92,7 @@ export const loadAnalytics = async () => {
       analytics = getAnalytics(app);
       return analytics;
     }
-  } catch (error) {
+  } catch {
     // Handle error silently
   }
   return null;
@@ -121,7 +108,7 @@ export const loadPerformance = async () => {
       performance = getPerformance(app);
       return performance;
     }
-  } catch (error) {
+  } catch {
     // Handle error silently
   }
   return null;
@@ -138,7 +125,7 @@ export const loadMessaging = async () => {
       messaging = getMessaging(app);
       return messaging;
     }
-  } catch (error) {
+  } catch {
     // Handle error silently
   }
   return null;

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { enhancedUserService } from '../lib/firestore-improved';
 import { User } from '../types/user';
 
@@ -21,7 +21,7 @@ export function useUser(options: UseUserOptions = {}): UseUserReturn {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const loadUser = async () => {
+  const loadUser = useCallback(async () => {
     if (!userId) {
       setUser(null);
       return;
@@ -32,18 +32,18 @@ export function useUser(options: UseUserOptions = {}): UseUserReturn {
       setError(null);
       const userProfile = await enhancedUserService.getUserProfile(userId);
       setUser(userProfile);
-    } catch (err) {
+    } catch {
       setError('사용자 프로필을 불러오는 중 오류가 발생했습니다.');
     } finally {
       setLoading(false);
     }
-  };
+  }, [userId]);
 
   useEffect(() => {
     if (autoLoad && userId) {
       loadUser();
     }
-  }, [userId, autoLoad]);
+  }, [userId, autoLoad, loadUser]);
 
   const refetch = async () => {
     await loadUser();

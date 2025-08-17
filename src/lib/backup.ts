@@ -56,7 +56,7 @@ export class BackupService {
       await this.cleanupOldBackups(frequency);
       
       return downloadURL;
-    } catch (error) {
+    } catch {
       throw new Error('백업 생성에 실패했습니다.');
     }
   }
@@ -193,7 +193,7 @@ export class BackupService {
           await deleteObject(item);
         }
       }
-    } catch (error) {
+    } catch {
       // 정리 실패는 백업 실패로 처리하지 않음
     }
   }
@@ -223,7 +223,7 @@ export class BackupService {
         }
       }
       return null;
-    } catch (error) {
+    } catch {
       return null;
     }
   }
@@ -261,7 +261,7 @@ export class BackupService {
       );
       
       return backups.sort((a, b) => b.timestamp - a.timestamp);
-    } catch (error) {
+    } catch {
       return [];
     }
   }
@@ -285,7 +285,7 @@ export class BackupService {
       }
       
       return backupData;
-    } catch (error) {
+    } catch {
       throw new Error('백업 복원에 실패했습니다.');
     }
   }
