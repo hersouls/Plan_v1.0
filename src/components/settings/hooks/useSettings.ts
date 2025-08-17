@@ -472,6 +472,7 @@ export function useSettings(): UseSettingsReturn {
                 storageUrl: decodedPath,
                 uploadedAt: Timestamp.now(),
                 isImage: true,
+                uploadedBy: userId,
               });
             }
           } catch {
@@ -560,15 +561,16 @@ export function useSettings(): UseSettingsReturn {
           const pathMatch = url.pathname.match(/\/v0\/b\/[^/]+\/o\/(.+)\?/);
           if (pathMatch) {
             const decodedPath = decodeURIComponent(pathMatch[1]);
-            await StorageService.deleteFile({
-              id: 'temp',
-              fileName: 'avatar',
-              fileSize: 0,
-              mimeType: 'image/jpeg',
-              storageUrl: decodedPath,
-              uploadedAt: Timestamp.now(),
-              isImage: true,
-            });
+                          await StorageService.deleteFile({
+                id: 'temp',
+                fileName: 'avatar',
+                fileSize: 0,
+                mimeType: 'image/jpeg',
+                storageUrl: decodedPath,
+                uploadedAt: Timestamp.now(),
+                isImage: true,
+                uploadedBy: userId,
+              });
           }
         } catch {
           // Handle error silently
