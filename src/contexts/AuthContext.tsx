@@ -12,22 +12,14 @@ import {
   updateProfile,
 } from 'firebase/auth';
 import { serverTimestamp } from 'firebase/firestore';
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
 import { fcmService } from '../lib/fcm';
 import { auth } from '../lib/firebase';
 import { userService } from '../lib/firestore';
 import { AuthContextType, ExtendedUser } from '../types/auth';
 import { User } from '../types/user';
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
-
-export function useAuth() {
-  const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return context;
-}
+export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<ExtendedUser | null>(null);

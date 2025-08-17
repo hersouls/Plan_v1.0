@@ -28,7 +28,7 @@ import { WaveBackground } from '../components/layout/WaveBackground';
 import { TaskDetail } from '../components/task/TaskDetail';
 import { WaveButton } from '../components/ui/WaveButton';
 import { Typography } from '../components/ui/typography';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../hooks/useAuth';
 import { useGroup } from '../hooks/useGroup';
 import { useTask } from '../hooks/useTask';
 import { useTasks } from '../hooks/useTasks';

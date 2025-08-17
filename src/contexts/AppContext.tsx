@@ -1,7 +1,7 @@
-import React, { createContext, useContext, useEffect, useReducer } from 'react';
+import React, { createContext, useEffect, useReducer } from 'react';
 import * as firestoreServices from '../lib/firestore';
 import { FamilyGroup } from '../types/group';
-import { useAuth } from './AuthContext';
+import { useAuth } from '../hooks/useAuth';
 
 // App State Interface
 export interface AppState {
@@ -260,16 +260,7 @@ export interface AppContextType {
 }
 
 // Create Context
-const AppContext = createContext<AppContextType | undefined>(undefined);
-
-// Hook to use App Context
-export function useApp(): AppContextType {
-  const context = useContext(AppContext);
-  if (context === undefined) {
-    throw new Error('useApp must be used within an AppProvider');
-  }
-  return context;
-}
+export const AppContext = createContext<AppContextType | undefined>(undefined);
 
 // App Provider Component
 export function AppProvider({ children }: { children: React.ReactNode }) {
@@ -355,7 +346,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
             payload: { group: defaultGroup, groupId: defaultGroup.id },
           });
         }
-      } catch (error) {
+      } catch (_error) {
         dispatch({
           type: 'SET_ERROR',
           payload: {

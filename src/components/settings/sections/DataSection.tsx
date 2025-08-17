@@ -9,7 +9,7 @@ import {
   Upload,
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { useAuth } from '../../../contexts/AuthContext';
+import { useAuth } from '../../../hooks/useAuth';
 import { BackupScheduler, BackupService } from '../../../lib/backup';
 import { cn } from '../../../lib/utils';
 import { InlineLoading } from '../../common/LoadingSpinner';

@@ -16,7 +16,7 @@ import {
 } from '@/components/ui/popover';
 import { Typography } from '@/components/ui/typography';
 import { cn } from '@/components/ui/utils';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/hooks/useAuth';
 import { useData } from '@/contexts/DataContext';
 import { Comment, useComments } from '@/hooks/useComments';
 import { formatDistanceToNow } from 'date-fns';

@@ -14,7 +14,7 @@ import {
   UpdateGroupInput,
   UserNotification,
 } from '../types';
-import { useAuth } from './AuthContext';
+import { useAuth } from '../hooks/useAuth';
 
 interface DataContextType {
   // Groups

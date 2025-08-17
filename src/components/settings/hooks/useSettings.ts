@@ -7,7 +7,7 @@ import {
   useRef,
   useState,
 } from 'react';
-import { useAuth } from '../../../contexts/AuthContext';
+import { useAuth } from '../../../hooks/useAuth';
 import { db } from '../../../lib/firebase';
 import StorageService from '../../../lib/storage';
 import type {

@@ -22,7 +22,7 @@ import { GlassCard } from '../components/ui/GlassCard';
 import { WaveButton } from '../components/ui/WaveButton';
 import { ResponsiveButton } from '../components/ui/responsive/ResponsiveButton';
 import { Typography } from '../components/ui/typography';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../hooks/useAuth';
 import { useData } from '../contexts/DataContext';
 import { useUserGroups } from '../hooks/useGroup';
 import { useTasks } from '../hooks/useTasks';
