@@ -394,4 +394,5 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 }
 
+export { AppContext };
 export default AppProvider;
