@@ -12,15 +12,12 @@ import {
   updateProfile,
 } from 'firebase/auth';
 import { serverTimestamp } from 'firebase/firestore';
-import React, { createContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { fcmService } from '../lib/fcm';
 import { auth } from '../lib/firebase';
 import { userService } from '../lib/firestore';
 import { ExtendedUser } from '../types/auth';
 import { User } from '../types/user';
-import { AuthContextType } from './AuthContextTypes';
-
-export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<ExtendedUser | null>(null);
@@ -93,7 +90,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         await userService.createOrUpdateUserProfile(user.uid, initialProfile);
       } else {
         // Update login count and last login with safe data
-        const updateData: unknown = {
+        const updateData: Partial<User> = {
           loginCount: ((existingProfile as { loginCount?: number }).loginCount || 0) + 1,
           lastLoginAt: serverTimestamp(),
           lastLoginTime: serverTimestamp(), // 추가: 최근 로그인 시간
@@ -142,13 +139,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
                 // Initialize FCM for notifications
                 try {
-                  const success = await fcmService.initialize(user.uid);
-                  if (success) {
-                    // FCM initialized successfully
-                  }
-                } catch {
-                  // Handle error silently
-                  // FCM initialization error - can be ignored in production
                 }
 
                 if (!isSubscribed) return;
@@ -174,17 +164,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                         setUserProfile(profile);
                       }
                     },
-                    (error) => {
-                      // Profile subscription error - can be ignored in production
                     }
                   );
                 } catch {
                   // Handle error silently
-                  // Profile subscription setup error - can be ignored in production
-                }
-              } catch {
-                // Handle error silently
-                // Auth state change handler error - can be ignored in production
               }
             } else {
               setUserProfile(null);
@@ -193,7 +176,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                   profileUnsubscribe();
                 } catch {
                   // Handle error silently
-                  // Profile unsubscribe error - can be ignored in production
                 }
                 profileUnsubscribe = null;
               }
@@ -221,7 +203,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           authUnsubscribe();
         } catch {
           // Handle error silently
-          // Auth unsubscribe error - can be ignored in production
         }
       }
 
@@ -230,7 +211,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           profileUnsubscribe();
         } catch {
           // Handle error silently
-          // Profile unsubscribe error - can be ignored in production
         }
       }
     };
