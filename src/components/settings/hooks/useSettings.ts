@@ -601,6 +601,7 @@ export function useSettings(): UseSettingsReturn {
       isInitializedRef.current = true;
       loadSettingsInternal();
     }
+  }, [currentUser?.uid, loadSettingsInternal]);
 
   // 1시간마다 자동 동기화 설정
   useEffect(() => {
