@@ -14,7 +14,7 @@ export {
   useResponsive,
   useTablet,
 } from './useResponsive';
-export { useTask } from './useTask';
+export { useTask, useTaskContext } from './useTask';
 export { useTasks } from './useTasks';
 export { useUser } from './useUser';
 

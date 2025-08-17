@@ -1,11 +1,13 @@
 export { AuthProvider } from './AuthContext';
-export { DataProvider, useData } from './DataContext';
+export { DataProvider } from './DataContext';
 export { AppProvider } from './AppContext';
-export { TaskProvider, useTask } from './TaskContext';
+export { TaskProvider } from './TaskContext';
 
-// Re-export hooks
+// Re-export hooks from hooks folder
 export { useAuth } from '../hooks/useAuth';
 export { useApp } from '../hooks/useApp';
+export { useData } from '../hooks/useData';
+export { useTaskContext as useTask } from '../hooks/useTask';
 
 // Re-export types
 export type { AuthContextType, ExtendedUser } from '../types/auth';
@@ -23,3 +25,4 @@ export type {
   TaskContextType, 
   TaskAction 
 } from './TaskContext';
+export type { DataContextType } from './DataContextTypes';

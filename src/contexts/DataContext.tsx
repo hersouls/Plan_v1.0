@@ -14,8 +14,7 @@ import {
   GroupMember,
 } from '../types';
 import { useAuth } from '../hooks/useAuth';
-import { DataContextType } from './DataContextTypes';
-import { DataContext } from './DataContextTypes';
+import { DataContextType, DataContext } from './DataContextTypes';
 
 export function DataProvider({ children }: { children: React.ReactNode }) {
   const { user, userProfile } = useAuth();
