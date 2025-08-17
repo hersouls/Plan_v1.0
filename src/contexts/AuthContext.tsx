@@ -353,9 +353,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       const profile = await userService.getUserProfile(user.uid);
       setUserProfile(profile);
-    } catch {
-        // Handle error silently
-      }
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   // Update user password
