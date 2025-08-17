@@ -1,7 +1,7 @@
 "use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+const __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
+    let desc = Object.getOwnPropertyDescriptor(m, k);
     if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
       desc = { enumerable: true, get: function() { return m[k]; } };
     }
@@ -10,24 +10,24 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
 }));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+const __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
     Object.defineProperty(o, "default", { enumerable: true, value: v });
 }) : function(o, v) {
     o["default"] = v;
 });
-var __importStar = (this && this.__importStar) || (function () {
-    var ownKeys = function(o) {
+const __importStar = (this && this.__importStar) || (function () {
+    let ownKeys = function(o) {
         ownKeys = Object.getOwnPropertyNames || function (o) {
-            var ar = [];
-            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            const ar = [];
+            for (const k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
             return ar;
         };
         return ownKeys(o);
     };
     return function (mod) {
         if (mod && mod.__esModule) return mod;
-        var result = {};
-        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        const result = {};
+        if (mod != null) for (let k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
         __setModuleDefault(result, mod);
         return result;
     };
@@ -46,7 +46,7 @@ const db = admin.firestore();
 const messaging = admin.messaging();
 // Task-related cloud functions
 exports.onTaskCreated = (0, firestore_1.onDocumentCreated)('tasks/{taskId}', async (event) => {
-    var _a;
+    let _a;
     const taskData = (_a = event.data) === null || _a === void 0 ? void 0 : _a.data();
     const taskId = event.params.taskId;
     if (!taskData)
@@ -72,7 +72,7 @@ exports.onTaskCreated = (0, firestore_1.onDocumentCreated)('tasks/{taskId}', asy
     }
 });
 exports.onTaskUpdated = (0, firestore_1.onDocumentUpdated)('tasks/{taskId}', async (event) => {
-    var _a, _b;
+    let _a, _b;
     const before = (_a = event.data) === null || _a === void 0 ? void 0 : _a.before.data();
     const after = (_b = event.data) === null || _b === void 0 ? void 0 : _b.after.data();
     const taskId = event.params.taskId;
@@ -96,7 +96,7 @@ exports.onTaskUpdated = (0, firestore_1.onDocumentUpdated)('tasks/{taskId}', asy
     }
 });
 exports.onCommentCreated = (0, firestore_1.onDocumentCreated)('tasks/{taskId}/comments/{commentId}', async (event) => {
-    var _a;
+    let _a;
     const commentData = (_a = event.data) === null || _a === void 0 ? void 0 : _a.data();
     const taskId = event.params.taskId;
     if (!commentData)

@@ -38,7 +38,7 @@ export const useOffline = (): UseOfflineReturn => {
       try {
         const actions = JSON.parse(saved);
         setPendingActions(actions);
-      } catch (error) {
+      } catch {
         localStorage.removeItem(OFFLINE_QUEUE_KEY);
       }
     }
@@ -94,7 +94,7 @@ export const useOffline = (): UseOfflineReturn => {
       window.removeEventListener('offline', handleOffline);
       clearInterval(connectionCheck);
     };
-  }, [pendingActions.length]);
+  }, [pendingActions.length, syncPendingActions]);
 
   const queueOfflineAction = useCallback((action: Omit<OfflineAction, 'id' | 'timestamp' | 'retry'>) => {
     const offlineAction: OfflineAction = {
@@ -203,7 +203,7 @@ export const useOffline = (): UseOfflineReturn => {
 };
 
 // Higher-order component to wrap operations with offline support
-export const withOfflineSupport = <T extends (...args: unknown[]) => Promise<any>>(
+export const withOfflineSupport = <T extends (...args: unknown[]) => Promise<unknown>>(
   operation: T,
   offlineAction: Omit<OfflineAction, 'id' | 'timestamp' | 'retry'>
 ): T => {

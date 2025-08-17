@@ -1,4 +1,4 @@
-import React, { useReducer, useEffect, createContext } from 'react';
+import React, { useReducer, useEffect } from 'react';
 import { Task, TaskStatus, CreateTaskInput, UpdateTaskInput } from '../types/task';
 import { taskService } from '../lib/firestore';
 import { useApp } from '../hooks/useApp';
@@ -72,22 +72,22 @@ const applyFiltersAndSort = (
 
   // Apply status filter
   if (filters.status && filters.status.length > 0) {
-    filteredTasks = filteredTasks.filter(task => filters.status?.includes(task.status));
+    filteredTasks = filteredTasks.filter(task => filters.status!.includes(task.status));
   }
 
   // Apply assignee filter
   if (filters.assigneeId && filters.assigneeId.length > 0) {
-    filteredTasks = filteredTasks.filter(task => filters.assigneeId?.includes(task.assigneeId));
+    filteredTasks = filteredTasks.filter(task => filters.assigneeId!.includes(task.assigneeId));
   }
 
   // Apply priority filter
   if (filters.priority && filters.priority.length > 0) {
-    filteredTasks = filteredTasks.filter(task => filters.priority?.includes(task.priority));
+    filteredTasks = filteredTasks.filter(task => filters.priority!.includes(task.priority));
   }
 
   // Apply category filter
   if (filters.category && filters.category.length > 0) {
-    filteredTasks = filteredTasks.filter(task => filters.category?.includes(task.category));
+    filteredTasks = filteredTasks.filter(task => filters.category!.includes(task.category));
   }
 
   // Apply date range filter
@@ -113,14 +113,14 @@ const applyFiltersAndSort = (
   // Apply tags filter
   if (filters.tags && filters.tags.length > 0) {
     filteredTasks = filteredTasks.filter(task =>
-      filters.tags?.some(tag => task.tags.includes(tag))
+      filters.tags!.some(tag => task.tags.includes(tag))
     );
   }
 
   // Apply sorting
   filteredTasks.sort((a, b) => {
-    let aValue: unknown;
-    let bValue: unknown;
+    let aValue: number | string;
+    let bValue: number | string;
 
     switch (sortBy) {
       case 'dueDate':
@@ -128,7 +128,7 @@ const applyFiltersAndSort = (
         bValue = b.dueDate ? new Date(b.dueDate).getTime() : Infinity;
         break;
       case 'priority': {
-        const priorityOrder = { high: 3, medium: 2, low: 1 };
+        const priorityOrder: Record<string, number> = { high: 3, medium: 2, low: 1 };
         aValue = priorityOrder[a.priority] || 0;
         bValue = priorityOrder[b.priority] || 0;
         break;
@@ -142,7 +142,7 @@ const applyFiltersAndSort = (
         bValue = b.title.toLowerCase();
         break;
       case 'status': {
-        const statusOrder = { pending: 1, in_progress: 2, completed: 3 };
+        const statusOrder: Record<string, number> = { pending: 1, in_progress: 2, completed: 3 };
         aValue = statusOrder[a.status] || 0;
         bValue = statusOrder[b.status] || 0;
         break;
@@ -151,8 +151,13 @@ const applyFiltersAndSort = (
         return 0;
     }
 
-    if (aValue < bValue) return sortOrder === 'asc' ? -1 : 1;
-    if (aValue > bValue) return sortOrder === 'asc' ? 1 : -1;
+    if (typeof aValue === 'number' && typeof bValue === 'number') {
+      if (aValue < bValue) return sortOrder === 'asc' ? -1 : 1;
+      if (aValue > bValue) return sortOrder === 'asc' ? 1 : -1;
+    } else if (typeof aValue === 'string' && typeof bValue === 'string') {
+      if (aValue < bValue) return sortOrder === 'asc' ? -1 : 1;
+      if (aValue > bValue) return sortOrder === 'asc' ? 1 : -1;
+    }
     return 0;
   });
 
@@ -283,7 +288,7 @@ function taskReducer(state: TaskState, action: TaskAction): TaskState {
     }
 
     case 'CLEAR_FILTERS': {
-      const filters = initialFilters;
+      const filters = initialState.filters; // Use initialState.filters directly
       const filteredTasks = applyFiltersAndSort(
         state.tasks,
         filters,
@@ -394,7 +399,7 @@ function taskReducer(state: TaskState, action: TaskAction): TaskState {
 // Task Provider Component
 export function TaskProvider({ children }: { children: React.ReactNode }) {
   const [state, dispatch] = useReducer(taskReducer, initialState);
-  const { user } = useAuth();
+  const { user } = useApp();
   const { state: appState } = useApp();
 
   // Subscribe to tasks for current group
@@ -598,11 +603,3 @@ export function TaskProvider({ children }: { children: React.ReactNode }) {
   );
 }
 
-// Hook to use the task context
-export function useTask() {
-  const context = React.useContext(TaskContext);
-  if (context === undefined) {
-    throw new Error('useTask must be used within a TaskProvider');
-  }
-  return context;
-}
