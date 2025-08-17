@@ -1,4 +1,4 @@
-name: Deploy Moonwave Travel to GitHub Pages
+name: Deploy Moonwave Travel to Vercel
 
 on:
   push:
@@ -6,20 +6,11 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
-  pages: write
-  id-token: write
-
-concurrency:
-  group: 'pages-deploy-${{ github.ref }}'
-  cancel-in-progress: false
+  contents: read
 
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -33,15 +24,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      # Temporarily skip type checking to fix deployment
-      # - name: Type check
-      #   run: npm run type-check
-
-      # - name: Lint check
-      #   run: npm run lint
-
       - name: Build project
-        id: build
         env:
           VITE_FIREBASE_API_KEY: ${{ secrets.VITE_FIREBASE_API_KEY }}
           VITE_FIREBASE_AUTH_DOMAIN: ${{ secrets.VITE_FIREBASE_AUTH_DOMAIN }}
@@ -50,23 +33,31 @@ jobs:
           VITE_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.VITE_FIREBASE_MESSAGING_SENDER_ID }}
           VITE_FIREBASE_APP_ID: ${{ secrets.VITE_FIREBASE_APP_ID }}
           VITE_FIREBASE_MEASUREMENT_ID: ${{ secrets.VITE_FIREBASE_MEASUREMENT_ID }}
-          GITHUB_PAGES: 'true'
-        run: |
-          echo "Building project..."
-          npm run build
-          echo "Build completed successfully"
-          # SPA fallback for direct deep links on GitHub Pages
-          cp dist/index.html dist/404.html
-          echo "404.html created for SPA routing"
+          VITE_APP_NAME: ${{ secrets.VITE_APP_NAME }}
+          VITE_APP_VERSION: ${{ secrets.VITE_APP_VERSION }}
+          VITE_APP_URL: ${{ secrets.VITE_APP_URL }}
+          VITE_NODE_ENV: production
+          VITE_DEBUG: false
+          VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}
+          VITE_ENABLE_PWA: ${{ secrets.VITE_ENABLE_PWA }}
+          VITE_ENABLE_ANALYTICS: ${{ secrets.VITE_ENABLE_ANALYTICS }}
+          VITE_ENABLE_NOTIFICATIONS: ${{ secrets.VITE_ENABLE_NOTIFICATIONS }}
+          VITE_ENABLE_CLAUDE_AI: ${{ secrets.VITE_ENABLE_CLAUDE_AI }}
+          VITE_CLAUDE_API_KEY: ${{ secrets.VITE_CLAUDE_API_KEY }}
+          CLAUDE_API_KEY: ${{ secrets.CLAUDE_API_KEY }}
+          VITE_CLAUDE_MODEL: ${{ secrets.VITE_CLAUDE_MODEL }}
+          VITE_CLAUDE_MAX_TOKENS: ${{ secrets.VITE_CLAUDE_MAX_TOKENS }}
+          VITE_CLAUDE_TASK_ASSISTANT: ${{ secrets.VITE_CLAUDE_TASK_ASSISTANT }}
+          VITE_CLAUDE_SMART_SUGGESTIONS: ${{ secrets.VITE_CLAUDE_SMART_SUGGESTIONS }}
+          VITE_CLAUDE_AUTO_CATEGORIZE: ${{ secrets.VITE_CLAUDE_AUTO_CATEGORIZE }}
+          VITE_GOOGLE_ANALYTICS_ID: ${{ secrets.VITE_GOOGLE_ANALYTICS_ID }}
+          VITE_SENTRY_DSN: ${{ secrets.VITE_SENTRY_DSN }}
+        run: npm run build:vercel
 
-      - name: Setup Pages
-        uses: actions/configure-pages@v4
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+      - name: Deploy to Vercel
+        uses: amondnet/vercel-action@v25
         with:
-          path: './dist'
-
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          vercel-args: '--prod'
