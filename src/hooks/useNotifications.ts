@@ -97,7 +97,7 @@ export function useNotifications(): UseNotificationsReturn {
   }, [user?.uid]);
 
   // 알림 읽음 처리
-  const markAsRead = async (_notificationId: string) => {
+  const markAsRead = async (notificationId: string) => {
     try {
       await NotificationService.markAsRead(notificationId);
       setNotifications(prev =>
@@ -127,7 +127,7 @@ export function useNotifications(): UseNotificationsReturn {
   };
 
   // 알림 삭제
-  const deleteNotification = async (_notificationId: string) => {
+  const deleteNotification = async (notificationId: string) => {
     try {
       await NotificationService.deleteNotification(notificationId);
       setNotifications(prev => prev.filter(n => n.id !== notificationId));

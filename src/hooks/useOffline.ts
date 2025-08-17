@@ -94,18 +94,7 @@ export const useOffline = (): UseOfflineReturn => {
       window.removeEventListener('offline', handleOffline);
       clearInterval(connectionCheck);
     };
-  }, [pendingActions.length, syncPendingActions]);
-
-  const queueOfflineAction = useCallback((action: Omit<OfflineAction, 'id' | 'timestamp' | 'retry'>) => {
-    const offlineAction: OfflineAction = {
-      ...action,
-      id: crypto.randomUUID(),
-      timestamp: Date.now(),
-      retry: 0,
-    };
-
-    setPendingActions(prev => [...prev, offlineAction]);
-    }, []);
+  }, [pendingActions.length]);
 
   const syncPendingActions = useCallback(async (): Promise<void> => {
     if (!isOnline || pendingActions.length === 0) return;
@@ -135,6 +124,17 @@ export const useOffline = (): UseOfflineReturn => {
     }
   }, [isOnline, pendingActions]);
 
+  const queueOfflineAction = useCallback((action: Omit<OfflineAction, 'id' | 'timestamp' | 'retry'>) => {
+    const offlineAction: OfflineAction = {
+      ...action,
+      id: crypto.randomUUID(),
+      timestamp: Date.now(),
+      retry: 0,
+    };
+
+    setPendingActions(prev => [...prev, offlineAction]);
+  }, []);
+
   const executeAction = async (action: OfflineAction): Promise<void> => {
     const { collection: collectionName, type, docId, data } = action;
     
@@ -149,12 +149,12 @@ export const useOffline = (): UseOfflineReturn => {
 
     switch (type) {
       case 'create':
-        await addDoc(collection(db, collectionName), data);
+        await addDoc(collection(db, collectionName), data as Record<string, any>);
         break;
       
       case 'update':
         if (!docId) throw new Error('Document ID required for update');
-        await updateDoc(doc(db, collectionName, docId), data);
+        await updateDoc(doc(db, collectionName, docId), data as Record<string, any>);
         break;
       
       case 'delete':
