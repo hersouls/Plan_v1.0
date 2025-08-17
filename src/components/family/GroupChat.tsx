@@ -477,8 +477,6 @@ export function GroupChat({
   // 시간 포맷팅
   const formatTime = (timestamp: unknown) => {
     if (!timestamp) return '';
-
-    const date = (timestamp as any).toDate ? (timestamp as any).toDate() : new Date(timestamp as any);
     const now = new Date();
     const diffInHours = (now.getTime() - date.getTime()) / (1000 * 60 * 60);
 

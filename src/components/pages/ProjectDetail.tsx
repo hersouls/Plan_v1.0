@@ -10,7 +10,6 @@ interface ProjectData {
   name: string;
   url: string;
   description: string;
-  icon: React.ComponentType<any>;
   color: string;
   longDescription: string;
   features: string[];
@@ -173,7 +172,7 @@ export function ProjectDetail() {
     );
   }
 
-  const IconComponent = project.icon;
+
 
   return (
     <div className="min-h-screen relative">
