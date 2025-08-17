@@ -5,9 +5,7 @@ import {
   Check,
   Clock,
   Filter,
-  MoreHorizontal,
   Trash2,
-  X,
 } from 'lucide-react';
 import { Typography } from '../components/ui/typography-utils';
 import { useEffect, useState } from 'react';
@@ -22,7 +20,6 @@ import { Notification, NotificationStats } from '../types/notification';
 import { cn } from '../lib/utils';
 
 function Notifications() {
-  const navigate = useNavigate();
   const { user } = useAuth();
   
   const [notifications, setNotifications] = useState<Notification[]>([]);
@@ -50,7 +47,7 @@ function Notifications() {
         
         setNotifications(notificationsData);
         setStats(statsData);
-      } catch (_err) {
+      } catch (err) {
         setError('알림을 불러올 수 없습니다.');
       } finally {
         setLoading(false);
@@ -68,17 +65,17 @@ function Notifications() {
   });
 
   // 알림 읽음 처리
-  const handleMarkAsRead = async (_notificationId: string) => {
+  const handleMarkAsRead = async (notificationId: string) => {
     try {
-      await NotificationService.markAsRead(n.id);
+      await NotificationService.markAsRead(notificationId);
       setNotifications(prev => 
         prev.map(n => 
-          n.id === _notificationId 
+          n.id === notificationId 
             ? { ...n, status: 'read' as const, readAt: new Date() }
             : n
         )
       );
-    } catch (_error) {
+    } catch (error) {
         // Handle error silently
       }
   };
@@ -92,7 +89,7 @@ function Notifications() {
       setNotifications(prev => 
         prev.map(n => ({ ...n, status: 'read' as const, readAt: new Date() }))
       );
-    } catch (_error) {
+    } catch (error) {
         // Handle error silently
       }
   };
@@ -104,7 +101,7 @@ function Notifications() {
     try {
       await NotificationService.deleteNotification(_notificationId);
       setNotifications(prev => prev.filter(n => n.id !== _notificationId));
-    } catch (_error) {
+    } catch (error) {
         // Handle error silently
       }
   };

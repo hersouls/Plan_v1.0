@@ -142,14 +142,7 @@ export function getImageInfo(file: File): Promise<{
  * 아바타 이미지 최적화 (파일 용량 제한 없음, 자동 리사이징)
  */
 export async function optimizeAvatarImage(file: File): Promise<File> {
-  const MAX_DIMENSION = 2048; // 최대 해상도
-  const QUALITY = 0.9; // 고품질 유지
-
-  const fileSizeMB = getFileSizeInMB(file);
-
   // 파일 크기 제한 없이 원본 반환
-
-  // 파일 크기가 적절한 경우 원본 반환
   return file;
 }
 
@@ -174,9 +167,8 @@ export async function optimizeImage(file: File): Promise<File> {
 
     try {
       const resizedFile = await resizeImage(file, options);
-      const newSize = getFileSizeInMB(resizedFile);
       return resizedFile;
-    } catch (_error) {
+    } catch (error) {
       throw new Error('이미지 크기 조정에 실패했습니다.');
     }
   }

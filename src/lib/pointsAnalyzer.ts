@@ -94,11 +94,11 @@ ${JSON.stringify(recentHistories, null, 2)}
         try {
           const analysis = JSON.parse(content.text);
           return this.validateAnalysis(analysis);
-        } catch (_parseError) {
+        } catch {
           return this.getDefaultAnalysis();
         }
       }
-    } catch (_error) {
+    } catch {
         // Handle error silently
       }
 
@@ -107,7 +107,7 @@ ${JSON.stringify(recentHistories, null, 2)}
 
   async analyzeBulkPoints(
     histories: PointHistory[],
-    groupId: string
+    _groupId: string
   ): Promise<Map<string, PointAnalysis>> {
     const analysisMap = new Map<string, PointAnalysis>();
 
@@ -162,11 +162,11 @@ ${i + 1}. ID: ${h.id}
               }
             });
           }
-        } catch (_error) {
+        } catch {
         // Handle error silently
       }
       }
-    } catch (_error) {
+    } catch {
         // Handle error silently
       }
 
@@ -224,7 +224,7 @@ ${histories.map(h => `
           return [];
         }
       }
-    } catch (_error) {
+    } catch (error) {
         // Handle error silently
       }
 
@@ -267,7 +267,7 @@ ${histories.map(h => `
         const points = parseInt(content.text.trim());
         return isNaN(points) ? 10 : Math.max(1, Math.min(100, points));
       }
-    } catch (_error) {
+    } catch (error) {
         // Handle error silently
       }
 

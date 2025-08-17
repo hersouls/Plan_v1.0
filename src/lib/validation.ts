@@ -7,7 +7,7 @@ export interface ValidationRule {
   minLength?: number;
   maxLength?: number;
   pattern?: RegExp;
-  custom?: (_value: unknown, _data?: Record<string, any>) => string | null;
+  custom?: (_value: unknown, _data?: Record<string, unknown>) => string | null;
   message?: string;
 }
 
@@ -32,7 +32,7 @@ export class ValidationService {
   /**
    * Validate a single field
    */
-  validateField(value: unknown, rules: ValidationRule, data?: Record<string, any>): string | null {
+  validateField(value: unknown, rules: ValidationRule, data?: Record<string, unknown>): string | null {
     // Required validation
     if (rules.required && this.isEmpty(value)) {
       return rules.message || '이 필드는 필수입니다.';
@@ -78,7 +78,7 @@ export class ValidationService {
    * Validate multiple fields
    */
   validateFields(
-    data: Record<string, any>,
+    data: Record<string, unknown>,
     rules: Record<string, ValidationRule>
   ): ValidationResult {
     const errors: Record<string, string> = {};
@@ -270,7 +270,6 @@ export class ValidationService {
     } = {}
   ): string | null {
     const {
-      maxSize = Number.MAX_SAFE_INTEGER, // 파일 용량 제한 없음
       allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'],
     } = options;
 
@@ -363,7 +362,7 @@ export class ValidationService {
    * Custom validation for specific business rules
    */
   validateBusinessRules(
-    data: Record<string, any>,
+    data: Record<string, unknown>,
     type: 'task' | 'group' | 'user'
   ): ValidationResult {
     const errors: Record<string, string> = {};

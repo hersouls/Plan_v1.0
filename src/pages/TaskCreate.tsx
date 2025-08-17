@@ -41,7 +41,7 @@ import { toDate } from '../utils/dateHelpers';
 const categories: Array<{
   value: TaskCategory;
   label: string;
-  icon: React.ComponentType<any>;
+  icon: React.ComponentType<{ className?: string }>;
   color: string;
 }> = [
   {
@@ -264,7 +264,7 @@ function TaskCreate({ mode = 'create' }: TaskCreateProps) {
       });
       setShowRecurring(existingTask.recurring?.enabled || false);
     }
-  }, [mode, existingTask]);
+  }, [mode, existingTask, firstGroup?.id]);
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
@@ -386,7 +386,7 @@ function TaskCreate({ mode = 'create' }: TaskCreateProps) {
       }
 
       navigate(-1); // Go back
-    } catch (_error) {
+    } catch (error) {
         // Handle error silently
       } finally {
       setSaving(false);

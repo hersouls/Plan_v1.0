@@ -126,7 +126,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         }
 
         return groupId;
-      } catch (_err) {
+      } catch (err) {
         const errorMessage =
           err instanceof Error ? err.message : '그룹 생성에 실패했습니다.';
         setError(errorMessage);
@@ -183,7 +183,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
             };
           });
         }
-      } catch (_err) {
+      } catch (err) {
         const errorMessage =
           err instanceof Error ? err.message : '그룹 업데이트에 실패했습니다.';
         setError(errorMessage);
@@ -203,7 +203,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         // This would require implementing invite code logic in groupService
         // For now, this is a placeholder
         throw new Error('초대 코드로 그룹 참가 기능은 구현 중입니다.');
-      } catch (_err) {
+      } catch (err) {
         const errorMessage =
           err instanceof Error ? err.message : '그룹 참가에 실패했습니다.';
         setError(errorMessage);
@@ -237,7 +237,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         if (currentGroup && currentGroup.id === groupId) {
           setCurrentGroupState(null);
         }
-      } catch (_err) {
+      } catch (err) {
         const errorMessage =
           err instanceof Error ? err.message : '그룹 탈퇴에 실패했습니다.';
         setError(errorMessage);
@@ -261,7 +261,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         // This would require implementing invitation service
         // For now, this is a placeholder
         throw new Error('초대 기능은 구현 중입니다.');
-      } catch (_err) {
+      } catch (err) {
         const errorMessage =
           err instanceof Error ? err.message : '초대 전송에 실패했습니다.';
         setError(errorMessage);
@@ -281,7 +281,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         // This would require implementing invitation response logic
         // For now, this is a placeholder
         throw new Error('초대 응답 기능은 구현 중입니다.');
-      } catch (_err) {
+      } catch (err) {
         const errorMessage =
           err instanceof Error ? err.message : '초대 응답에 실패했습니다.';
         setError(errorMessage);
@@ -301,7 +301,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         // This would require implementing notification service
         // For now, this is a placeholder
         throw new Error('알림 읽음 처리 기능은 구현 중입니다.');
-      } catch (_err) {
+      } catch (err) {
         const errorMessage =
           err instanceof Error ? err.message : '알림 처리에 실패했습니다.';
         setError(errorMessage);
@@ -320,7 +320,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
       // This would require implementing bulk notification update
       // For now, this is a placeholder
       throw new Error('모든 알림 읽음 처리 기능은 구현 중입니다.');
-    } catch (_err) {
+    } catch (err) {
       const errorMessage =
         err instanceof Error ? err.message : '알림 처리에 실패했습니다.';
       setError(errorMessage);
@@ -338,7 +338,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         // This would require implementing notification deletion
         // For now, this is a placeholder
         throw new Error('알림 삭제 기능은 구현 중입니다.');
-      } catch (_err) {
+      } catch (err) {
         const errorMessage =
           err instanceof Error ? err.message : '알림 삭제에 실패했습니다.';
         setError(errorMessage);

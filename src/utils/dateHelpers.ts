@@ -37,7 +37,7 @@ export function toDate(
         return new Date();
       }
       return date;
-    } catch (_error) {
+    } catch (error) {
       return new Date();
     }
   }
@@ -50,7 +50,7 @@ export function toDate(
         return new Date();
       }
       return date;
-    } catch (_error) {
+    } catch (error) {
       return new Date();
     }
   }
@@ -62,7 +62,7 @@ export function toDate(
       return new Date();
     }
     return date;
-  } catch (_error) {
+  } catch (error) {
     return new Date();
   }
 }

@@ -2,9 +2,7 @@ import React, { ReactNode } from 'react';
 import { 
   GlassCardVariant, 
   WaveButtonVariant, 
-  WaveButtonSize, 
-  BaseComponentProps, 
-  InteractiveComponentProps 
+  WaveButtonSize
 } from './common';
 
 // ============================================================================
@@ -374,7 +372,7 @@ export type MakeRequired<T, K extends keyof T> = T & { [P in K]-?: T[P] };
 /**
  * 컴포넌트 렌더링 함수 타입
  */
-export type RenderFunction<T = any> = (props: T) => ReactNode;
+export type RenderFunction<T = unknown> = (props: T) => ReactNode;
 
 /**
  * 컴포넌트 ref 타입
