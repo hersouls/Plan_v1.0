@@ -116,7 +116,7 @@ export function AccountActions() {
       setShowPasswordModal(false);
       setPasswordForm({ current: '', new: '', confirm: '' });
       setPasswordError('');
-    } catch (error) {
+    } catch {
       setPasswordError('비밀번호 변경에 실패했습니다.');
     } finally {
       setLoading(null);
@@ -149,7 +149,7 @@ export function AccountActions() {
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
 
-      } catch (error) {
+      } catch {
         // Handle error silently
       } finally {
       setLoading(null);
@@ -173,7 +173,7 @@ export function AccountActions() {
       }
 
       window.location.reload();
-    } catch (error) {
+    } catch {
         // Handle error silently
       } finally {
       setLoading(null);
@@ -185,7 +185,7 @@ export function AccountActions() {
     try {
       await signOut();
       navigate('/login');
-    } catch (error) {
+    } catch {
         // Handle error silently
       } finally {
       setLoading(null);
@@ -199,7 +199,7 @@ export function AccountActions() {
       await new Promise(resolve => setTimeout(resolve, 2000));
       
       navigate('/login');
-    } catch (error) {
+    } catch {
         // Handle error silently
       } finally {
       setLoading(null);
