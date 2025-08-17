@@ -303,7 +303,7 @@ function PointsManagement() {
             profiles[memberId] = profile as User;
           }
         } catch {
-          `);
+          // Handle error silently
         }
       }
 
@@ -353,8 +353,8 @@ function PointsManagement() {
         <div className="relative">
           <img
             src={avatarUrl}
-            alt={`${displayName || 'User'} Avatar`}
-            className={`${sizeClasses[size]} rounded-full object-cover shadow-lg`}
+            alt={displayName ? displayName + ' Avatar' : 'User Avatar'}
+            className={sizeClasses[size] + ' rounded-full object-cover shadow-lg'}
             onError={e => {
               // 이미지 로드 실패 시 기본 아바타로 대체
               const target = e.target as HTMLImageElement;
@@ -371,7 +371,7 @@ function PointsManagement() {
             }}
           />
           <div
-            className={`${sizeClasses[size]} bg-gradient-to-br from-blue-400 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold ${textSizes[size]} shadow-lg avatar-fallback absolute inset-0`}
+            className={sizeClasses[size] + ' bg-gradient-to-br from-blue-400 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold ' + textSizes[size] + ' shadow-lg avatar-fallback absolute inset-0'}
             style={{ display: 'none' }}
           >
             {displayName?.charAt(0) || 'U'}
@@ -382,7 +382,7 @@ function PointsManagement() {
 
     return (
       <div
-        className={`${sizeClasses[size]} bg-gradient-to-br from-blue-400 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold ${textSizes[size]} shadow-lg avatar-fallback`}
+        className={sizeClasses[size] + ' bg-gradient-to-br from-blue-400 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold ' + textSizes[size] + ' shadow-lg avatar-fallback'}
       >
         {displayName?.charAt(0) || 'U'}
       </div>
@@ -424,6 +424,7 @@ function PointsManagement() {
       setShowAddPointsModal(false);
     } catch (error) {
         // Handle error silently
+        console.error('Error adding points:', error);
     }
   };
 
@@ -455,6 +456,7 @@ function PointsManagement() {
       setShowAddPointsModal(false);
     } catch (error) {
         // Handle error silently
+        console.error('Error deducting points:', error);
     }
   };
 
@@ -529,11 +531,11 @@ function PointsManagement() {
                     >
                       <Star
                         size={16}
-                        className={`sm:w-4 sm:h-4 lg:w-5 lg:h-5 ${
+                        className={'sm:w-4 sm:h-4 lg:w-5 lg:h-5 ' + (
                           favoriteGroups.includes(selectedGroupId)
                             ? 'text-yellow-400 fill-yellow-400'
                             : 'text-white/60'
-                        }`}
+                        )}
                       />
                     </WaveButton>
                   )}
@@ -655,17 +657,17 @@ function PointsManagement() {
                         <button
                           key={member.userId}
                           onClick={() => setSelectedMember(member.userId)}
-                          className={`
-                           w-full p-4 rounded-xl cursor-pointer transition-all duration-300 text-left font-pretendard
-                           ${
+                          className={
+                           'w-full p-4 rounded-xl cursor-pointer transition-all duration-300 text-left font-pretendard ' +
+                           (
                              isSelected
                                ? 'bg-gradient-to-r from-blue-500/20 to-purple-500/20 border-2 border-blue-400/50 shadow-lg'
                                : member.userId === user?.uid
                                ? 'bg-gradient-to-r from-yellow-400/10 to-orange-400/10 border-2 border-yellow-400/30 hover:bg-yellow-400/20 hover:border-yellow-400/50'
                                : 'bg-white/10 border-2 border-transparent hover:bg-white/20 hover:border-white/30'
-                           }
-                         `}
-                          aria-label={`${member.userName || 'Unknown'} 선택`}
+                           )
+                         }
+                          aria-label={(member.userName || 'Unknown') + ' 선택'}
                           aria-pressed={isSelected}
                         >
                           <div className="flex items-center justify-between">
@@ -886,9 +888,7 @@ function PointsManagement() {
                           aria-label="미승인 포인트 내역 새로고침"
                         >
                           <RefreshCw
-                            className={`w-4 h-4 ${
-                              loading ? 'animate-spin' : ''
-                            }`}
+                            className={'w-4 h-4 ' + (loading ? 'animate-spin' : '')}
                           />
                         </WaveButton>
                       </div>
@@ -929,7 +929,7 @@ function PointsManagement() {
                               } else if (diffDays === 2) {
                                 return '어제';
                               } else if (diffDays <= 7) {
-                                return `${diffDays - 1}일 전`;
+                                return (diffDays - 1) + '일 전';
                               } else {
                                 return date.toLocaleDateString('ko-KR', {
                                   month: 'short',
@@ -944,21 +944,21 @@ function PointsManagement() {
                           return (
                             <div
                               key={history.id}
-                              className={`
-                                flex items-center justify-between p-4 rounded-xl transition-all duration-200 hover:scale-[1.02] hover:shadow-lg point-history-card
-                                ${
+                              className={
+                                'flex items-center justify-between p-4 rounded-xl transition-all duration-200 hover:scale-[1.02] hover:shadow-lg point-history-card ' +
+                                (
                                   history.taskId
                                     ? 'cursor-pointer hover:ring-2 hover:ring-blue-300'
                                     : 'cursor-default'
-                                }
-                                ${
+                                ) + ' ' +
+                                (
                                   isEarned
                                     ? 'point-history-bg-earned'
                                     : isDeducted
                                     ? 'point-history-bg-deducted'
                                     : 'point-history-bg-manual'
-                                }
-                              `}
+                                )
+                              }
                               role="listitem"
                               onClick={
                                 history.taskId
@@ -977,22 +977,22 @@ function PointsManagement() {
                               tabIndex={history.taskId ? 0 : -1}
                               aria-label={
                                 history.taskId
-                                  ? `${history.description} 할일 수정하기`
+                                  ? history.description + ' 할일 수정하기'
                                   : history.description
                               }
                             >
                               <div className="flex items-center gap-4">
                                 <div
-                                  className={`
-                                    w-10 h-10 rounded-full flex items-center justify-center shadow-sm point-icon-animate
-                                    ${
+                                  className={
+                                    'w-10 h-10 rounded-full flex items-center justify-center shadow-sm point-icon-animate ' +
+                                    (
                                       isEarned
                                         ? 'point-earned'
                                         : isDeducted
                                         ? 'point-deducted'
                                         : 'point-manual'
-                                    }
-                                  `}
+                                    )
+                                  }
                                   aria-label={
                                     isEarned
                                       ? '획득'
@@ -1039,16 +1039,16 @@ function PointsManagement() {
                               <div className="flex items-center gap-3">
                                 <div className="flex items-center gap-2">
                                   <Typography.Body
-                                    className={`
-                                      font-bold text-lg
-                                      ${
+                                    className={
+                                      'font-bold text-lg ' +
+                                      (
                                         isEarned
                                           ? 'text-semantic-success-600'
                                           : isDeducted
                                           ? 'text-semantic-danger-600'
                                           : 'text-semantic-primary-600'
-                                      }
-                                    `}
+                                      )
+                                    }
                                   >
                                     {isEarned ? '+' : isDeducted ? '-' : ''}
                                     {history.amount}
@@ -1180,9 +1180,7 @@ function PointsManagement() {
                           aria-label="승인된 포인트 내역 새로고침"
                         >
                           <RefreshCw
-                            className={`w-4 h-4 ${
-                              loading ? 'animate-spin' : ''
-                            }`}
+                            className={'w-4 h-4 ' + (loading ? 'animate-spin' : '')}
                           />
                         </WaveButton>
                       </div>
@@ -1223,7 +1221,7 @@ function PointsManagement() {
                               } else if (diffDays === 2) {
                                 return '어제';
                               } else if (diffDays <= 7) {
-                                return `${diffDays - 1}일 전`;
+                                return (diffDays - 1) + '일 전';
                               } else {
                                 return date.toLocaleDateString('ko-KR', {
                                   month: 'short',
@@ -1238,30 +1236,30 @@ function PointsManagement() {
                           return (
                             <div
                               key={history.id}
-                              className={`
-                                flex items-center justify-between p-4 rounded-xl transition-all duration-200 hover:scale-[1.02] hover:shadow-lg point-history-card
-                                ${
+                              className={
+                                'flex items-center justify-between p-4 rounded-xl transition-all duration-200 hover:scale-[1.02] hover:shadow-lg point-history-card ' +
+                                (
                                   isEarned
                                     ? 'point-history-bg-earned'
                                     : isDeducted
                                     ? 'point-history-bg-deducted'
                                     : 'point-history-bg-manual'
-                                }
-                              `}
+                                )
+                              }
                               role="listitem"
                             >
                               <div className="flex items-center gap-4">
                                 <div
-                                  className={`
-                                    w-10 h-10 rounded-full flex items-center justify-center shadow-sm point-icon-animate
-                                    ${
+                                  className={
+                                    'w-10 h-10 rounded-full flex items-center justify-center shadow-sm point-icon-animate ' +
+                                    (
                                       isEarned
                                         ? 'point-earned'
                                         : isDeducted
                                         ? 'point-deducted'
                                         : 'point-manual'
-                                    }
-                                  `}
+                                    )
+                                  }
                                   aria-label={
                                     isEarned
                                       ? '획득'
@@ -1299,16 +1297,16 @@ function PointsManagement() {
                               </div>
                               <div className="flex items-center gap-2">
                                 <Typography.Body
-                                  className={`
-                                      font-bold text-lg
-                                      ${
+                                  className={
+                                      'font-bold text-lg ' +
+                                      (
                                         isEarned
                                           ? 'text-semantic-success-600'
                                           : isDeducted
                                           ? 'text-semantic-danger-600'
                                           : 'text-semantic-primary-600'
-                                      }
-                                      `}
+                                      )
+                                    }
                                 >
                                   {isEarned ? '+' : isDeducted ? '-' : ''}
                                   {history.amount}
@@ -1375,11 +1373,11 @@ function PointsManagement() {
           >
             <div className="flex items-center gap-3 mb-6">
               <div
-                className={`w-12 h-12 rounded-full flex items-center justify-center ${
+                className={'w-12 h-12 rounded-full flex items-center justify-center ' + (
                   pointAction === 'add'
                     ? 'bg-gradient-to-br from-semantic-success-500 to-semantic-success-600'
                     : 'bg-gradient-to-br from-semantic-danger-500 to-semantic-danger-600'
-                }`}
+                )}
               >
                 {pointAction === 'add' ? (
                   <Plus className="w-6 h-6 text-white" />
@@ -1432,9 +1430,7 @@ function PointsManagement() {
                   onChange={e => setPointReason(e.target.value)}
                   rows={3}
                   className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-blue-500/50 resize-none"
-                  placeholder={`포인트 ${
-                    pointAction === 'add' ? '추가' : '차감'
-                  } 사유를 입력하세요`}
+                  placeholder={'포인트 ' + (pointAction === 'add' ? '추가' : '차감') + ' 사유를 입력하세요'}
                 />
               </div>
 
@@ -1451,11 +1447,11 @@ function PointsManagement() {
                     {pointAction === 'add' ? '추가 후' : '차감 후'}
                   </span>
                   <span
-                    className={`font-semibold ${
+                    className={'font-semibold ' + (
                       pointAction === 'add'
                         ? 'text-semantic-success-400'
                         : 'text-semantic-danger-400'
-                    }`}
+                    )}
                   >
                     {(selectedMemberStats?.totalPoints || 0) +
                       (pointAction === 'add' ? pointAmount : -pointAmount)}
@@ -1484,14 +1480,12 @@ function PointsManagement() {
                   }
                 }}
                 disabled={pointAmount <= 0 || !pointReason.trim()}
-                className={`flex-1 ${
+                className={'flex-1 ' + (
                   pointAction === 'add'
                     ? 'bg-gradient-to-r from-semantic-success-500 to-semantic-success-600 hover:from-semantic-success-600 hover:to-semantic-success-700'
                     : 'bg-gradient-to-r from-semantic-danger-500 to-semantic-danger-600 hover:from-semantic-danger-600 hover:to-semantic-danger-700'
-                } text-white disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl transition-all duration-200`}
-                aria-label={`포인트 ${
-                  pointAction === 'add' ? '추가' : '차감'
-                } 확인`}
+                ) + ' text-white disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl transition-all duration-200'}
+                aria-label={'포인트 ' + (pointAction === 'add' ? '추가' : '차감') + ' 확인'}
               >
                 {pointAction === 'add' ? '추가' : '차감'}
               </WaveButton>
@@ -1581,30 +1575,30 @@ function PointsManagement() {
                   return (
                     <div
                       key={history.id}
-                      className={`
-                        flex items-center justify-between p-4 rounded-xl transition-all duration-200 hover:scale-[1.01] hover:shadow-lg point-history-card
-                        ${
+                      className={
+                        'flex items-center justify-between p-4 rounded-xl transition-all duration-200 hover:scale-[1.01] hover:shadow-lg point-history-card ' +
+                        (
                           isEarned
                             ? 'point-history-bg-earned'
                             : isDeducted
                             ? 'point-history-bg-deducted'
                             : 'point-history-bg-manual'
-                        }
-                      `}
+                        )
+                      }
                       role="listitem"
                     >
                       <div className="flex items-center gap-4">
                         <div
-                          className={`
-                            w-12 h-12 rounded-full flex items-center justify-center shadow-sm point-icon-animate
-                            ${
+                          className={
+                            'w-12 h-12 rounded-full flex items-center justify-center shadow-sm point-icon-animate ' +
+                            (
                               isEarned
                                 ? 'point-earned'
                                 : isDeducted
                                 ? 'point-deducted'
                                 : 'point-manual'
-                            }
-                          `}
+                            )
+                          }
                           aria-label={
                             isEarned ? '획득' : isDeducted ? '차감' : '기타'
                           }
@@ -1635,16 +1629,16 @@ function PointsManagement() {
                       </div>
                       <div className="flex items-center gap-3">
                         <Typography.Body
-                          className={`
-                            font-bold text-xl
-                            ${
+                          className={
+                            'font-bold text-xl ' +
+                            (
                               isEarned
                                 ? 'point-text-earned'
                                 : isDeducted
                                 ? 'point-text-deducted'
                                 : 'point-text-manual'
-                            }
-                          `}
+                            )
+                          }
                         >
                           {isEarned ? '+' : isDeducted ? '-' : ''}
                           {history.amount}
@@ -1767,30 +1761,30 @@ function PointsManagement() {
                   return (
                     <div
                       key={history.id}
-                      className={`
-                        flex items-center justify-between p-4 rounded-xl transition-all duration-200 hover:scale-[1.01] hover:shadow-lg point-history-card
-                        ${
+                      className={
+                        'flex items-center justify-between p-4 rounded-xl transition-all duration-200 hover:scale-[1.01] hover:shadow-lg point-history-card ' +
+                        (
                           isEarned
                             ? 'point-history-bg-earned'
                             : isDeducted
                             ? 'point-history-bg-deducted'
                             : 'point-history-bg-manual'
-                        }
-                      `}
+                        )
+                      }
                       role="listitem"
                     >
                       <div className="flex items-center gap-4">
                         <div
-                          className={`
-                            w-12 h-12 rounded-full flex items-center justify-center shadow-sm point-icon-animate
-                            ${
+                          className={
+                            'w-12 h-12 rounded-full flex items-center justify-center shadow-sm point-icon-animate ' +
+                            (
                               isEarned
                                 ? 'point-earned'
                                 : isDeducted
                                 ? 'point-deducted'
                                 : 'point-manual'
-                            }
-                          `}
+                            )
+                          }
                           aria-label={
                             isEarned ? '획득' : isDeducted ? '차감' : '기타'
                           }
@@ -1824,16 +1818,16 @@ function PointsManagement() {
                       </div>
                       <div className="flex items-center gap-3">
                         <Typography.Body
-                          className={`
-                            font-bold text-xl
-                            ${
+                          className={
+                            'font-bold text-xl ' +
+                            (
                               isEarned
                                 ? 'point-text-earned'
                                 : isDeducted
                                 ? 'point-text-deducted'
                                 : 'point-text-manual'
-                            }
-                          `}
+                            )
+                          }
                         >
                           {isEarned ? '+' : isDeducted ? '-' : ''}
                           {history.amount}
@@ -1891,3 +1885,4 @@ function PointsManagement() {
 }
 
 export default PointsManagement;
+
