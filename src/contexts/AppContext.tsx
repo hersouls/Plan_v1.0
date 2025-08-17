@@ -346,7 +346,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
             payload: { group: defaultGroup, groupId: defaultGroup.id },
           });
         }
-      } catch (_error) {
+      } catch {
         dispatch({
           type: 'SET_ERROR',
           payload: {

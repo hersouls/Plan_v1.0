@@ -104,7 +104,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
         await userService.createOrUpdateUserProfile(user.uid, updateData);
       }
-    } catch (_error) {
+    } catch {
         // Handle error silently
       }
   };
