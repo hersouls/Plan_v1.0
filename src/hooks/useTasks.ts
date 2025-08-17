@@ -94,7 +94,7 @@ export const useTasks = (options: UseTasksOptions = {}): UseTasksReturn => {
       try {
         setError(null);
         return await taskService.createTask(taskData);
-      } catch (_err) {
+      } catch {
         const errorMessage = '할일 생성 중 오류가 발생했습니다.';
         setError(errorMessage);
         throw new Error(errorMessage);
@@ -178,7 +178,7 @@ export const useTasks = (options: UseTasksOptions = {}): UseTasksReturn => {
                 taskId,
                 task.title
               );
-            } catch (_pointsError) {
+            } catch {
               // 포인트 지급 실패는 할일 완료를 막지 않음
             }
           }
@@ -189,7 +189,7 @@ export const useTasks = (options: UseTasksOptions = {}): UseTasksReturn => {
           );
           throw updateError;
         }
-      } catch (err) {
+      } catch {
         const errorMessage = '할일 상태 변경 중 오류가 발생했습니다.';
         setError(errorMessage);
         throw new Error(errorMessage);
@@ -206,7 +206,7 @@ export const useTasks = (options: UseTasksOptions = {}): UseTasksReturn => {
       setError(null);
       const taskList = await taskService.getGroupTasks(options.groupId);
       setTasks(taskList);
-    } catch (err) {
+    } catch {
       const errorMessage = '할일을 새로고침하는 중 오류가 발생했습니다.';
       setError(errorMessage);
     } finally {
@@ -270,7 +270,7 @@ export const useTasks = (options: UseTasksOptions = {}): UseTasksReturn => {
           }
 
           setTasks(filteredTasks);
-        } catch (err) {
+        } catch {
           setError('할일을 불러오는 중 오류가 발생했습니다.');
         } finally {
           setLoading(false);
@@ -283,7 +283,7 @@ export const useTasks = (options: UseTasksOptions = {}): UseTasksReturn => {
 
     let unsubscribe: (() => void) | undefined;
 
-    const handleError = (error: Error) => {
+    const handleError = (_error: Error) => {
       setError('할일을 불러오는 중 오류가 발생했습니다.');
       setLoading(false);
     };
@@ -340,8 +340,8 @@ export const useTasks = (options: UseTasksOptions = {}): UseTasksReturn => {
           handleError
         );
       }
-    } catch (err) {
-      handleError(err as Error);
+    } catch {
+      handleError(new Error('할일 구독 중 오류가 발생했습니다.'));
     }
 
     return () => {

@@ -3,7 +3,6 @@ import {
   doc,
   addDoc,
   updateDoc,
-  deleteDoc,
   getDoc,
   getDocs,
   query,
@@ -11,14 +10,11 @@ import {
   orderBy,
   onSnapshot,
   serverTimestamp,
-  Timestamp,
   writeBatch,
   limit,
   setDoc,
   arrayUnion,
-  arrayRemove,
   increment,
-  startAfter,
   runTransaction,
 } from 'firebase/firestore';
 import { db } from './firebase';
@@ -26,19 +22,14 @@ import type {
   Task, 
   CreateTaskInput, 
   UpdateTaskInput, 
-  TaskComment, 
   FamilyGroup, 
   CreateGroupInput, 
   UpdateGroupInput, 
-  UserProfile,
-  UserNotification,
-  Analytics,
-  Activity,
-  Invite
+  UserNotification
 } from '../types';
 
 // Enhanced helper function to filter undefined values deeply
-function sanitizeData(_obj: unknown): unknown {
+function sanitizeData(obj: unknown): unknown {
   if (obj === null || obj === undefined) {
     return null;
   }
@@ -48,7 +39,7 @@ function sanitizeData(_obj: unknown): unknown {
   }
   
   if (typeof obj === 'object' && obj.constructor === Object) {
-    const result: unknown = {};
+    const result: Record<string, unknown> = {};
     for (const [key, value] of Object.entries(obj)) {
       if (value !== undefined) {
         result[key] = sanitizeData(value);
@@ -231,7 +222,7 @@ export const enhancedTaskService = {
         })) as Task[];
         callback(tasks);
       },
-      (error) => {
+      (_error) => {
         callback([]);
       }
     );
@@ -254,7 +245,7 @@ export const enhancedTaskService = {
       });
       
       await addDoc(collection(db, 'activities'), sanitizedData);
-    } catch (error) {
+    } catch {
       // Don't throw - activity logging shouldn't break main operations
     }
   },
@@ -297,9 +288,9 @@ export const enhancedTaskService = {
       });
 
       await batch.commit();
-      return taskRefs.map(ref => ref.id);
-    } catch (error) {
-      throw error;
+      return taskRefs.map((ref: { id: string }) => ref.id);
+    } catch {
+      throw new Error('Failed to create multiple tasks');
     }
   },
 
@@ -359,8 +350,8 @@ export const enhancedTaskService = {
         entityType: 'task',
         entityId: taskId,
       });
-    } catch (error) {
-      throw error;
+    } catch {
+      throw new Error('Failed to toggle task completion');
     }
   },
 };
@@ -403,8 +394,8 @@ export const enhancedGroupService = {
       await this.addUserToGroup(docRef.id, groupData.ownerId);
       
       return docRef.id;
-    } catch (error) {
-      throw error;
+    } catch {
+      throw new Error('Failed to create group');
     }
   },
 
@@ -420,8 +411,8 @@ export const enhancedGroupService = {
       
       const groupRef = doc(db, 'groups', groupId);
       await updateDoc(groupRef, sanitizedUpdates);
-    } catch (error) {
-      throw error;
+    } catch {
+      throw new Error('Failed to update group');
     }
   },
 
@@ -439,8 +430,8 @@ export const enhancedGroupService = {
         id: doc.id,
         ...doc.data()
       })) as FamilyGroup[];
-    } catch (error) {
-      throw error;
+    } catch {
+      throw new Error('Failed to get user groups');
     }
   },
 
@@ -463,8 +454,8 @@ export const enhancedGroupService = {
           }
         }
       });
-    } catch (error) {
-      throw error;
+    } catch {
+      throw new Error('Failed to add user to group');
     }
   },
 
@@ -479,7 +470,7 @@ export const enhancedGroupService = {
           callback(null);
         }
       },
-      (error) => {
+      (_error) => {
         callback(null);
       }
     );
@@ -489,15 +480,9 @@ export const enhancedGroupService = {
 // Enhanced User Service with consistent field names
 export const enhancedUserService = {
   // Create or update user profile with proper data sanitization
-  async createOrUpdateUserProfile(userId: string, _profileData: unknown): Promise<void> {
+  async createOrUpdateUserProfile(userId: string, profileData: unknown): Promise<void> {
     try {
       const userRef = doc(db, 'users', userId);
-      
-      // Normalize avatar/photoURL field
-      if (profileData.avatar && !profileData.photoURL) {
-        profileData.photoURL = profileData.avatar;
-        delete profileData.avatar;
-      }
       
       // Deep filter out undefined values to prevent Firestore errors
       const cleanProfileData = sanitizeData(profileData);
@@ -519,23 +504,23 @@ export const enhancedUserService = {
           updatedAt: serverTimestamp(),
         });
       }
-    } catch (error) {
-      throw error;
+    } catch {
+      throw new Error('Failed to create or update user profile');
     }
   },
 
   // Get user profile with error handling
-  async getUserProfile(userId: string): Promise<UserProfile | null> {
+  async getUserProfile(userId: string): Promise<unknown | null> {
     try {
       const docSnap = await getDoc(doc(db, 'users', userId));
-      return docSnap.exists() ? { id: docSnap.id, ...docSnap.data() } as UserProfile : null;
-    } catch (error) {
-      throw error;
+      return docSnap.exists() ? { id: docSnap.id, ...docSnap.data() } : null;
+    } catch {
+      throw new Error('Failed to get user profile');
     }
   },
 
   // Update user statistics
-  async updateUserStats(userId: string, statsUpdate: Partial<UserProfile['stats']>): Promise<void> {
+  async updateUserStats(userId: string, statsUpdate: Record<string, number>): Promise<void> {
     try {
       const userRef = doc(db, 'users', userId);
       const updateData: unknown = { updatedAt: serverTimestamp() };
@@ -547,23 +532,23 @@ export const enhancedUserService = {
       });
       
       await updateDoc(userRef, updateData);
-    } catch (error) {
-      throw error;
+    } catch {
+      throw new Error('Failed to update user stats');
     }
   },
 
   // Subscribe to user profile
-  subscribeToUserProfile(userId: string, callback: (profile: UserProfile | null) => void) {
+  subscribeToUserProfile(userId: string, callback: (profile: unknown | null) => void) {
     return onSnapshot(
       doc(db, 'users', userId), 
       (doc) => {
         if (doc.exists()) {
-          callback({ id: doc.id, ...doc.data() } as UserProfile);
+          callback({ id: doc.id, ...doc.data() });
         } else {
           callback(null);
         }
       },
-      (error) => {
+      (_error) => {
         callback(null);
       }
     );
@@ -583,8 +568,8 @@ export const enhancedNotificationService = {
       
       const docRef = await addDoc(collection(db, 'notifications'), sanitizedData);
       return docRef.id;
-    } catch (error) {
-      throw error;
+    } catch {
+      throw new Error('Failed to create notification');
     }
   },
 
@@ -596,8 +581,8 @@ export const enhancedNotificationService = {
         read: true,
         readAt: serverTimestamp(),
       });
-    } catch (error) {
-      throw error;
+    } catch {
+      throw new Error('Failed to mark notification as read');
     }
   },
 
@@ -618,7 +603,7 @@ export const enhancedNotificationService = {
         })) as UserNotification[];
         callback(notifications);
       },
-      (error) => {
+      (_error) => {
         callback([]);
       }
     );

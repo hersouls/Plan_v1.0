@@ -49,10 +49,8 @@ class FCMService {
     try {
       const permission = await Notification.requestPermission();
       return permission;
-    } catch (error) {
-      if (import.meta.env.DEV) {
-        console.error('Error requesting notification permission:', error);
-      }
+    } catch {
+      // Error requesting notification permission
       return 'denied';
     }
   }
@@ -78,10 +76,8 @@ class FCMService {
       }
       
       return null;
-    } catch (error) {
-      if (import.meta.env.DEV) {
-        console.error('Error getting registration token:', error);
-      }
+    } catch {
+      // Error getting registration token
       return null;
     }
   }
@@ -94,11 +90,8 @@ class FCMService {
         fcmTokens: [token], // Array to support multiple devices
         lastTokenUpdate: new Date().toISOString(),
       });
-    } catch (error) {
+    } catch {
       // Handle error silently
-      if (import.meta.env.DEV) {
-        console.error('Error saving token to profile:', error);
-      }
     }
   }
 
@@ -169,10 +162,8 @@ class FCMService {
         return true;
       }
       return false;
-    } catch (error) {
-      if (import.meta.env.DEV) {
-        console.error('Error initializing FCM:', error);
-      }
+    } catch {
+      // Error initializing FCM
       return false;
     }
   }

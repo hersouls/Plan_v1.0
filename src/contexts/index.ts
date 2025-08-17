@@ -6,8 +6,8 @@ export { TaskProvider } from './TaskContext';
 // Re-export hooks from hooks folder
 export { useAuth } from '../hooks/useAuth';
 export { useApp } from '../hooks/useApp';
-export { useData } from '../hooks/useData';
-export { useTaskContext as useTask } from '../hooks/useTask';
+export { useData } from './utils/dataContext.utils';
+export { useTask } from './utils/taskContext.utils';
 
 // Re-export types
 export type { AuthContextType, ExtendedUser } from '../types/auth';
@@ -23,3 +23,6 @@ export type {
   TaskSortBy, 
   TaskStats, 
   TaskAction 
+} from '../types/taskContext';
+export type { DataContextType } from './DataContextTypes';
+export type { TaskContextType } from './TaskContextTypes';
