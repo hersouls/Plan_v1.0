@@ -48,7 +48,6 @@ class FCMService {
 
     try {
       const permission = await Notification.requestPermission();
-      }
       return permission;
     } catch (error) {
       if (import.meta.env.DEV) {
@@ -75,8 +74,10 @@ class FCMService {
       });
 
       if (token) {
-        return null;
+        return token;
       }
+      
+      return null;
     } catch (error) {
       if (import.meta.env.DEV) {
         console.error('Error getting registration token:', error);
@@ -147,6 +148,7 @@ class FCMService {
     if (!this.isSupported) {
       return false;
     }
+    
     try {
       const token = await this.getRegistrationToken();
       if (token) {
