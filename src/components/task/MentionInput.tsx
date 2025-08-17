@@ -7,6 +7,7 @@ import { cn } from '@/components/ui/utils';
 import { useAuth } from '@/contexts/AuthContext';
 import { useData } from '@/contexts/DataContext';
 import { useGroup } from '@/hooks/useGroup';
+import { GroupMember } from '@/types/group';
 import { AtSign } from 'lucide-react';
 
 interface MentionInputProps {
@@ -59,7 +60,7 @@ export const MentionInput: React.FC<MentionInputProps> = ({
 
     // 그룹 멤버 추가
     if (currentGroup && groupMembers) {
-      groupMembers.forEach((member: any) => {
+      groupMembers.forEach((member: GroupMember) => {
         if (member.userId !== user?.uid) {
           users.push({
             id: member.userId,
