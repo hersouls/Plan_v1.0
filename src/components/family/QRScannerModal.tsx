@@ -37,7 +37,7 @@ export function QRScannerModal({
     return () => {
       stopScanning();
     };
-  }, [isOpen]);
+  }, [isOpen, startScanning]);
 
   const scanQRCode = useCallback(() => {
     if (!videoRef.current || !canvasRef.current || !isScanning) return;
