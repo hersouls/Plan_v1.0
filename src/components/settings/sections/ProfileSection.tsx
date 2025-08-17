@@ -296,7 +296,7 @@ export function ProfileSection({
             
             <div className="flex gap-2 mt-2">
               <WaveButton
-                size="xs"
+                size="sm"
                 onClick={() => handleFieldSave(fieldKey)}
                 disabled={saving}
                 className="flex-1"
@@ -304,7 +304,7 @@ export function ProfileSection({
                 {saving ? <InlineLoading /> : '저장'}
               </WaveButton>
               <WaveButton
-                size="xs"
+                size="sm"
                 variant="ghost"
                 onClick={() => {
                   setEditingField(null);

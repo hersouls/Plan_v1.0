@@ -6,11 +6,9 @@ import {
   Link,
   Plus,
   Trash2,
-  Upload,
   X,
 } from 'lucide-react';
 import { useRef, useState } from 'react';
-import { LoadingSpinner } from '../common/LoadingSpinner';
 import { WaveButton } from '../ui/WaveButton';
 import { Typography } from '../ui/typography';
 import { FileAttachment, UrlAttachment } from '../../types/task';

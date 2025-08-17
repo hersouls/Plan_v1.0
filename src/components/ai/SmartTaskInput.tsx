@@ -44,31 +44,6 @@ export function SmartTaskInput({
     suggestTaskPriority 
   } = useClaudeAI();
 
-  // Auto-enhance when user stops typing
-  useEffect(() => {
-    if (!value.trim() || !isAvailable) {
-      setShowSuggestions(false);
-      setSuggestion(null);
-      return;
-    }
-
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
-
-    timeoutRef.current = setTimeout(async () => {
-      if (value.trim().length > 10) { // Only enhance meaningful input
-        await handleAutoEnhance(value.trim());
-      }
-    }, 1500);
-
-    return () => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
-    };
-  }, [value, isAvailable, handleAutoEnhance]);
-
   const handleAutoEnhance = useCallback(async (input: string) => {
     if (!isAvailable || isEnhancing) return;
 
@@ -97,6 +72,31 @@ export function SmartTaskInput({
       setIsEnhancing(false);
     }
   }, [isAvailable, isEnhancing, categorizeTask, improveTaskDescription, estimateTaskDuration, suggestTaskPriority]);
+
+  // Auto-enhance when user stops typing
+  useEffect(() => {
+    if (!value.trim() || !isAvailable) {
+      setShowSuggestions(false);
+      setSuggestion(null);
+      return;
+    }
+
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+
+    timeoutRef.current = setTimeout(async () => {
+      if (value.trim().length > 10) { // Only enhance meaningful input
+        await handleAutoEnhance(value.trim());
+      }
+    }, 1500);
+
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, [value, isAvailable, handleAutoEnhance]);
 
   const handleManualEnhance = useCallback(async () => {
     if (!value.trim() || !isAvailable) return;

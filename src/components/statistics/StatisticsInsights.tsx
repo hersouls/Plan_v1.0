@@ -9,9 +9,7 @@ import {
   ChevronRight,
   RefreshCw,
   X,
-  Users,
-  Award,
-  Calendar
+  Award
 } from 'lucide-react';
 import { GlassCard } from '../ui/GlassCard';
 import { WaveButton } from '../ui/WaveButton';
