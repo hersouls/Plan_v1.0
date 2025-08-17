@@ -2,6 +2,7 @@ import { anthropic, claudeConfig } from './claude';
 import { PointStats } from './points';
 import { Task } from '../types/task';
 import { GroupMember } from '../types/group';
+import { Timestamp } from 'firebase/firestore';
 
 export interface StatisticsInsight {
   type: 'trend' | 'pattern' | 'anomaly' | 'prediction' | 'recommendation';
@@ -77,7 +78,7 @@ export class StatisticsAnalyzer {
       // 멤버별 통계
       const memberStats = members.map(member => ({
         name: member.userName,
-        completedTasks: completedTasks.filter(t => t.assignedTo === member.userId).length,
+        completedTasks: completedTasks.filter(t => t.assigneeId === member.userId).length,
         points: pointStats[member.userId]?.totalPoints || 0,
         streak: pointStats[member.userId]?.currentStreak || 0
       }));
@@ -162,7 +163,7 @@ ${JSON.stringify(timePatterns, null, 2)}
 
     try {
       const recentTasks = tasks.filter(t => {
-        const taskDate = new Date(t.createdAt);
+        const taskDate = t.createdAt instanceof Timestamp ? t.createdAt.toDate() : new Date(t.createdAt);
         const thirtyDaysAgo = new Date();
         thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
         return taskDate > thirtyDaysAgo;
@@ -231,7 +232,7 @@ ${JSON.stringify(timePatterns, null, 2)}
 
     try {
       const memberPerformance = members.map(member => {
-        const memberTasks = tasks.filter(t => t.assignedTo === member.userId);
+        const memberTasks = tasks.filter(t => t.assigneeId === member.userId);
         const completedTasks = memberTasks.filter(t => t.status === 'completed');
         const stats = pointStats[member.userId];
         
@@ -318,7 +319,7 @@ ${JSON.stringify(memberPerformance, null, 2)}
     }
 
     try {
-      const userTasks = tasks.filter(t => t.assignedTo === userId);
+      const userTasks = tasks.filter(t => t.assigneeId === userId);
       const completedTasks = userTasks.filter(t => t.status === 'completed');
 
       // 시간대별 분석
@@ -372,20 +373,21 @@ ${JSON.stringify(memberPerformance, null, 2)}
   }
 
   private validateInsight(_insight: unknown): StatisticsInsight {
+    const insight = _insight as any;
     return {
-      type: ['trend', 'pattern', 'anomaly', 'prediction', 'recommendation'].includes(insight.type) ? 
+      type: ['trend', 'pattern', 'anomaly', 'prediction', 'recommendation'].includes(insight?.type) ? 
         insight.type : 'recommendation',
-      title: typeof insight.title === 'string' ? insight.title : '인사이트',
-      description: typeof insight.description === 'string' ? 
+      title: typeof insight?.title === 'string' ? insight.title : '인사이트',
+      description: typeof insight?.description === 'string' ? 
         insight.description : '분석 결과를 확인해주세요.',
-      confidence: typeof insight.confidence === 'number' ? 
+      confidence: typeof insight?.confidence === 'number' ? 
         Math.max(0, Math.min(100, insight.confidence)) : 75,
-      priority: ['low', 'medium', 'high'].includes(insight.priority) ? 
+      priority: ['low', 'medium', 'high'].includes(insight?.priority) ? 
         insight.priority : 'medium',
-      actionable: typeof insight.actionable === 'boolean' ? 
+      actionable: typeof insight?.actionable === 'boolean' ? 
         insight.actionable : false,
-      actions: Array.isArray(insight.actions) ? insight.actions : undefined,
-      data: insight.data
+      actions: Array.isArray(insight?.actions) ? insight.actions : undefined,
+      data: insight?.data
     };
   }
 
@@ -449,7 +451,8 @@ ${JSON.stringify(memberPerformance, null, 2)}
     const patterns: Record<number, number> = {};
     tasks.forEach(task => {
       if (task.completedAt) {
-        const hour = new Date(task.completedAt).getHours();
+        const completedAt = task.completedAt instanceof Timestamp ? task.completedAt.toDate() : new Date(task.completedAt);
+        const hour = completedAt.getHours();
         patterns[hour] = (patterns[hour] || 0) + 1;
       }
     });
@@ -479,9 +482,10 @@ ${JSON.stringify(memberPerformance, null, 2)}
     const timeDiffs = tasks
       .filter(t => t.createdAt && t.completedAt)
       .map(t => {
-        const created = new Date(t.createdAt).getTime();
-        const completed = new Date(t.completedAt!).getTime();
-        return (completed - created) / (1000 * 60); // 분 단위
+        const created = t.createdAt instanceof Timestamp ? t.createdAt.toDate() : new Date(t.createdAt);
+        const completed = t.completedAt ? (t.completedAt instanceof Timestamp ? t.completedAt.toDate() : new Date(t.completedAt)) : null;
+        if (!completed) return 0;
+        return (completed.getTime() - created.getTime()) / (1000 * 60); // 분 단위
       });
     
     if (timeDiffs.length === 0) return 0;
@@ -492,7 +496,8 @@ ${JSON.stringify(memberPerformance, null, 2)}
     const distribution: Record<number, number> = {};
     tasks.forEach(task => {
       if (task.completedAt) {
-        const hour = new Date(task.completedAt).getHours();
+        const completedAt = task.completedAt instanceof Timestamp ? task.completedAt.toDate() : new Date(task.completedAt);
+        const hour = completedAt.getHours();
         distribution[hour] = (distribution[hour] || 0) + 1;
       }
     });
@@ -505,7 +510,8 @@ ${JSON.stringify(memberPerformance, null, 2)}
     
     tasks.forEach(task => {
       if (task.completedAt) {
-        const dayIndex = new Date(task.completedAt).getDay();
+        const completedAt = task.completedAt instanceof Timestamp ? task.completedAt.toDate() : new Date(task.completedAt);
+        const dayIndex = completedAt.getDay();
         const dayName = days[dayIndex];
         distribution[dayName] = (distribution[dayName] || 0) + 1;
       }

@@ -1,5 +1,6 @@
 import { format, isThisWeek, isToday, subDays } from 'date-fns';
 import { ko } from 'date-fns/locale';
+import { Timestamp } from 'firebase/firestore';
 import {
   ArrowLeft,
   Award,
@@ -37,6 +38,7 @@ import { useTasks } from '../hooks/useTasks';
 import { PointStats, pointsService } from '../lib/points';
 import { statisticsAnalyzer } from '../lib/statisticsAnalyzer';
 import { toDate } from '../utils/dateHelpers';
+import { Task } from '../types/task';
 
 type DateRange = '7days' | '30days' | '3months' | 'year';
 
@@ -166,14 +168,23 @@ function StatisticsEnhanced() {
         }),
         fullDate: date,
         total: dayTasks.length,
-        completed: dayTasks.filter(t => t.completed).length,
-        pending: dayTasks.filter(t => !t.completed && !t.isOverdue).length,
-        overdue: dayTasks.filter(t => t.isOverdue).length,
+        completed: dayTasks.filter(t => isTaskCompleted(t)).length,
+        pending: dayTasks.filter(t => !isTaskCompleted(t) && !isTaskOverdue(t)).length,
+        overdue: dayTasks.filter(t => isTaskOverdue(t)).length,
       });
     }
 
     return { filteredTasks: filtered, periodData: period };
   }, [tasks, dateRange]);
+
+  // Helper functions for task status
+  const isTaskCompleted = (task: Task) => task.status === 'completed' || !!task.completedAt;
+  const isTaskOverdue = (task: Task) => {
+    if (task.status === 'completed' || !!task.completedAt) return false;
+    if (!task.dueDate) return false;
+    const dueDate = task.dueDate instanceof Timestamp ? task.dueDate.toDate() : new Date(task.dueDate);
+    return dueDate < new Date();
+  };
 
   // Enhanced chart data with multiple metrics
   const { categoryData, priorityData, statusData, memberData } = useMemo(() => {
@@ -224,8 +235,8 @@ function StatisticsEnhanced() {
     );
 
     // Status distribution
-    const completed = filteredTasks.filter(t => t.completed).length;
-    const overdue = filteredTasks.filter(t => t.isOverdue).length;
+    const completed = filteredTasks.filter(t => isTaskCompleted(t)).length;
+    const overdue = filteredTasks.filter(t => isTaskOverdue(t)).length;
     const pending = filteredTasks.length - completed - overdue;
 
     const statusChart = [
@@ -253,7 +264,7 @@ function StatisticsEnhanced() {
             const memberTasks = filteredTasks.filter(
               t => t.assigneeId === member.userId
             );
-            const completedCount = memberTasks.filter(t => t.completed).length;
+            const completedCount = memberTasks.filter(t => isTaskCompleted(t)).length;
 
             return {
               name: member.userName || '이름 없음',
@@ -289,24 +300,24 @@ function StatisticsEnhanced() {
       return isThisWeek(taskDate);
     });
 
-    const overdueTasks = filteredTasks.filter(task => task.isOverdue);
+    const overdueTasks = filteredTasks.filter(task => isTaskOverdue(task));
 
     return {
       todayTotal: todayTasks.length,
-      todayCompleted: todayTasks.filter(t => t.completed).length,
+              todayCompleted: todayTasks.filter(t => isTaskCompleted(t)).length,
       weekTotal: thisWeekTasks.length,
-      weekCompleted: thisWeekTasks.filter(t => t.completed).length,
+              weekCompleted: thisWeekTasks.filter(t => isTaskCompleted(t)).length,
       overdueCount: overdueTasks.length,
-      totalPoints: filteredTasks.reduce(
-        (sum, task) => sum + (task.completed ? 10 : 0),
-        0
-      ),
+              totalPoints: filteredTasks.reduce(
+          (sum, task) => sum + (isTaskCompleted(task) ? 10 : 0),
+          0
+        ),
     };
   }, [filteredTasks]);
 
   const loading =
     groupsLoading || groupLoading || tasksLoading || settingsLoading;
-  const completedTasks = filteredTasks.filter(task => task.completed).length;
+  const completedTasks = filteredTasks.filter(task => isTaskCompleted(task)).length;
   const completionRate =
     filteredTasks.length > 0
       ? Math.round((completedTasks / filteredTasks.length) * 100)

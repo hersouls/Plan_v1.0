@@ -282,12 +282,15 @@ function TaskDetailPage() {
 
   // 그룹 멤버 정보 가져오기
   const getGroupMemberInfo = (memberId: string) => {
-    const member = groupMembers?.find((_m: unknown) => m.userId === memberId);
+    const member = groupMembers?.find((_m: unknown) => {
+      const m = _m as any;
+      return m.userId === memberId;
+    });
     return member
       ? {
-          name: member.userName || '알 수 없음',
-          role: member.role,
-          avatar: member.userAvatar,
+          name: (member as any).userName || '알 수 없음',
+          role: (member as any).role,
+          avatar: (member as any).userAvatar,
         }
       : null;
   };
@@ -601,23 +604,26 @@ function TaskDetailPage() {
                               <div className="flex -space-x-2">
                                 {groupMembers
                                   .slice(0, 3)
-                                  .map((_member: unknown, _index: number) => (
-                                    <div
-                                      key={member.userId}
-                                      className="w-6 h-6 rounded-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-white text-xs font-bold border-2 border-white/20"
-                                      title={
-                                        member.userName ||
-                                        member.displayName ||
-                                        '알 수 없음'
-                                      }
-                                    >
-                                      {(
-                                        member.userName ||
-                                        member.displayName ||
-                                        '알'
-                                      ).charAt(0)}
-                                    </div>
-                                  ))}
+                                  .map((_member: unknown, _index: number) => {
+                                    const member = _member as any;
+                                    return (
+                                      <div
+                                        key={member.userId}
+                                        className="w-6 h-6 rounded-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-white text-xs font-bold border-2 border-white/20"
+                                        title={
+                                          member.userName ||
+                                          member.displayName ||
+                                          '알 수 없음'
+                                        }
+                                      >
+                                        {(
+                                          member.userName ||
+                                          member.displayName ||
+                                          '알'
+                                        ).charAt(0)}
+                                      </div>
+                                    );
+                                  })}
                                 {groupMembers.length > 3 && (
                                   <div className="w-6 h-6 rounded-full bg-gray-500 flex items-center justify-center text-white text-xs font-bold border-2 border-white/20">
                                     +{groupMembers.length - 3}

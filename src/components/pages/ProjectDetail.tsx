@@ -9,7 +9,7 @@ interface ProjectData {
   name: string;
   url: string;
   description: string;
-  icon: React.ComponentType<{ className?: string }>;
+  iconComponent: React.ComponentType<{ className?: string }>;
   color: string;
   longDescription: string;
   features: string[];
@@ -26,7 +26,7 @@ export function ProjectDetail() {
       name: 'Music Platform',
       url: 'music.moonwave.kr',
       description: 'Moonwave만의 감성음악 제작',
-      icon: Music,
+      iconComponent: Music,
       color: 'from-purple-500 to-pink-500',
       longDescription: 'Moonwave만의 독특한 감성과 철학을 담은 음악 제작 플랫폼입니다. AI 기술을 활용하여 개인만의 고유한 음악 파동을 만들어갑니다.',
       features: [
@@ -44,7 +44,7 @@ export function ProjectDetail() {
       name: 'Travel Service',
       url: 'travel.moonwave.kr',
       description: 'Moonwave과 함께 세계여행',
-      icon: Globe,
+      iconComponent: Globe,
       color: 'from-blue-500 to-cyan-500',
       longDescription: '세계 각지의 아름다운 여행지를 Moonwave만의 관점으로 소개하고, 개인화된 여행 경험을 제공합니다.',
       features: [
@@ -62,7 +62,7 @@ export function ProjectDetail() {
       name: 'Subscription Manager',
       url: 'sub.moonwave.kr',
       description: 'AI 서비스 중심의 구독 관리',
-      icon: CreditCard,
+      iconComponent: CreditCard,
       color: 'from-green-500 to-emerald-500',
       longDescription: 'AI 서비스와 디지털 구독 서비스를 효율적으로 관리하고 최적화할 수 있는 스마트 구독 관리 플랫폼입니다.',
       features: [
@@ -80,7 +80,7 @@ export function ProjectDetail() {
       name: 'Crypto Trading',
       url: 'btc.moonwave.kr',
       description: 'Moonwave와 함께하는 크립토 매매',
-      icon: Coins,
+      iconComponent: Coins,
       color: 'from-yellow-500 to-orange-500',
       longDescription: '크립토 자산의 안전하고 효율적인 거래를 위한 전문 플랫폼으로, Moonwave만의 전략적 접근 방식을 제공합니다.',
       features: [
@@ -98,7 +98,7 @@ export function ProjectDetail() {
       name: 'Music Album',
       url: 'oh.moonwave.kr',
       description: '국가대표 오안나 헌정 앨범',
-      icon: Gift,
+      iconComponent: Gift,
       color: 'from-pink-500 to-rose-500',
       longDescription: '국가대표 선수 오안나를 위한 특별한 헌정 앨범 프로젝트로, Moonwave만의 음악적 감성으로 스포츠 정신을 표현합니다.',
       features: [
@@ -116,7 +116,7 @@ export function ProjectDetail() {
       name: 'Financial Strategy',
       url: 'financial.moonwave.kr',
       description: 'Moonwave와 함께하는 금융투자 전략',
-      icon: TrendingUp,
+      iconComponent: TrendingUp,
       color: 'from-emerald-500 to-teal-500',
       longDescription: '개인 투자자들을 위한 스마트한 금융 전략 플랫폼으로, Moonwave만의 분석적 접근으로 투자 성공률을 높입니다.',
       features: [
@@ -134,7 +134,7 @@ export function ProjectDetail() {
       name: 'Kids Platform',
       url: 'lego.moonwave.kr',
       description: '아이들과 함께 Lego 블럭 재사용 조립놀이',
-      icon: Crown,
+      iconComponent: Crown,
       color: 'from-indigo-500 to-purple-500',
       longDescription: '아이들의 창의력과 문제 해결 능력을 키우는 교육적 레고 플랫폼으로, 지속가능한 놀이 문화를 만들어갑니다.',
       features: [

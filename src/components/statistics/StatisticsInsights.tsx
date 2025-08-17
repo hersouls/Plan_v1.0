@@ -50,7 +50,6 @@ export function StatisticsInsights({
   const [loading, setLoading] = useState(false);
   const [selectedInsight, setSelectedInsight] = useState<StatisticsInsight | null>(null);
   const [activeTab, setActiveTab] = useState<'insights' | 'prediction' | 'team' | 'pattern'>('insights');
-
   const loadInsights = useCallback(async () => {
     setLoading(true);
     try {
@@ -92,13 +91,6 @@ export function StatisticsInsights({
       } finally {
       setLoading(false);
     }
-  }, [tasks, members, pointStats, period, userId, statisticsAnalyzer]);
-
-  useEffect(() => {
-    if (statisticsAnalyzer.isAvailable()) {
-      loadInsights();
-    }
-  }, [loadInsights]);
 
   const getInsightIcon = (type: string) => {
     switch (type) {

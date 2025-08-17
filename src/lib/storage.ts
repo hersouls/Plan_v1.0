@@ -153,6 +153,7 @@ export async function deleteAvatarImage(
  * 아바타 업로드 에러 메시지 변환
  */
 function getAvatarUploadErrorMessage(_error: unknown): string {
+  const error = _error as any;
   if (error.code === 'storage/unauthorized') {
     return '아바타 업로드 권한이 없습니다.';
   } else if (error.code === 'storage/canceled') {
