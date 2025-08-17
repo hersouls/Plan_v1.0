@@ -16,10 +16,6 @@
     "src/**/*.tsx"
   ],
   "exclude": [
-    "src/**/__tests__/**/*",
-    "src/**/*.test.ts",
-    "src/**/*.test.tsx",
-    "src/setupTests.ts",
     // Exclude problematic utility files during build
     "src/utils/seed-data.ts",
     "src/lib/migration.ts",

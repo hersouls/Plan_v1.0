@@ -171,12 +171,7 @@ npm run type-check         # TypeScript 타입 검사
 npm run lint               # Lint 검사
 npm run lint:fix           # 자동 수정
 
-# 테스트
-npm run test               # 단위 테스트 실행
-npm run test:e2e           # E2E 테스트 실행
-npm run test:coverage      # 테스트 커버리지
-npm run test:e2e:ui        # Playwright UI 모드
-npm run test:e2e:smoke     # 스모크 테스트
+
 
 # 빌드 & 분석
 npm run build              # 프로덕션 빌드
@@ -194,7 +189,7 @@ npm run functions:deploy   # Firebase Functions 배포
 # Firebase 유틸리티
 npm run firebase:deploy           # Firestore/Functions/Storage 동시 배포
 npm run firebase:deploy:rules     # 보안 규칙만 배포
-npm run firebase:setup-test-data  # 테스트 데이터 세팅
+
 npm run firebase:setup-cors       # Storage CORS 설정
 
 # 검증
