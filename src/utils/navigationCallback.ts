@@ -60,7 +60,7 @@ export class NavigationCallback {
     if (returnQuery) {
       try {
         state.returnQuery = JSON.parse(returnQuery);
-      } catch (_error) {
+      } catch {
         // Handle error silently
       }
     }
@@ -76,7 +76,7 @@ export class NavigationCallback {
     if (contextData) {
       try {
         state.contextData = JSON.parse(contextData);
-      } catch (_error) {
+      } catch {
         // Handle error silently
       }
     }
@@ -145,14 +145,18 @@ export class NavigationCallback {
     options?: {
       preserveQuery?: boolean;
       preserveFragment?: boolean;
-      contextData?: Record<string, any>;
+      contextData?: Record<string, unknown>;
     }
   ): string {
     const currentPath = window.location.pathname;
     const currentSearch = new URLSearchParams(window.location.search);
     const currentFragment = window.location.hash.substring(1);
     
-    const callbackOptions: unknown = {};
+    const callbackOptions: {
+      query?: Record<string, string>;
+      fragment?: string;
+      contextData?: Record<string, unknown>;
+    } = {};
     
     // 현재 쿼리 파라미터 보존
     if (options?.preserveQuery && currentSearch.toString()) {

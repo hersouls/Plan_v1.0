@@ -27,7 +27,7 @@ export class PWAManager {
     if ('serviceWorker' in navigator) {
       try {
         await this.registerServiceWorker();
-      } catch (_error) {
+      } catch {
         // Handle error silently
       }
     }
@@ -78,7 +78,7 @@ export class PWAManager {
       });
 
       return registration;
-    } catch (_error) {
+    } catch {
       return null;
     }
   }
@@ -99,7 +99,7 @@ export class PWAManager {
       this.installPrompt = null;
 
       return result.outcome === 'accepted';
-    } catch (_error) {
+    } catch {
       return false;
     }
   }
@@ -130,12 +130,12 @@ export class PWAManager {
 
         // Listen for controlling change
         navigator.serviceWorker.addEventListener('controllerchange', () => {
-          window.location.reload();
-        });
-      }
-    } catch (_error) {
-        // Handle error silently
-      }
+                  window.location.reload();
+      });
+    }
+  } catch {
+    // Handle error silently
+  }
   }
 
   getServiceWorkerStatus(): ServiceWorkerStatus {
@@ -178,7 +178,7 @@ export class PWAManager {
         await Promise.all(
           cacheNames.map(cacheName => caches.delete(cacheName))
         );
-        } catch (_error) {
+      } catch {
         // Handle error silently
       }
     }
@@ -195,9 +195,9 @@ export class PWAManager {
 
     try {
       await this.registration.sync.register(tag);
-      } catch (_error) {
-        // Handle error silently
-      }
+    } catch {
+      // Handle error silently
+    }
   }
 
   // Notification helpers
@@ -248,9 +248,10 @@ export class PWAManager {
     try {
       await navigator.share(data);
       return true;
-    } catch (_error) {
+    } catch (error) {
       if ((error as Error).name !== 'AbortError') {
-        }
+        // Handle non-abort errors if needed
+      }
       return false;
     }
   }
