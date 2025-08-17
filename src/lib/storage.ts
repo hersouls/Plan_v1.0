@@ -45,7 +45,7 @@ export async function uploadFile(
             storageUrl: path,
             downloadUrl: downloadURL,
           });
-        } catch (_error) {
+        } catch (error) {
           reject(error);
         }
       }
@@ -85,7 +85,6 @@ export async function uploadAvatarImage(
 
   try {
     optimizedFile = await optimizeAvatarImage(file);
-  } catch (_error) {
     throw new Error('이미지 처리에 실패했습니다.');
   }
 
@@ -115,7 +114,7 @@ export async function uploadAvatarImage(
             storageUrl: avatarPath,
             downloadUrl: downloadURL,
           });
-        } catch (_error) {
+        } catch (error) {
           reject(
             new Error('아바타 업로드 완료 후 URL을 가져오는데 실패했습니다.')
           );
@@ -142,7 +141,7 @@ export async function deleteAvatarImage(
   try {
     const storageRef = ref(storage, storageUrl);
     await deleteObject(storageRef);
-  } catch (_error) {
+  } catch (error) {
     throw new Error('아바타 삭제에 실패했습니다.');
   }
 }
@@ -276,10 +275,6 @@ export class StorageService {
             let height: number | undefined;
 
             if (this.isImage(file.type)) {
-              const thumbnailRef = ref(
-                storage,
-                `${filePath.replace(/\.[^/.]+$/, '')}_thumb.jpg`
-              );
               // 썸네일 생성 로직은 별도로 구현 필요
               // thumbnailURL = await this.generateThumbnail(file, thumbnailRef);
             }
@@ -308,7 +303,7 @@ export class StorageService {
             options?.onComplete?.(fileAttachment);
 
             return fileAttachment;
-          } catch (_error) {
+          } catch (error) {
             const errorMessage = this.getErrorMessage(error);
             options?.onError?.(errorMessage);
             throw new Error(errorMessage);
@@ -345,7 +340,7 @@ export class StorageService {
       };
 
       return fileAttachment;
-    } catch (_error) {
+    } catch (error) {
       const errorMessage = this.getErrorMessage(error);
       options?.onError?.(errorMessage);
       throw new Error(errorMessage);
@@ -362,7 +357,7 @@ export class StorageService {
         throw new Error('파일 다운로드에 실패했습니다.');
       }
       return await response.blob();
-    } catch (_error) {
+    } catch (error) {
       throw new Error(this.getErrorMessage(error));
     }
   }
@@ -380,7 +375,7 @@ export class StorageService {
         const thumbnailRef = ref(storage, fileAttachment.thumbnailUrl);
         await deleteObject(thumbnailRef);
       }
-    } catch (_error) {
+    } catch (error) {
       throw new Error(this.getErrorMessage(error));
     }
   }
@@ -392,7 +387,7 @@ export class StorageService {
     try {
       const taskFilesRef = ref(storage, `tasks/${taskId}`);
       await this.deleteFolder(taskFilesRef);
-    } catch (_error) {
+    } catch (error) {
       throw new Error(this.getErrorMessage(error));
     }
   }
@@ -410,7 +405,7 @@ export class StorageService {
         `tasks/${taskId}/comments/${commentId}`
       );
       await this.deleteFolder(commentFilesRef);
-    } catch (_error) {
+    } catch (error) {
       throw new Error(this.getErrorMessage(error));
     }
   }
@@ -433,7 +428,7 @@ export class StorageService {
         this.deleteFolder(prefix)
       );
       await Promise.all(folderPromises);
-    } catch (_error) {
+    } catch (error) {
         // Handle error silently
       }
   }
@@ -610,7 +605,7 @@ export async function uploadChatAttachment(
             storageUrl: chatPath,
             downloadUrl: downloadURL,
           });
-        } catch (_error) {
+        } catch (error) {
           reject(error);
         }
       }

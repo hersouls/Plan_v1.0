@@ -98,7 +98,7 @@ function PointsManagement() {
     if (savedFavorites) {
       try {
         setFavoriteGroups(JSON.parse(savedFavorites));
-      } catch (_error) {
+      } catch (error) {
         setFavoriteGroups([]);
       }
     }
@@ -134,7 +134,7 @@ function PointsManagement() {
   };
 
   // 즐겨찾기 토글
-  const toggleFavorite = (_groupId: string) => {
+  const toggleFavorite = (groupId: string) => {
     const newFavorites = favoriteGroups.includes(groupId)
       ? favoriteGroups.filter(id => id !== groupId)
       : [...favoriteGroups, groupId];
@@ -166,7 +166,7 @@ function PointsManagement() {
         selectedGroupId
       );
       setUnapprovedPointHistory(history);
-    } catch (_error) {
+    } catch (error) {
         // Handle error silently
       } finally {
       setLoading(false);
@@ -185,7 +185,7 @@ function PointsManagement() {
       );
 
       setApprovedPointHistory(history);
-    } catch (_error) {
+    } catch (error) {
         // Handle error silently
       } finally {
       setLoading(false);
@@ -217,7 +217,7 @@ function PointsManagement() {
       await loadUnapprovedPointHistory();
       await loadApprovedPointHistory();
       await loadMemberStats();
-    } catch (_error) {
+    } catch (error) {
         // Handle error silently
       } finally {
       setApprovingHistoryId(null);
@@ -253,7 +253,7 @@ function PointsManagement() {
       await loadUnapprovedPointHistory();
       await loadApprovedPointHistory();
       await loadMemberStats();
-    } catch (_error) {
+    } catch (error) {
         // Handle error silently
       } finally {
       setApprovingHistoryId(null);
@@ -264,7 +264,7 @@ function PointsManagement() {
   const handleTaskCardClick = (taskId: string) => {
     try {
       navigate(`/tasks/${taskId}/edit`);
-    } catch (_error) {
+    } catch (error) {
       // 오류 발생 시 사용자에게 알림
       alert('할일 수정 페이지로 이동할 수 없습니다. 다시 시도해주세요.');
     }
@@ -285,7 +285,7 @@ function PointsManagement() {
       });
 
       setMemberStats(statsMap);
-    } catch (_error) {
+    } catch (error) {
         // Handle error silently
       }
   };
@@ -307,7 +307,7 @@ function PointsManagement() {
       }
 
       setUserProfiles(prev => ({ ...prev, ...profiles }));
-    } catch (_error) {
+    } catch (error) {
         // Handle error silently
       }
   };
@@ -409,7 +409,7 @@ function PointsManagement() {
       await loadUnapprovedPointHistory();
       await loadApprovedPointHistory();
       setShowAddPointsModal(false);
-    } catch (_error) {
+    } catch (error) {
         // Handle error silently
     }
   };
@@ -440,7 +440,7 @@ function PointsManagement() {
       await loadUnapprovedPointHistory();
       await loadApprovedPointHistory();
       setShowAddPointsModal(false);
-    } catch (_error) {
+    } catch (error) {
         // Handle error silently
     }
   };
@@ -845,7 +845,7 @@ function PointsManagement() {
                               setLoading(true);
                               try {
                                 await loadUnapprovedPointHistory();
-                              } catch (_error) {
+                              } catch (error) {
         // Handle error silently
       } finally {
                                 setLoading(false);
@@ -1099,7 +1099,7 @@ function PointsManagement() {
                               setLoading(true);
                               try {
                                 await loadApprovedPointHistory();
-                              } catch (_error) {
+                              } catch (error) {
         // Handle error silently
       } finally {
                                 setLoading(false);

@@ -20,7 +20,7 @@ export interface NotificationPayload {
     title: string;
     icon?: string;
   }>;
-  data?: Record<string, any>;
+  data?: Record<string, unknown>;
 }
 
 class FCMService {

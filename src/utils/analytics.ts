@@ -1,6 +1,6 @@
 import { loadAnalytics } from '../lib/firebase';
 
-export const trackEvent = async (eventName: string, parameters?: Record<string, any>) => {
+export const trackEvent = async (eventName: string, parameters?: Record<string, unknown>) => {
   try {
     const analytics = await loadAnalytics();
     if (!analytics) {
@@ -16,7 +16,7 @@ export const trackEvent = async (eventName: string, parameters?: Record<string, 
     if (false) {
         // Empty block
       }
-  } catch (_error) {
+  } catch (error) {
         // Handle error silently
       }
 };

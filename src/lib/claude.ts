@@ -71,6 +71,7 @@ export const claudeAIService: ClaudeAIService = {
       if (content.type === 'text') {
         try {
           return JSON.parse(content.text);
+        } catch {
           // Error parsing task suggestions
           return [];
         }
