@@ -7,6 +7,7 @@ import {
 import { cn } from '../../../lib/utils';
 import { WaveButton } from '../WaveButton';
 import { ButtonProps } from '../button';
+import { WaveButtonProps } from '../../../types/ui';
 
 interface ResponsiveButtonProps extends Omit<ButtonProps, 'className'> {
   children: React.ReactNode;
@@ -88,26 +89,5 @@ export const ResponsiveButton: React.FC<ResponsiveButtonProps> = ({
         </span>
       )}
     </div>
-  );
-
-  return (
-    <WaveButton
-      className={cn(
-        responsive && paddingClasses,
-        responsive && touchTargetClasses,
-        fullWidthClasses,
-        className
-      )}
-      onClick={props.onClick}
-      disabled={props.disabled}
-      type={props.type}
-      aria-label={props['aria-label']}
-      aria-describedby={props['aria-describedby']}
-      aria-labelledby={props['aria-labelledby']}
-      style={props.style}
-      title={props.title}
-    >
-      {buttonContent}
-    </WaveButton>
   );
 };
