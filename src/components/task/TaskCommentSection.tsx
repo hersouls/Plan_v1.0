@@ -17,7 +17,7 @@ import {
 import { Typography } from '@/components/ui/typography-utils';
 import { cn } from '@/components/ui/utils';
 import { useAuth } from '@/hooks/useAuth';
-import { useData } from '@/contexts/DataContext';
+import { useData } from '@/hooks/useData';
 import { Comment, useComments } from '@/hooks/useComments';
 import { formatDistanceToNow } from 'date-fns';
 import { ko } from 'date-fns/locale';
@@ -49,6 +49,14 @@ interface CommentItemProps {
   level?: number;
 }
 
+const reactionEmojis = [
+  { emoji: '👍', label: '좋아요' },
+  { emoji: '❤️', label: '사랑해요' },
+  { emoji: '😊', label: '미소' },
+  { emoji: '🎉', label: '축하해요' },
+  { emoji: '👏', label: '박수' },
+  { emoji: '🔥', label: '멋져요' },
+];
 
 
 const CommentItem: React.FC<CommentItemProps> = ({
@@ -251,10 +259,10 @@ export const TaskCommentSection: React.FC<TaskCommentSectionProps> = ({
 }) => {
   const { user } = useAuth();
   const { groupMembers } = useData();
-    useComments({
-      taskId,
-      realtime: true,
-    });
+  const { comments, loading, addComment, updateComment, deleteComment } = useComments({
+    taskId,
+    realtime: true,
+  });
 
   const [commentText, setCommentText] = useState('');
   const [replyToId, setReplyToId] = useState<string | null>(null);
@@ -295,7 +303,7 @@ export const TaskCommentSection: React.FC<TaskCommentSectionProps> = ({
     } catch {
       setIsSubmitting(false);
     }
-  }, [commentText, user, taskId, replyToId, addComment, groupMembers]);
+  }, [commentText, user, taskId, replyToId, groupMembers]);
 
   const handleReply = useCallback((commentId: string) => {
     setReplyToId(commentId);
@@ -310,6 +318,7 @@ export const TaskCommentSection: React.FC<TaskCommentSectionProps> = ({
         // Handle error silently
       }
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
 
@@ -323,6 +332,7 @@ export const TaskCommentSection: React.FC<TaskCommentSectionProps> = ({
         // Handle error silently
       }
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
 
@@ -352,6 +362,7 @@ export const TaskCommentSection: React.FC<TaskCommentSectionProps> = ({
         // Handle error silently
       }
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [user?.uid]
   );
 

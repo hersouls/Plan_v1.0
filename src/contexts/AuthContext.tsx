@@ -138,13 +138,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
                 if (!isSubscribed) return;
 
+
                 // 실시간 구독 대신 일회성 데이터 읽기 사용 (assertion 에러 방지)
                 try {
                   const profile = await userService.getUserProfile(user.uid);
                   if (isSubscribed) {
                     setUserProfile(profile);
                   }
-                } catch {
+                } catch (error) {
                   if (isSubscribed) {
                     setUserProfile(null);
                   }
@@ -160,18 +161,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                       }
                     }
                   );
-                } catch {
+                } catch (error) {
                   // Handle error silently
                 }
               } catch {
                 // Handle error silently
               }
+
             } else {
               setUserProfile(null);
               if (profileUnsubscribe) {
                 try {
                   profileUnsubscribe();
-                } catch {
+                } catch (error) {
                   // Handle error silently
                 }
                 profileUnsubscribe = null;
@@ -183,7 +185,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             }
           }
         );
-      } catch {
+      } catch (error) {
         if (isSubscribed) {
           setLoading(false);
         }
@@ -198,7 +200,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (authUnsubscribe) {
         try {
           authUnsubscribe();
-        } catch {
+        } catch (error) {
           // Handle error silently
         }
       }
@@ -206,7 +208,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (profileUnsubscribe) {
         try {
           profileUnsubscribe();
-        } catch {
+        } catch (error) {
           // Handle error silently
         }
       }

@@ -1,7 +1,5 @@
 import React, {
-  createContext,
   useCallback,
-  useContext,
   useEffect,
   useRef,
   useState,
@@ -16,56 +14,14 @@ import {
 } from '../types';
 import { useAuth } from '../hooks/useAuth';
 
-interface DataContextType {
-  // Groups
-  groups: FamilyGroup[];
-  currentGroup: FamilyGroup | null;
-  setCurrentGroup: (group: FamilyGroup | null) => void;
-
-  // Group operations
-  createGroup: (groupData: CreateGroupInput) => Promise<string>;
-  updateGroup: (groupId: string, updates: UpdateGroupInput) => Promise<void>;
-  joinGroup: (inviteCode: string) => Promise<void>;
-  leaveGroup: (groupId: string) => Promise<void>;
-
-  // Invitations
-  invitations: GroupInvitation[];
-  sendInvitation: (
-    groupId: string,
-    email: string,
-    role: 'admin' | 'member'
-  ) => Promise<void>;
-  respondToInvitation: (invitationId: string, accept: boolean) => Promise<void>;
-
-  // Notifications
-  notifications: UserNotification[];
-  markNotificationAsRead: (notificationId: string) => Promise<void>;
-  markAllNotificationsAsRead: () => Promise<void>;
-  deleteNotification: (notificationId: string) => Promise<void>;
-
-  // Loading states
-  loading: boolean;
-  error: string | null;
-}
-
-const DataContext = createContext<DataContextType | undefined>(undefined);
-
-export function useData() {
-  const context = useContext(DataContext);
-  if (context === undefined) {
-    throw new Error('useData must be used within a DataProvider');
-  }
-  return context;
-}
-
 export function DataProvider({ children }: { children: React.ReactNode }) {
   const { user, userProfile } = useAuth();
   const [groups, setGroups] = useState<FamilyGroup[]>([]);
   const [currentGroup, setCurrentGroupState] = useState<FamilyGroup | null>(
     null
   );
-  const [invitations, setInvitations] = useState<GroupInvitation[]>([]);
-  const [notifications, setNotifications] = useState<UserNotification[]>([]);
+  const [invitations] = useState<GroupInvitation[]>([]);
+  const [notifications] = useState<UserNotification[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const isInitialLoad = useRef(true);
@@ -91,11 +47,8 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
           try {
             const group = await groupService.getGroup(groupId);
             return group;
-          } catch (error) {
+          } catch {
             // 그룹 로딩 실패 시에도 계속 진행
-            if (import.meta.env.DEV) {
-              console.error('Error loading group:', error);
-            }
             return null;
           }
         });
@@ -131,10 +84,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         } else {
           // No valid groups found
         }
-      } catch (err) {
-        if (import.meta.env.DEV) {
-          console.error('Error loading groups:', err);
-        }
+      } catch {
         setError('그룹 정보를 불러오는데 실패했습니다.');
       } finally {
         setLoading(false);
@@ -242,7 +192,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
 
   // Join group (by invite code)
   const joinGroup = useCallback(
-    async (inviteCode: string): Promise<void> => {
+    async (_inviteCode: string): Promise<void> => {
       if (!user || !userProfile) throw new Error('User not authenticated');
 
       try {
@@ -262,7 +212,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
 
   // Leave group
   const leaveGroup = useCallback(
-    async (groupId: string): Promise<void> => {
+    async (_groupId: string): Promise<void> => {
       if (!user || !userProfile) throw new Error('User not authenticated');
 
       try {
@@ -297,9 +247,9 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   // Send invitation
   const sendInvitation = useCallback(
     async (
-      groupId: string,
-      email: string,
-      role: 'admin' | 'member'
+      _groupId: string,
+      _email: string,
+      _role: 'admin' | 'member'
     ): Promise<void> => {
       if (!user) throw new Error('User not authenticated');
 
@@ -320,7 +270,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
 
   // Respond to invitation
   const respondToInvitation = useCallback(
-    async (invitationId: string, accept: boolean): Promise<void> => {
+    async (_invitationId: string, _accept: boolean): Promise<void> => {
       if (!user) throw new Error('User not authenticated');
 
       try {
@@ -340,7 +290,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
 
   // Mark notification as read
   const markNotificationAsRead = useCallback(
-    async (notificationId: string): Promise<void> => {
+    async (_notificationId: string): Promise<void> => {
       if (!user) throw new Error('User not authenticated');
 
       try {
@@ -377,7 +327,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
 
   // Delete notification
   const deleteNotification = useCallback(
-    async (notificationId: string): Promise<void> => {
+    async (_notificationId: string): Promise<void> => {
       if (!user) throw new Error('User not authenticated');
 
       try {
