@@ -35,7 +35,6 @@ import {
 } from 'lucide-react';
 import React, { useCallback, useRef, useState } from 'react';
 import { MentionInput } from './MentionInput';
-// ... existing code ...
 
 interface TaskCommentSectionProps {
   taskId: string;
@@ -286,7 +285,6 @@ export const TaskCommentSection: React.FC<TaskCommentSectionProps> = ({
         const mentionedName = match[1];
         // 그룹 멤버에서 이름으로 ID 찾기
         const mentionedUser = groupMembers?.find(
-          (member) => member.userName === mentionedName
         );
         if (mentionedUser) {
           mentions.push(mentionedUser.userId);
