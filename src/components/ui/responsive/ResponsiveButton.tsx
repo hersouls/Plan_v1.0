@@ -22,13 +22,12 @@ export interface ResponsiveButtonProps extends Omit<ButtonProps, 'className'> {
 export const ResponsiveButton: React.FC<ResponsiveButtonProps> = ({
   children,
   className,
-  padding = 'button',
+  padding: _padding = 'button',
   touchTarget = 'button',
   layout = 'auto',
   icon,
   iconPosition = 'left',
   fullWidth = false,
-  responsive = true,
   iconSize = 'responsive',
   ...props
 }) => {
