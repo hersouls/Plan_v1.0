@@ -1,10 +1,8 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useEffect, useReducer, createContext } from 'react';
 import * as firestoreServices from '../lib/firestore';
 import { FamilyGroup } from '../types/group';
 import { useAuth } from '../hooks/useAuth';
 import { AppState, AppAction, AppNotification, AppContextType } from './AppContextTypes';
-import { AppContext } from './AppContextDef';
-
 
 // Create the context
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -396,6 +394,15 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
+}
+
+// Hook to use the app context
+export function useApp() {
+  const context = React.useContext(AppContext);
+  if (context === undefined) {
+    throw new Error('useApp must be used within an AppProvider');
+  }
+  return context;
 }
 
 export { AppContext };

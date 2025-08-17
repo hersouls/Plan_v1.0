@@ -30,7 +30,7 @@ export function useNotifications() {
 
         setNotifications(notificationsData);
         setStats(statsData);
-      } catch (_err) {
+      } catch {
         setError('알림을 불러올 수 없습니다.');
       } finally {
         setLoading(false);
@@ -80,7 +80,7 @@ export function useNotifications() {
             : n
         )
       );
-    } catch (_error) {
+    } catch {
         // Handle error silently
       }
   };
@@ -94,7 +94,7 @@ export function useNotifications() {
       setNotifications(prev =>
         prev.map(n => ({ ...n, status: 'read' as const, readAt: new Date() }))
       );
-    } catch (_error) {
+    } catch {
         // Handle error silently
       }
   };
@@ -104,7 +104,7 @@ export function useNotifications() {
     try {
       await NotificationService.deleteNotification(notificationId);
       setNotifications(prev => prev.filter(n => n.id !== notificationId));
-    } catch (_error) {
+    } catch {
         // Handle error silently
       }
   };

@@ -414,9 +414,8 @@ export function useGroup(options: UseGroupOptions = {}): UseGroupReturn {
 
         // Load the newly joined group data
         await loadGroupData(joinedGroupId);
-      } catch (err) {
+      } catch {
         setError('초대 코드로 그룹에 참여하는 중 오류가 발생했습니다.');
-        throw err;
       }
     },
     [user, loadGroupData]
@@ -469,7 +468,7 @@ export function useUserGroups() {
         setError(null);
         const userGroups = await groupService.getUserGroups(user.uid);
         setGroups(userGroups);
-      } catch (err) {
+      } catch {
         setError('사용자 그룹을 불러오는 중 오류가 발생했습니다.');
       } finally {
         setLoading(false);
@@ -487,7 +486,7 @@ export function useUserGroups() {
       setError(null);
       const userGroups = await groupService.getUserGroups(user.uid);
       setGroups(userGroups);
-    } catch (err) {
+    } catch {
       setError('사용자 그룹을 다시 불러오는 중 오류가 발생했습니다.');
     } finally {
       setLoading(false);

@@ -1,4 +1,4 @@
-import React, { useReducer, useEffect } from 'react';
+import React, { useReducer, useEffect, createContext } from 'react';
 import { Task, TaskStatus, CreateTaskInput, UpdateTaskInput } from '../types/task';
 import { taskService } from '../lib/firestore';
 import { useApp } from '../hooks/useApp';
@@ -598,3 +598,13 @@ export function TaskProvider({ children }: { children: React.ReactNode }) {
   );
 }
 
+// Hook to use the task context
+export function useTask() {
+  const context = React.useContext(TaskContext);
+  if (context === undefined) {
+    throw new Error('useTask must be used within a TaskProvider');
+  }
+  return context;
+}
+
+export { TaskProvider };
