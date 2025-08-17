@@ -1,4 +1,3 @@
-import { useState, useCallback } from 'react';
 import { 
   Brain, 
   TrendingUp, 
@@ -87,8 +86,8 @@ export function StatisticsInsights({
         setActivityPattern(patternData);
       }
     } catch {
-        // Handle error silently
-      } finally {
+      // Handle error silently
+    } finally {
       setLoading(false);
     }
   }, [tasks, members, pointStats, period, userId]);
