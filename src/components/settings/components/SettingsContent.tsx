@@ -1,7 +1,7 @@
 import React from 'react';
 import { GlassCard } from '../../ui/GlassCard';
 import { Typography } from '../../ui/typography';
-import { ProfileSection } from '../ProfileSection';
+import { ProfileSection } from '../sections/ProfileSection';
 import { DataSection, NotificationSection, PrivacySection } from '../sections';
 import type { SettingsSectionProps } from '../types';
 
