@@ -175,7 +175,7 @@ export function useGroup(options: UseGroupOptions = {}): UseGroupReturn {
         groupData => {
           setGroup(groupData);
         },
-        error => {
+        _error => {
           setError('그룹 정보 구독 중 오류가 발생했습니다.');
         }
       );
@@ -236,14 +236,13 @@ export function useGroup(options: UseGroupOptions = {}): UseGroupReturn {
               groupIds: updatedGroupIds,
             });
           }
-        } catch (_profileError) {
+        } catch {
           // Don't throw error as group creation was successful
         }
 
         return newGroupId;
-      } catch (err) {
+      } catch {
         setError('그룹을 생성하는 중 오류가 발생했습니다.');
-        throw err;
       }
     },
     [user]
@@ -261,9 +260,8 @@ export function useGroup(options: UseGroupOptions = {}): UseGroupReturn {
             prev ? ({ ...prev, ...updates } as FamilyGroup) : null
           );
         }
-      } catch (err) {
+      } catch {
         setError('그룹을 업데이트하는 중 오류가 발생했습니다.');
-        throw err;
       }
     },
     [group]
@@ -286,9 +284,8 @@ export function useGroup(options: UseGroupOptions = {}): UseGroupReturn {
           setMembers([]);
           setStats(null);
         }
-      } catch (err) {
+      } catch {
         setError('그룹을 삭제하는 중 오류가 발생했습니다.');
-        throw err;
       }
     },
     [user, group]
@@ -311,9 +308,8 @@ export function useGroup(options: UseGroupOptions = {}): UseGroupReturn {
           setMembers([]);
           setStats(null);
         }
-      } catch (err) {
+      } catch {
         setError('그룹을 나가는 중 오류가 발생했습니다.');
-        throw err;
       }
     },
     [user, group]
@@ -334,9 +330,8 @@ export function useGroup(options: UseGroupOptions = {}): UseGroupReturn {
       try {
         setError(null);
         await groupService.inviteMemberByEmail(targetGroupId, email, role);
-      } catch (err) {
+      } catch {
         setError('멤버를 초대하는 중 오류가 발생했습니다.');
-        throw err;
       }
     },
     [user]
@@ -415,10 +410,9 @@ export function useGroup(options: UseGroupOptions = {}): UseGroupReturn {
 
         // Load the newly joined group data
         await loadGroupData(joinedGroupId);
-      } catch (_err) {
-        setError('그룹에 참여하는 중 오류가 발생했습니다.');
-        throw _err;
-      }
+              } catch {
+          setError('그룹에 참여하는 중 오류가 발생했습니다.');
+        }
     },
     [user, loadGroupData]
   );

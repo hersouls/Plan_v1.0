@@ -1,8 +1,20 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useEffect, useReducer, createContext, useContext } from 'react';
 import * as firestoreServices from '../lib/firestore';
 import { FamilyGroup } from '../types/group';
 import { useAuth } from '../hooks/useAuth';
+import { AppState, AppAction, AppNotification, AppContextType } from './AppContextTypes';
 
+// Create the context
+const AppContext = createContext<AppContextType | undefined>(undefined);
+
+// Hook to use the context
+export const useApp = () => {
+  const context = useContext(AppContext);
+  if (context === undefined) {
+    throw new Error('useApp must be used within an AppProvider');
+  }
+  return context;
+};
 
 
 // Initial State
@@ -71,7 +83,7 @@ function appReducer(state: AppState, action: AppAction): AppState {
         newNotification,
         ...state.notifications.slice(0, 49),
       ]; // Keep last 50
-      const unreadCount = notifications.filter(n => !n.read).length;
+      const unreadCount = notifications.filter((n: AppNotification) => !n.read).length;
 
       return {
         ...state,
@@ -82,9 +94,9 @@ function appReducer(state: AppState, action: AppAction): AppState {
 
     case 'REMOVE_NOTIFICATION': {
       const notifications = state.notifications.filter(
-        n => n.id !== action.payload
+        (n: AppNotification) => n.id !== action.payload
       );
-      const unreadCount = notifications.filter(n => !n.read).length;
+      const unreadCount = notifications.filter((n: AppNotification) => !n.read).length;
 
       return {
         ...state,
@@ -94,10 +106,10 @@ function appReducer(state: AppState, action: AppAction): AppState {
     }
 
     case 'MARK_NOTIFICATION_READ': {
-      const notifications = state.notifications.map(n =>
+      const notifications = state.notifications.map((n: AppNotification) =>
         n.id === action.payload ? { ...n, read: true } : n
       );
-      const unreadCount = notifications.filter(n => !n.read).length;
+      const unreadCount = notifications.filter((n: AppNotification) => !n.read).length;
 
       return {
         ...state,
@@ -107,7 +119,7 @@ function appReducer(state: AppState, action: AppAction): AppState {
     }
 
     case 'MARK_ALL_NOTIFICATIONS_READ': {
-      const notifications = state.notifications.map(n => ({
+      const notifications = state.notifications.map((n: AppNotification) => ({
         ...n,
         read: true,
       }));
