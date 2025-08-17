@@ -140,9 +140,8 @@ export class NotificationService {
         callback([]); // 빈 배열 반환
       }
     );
-  }
 
-  return unsubscribe;
+    return unsubscribe;
   }
 
   /**
