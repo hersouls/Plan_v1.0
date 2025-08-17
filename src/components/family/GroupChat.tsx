@@ -478,7 +478,13 @@ export function GroupChat({
   const formatTime = (timestamp: unknown) => {
     if (!timestamp) return '';
 
-    const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
+    let date: Date;
+    if (typeof timestamp === 'object' && timestamp !== null && 'toDate' in timestamp && typeof (timestamp as any).toDate === 'function') {
+      date = (timestamp as any).toDate();
+    } else {
+      date = new Date(timestamp as any);
+    }
+    
     const now = new Date();
     const diffInHours = (now.getTime() - date.getTime()) / (1000 * 60 * 60);
 

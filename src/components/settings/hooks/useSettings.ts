@@ -372,15 +372,15 @@ export function useSettings(): UseSettingsReturn {
           dispatch({ type: 'LOAD_SETTINGS', payload: defaultSettings });
           lastSyncRef.current = now; // 동기화 시간 업데이트
         }
-      } catch (error) {
+      } catch {
         setError('사용자 프로필을 처리하는 중 오류가 발생했습니다.');
       }
-    } catch (error) {
+    } catch {
       setError('사용자 프로필을 불러오는 중 오류가 발생했습니다.');
     } finally {
       setLoading(false);
     }
-  }, [currentUser?.uid, authContext.user]);
+  }, [currentUser?.uid, authContext.user, currentUser]);
 
   // 외부에서 호출할 수 있는 loadSettings 함수
   const loadSettings = useCallback(async () => {
@@ -466,11 +466,11 @@ export function useSettings(): UseSettingsReturn {
               const decodedPath = decodeURIComponent(pathMatch[1]);
               await StorageService.deleteFile({
                 storageUrl: decodedPath,
-              } as any);
+              } as { storageUrl: string });
             }
-          } catch (deleteError) {
-            // 이전 아바타 삭제 실패는 무시하고 계속 진행
-          }
+                      } catch {
+              // 이전 아바타 삭제 실패는 무시하고 계속 진행
+            }
         }
 
         // 새 아바타 업로드
@@ -554,11 +554,11 @@ export function useSettings(): UseSettingsReturn {
           const pathMatch = url.pathname.match(/\/v0\/b\/[^/]+\/o\/(.+)\?/);
           if (pathMatch) {
             const decodedPath = decodeURIComponent(pathMatch[1]);
-            await StorageService.deleteFile({ storageUrl: decodedPath } as any);
+            await StorageService.deleteFile({ storageUrl: decodedPath } as { storageUrl: string });
           }
         } catch (error) {
-        // Handle error silently
-      }
+          // Handle error silently
+        }
       }
 
       // 프로필에서 아바타 제거
@@ -601,7 +601,7 @@ export function useSettings(): UseSettingsReturn {
       isInitializedRef.current = true;
       loadSettingsInternal();
     }
-  }, [currentUser?.uid]); // loadSettingsInternal을 의존성에서 제거
+  }, [currentUser?.uid, loadSettingsInternal]); // loadSettingsInternal 의존성 추가
 
   // 1시간마다 자동 동기화 설정
   useEffect(() => {
