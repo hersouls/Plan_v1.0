@@ -84,22 +84,18 @@ class PointsService {
   async addPointHistory(
     history: Omit<PointHistory, 'id' | 'createdAt'>
   ): Promise<string> {
-    try {
-      const historyData = {
-        ...history,
-        createdAt: Timestamp.now(),
-        isApproved: false, // 기본적으로 승인되지 않은 상태
-      };
+    const historyData = {
+      ...history,
+      createdAt: Timestamp.now(),
+      isApproved: false, // 기본적으로 승인되지 않은 상태
+    };
 
-      const docRef = await addDoc(collection(db, 'pointHistory'), historyData);
+    const docRef = await addDoc(collection(db, 'pointHistory'), historyData);
 
-      // 포인트 통계 업데이트 (승인된 경우에만)
-      // await this.updatePointStats(history.userId, history.groupId);
+    // 포인트 통계 업데이트 (승인된 경우에만)
+    // await this.updatePointStats(history.userId, history.groupId);
 
-      return docRef.id;
-    } catch (error) {
-      throw error;
-    }
+    return docRef.id;
   }
 
   // 포인트 내역 조회
@@ -122,7 +118,6 @@ class PointsService {
         id: doc.id,
         ...doc.data(),
       })) as PointHistory[];
-    } catch (_error) {
       return [];
     }
   }
@@ -141,7 +136,6 @@ class PointsService {
         id: doc.id,
         ...doc.data(),
       })) as PointHistory[];
-    } catch (_error) {
       return [];
     }
   }
@@ -150,18 +144,14 @@ class PointsService {
   async createPointRule(
     rule: Omit<PointRule, 'id' | 'createdAt' | 'updatedAt'>
   ): Promise<string> {
-    try {
-      const ruleData = {
-        ...rule,
-        createdAt: Timestamp.now(),
-        updatedAt: Timestamp.now(),
-      };
+    const ruleData = {
+      ...rule,
+      createdAt: Timestamp.now(),
+      updatedAt: Timestamp.now(),
+    };
 
-      const docRef = await addDoc(collection(db, 'pointRules'), ruleData);
-      return docRef.id;
-    } catch (error) {
-      throw error;
-    }
+    const docRef = await addDoc(collection(db, 'pointRules'), ruleData);
+    return docRef.id;
   }
 
   // 포인트 규칙 조회
@@ -179,7 +169,6 @@ class PointsService {
         id: doc.id,
         ...doc.data(),
       })) as PointRule[];
-    } catch (_error) {
       return [];
     }
   }
@@ -189,15 +178,11 @@ class PointsService {
     ruleId: string,
     updates: Partial<PointRule>
   ): Promise<void> {
-    try {
-      const ruleRef = doc(db, 'pointRules', ruleId);
-      await updateDoc(ruleRef, {
-        ...updates,
-        updatedAt: Timestamp.now(),
-      });
-    } catch (error) {
-      throw error;
-    }
+    const ruleRef = doc(db, 'pointRules', ruleId);
+    await updateDoc(ruleRef, {
+      ...updates,
+      updatedAt: Timestamp.now(),
+    });
   }
 
   // 포인트 통계 조회
@@ -214,68 +199,63 @@ class PointsService {
       }
 
       return null;
-    } catch (_error) {
       return null;
     }
   }
 
   // 포인트 통계 업데이트
   async updatePointStats(userId: string, groupId: string): Promise<void> {
-    try {
-      // 해당 사용자의 승인된 포인트 내역만 조회
-      const history = await this.getApprovedPointHistory(userId, groupId, 1000);
+    // 해당 사용자의 승인된 포인트 내역만 조회
+    const history = await this.getApprovedPointHistory(userId, groupId, 1000);
 
-      // 통계 계산 (승인된 포인트만)
-      const earned = history
-        .filter(h => h.type === 'earned')
-        .reduce((sum, h) => sum + h.amount, 0);
-      const manualAdd = history
-        .filter(h => h.type === 'manual_add')
-        .reduce((sum, h) => sum + h.amount, 0);
-      const deducted = history
-        .filter(
-          h =>
-            h.type === 'deducted' ||
-            h.type === 'penalty' ||
-            h.type === 'manual_deduct'
-        )
-        .reduce((sum, h) => sum + h.amount, 0);
-      const bonus = history
-        .filter(h => h.type === 'bonus')
-        .reduce((sum, h) => sum + h.amount, 0);
+    // 통계 계산 (승인된 포인트만)
+    const earned = history
+      .filter(h => h.type === 'earned')
+      .reduce((sum, h) => sum + h.amount, 0);
+    const manualAdd = history
+      .filter(h => h.type === 'manual_add')
+      .reduce((sum, h) => sum + h.amount, 0);
+    const deducted = history
+      .filter(
+        h =>
+          h.type === 'deducted' ||
+          h.type === 'penalty' ||
+          h.type === 'manual_deduct'
+      )
+      .reduce((sum, h) => sum + h.amount, 0);
+    const bonus = history
+      .filter(h => h.type === 'bonus')
+      .reduce((sum, h) => sum + h.amount, 0);
 
-      // 스트릭 계산 (임시 - 실제로는 할일 완료 데이터에서 계산)
-      const currentStreak = 0; // TODO: 실제 스트릭 계산 로직 구현
-      const longestStreak = 0; // TODO: 실제 스트릭 계산 로직 구현
+    // 스트릭 계산 (임시 - 실제로는 할일 완료 데이터에서 계산)
+    const currentStreak = 0; // TODO: 실제 스트릭 계산 로직 구현
+    const longestStreak = 0; // TODO: 실제 스트릭 계산 로직 구현
 
-      // 완료율 계산 (임시)
-      const completionRate = 0; // TODO: 실제 완료율 계산 로직 구현
+    // 완료율 계산 (임시)
+    const completionRate = 0; // TODO: 실제 완료율 계산 로직 구현
 
-      // 순위 계산 (임시)
-      const rank = 1; // TODO: 실제 순위 계산 로직 구현
-      const totalMembers = 1; // TODO: 실제 멤버 수 계산 로직 구현
+    // 순위 계산 (임시)
+    const rank = 1; // TODO: 실제 순위 계산 로직 구현
+    const totalMembers = 1; // TODO: 실제 멤버 수 계산 로직 구현
 
-      const stats: PointStats = {
-        userId,
-        groupId,
-        totalPoints: earned + manualAdd - deducted,
-        earnedPoints: earned + manualAdd,
-        deductedPoints: deducted,
-        bonusPoints: bonus,
-        currentStreak,
-        longestStreak,
-        completionRate,
-        rank,
-        totalMembers,
-        lastUpdated: Timestamp.now(),
-      };
+    const stats: PointStats = {
+      userId,
+      groupId,
+      totalPoints: earned + manualAdd - deducted,
+      earnedPoints: earned + manualAdd,
+      deductedPoints: deducted,
+      bonusPoints: bonus,
+      currentStreak,
+      longestStreak,
+      completionRate,
+      rank,
+      totalMembers,
+      lastUpdated: Timestamp.now(),
+    };
 
-      // Firestore에 저장
-      const statsRef = doc(db, 'pointStats', `${userId}_${groupId}`);
-      await setDoc(statsRef, stats);
-    } catch (error) {
-      throw error;
-    }
+    // Firestore에 저장
+    const statsRef = doc(db, 'pointStats', `${userId}_${groupId}`);
+    await setDoc(statsRef, stats);
   }
 
   // 그룹의 모든 멤버 포인트 통계 조회
@@ -313,7 +293,6 @@ class PointsService {
       await batch.commit();
 
       return updatedStats;
-    } catch (_error) {
       return [];
     }
   }
@@ -325,24 +304,20 @@ class PointsService {
     taskId: string,
     taskTitle: string
   ): Promise<void> {
-    try {
-      // 기본 포인트 지급 (승인 대기 상태)
-      await this.addPointHistory({
-        userId,
-        groupId,
-        type: 'earned',
-        amount: 10, // 기본 포인트
-        reason: 'task_completion',
-        taskId,
-        taskTitle,
-        description: `할일 완료: ${taskTitle}`,
-      });
+    // 기본 포인트 지급 (승인 대기 상태)
+    await this.addPointHistory({
+      userId,
+      groupId,
+      type: 'earned',
+      amount: 10, // 기본 포인트
+      reason: 'task_completion',
+      taskId,
+      taskTitle,
+      description: `할일 완료: ${taskTitle}`,
+    });
 
-      // 추가 보너스 포인트 규칙 확인 (승인 대기 상태)
-      await this.checkAndAwardBonusPoints(userId, groupId);
-    } catch (error) {
-      throw error;
-    }
+    // 추가 보너스 포인트 규칙 확인 (승인 대기 상태)
+    await this.checkAndAwardBonusPoints(userId, groupId);
   }
 
   // 보너스 포인트 확인 및 지급
@@ -350,44 +325,40 @@ class PointsService {
     userId: string,
     groupId: string
   ): Promise<void> {
-    try {
-      const rules = await this.getPointRules(groupId);
-      const stats = await this.getPointStats(userId, groupId);
+    const rules = await this.getPointRules(groupId);
+    const stats = await this.getPointStats(userId, groupId);
 
-      if (!stats) return;
+    if (!stats) return;
 
-      for (const rule of rules) {
-        if (rule.type === 'streak_bonus' && rule.conditions?.minStreak) {
-          if (stats.currentStreak >= rule.conditions.minStreak) {
-            await this.addPointHistory({
-              userId,
-              groupId,
-              type: 'bonus',
-              amount: rule.points,
-              reason: 'streak_bonus',
-              description: `연속 완료 보너스 (${stats.currentStreak}일)`,
-            });
-          }
-        }
-
-        if (
-          rule.type === 'completion_rate' &&
-          rule.conditions?.minCompletionRate
-        ) {
-          if (stats.completionRate >= rule.conditions.minCompletionRate) {
-            await this.addPointHistory({
-              userId,
-              groupId,
-              type: 'bonus',
-              amount: rule.points,
-              reason: 'completion_rate',
-              description: `완료율 보너스 (${stats.completionRate}%)`,
-            });
-          }
+    for (const rule of rules) {
+      if (rule.type === 'streak_bonus' && rule.conditions?.minStreak) {
+        if (stats.currentStreak >= rule.conditions.minStreak) {
+          await this.addPointHistory({
+            userId,
+            groupId,
+            type: 'bonus',
+            amount: rule.points,
+            reason: 'streak_bonus',
+            description: `연속 완료 보너스 (${stats.currentStreak}일)`,
+          });
         }
       }
-    } catch (error) {
-      throw error;
+
+      if (
+        rule.type === 'completion_rate' &&
+        rule.conditions?.minCompletionRate
+      ) {
+        if (stats.completionRate >= rule.conditions.minCompletionRate) {
+          await this.addPointHistory({
+            userId,
+            groupId,
+            type: 'bonus',
+            amount: rule.points,
+            reason: 'completion_rate',
+            description: `완료율 보너스 (${stats.completionRate}%)`,
+          });
+        }
+      }
     }
   }
 
@@ -399,28 +370,24 @@ class PointsService {
     reason: string,
     description?: string
   ): Promise<void> {
-    try {
-      const type = amount > 0 ? 'manual_add' : 'manual_deduct';
-      const absAmount = Math.abs(amount);
+    const type = amount > 0 ? 'manual_add' : 'manual_deduct';
+    const absAmount = Math.abs(amount);
 
-      // 포인트 내역 추가
-      const historyId = await this.addPointHistory({
-        userId,
-        groupId,
-        type,
-        amount: absAmount,
-        reason: reason,
-        description: description || reason,
-      });
+    // 포인트 내역 추가
+    const historyId = await this.addPointHistory({
+      userId,
+      groupId,
+      type,
+      amount: absAmount,
+      reason: reason,
+      description: description || reason,
+    });
 
-      // 즉시 승인하여 포인트 반영
-      await this.approvePointHistory(historyId, userId);
+    // 즉시 승인하여 포인트 반영
+    await this.approvePointHistory(historyId, userId);
 
-      // 포인트 통계 업데이트
-      await this.updatePointStats(userId, groupId);
-    } catch (error) {
-      throw error;
-    }
+    // 포인트 통계 업데이트
+    await this.updatePointStats(userId, groupId);
   }
 
   // 포인트 내역 승인
@@ -428,36 +395,32 @@ class PointsService {
     historyId: string,
     approvedBy: string
   ): Promise<void> {
-    try {
-      const historyRef = doc(db, 'pointHistory', historyId);
+    const historyRef = doc(db, 'pointHistory', historyId);
 
-      // 현재 내역 조회
-      const historyDoc = await getDoc(historyRef);
-      if (!historyDoc.exists()) {
-        throw new Error('포인트 내역을 찾을 수 없습니다.');
-      }
-
-      const history = historyDoc.data() as PointHistory;
-      // 승인 상태 업데이트
-      await updateDoc(historyRef, {
-        isApproved: true,
-        approvedAt: Timestamp.now(),
-        approvedBy: approvedBy,
-      });
-
-      // 승인된 포인트를 사용자에게 실제로 지급
-      const pointAmount =
-        history.type === 'manual_add' ||
-        history.type === 'earned' ||
-        history.type === 'bonus'
-          ? history.amount
-          : -history.amount;
-
-      // 사용자 프로필의 포인트 업데이트
-      await this.updateUserPoints(history.userId, history.groupId, pointAmount);
-    } catch (error) {
-      throw error;
+    // 현재 내역 조회
+    const historyDoc = await getDoc(historyRef);
+    if (!historyDoc.exists()) {
+      throw new Error('포인트 내역을 찾을 수 없습니다.');
     }
+
+    const history = historyDoc.data() as PointHistory;
+    // 승인 상태 업데이트
+    await updateDoc(historyRef, {
+      isApproved: true,
+      approvedAt: Timestamp.now(),
+      approvedBy: approvedBy,
+    });
+
+    // 승인된 포인트를 사용자에게 실제로 지급
+    const pointAmount =
+      history.type === 'manual_add' ||
+      history.type === 'earned' ||
+      history.type === 'bonus'
+        ? history.amount
+        : -history.amount;
+
+    // 사용자 프로필의 포인트 업데이트
+    await this.updateUserPoints(history.userId, history.groupId, pointAmount);
   }
 
   // 포인트 내역 승인 취소
@@ -465,16 +428,12 @@ class PointsService {
     historyId: string,
     rejectedBy: string
   ): Promise<void> {
-    try {
-      const historyRef = doc(db, 'pointHistory', historyId);
-      await updateDoc(historyRef, {
-        isApproved: false,
-        approvedAt: Timestamp.now(),
-        approvedBy: rejectedBy,
-      });
-    } catch (error) {
-      throw error;
-    }
+    const historyRef = doc(db, 'pointHistory', historyId);
+    await updateDoc(historyRef, {
+      isApproved: false,
+      approvedAt: Timestamp.now(),
+      approvedBy: rejectedBy,
+    });
   }
 
   // 승인되지 않은 포인트 내역 조회
@@ -505,7 +464,6 @@ class PointsService {
       );
 
       return unapprovedHistory;
-    } catch (_error) {
       return [];
     }
   }
@@ -537,7 +495,6 @@ class PointsService {
       );
 
       return approvedHistory;
-    } catch (_error) {
       return [];
     }
   }
@@ -553,8 +510,8 @@ class PointsService {
         amount: newAmount,
         updatedAt: Timestamp.now(),
       });
-    } catch (error) {
-      throw error;
+    } catch {
+      throw new Error('Failed to update point history amount');
     }
   }
 
@@ -578,8 +535,8 @@ class PointsService {
           points: newPoints,
         });
       }
-    } catch (error) {
-      throw error;
+    } catch {
+      throw new Error('Failed to update user points');
     }
   }
 }

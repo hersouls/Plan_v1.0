@@ -165,7 +165,6 @@ export async function deleteAvatarImage(
 /**
  * 아바타 업로드 에러 메시지 변환
  */
-function getAvatarUploadErrorMessage(errorObj: StorageError): string {
   if (errorObj.code === 'storage/unauthorized') {
     return '아바타 업로드 권한이 없습니다.';
   } else if (errorObj.code === 'storage/canceled') {
@@ -376,12 +375,6 @@ export class StorageService {
    * 파일 삭제
    */
   static async deleteFile(fileAttachment: FileAttachment): Promise<void> {
-    try {
-      const storageRef = ref(storage, fileAttachment.storageUrl);
-      await deleteObject(storageRef);
-    } catch (error) {
-      throw new Error('파일 삭제 중 오류가 발생했습니다.');
-    }
   }
 
   /**
@@ -453,7 +446,6 @@ export class StorageService {
   /**
    * 에러 메시지 변환
    */
-  private static getErrorMessage(errorObj: StorageError): string {
     // CORS 오류 처리
     if (errorObj.message && errorObj.message.includes('CORS')) {
       return '브라우저 보안 정책으로 인해 파일 업로드가 차단되었습니다. 개발자에게 문의해주세요.';

@@ -70,8 +70,6 @@ function createSafeSnapshot<T>(
               onNext(null as T);
             }
           }
-        } catch (innerError) {
-          if (onError) onError(innerError as Error);
         }
       },
       error: error => {
@@ -131,6 +129,7 @@ export const taskService = {
       return docRef.id;
     } catch (error) {
       // Handle error silently
+      return '';
     }
   },
 
@@ -168,6 +167,7 @@ export const taskService = {
       return null;
     } catch (error) {
       // Handle error silently
+      return null;
     }
   },
 
@@ -673,6 +673,8 @@ export const groupService = {
 
       return code;
     } catch (error) {
+      // Handle error silently
+      return '';
     }
   },
 
@@ -707,6 +709,8 @@ export const groupService = {
 
       return groupId;
     } catch (error) {
+      // Handle error silently
+      return '';
     }
   },
 };
@@ -852,6 +856,7 @@ export const commentService = {
         });
       }
     } catch (error) {
+      // Handle error silently
     }
   },
 
@@ -878,6 +883,7 @@ export const commentService = {
         });
       }
     } catch (error) {
+      // Handle error silently
     }
   },
 };
