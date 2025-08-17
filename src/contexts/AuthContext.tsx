@@ -19,15 +19,7 @@ import { userService } from '../lib/firestore';
 import { AuthContextType, ExtendedUser } from '../types/auth';
 import { User } from '../types/user';
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
-
-export function useAuth() {
-  const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return context;
-}
+export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<ExtendedUser | null>(null);
@@ -101,7 +93,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       } else {
         // Update login count and last login with safe data
         const updateData: unknown = {
-          loginCount: ((existingProfile as any).loginCount || 0) + 1,
+          loginCount: ((existingProfile as { loginCount?: number }).loginCount || 0) + 1,
           lastLoginAt: serverTimestamp(),
           lastLoginTime: serverTimestamp(), // 추가: 최근 로그인 시간
           lastSignInTime: serverTimestamp(), // 추가: 최근 로그인 시간 (다른 필드명)
@@ -112,7 +104,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
         await userService.createOrUpdateUserProfile(user.uid, updateData);
       }
-    } catch (error) {
+    } catch (_error) {
         // Handle error silently
       }
   };

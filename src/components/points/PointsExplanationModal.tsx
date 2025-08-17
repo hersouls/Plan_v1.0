@@ -15,7 +15,7 @@ import {
 } from 'lucide-react';
 import { useEffect } from 'react';
 import { GlassCard } from '../ui/GlassCard';
-import { Typography } from '../ui/typography';
+import { Typography } from '../ui/typography-utils';
 
 interface PointsExplanationModalProps {
   isOpen: boolean;

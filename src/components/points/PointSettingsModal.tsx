@@ -10,13 +10,13 @@ import {
   Zap,
 } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from '../../hooks/useAuth';
 import { useGroup, useUserGroups } from '../../hooks/useGroup';
 import { PointRule, pointsService } from '../../lib/points';
 import { LoadingSpinner } from '../common/LoadingSpinner';
 import { GlassCard } from '../ui/GlassCard';
 import { WaveButton } from '../ui/WaveButton';
-import { Typography } from '../ui/typography';
+import { Typography } from '../ui/typography-utils';
 
 interface PointSettingsModalProps {
   isOpen: boolean;

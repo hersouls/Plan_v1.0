@@ -12,7 +12,7 @@ import {
   X,
 } from 'lucide-react';
 import { useMemo, useRef, useState } from 'react';
-import { useAuth } from '../../../contexts/AuthContext';
+import { useAuth } from '../../../hooks/useAuth';
 import { validationService } from '../../../lib/validation';
 import { InlineLoading } from '../../common/LoadingSpinner';
 import { GlassCard } from '../../ui/GlassCard';

@@ -3,8 +3,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { GlassCard } from '../components/ui/GlassCard';
 import { WaveButton } from '../components/ui/WaveButton';
-import { Typography } from '../components/ui/typography';
-import { useAuth } from '../contexts';
+import { Typography } from '../components/ui/typography-utils';
+import { useAuth } from '../hooks/useAuth';
 
 function Login() {
   const [isSignUp, setIsSignUp] = useState(false);

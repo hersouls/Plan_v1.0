@@ -21,14 +21,14 @@ import {
   X,
 } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from '../../hooks/useAuth';
 import { useUser } from '../../hooks/useUser';
 import { uploadChatAttachment } from '../../lib/storage';
 import { cn } from '../../lib/utils';
 import { GlassCard } from '../ui/GlassCard';
 import { WaveButton } from '../ui/WaveButton';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
-import { Typography } from '../ui/typography';
+import { Typography } from '../ui/typography-utils';
 
 interface ChatMessage {
   id: string;
