@@ -485,4 +485,3 @@ export function AttachmentSection({
   );
 }
 
-export default AttachmentSection;

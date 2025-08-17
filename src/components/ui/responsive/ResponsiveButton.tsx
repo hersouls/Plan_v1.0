@@ -90,22 +90,4 @@ export const ResponsiveButton: React.FC<ResponsiveButtonProps> = ({
       )}
     </div>
   );
-
-  // Filter props to only include valid WaveButtonProps
-  const waveButtonProps: WaveButtonProps = {
-    children: buttonContent,
-    className: cn(
-      responsive && paddingClasses,
-      responsive && touchTargetClasses,
-      fullWidthClasses,
-      className
-    ),
-    ...Object.fromEntries(
-      Object.entries(props).filter(([key]) => 
-        key in ({} as WaveButtonProps)
-      )
-    )
-  };
-
-  return <WaveButton {...waveButtonProps} />;
 };
