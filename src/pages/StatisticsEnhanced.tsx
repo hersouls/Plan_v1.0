@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import { Typography } from '../components/ui/typography-utils';
 import { useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   CartesianGrid,
   Cell,
@@ -176,6 +177,7 @@ function StatisticsEnhanced() {
   // Enhanced chart data with multiple metrics
   const { categoryData } = useMemo(() => {
     if (!filteredTasks.length) {
+      return { categoryData: [] };
     }
 
     // Category distribution
@@ -528,7 +530,7 @@ function StatisticsEnhanced() {
                     dataKey="value"
                     label={({ name, percentage }) => `${name} ${percentage}%`}
                   >
-                    {categoryData.map((entry, index) => (
+                    {categoryData.map((_entry, index) => (
                       <Cell
                         key={`cell-${index}`}
                         fill={COLORS[index % COLORS.length]}

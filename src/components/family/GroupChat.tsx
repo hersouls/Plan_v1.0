@@ -461,6 +461,7 @@ export function GroupChat({
       setShowEmojiPicker(false);
       inputRef.current?.focus();
     } catch {
+      // Handle error silently
     } finally {
       setIsSending(false);
     }

@@ -194,7 +194,7 @@ export class PWAManager {
     }
 
     try {
-      await this.registration.sync.register(tag);
+      await (this.registration as any).sync.register(tag);
     } catch {
       // Handle error silently
     }

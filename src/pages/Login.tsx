@@ -115,7 +115,7 @@ function Login() {
         errorMessage = '비활성화된 계정입니다.';
       }
 
-      setError(errorMessage);
+      setError(String(errorMessage));
     } finally {
       setIsLoading(false);
     }
@@ -130,7 +130,7 @@ function Login() {
       navigate('/');
     } catch (_err: unknown) {
       const err = _err as Record<string, unknown>;
-      setError(err.message || 'Google 로그인에 실패했습니다.');
+      setError(String(err.message || 'Google 로그인에 실패했습니다.'));
     } finally {
       setIsGoogleLoading(false);
     }
@@ -145,7 +145,7 @@ function Login() {
       navigate('/');
     } catch (_err: unknown) {
       const err = _err as Record<string, unknown>;
-      setError(err.message || '익명 로그인에 실패했습니다.');
+      setError(String(err.message || '익명 로그인에 실패했습니다.'));
     } finally {
       setIsLoading(false);
     }

@@ -11,7 +11,7 @@ export const measurePerformance = async (name: string) => {
     }
 
     const { trace } = await import('firebase/performance');
-    const performanceTrace = trace(performance, name);
+    const performanceTrace = trace(performance as any, name);
     
     return {
       start: () => {

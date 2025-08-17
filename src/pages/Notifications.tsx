@@ -140,7 +140,7 @@ function Notifications() {
   const formatDate = (_timestamp: unknown) => {
     try {
       const timestamp = _timestamp as Record<string, unknown>;
-      const date = timestamp?.seconds ? new Date(timestamp.seconds * 1000) : new Date(timestamp);
+      const date = timestamp?.seconds ? new Date(Number(timestamp.seconds) * 1000) : new Date(String(timestamp));
       const now = new Date();
       const diffTime = Math.abs(now.getTime() - date.getTime());
       const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
@@ -269,7 +269,7 @@ function Notifications() {
                     ].map(option => (
                       <button
                         key={option.key}
-                        onClick={() => setFilter(option.key as Record<string, unknown>)}
+                        onClick={() => setFilter(option.key as "all" | "unread" | "read")}
                         className={cn(
                           'px-3 py-1 rounded-lg text-sm font-medium transition-all duration-200',
                           filter === option.key

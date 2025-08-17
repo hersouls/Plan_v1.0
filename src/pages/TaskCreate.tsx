@@ -41,7 +41,7 @@ import { toDate } from '../utils/dateHelpers';
 const categories: Array<{
   value: TaskCategory;
   label: string;
-  icon: React.ComponentType<{ className?: string }>;
+  icon: React.ComponentType<{ className?: string; size?: number }>;
   color: string;
 }> = [
   {
@@ -206,7 +206,7 @@ function TaskCreate({ mode = 'create' }: TaskCreateProps) {
       ? selectedGroupMembers.map(member => ({
           id: member.userId,
           name: member.userName || 'Unknown',
-          avatar: (member as Record<string, unknown>).avatar,
+          avatar: (member as Record<string, unknown>).avatar as string | undefined,
           role:
             member.role === 'owner' || member.role === 'admin'
               ? 'parent'
@@ -337,7 +337,7 @@ function TaskCreate({ mode = 'create' }: TaskCreateProps) {
       }
 
       if (dueDate) {
-        taskData.dueDate = dueDate as Record<string, unknown>;
+        taskData.dueDate = dueDate;
       }
 
       if (formData.recurring.enabled) {
@@ -357,7 +357,7 @@ function TaskCreate({ mode = 'create' }: TaskCreateProps) {
       }
 
       if (formData.location.trim()) {
-        taskData.location = formData.location.trim() as Record<string, unknown>;
+        taskData.location = formData.location.trim();
       }
 
       if (mode === 'edit' && taskId) {
@@ -928,7 +928,7 @@ function TaskCreate({ mode = 'create' }: TaskCreateProps) {
                             >
                               {member.avatar ? (
                                 <img
-                                  src={member.avatar}
+                                  src={String(member.avatar)}
                                   alt={member.name}
                                   className="w-full h-full rounded-full object-cover"
                                 />

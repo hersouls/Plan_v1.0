@@ -56,7 +56,7 @@ export async function resizeImage(
           `image/${options.format}`,
           options.quality
         );
-      } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
+      } catch (_error) { 
         // FIX: Handle error silently - intentionally unused
         reject(_error);
       }
@@ -162,7 +162,7 @@ export async function optimizeImage(file: File): Promise<File> {
     try {
       const resizedFile = await resizeImage(file, options);
       return resizedFile;
-    } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
+    } catch (_error) { 
       // FIX: Handle error silently - intentionally unused
       throw new Error('이미지 크기 조정에 실패했습니다.');
     }

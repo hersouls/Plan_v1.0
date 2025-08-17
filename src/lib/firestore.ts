@@ -70,7 +70,7 @@ function createSafeSnapshot<T>(
               onNext(null as T);
             }
           }
-        } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
+        } catch (_error) {
           // FIX: Handle error silently - intentionally unused
           if (onError) onError(_error as Error);
         }
@@ -130,7 +130,7 @@ export const taskService = {
       // 디버깅용 로그
       const docRef = await addDoc(collection(db, 'tasks'), finalData);
       return docRef.id;
-    } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
+    } catch (_error) { 
       // FIX: Handle error silently - intentionally unused
       // Handle error silently
       return '';
@@ -147,7 +147,7 @@ export const taskService = {
         updatedAt: serverTimestamp(),
       });
       await updateDoc(taskRef, sanitizedUpdates);
-    } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
+    } catch (_error) { 
       // FIX: Handle error silently - intentionally unused
       // Handle error silently
     }
@@ -157,7 +157,7 @@ export const taskService = {
   async deleteTask(taskId: string): Promise<void> {
     try {
       await deleteDoc(doc(db, 'tasks', taskId));
-    } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
+    } catch (_error) { 
       // FIX: Handle error silently - intentionally unused
       // Handle error silently
     }
@@ -171,7 +171,7 @@ export const taskService = {
         return { id: docSnap.id, ...docSnap.data() } as Task;
       }
       return null;
-    } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
+    } catch (_error) { 
       // FIX: Handle error silently - intentionally unused
       // Handle error silently
       return null;
@@ -263,7 +263,7 @@ export const taskService = {
         id: doc.id,
         ...doc.data(),
       })) as Task[];
-    } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
+    } catch (_error) { 
       // FIX: Handle error silently - intentionally unused
       // Handle error silently
       return [];
@@ -284,7 +284,7 @@ export const taskService = {
         id: doc.id,
         ...doc.data(),
       })) as Task[];
-    } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
+    } catch (_error) { 
       // FIX: Handle error silently - intentionally unused
       // Handle error silently
       return [];
@@ -305,7 +305,7 @@ export const groupService = {
         updatedAt: serverTimestamp(),
       });
       return docRef.id;
-    } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
+    } catch (_error) { 
       // FIX: Handle error silently - intentionally unused
       // Handle error silently
       return '';
@@ -320,7 +320,7 @@ export const groupService = {
         ...updates,
         updatedAt: serverTimestamp(),
       });
-    } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
+    } catch (_error) { 
       // FIX: Handle error silently - intentionally unused
       // Handle error silently
     }
@@ -341,7 +341,7 @@ export const groupService = {
         return { id: docSnap.id, ...docSnap.data() } as FamilyGroup;
       }
       return null;
-    } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
+    } catch (_error) { 
       // FIX: Handle error silently - intentionally unused
       // Handle error silently
       return null;
@@ -386,7 +386,7 @@ export const groupService = {
         [`memberRoles.${userId}`]: role,
         updatedAt: serverTimestamp(),
       });
-    } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
+    } catch (_error) { 
       // FIX: Handle error silently - intentionally unused
       // Handle error silently
     }
@@ -414,7 +414,7 @@ export const groupService = {
       }
 
       await batch.commit();
-    } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
+    } catch (_error) { 
       // FIX: Handle error silently - intentionally unused
       // Handle error silently
     }
@@ -434,7 +434,7 @@ export const groupService = {
         id: doc.id,
         ...doc.data(),
       })) as FamilyGroup[];
-    } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
+    } catch (_error) { 
       // FIX: Handle error silently - intentionally unused
       // Handle error silently
       return [];
@@ -455,7 +455,7 @@ export const groupService = {
       );
 
       return createSafeSnapshot<FamilyGroup[]>(q, callback, onError);
-    } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
+    } catch (_error) { 
       // FIX: Handle error silently - intentionally unused
       if (onError) onError(_error as Error);
       return () => {};
@@ -515,7 +515,7 @@ export const groupService = {
       });
 
       return await Promise.all(memberPromises);
-    } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
+    } catch (_error) { 
       // FIX: Handle error silently - intentionally unused
       // Handle error silently
       return [];
@@ -603,7 +603,7 @@ export const groupService = {
           totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0,
         memberStats,
       };
-    } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
+    } catch (_error) { 
       // FIX: Handle error silently - intentionally unused
       // Handle error silently
       return {
@@ -647,7 +647,7 @@ export const groupService = {
       batch.delete(doc(db, 'groups', groupId));
 
       await batch.commit();
-    } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
+    } catch (_error) { 
       // FIX: Handle error silently - intentionally unused
       // Handle error silently
     }
@@ -670,7 +670,7 @@ export const groupService = {
         createdAt: serverTimestamp(),
         expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
       });
-    } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
+    } catch (_error) { 
       // FIX: Handle error silently - intentionally unused
       // Handle error silently
     }
@@ -688,7 +688,7 @@ export const groupService = {
         [`memberRoles.${userId}`]: newRole,
         updatedAt: serverTimestamp(),
       });
-    } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
+    } catch (_error) { 
       // FIX: Handle error silently - intentionally unused
       // Handle error silently
     }
@@ -709,7 +709,7 @@ export const groupService = {
       });
 
       return code;
-    } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
+    } catch (_error) { 
       // FIX: Handle error silently - intentionally unused
       // Handle error silently
       return '';
@@ -746,7 +746,7 @@ export const groupService = {
       await this.addMemberToGroup(groupId, userId, 'member');
 
       return groupId;
-    } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
+    } catch (_error) { 
       // FIX: Handle error silently - intentionally unused
       // Handle error silently
       return '';
@@ -815,7 +815,7 @@ export const commentService = {
         createdAt: serverTimestamp(),
       });
       return docRef.id;
-    } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
+    } catch (_error) { 
       // FIX: Handle error silently - intentionally unused
       // Handle error silently
       return '';
@@ -826,7 +826,7 @@ export const commentService = {
   async deleteComment(taskId: string, commentId: string) {
     try {
       await deleteDoc(doc(db, 'tasks', taskId, 'comments', commentId));
-    } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
+    } catch (_error) { 
       // FIX: Handle error silently - intentionally unused
       // Handle error silently
     }
@@ -874,7 +874,7 @@ export const commentService = {
           await updateDoc(commentRef, { reactions });
         }
       }
-    } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
+    } catch (_error) { 
       // FIX: Handle error silently - intentionally unused
       // Handle error silently
     }
@@ -900,7 +900,7 @@ export const commentService = {
           updatedAt: serverTimestamp(),
         });
       }
-    } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
+    } catch (_error) { 
       // FIX: Handle error silently - intentionally unused
       // Handle error silently
     }
@@ -928,7 +928,7 @@ export const commentService = {
           updatedAt: serverTimestamp(),
         });
       }
-    } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
+    } catch (_error) { 
       // FIX: Handle error silently - intentionally unused
       // Handle error silently
     }
@@ -994,7 +994,7 @@ export const userService = {
         },
         { merge: true }
       );
-    } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
+    } catch (_error) { 
       // FIX: Handle error silently - intentionally unused
       // Handle error silently
     }
@@ -1008,7 +1008,7 @@ export const userService = {
         return { id: docSnap.id, ...docSnap.data() } as User;
       }
       return null;
-    } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
+    } catch (_error) { 
       // FIX: Handle error silently - intentionally unused
       // Handle error silently
       return null;
@@ -1035,43 +1035,35 @@ export const userService = {
 export const batchService = {
   // Create multiple tasks at once
   async createMultipleTasks(tasks: unknown[]) {
-    try {
-      const batch = writeBatch(db);
-      const taskRefs: unknown[] = [];
+    const batch = writeBatch(db);
+    const taskRefs: unknown[] = [];
 
-      tasks.forEach(taskData => {
-        const taskRef = doc(collection(db, 'tasks'));
-        taskRefs.push(taskRef);
-        batch.set(taskRef, {
-          ...(taskData as Record<string, unknown>),
-          createdAt: serverTimestamp(),
-          updatedAt: serverTimestamp(),
-        });
+    tasks.forEach(taskData => {
+      const taskRef = doc(collection(db, 'tasks'));
+      taskRefs.push(taskRef);
+      batch.set(taskRef, {
+        ...(taskData as Record<string, unknown>),
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp(),
       });
+    });
 
-      await batch.commit();
-    } catch (error) {
-      throw error;
-    }
+    await batch.commit();
   },
 
   // Update multiple tasks
   async updateMultipleTasks(updates: Array<{ id: string; data: unknown }>) {
-    try {
-      const batch = writeBatch(db);
-      
-      updates.forEach(({ id, data }) => {
-        const taskRef = doc(db, 'tasks', id);
-        batch.update(taskRef, {
-          ...(data as Record<string, unknown>),
-          updatedAt: serverTimestamp(),
-        });
+    const batch = writeBatch(db);
+    
+    updates.forEach(({ id, data }) => {
+      const taskRef = doc(db, 'tasks', id);
+      batch.update(taskRef, {
+        ...(data as Record<string, unknown>),
+        updatedAt: serverTimestamp(),
       });
+    });
 
-      await batch.commit();
-    } catch (error) {
-      throw error;
-    }
+    await batch.commit();
   },
 };
 
