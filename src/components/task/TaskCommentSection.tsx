@@ -285,6 +285,7 @@ export const TaskCommentSection: React.FC<TaskCommentSectionProps> = ({
         const mentionedName = match[1];
         // 그룹 멤버에서 이름으로 ID 찾기
         const mentionedUser = groupMembers?.find(
+          member => member.displayName === mentionedName
         );
         if (mentionedUser) {
           mentions.push(mentionedUser.userId);
