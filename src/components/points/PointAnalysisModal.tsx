@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { X, AlertTriangle, CheckCircle, Info, TrendingUp, Brain } from 'lucide-react';
 import { GlassCard } from '../ui/GlassCard';
 import { WaveButton } from '../ui/WaveButton';
@@ -30,13 +30,7 @@ export function PointAnalysisModal({
   const [loading, setLoading] = useState(false);
   const [useAdjustedAmount, setUseAdjustedAmount] = useState(false);
 
-  useEffect(() => {
-    if (isOpen && pointHistory) {
-      analyzePoint();
-    }
-  }, [isOpen, pointHistory, analyzePoint]);
-
-  const analyzePoint = async () => {
+  const analyzePoint = useCallback(async () => {
     setLoading(true);
     try {
       const result = await pointsAnalyzer.analyzePointHistory(
@@ -45,12 +39,18 @@ export function PointAnalysisModal({
         allHistories
       );
       setAnalysis(result);
-    } catch (error) {
+    } catch {
         // Handle error silently
       } finally {
       setLoading(false);
     }
-  };
+  }, [pointHistory, userStats, allHistories]);
+
+  useEffect(() => {
+    if (isOpen && pointHistory) {
+      analyzePoint();
+    }
+  }, [isOpen, pointHistory, analyzePoint]);
 
   const getValidityIcon = (validity: string) => {
     switch (validity) {

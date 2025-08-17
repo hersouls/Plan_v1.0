@@ -71,7 +71,7 @@ export function QRScannerModal({
     }
   }, [scanQRCode]);
 
-  const scanQRCode = () => {
+  const scanQRCode = useCallback(() => {
     if (!videoRef.current || !canvasRef.current || !isScanning) return;
 
     const video = videoRef.current;
@@ -105,7 +105,7 @@ export function QRScannerModal({
 
     // 다음 프레임 스캔
     animationFrameRef.current = requestAnimationFrame(scanQRCode);
-  };
+  }, [isScanning, onScanSuccess]);
 
   const stopScanning = () => {
     if (animationFrameRef.current) {
