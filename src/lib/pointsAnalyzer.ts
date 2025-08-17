@@ -162,9 +162,6 @@ ${i + 1}. ID: ${h.id}
               }
             });
           }
-        } catch (error) {
-          // Handle error silently
-        }
       }
     } catch (error) {
       // Handle error silently

@@ -215,7 +215,6 @@ ${JSON.stringify(timePatterns, null, 2)}
         }
       }
     } catch (error) {
-      // Handle error silently
     }
 
     return this.getDefaultPrediction(targetPeriod);

@@ -137,11 +137,6 @@ export class NotificationService {
         callback(notifications);
       },
       error => {
-        // 인덱스 빌드 중 오류인 경우 기본 쿼리로 재시도
-        if (
-          error.code === 'failed-precondition' &&
-          error.message.includes('index')
-        ) {
           // 기본 쿼리로 재시도
           const basicQuery = query(
             collection(db, this.COLLECTION),
@@ -165,7 +160,6 @@ export class NotificationService {
 
               callback(notifications);
             },
-            () => {
               callback([]); // 빈 배열 반환
             }
           );

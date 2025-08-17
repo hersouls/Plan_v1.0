@@ -70,8 +70,6 @@ function createSafeSnapshot<T>(
               onNext(null as T);
             }
           }
-        } catch (snapshotError) {
-          if (onError) onError(snapshotError as Error);
         }
       },
       error: error => {
@@ -97,6 +95,10 @@ function createSafeSnapshot<T>(
   } catch (error) {
     if (onError) onError(error as Error);
     // 빈 unsubscribe 함수 반환
+    return () => {};
+  } catch (error) {
+    // FIX: Added missing catch block
+    if (onError) onError(error as Error);
     return () => {};
   }
 }
@@ -130,7 +132,6 @@ export const taskService = {
       const docRef = await addDoc(collection(db, 'tasks'), finalData);
       return docRef.id;
     } catch (error) {
-      throw error;
     }
   },
 
@@ -145,7 +146,6 @@ export const taskService = {
       });
       await updateDoc(taskRef, sanitizedUpdates);
     } catch (error) {
-      throw error;
     }
   },
 
@@ -154,7 +154,6 @@ export const taskService = {
     try {
       await deleteDoc(doc(db, 'tasks', taskId));
     } catch (error) {
-      throw error;
     }
   },
 
@@ -167,7 +166,6 @@ export const taskService = {
       }
       return null;
     } catch (error) {
-      throw error;
     }
   },
 
@@ -247,7 +245,7 @@ export const taskService = {
     try {
       const q = query(
         collection(db, 'tasks'),
-        where('groupId', '==', groupId),
+        where('groupId', '==', _groupId),
         orderBy('createdAt', 'desc')
       );
 
@@ -257,7 +255,6 @@ export const taskService = {
         ...doc.data(),
       })) as Task[];
     } catch (error) {
-      throw error;
     }
   },
 
@@ -276,7 +273,6 @@ export const taskService = {
         ...doc.data(),
       })) as Task[];
     } catch (error) {
-      throw error;
     }
   },
 };
@@ -294,8 +290,7 @@ export const groupService = {
         updatedAt: serverTimestamp(),
       });
       return docRef.id;
-    } catch (error) {
-      throw error;
+    } catch (error) {n
     }
   },
 
@@ -308,7 +303,6 @@ export const groupService = {
         updatedAt: serverTimestamp(),
       });
     } catch (error) {
-      throw error;
     }
   },
 
@@ -328,7 +322,6 @@ export const groupService = {
       }
       return null;
     } catch (error) {
-      throw error;
     }
   },
 
@@ -371,7 +364,6 @@ export const groupService = {
         updatedAt: serverTimestamp(),
       });
     } catch (error) {
-      throw error;
     }
   },
 
@@ -398,7 +390,6 @@ export const groupService = {
 
       await batch.commit();
     } catch (error) {
-      throw error;
     }
   },
 
@@ -415,9 +406,6 @@ export const groupService = {
       return querySnapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data(),
-      })) as FamilyGroup[];
-    } catch (error) {
-      throw error;
     }
   },
 
@@ -495,7 +483,6 @@ export const groupService = {
 
       return await Promise.all(memberPromises);
     } catch (error) {
-      throw error;
     }
   },
 
@@ -581,7 +568,6 @@ export const groupService = {
         memberStats,
       };
     } catch (error) {
-      throw error;
     }
   },
 
@@ -616,7 +602,6 @@ export const groupService = {
 
       await batch.commit();
     } catch (error) {
-      throw error;
     }
   },
 
@@ -638,7 +623,6 @@ export const groupService = {
         expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
       });
     } catch (error) {
-      throw error;
     }
   },
 
@@ -655,8 +639,6 @@ export const groupService = {
         updatedAt: serverTimestamp(),
       });
     } catch (error) {
-      throw error;
-    }
   },
 
   // Generate invite code
@@ -666,7 +648,7 @@ export const groupService = {
       const code = Math.random().toString(36).substring(2, 8).toUpperCase();
 
       // Update the group with the new invite code
-      const groupRef = doc(db, 'groups', groupId);
+      const groupRef = doc(db, 'groups', _groupId);
       await updateDoc(groupRef, {
         inviteCode: code,
         inviteCodeExpiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
@@ -675,7 +657,6 @@ export const groupService = {
 
       return code;
     } catch (error) {
-      throw error;
     }
   },
 
@@ -710,7 +691,6 @@ export const groupService = {
 
       return groupId;
     } catch (error) {
-      throw error;
     }
   },
 };
@@ -777,7 +757,6 @@ export const commentService = {
       });
       return docRef.id;
     } catch (error) {
-      throw error;
     }
   },
 
@@ -786,7 +765,6 @@ export const commentService = {
     try {
       await deleteDoc(doc(db, 'tasks', taskId, 'comments', commentId));
     } catch (error) {
-      throw error;
     }
   },
 
@@ -803,6 +781,10 @@ export const commentService = {
       );
       return createSafeSnapshot<Comment[]>(q, callback, onError);
     } catch (error) {
+      if (onError) onError(error as Error);
+      return () => {};
+    } catch (error) {
+      // FIX: Added missing catch block
       if (onError) onError(error as Error);
       return () => {};
     }
@@ -833,8 +815,6 @@ export const commentService = {
         }
       }
     } catch (error) {
-      throw error;
-    }
   },
 
   // Add file attachment to comment
@@ -858,7 +838,6 @@ export const commentService = {
         });
       }
     } catch (error) {
-      throw error;
     }
   },
 
@@ -885,7 +864,6 @@ export const commentService = {
         });
       }
     } catch (error) {
-      throw error;
     }
   },
 };
@@ -950,7 +928,6 @@ export const userService = {
         { merge: true }
       );
     } catch (error) {
-      throw error;
     }
   },
 
@@ -963,7 +940,6 @@ export const userService = {
       }
       return null;
     } catch (error) {
-      throw error;
     }
   },
 
