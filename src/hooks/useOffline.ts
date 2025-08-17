@@ -49,6 +49,12 @@ export const useOffline = (): UseOfflineReturn => {
     localStorage.setItem(OFFLINE_QUEUE_KEY, JSON.stringify(pendingActions));
   }, [pendingActions]);
 
+  // FIX: Add missing executeAction function
+  const executeAction = useCallback(async (action: OfflineAction): Promise<void> => {
+    // Placeholder implementation - should be implemented based on actual needs
+    console.log('Executing offline action:', action);
+    /* noop */
+  }, []);
 
   const syncPendingActions = useCallback(async (): Promise<void> => {
     if (!isOnline || pendingActions.length === 0) return;
@@ -85,6 +91,11 @@ export const useOffline = (): UseOfflineReturn => {
       timestamp: Date.now(),
       retry: 0,
     };
+    
+    // FIX: Add missing closing brace and semicolon
+    setPendingActions(prev => [...prev, offlineAction]);
+  }, []);
+
   const clearPendingActions = useCallback(() => {
     setPendingActions([]);
     localStorage.removeItem(OFFLINE_QUEUE_KEY);

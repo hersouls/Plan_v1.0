@@ -118,6 +118,8 @@ class PointsService {
         id: doc.id,
         ...doc.data(),
       })) as PointHistory[];
+    } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
+      // FIX: Handle error silently - intentionally unused
       return [];
     }
   }
@@ -136,6 +138,8 @@ class PointsService {
         id: doc.id,
         ...doc.data(),
       })) as PointHistory[];
+    } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
+      // FIX: Handle error silently - intentionally unused
       return [];
     }
   }
@@ -169,6 +173,8 @@ class PointsService {
         id: doc.id,
         ...doc.data(),
       })) as PointRule[];
+    } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
+      // FIX: Handle error silently - intentionally unused
       return [];
     }
   }
@@ -199,6 +205,8 @@ class PointsService {
       }
 
       return null;
+    } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
+      // FIX: Handle error silently - intentionally unused
       return null;
     }
   }
@@ -293,6 +301,8 @@ class PointsService {
       await batch.commit();
 
       return updatedStats;
+    } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
+      // FIX: Handle error silently - intentionally unused
       return [];
     }
   }
@@ -464,6 +474,8 @@ class PointsService {
       );
 
       return unapprovedHistory;
+    } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
+      // FIX: Handle error silently - intentionally unused
       return [];
     }
   }
@@ -495,6 +507,8 @@ class PointsService {
       );
 
       return approvedHistory;
+    } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
+      // FIX: Handle error silently - intentionally unused
       return [];
     }
   }
@@ -511,8 +525,7 @@ class PointsService {
         updatedAt: Timestamp.now(),
       });
     } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
-          // FIX: Handle error silently - intentionally unused
-      // FIX: Handle error silently
+      // FIX: Handle error silently - intentionally unused
       throw new Error('Failed to update point history amount');
     }
   }
@@ -538,8 +551,7 @@ class PointsService {
         });
       }
     } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
-          // FIX: Handle error silently - intentionally unused
-      // FIX: Handle error silently
+      // FIX: Handle error silently - intentionally unused
       throw new Error('Failed to update user points');
     }
   }

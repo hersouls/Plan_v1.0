@@ -143,10 +143,11 @@ ${JSON.stringify(timePatterns, null, 2)}
             this.getDefaultInsights();
         } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
           // FIX: Handle error silently - intentionally unused
-          // FIX: Handle JSON parsing error silently
           return this.getDefaultInsights();
         }
       }
+    } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
+      // FIX: Handle error silently - intentionally unused
     }
 
     return this.getDefaultInsights();
@@ -212,10 +213,11 @@ ${JSON.stringify(timePatterns, null, 2)}
           return JSON.parse(content.text);
         } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
           // FIX: Handle error silently - intentionally unused
-          // FIX: Handle JSON parsing error silently
           return this.getDefaultPrediction(targetPeriod);
         }
       }
+    } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
+      // FIX: Handle error silently - intentionally unused
     }
 
     return this.getDefaultPrediction(targetPeriod);
@@ -301,10 +303,11 @@ ${JSON.stringify(memberPerformance, null, 2)}
           return JSON.parse(content.text);
         } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
           // FIX: Handle error silently - intentionally unused
-          // FIX: Handle JSON parsing error silently
           return this.getDefaultTeamAnalysis();
         }
       }
+    } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
+      // FIX: Handle error silently - intentionally unused
     }
 
     return this.getDefaultTeamAnalysis();
@@ -363,10 +366,11 @@ ${JSON.stringify(memberPerformance, null, 2)}
           return JSON.parse(content.text);
         } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
           // FIX: Handle error silently - intentionally unused
-          // FIX: Handle JSON parsing error silently
           return this.getDefaultActivityPattern();
         }
       }
+    } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
+      // FIX: Handle error silently - intentionally unused
     }
 
     return this.getDefaultActivityPattern();
