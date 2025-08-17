@@ -354,7 +354,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const profile = await userService.getUserProfile(user.uid);
       setUserProfile(profile);
     } catch (err) {
-      console.error(err);
+      // Handle error silently or set error state if needed
+      setError(err instanceof Error ? err.message : '프로필 새로고침에 실패했습니다.');
     }
   };
 

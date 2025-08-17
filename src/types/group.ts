@@ -53,6 +53,7 @@ export interface GroupMember {
   invitedBy?: string;
   isActive: boolean;
   lastActivityAt?: Timestamp;
+  points?: number;
   // Compatibility aliases
   lastActive?: Timestamp;
   userName?: string;
@@ -110,6 +111,13 @@ export interface UpdateGroupInput {
 export interface GroupStats {
   groupId: string;
   period: 'daily' | 'weekly' | 'monthly' | 'yearly' | 'all_time';
+  
+  // Add the missing properties that are being used in the code
+  totalTasks: number;
+  completedTasks: number;
+  pendingTasks: number;
+  overdueTasks: number;
+  completionRate: number;
   
   tasks: {
     created: number;
