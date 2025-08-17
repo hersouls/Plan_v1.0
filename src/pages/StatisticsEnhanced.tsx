@@ -13,6 +13,7 @@ import {
 import { Typography } from '../components/ui/typography-utils';
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+
 import {
   CartesianGrid,
   Cell,
@@ -27,7 +28,7 @@ import {
 import { ResponsiveContainer } from '../components/ui/responsive';
 import { LoadingSpinner } from '../components/common/LoadingSpinner';
 import { WaveBackground } from '../components/layout/WaveBackground';
-import { useSettings } from '../components/settings/hooks/useSettings';
+
 import { StatisticsInsights } from '../components/statistics/StatisticsInsights';
 import { GlassCard } from '../components/ui/GlassCard';
 import { WaveButton } from '../components/ui/WaveButton';
@@ -54,6 +55,7 @@ const COLORS = [
 
 function StatisticsEnhanced() {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [selectedGroupId, setSelectedGroupId] = useState<string | null>(null);
   const [dateRange, setDateRange] = useState<DateRange>('30days');
   // Use real Firebase data
@@ -68,7 +70,6 @@ function StatisticsEnhanced() {
   const {
     tasks,
     loading: tasksLoading,
-    stats,
   } = useTasks({
     realtime: true,
     groupId: selectedGroupId || undefined,
@@ -76,7 +77,6 @@ function StatisticsEnhanced() {
 
   // 포인트 통계 상태
   const [pointStats, setPointStats] = useState<Record<string, PointStats>>({});
-  const [loadingPoints, setLoadingPoints] = useState(false);
 
   // Set first group as selected if available
   useEffect(() => {
@@ -90,7 +90,6 @@ function StatisticsEnhanced() {
     const loadPointStats = async () => {
       if (!selectedGroupId || !members) return;
       
-      setLoadingPoints(true);
       try {
         const stats: Record<string, PointStats> = {};
         for (const member of members) {
@@ -100,10 +99,8 @@ function StatisticsEnhanced() {
           }
         }
         setPointStats(stats);
-      } catch (error) {
+      } catch {
         // Handle error silently
-      } finally {
-        setLoadingPoints(false);
       }
     };
 
@@ -179,13 +176,10 @@ function StatisticsEnhanced() {
   };
 
   // Enhanced chart data with multiple metrics
-  const { categoryData, priorityData, statusData, memberData } = useMemo(() => {
+  const { categoryData } = useMemo(() => {
     if (!filteredTasks.length) {
       return {
         categoryData: [],
-        priorityData: [],
-        statusData: [],
-        memberData: [],
       };
     }
 
@@ -204,79 +198,12 @@ function StatisticsEnhanced() {
       })
     );
 
-    // Priority distribution
-    const priorities = filteredTasks.reduce((acc, task) => {
-      const priority = task.priority || 'medium';
-      acc[priority] = (acc[priority] || 0) + 1;
-      return acc;
-    }, {} as Record<string, number>);
 
-    const priorityChart = Object.entries(priorities).map(
-      ([priority, count]) => ({
-        name:
-          priority === 'low'
-            ? '낮음'
-            : priority === 'medium'
-            ? '보통'
-            : priority === 'high'
-            ? '높음'
-            : '긴급',
-        value: count,
-        percentage: Math.round((count / filteredTasks.length) * 100),
-      })
-    );
-
-    // Status distribution
-    const completed = filteredTasks.filter(t => isTaskCompleted(t)).length;
-    const overdue = filteredTasks.filter(t => isTaskOverdue(t)).length;
-    const pending = filteredTasks.length - completed - overdue;
-
-    const statusChart = [
-      {
-        name: '완료',
-        value: completed,
-        percentage: Math.round((completed / filteredTasks.length) * 100),
-      },
-      {
-        name: '진행 중',
-        value: pending,
-        percentage: Math.round((pending / filteredTasks.length) * 100),
-      },
-      {
-        name: '지연',
-        value: overdue,
-        percentage: Math.round((overdue / filteredTasks.length) * 100),
-      },
-    ].filter(item => item.value > 0);
-
-    // Member performance (if group selected)
-    const memberChart = members
-      ? members
-          .map(member => {
-            const memberTasks = filteredTasks.filter(
-              t => t.assigneeId === member.userId
-            );
-            const completedCount = memberTasks.filter(t => isTaskCompleted(t)).length;
-
-            return {
-              name: member.userName || '이름 없음',
-              total: memberTasks.length,
-              completed: completedCount,
-              percentage:
-                memberTasks.length > 0
-                  ? Math.round((completedCount / memberTasks.length) * 100)
-                  : 0,
-            };
-          })
-          .filter(item => item.total > 0)
-      : [];
 
     return {
       categoryData: categoryChart,
-      statusData: statusChart,
-      memberData: memberChart,
     };
-  }, [filteredTasks, members]);
+  }, [filteredTasks]);
 
   // Quick stats calculations
   const quickStats = useMemo(() => {
@@ -306,7 +233,7 @@ function StatisticsEnhanced() {
   }, [filteredTasks]);
 
   const loading =
-    groupsLoading || groupLoading || tasksLoading || settingsLoading;
+    groupsLoading || groupLoading || tasksLoading;
   const completedTasks = filteredTasks.filter(task => isTaskCompleted(task)).length;
   const completionRate =
     filteredTasks.length > 0
