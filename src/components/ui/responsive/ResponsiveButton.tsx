@@ -5,14 +5,12 @@ import {
   responsiveTouchTarget,
 } from '../../../lib/responsive';
 import { cn } from '../../../lib/utils';
-import { WaveButton } from '../WaveButton';
 import { ButtonProps } from '../button';
-import { WaveButtonProps } from '../../../types/ui';
 
 interface ResponsiveButtonProps extends Omit<ButtonProps, 'className'> {
   children: React.ReactNode;
   className?: string;
-  padding?: 'button' | 'card' | 'none';
+  padding?: 'button' | 'card' | 'container' | 'none';
   touchTarget?: 'button' | 'icon' | 'none';
   layout?: 'horizontal' | 'vertical' | 'auto';
   icon?: React.ReactNode;
@@ -35,9 +33,9 @@ export const ResponsiveButton: React.FC<ResponsiveButtonProps> = ({
   iconSize = 'responsive',
   ...props
 }) => {
-  const paddingClasses = padding !== 'none' ? responsivePadding(padding) : '';
+  const paddingClasses = padding !== 'none' ? responsivePadding(padding as 'button' | 'card' | 'container') : '';
   const touchTargetClasses =
-    touchTarget !== 'none' ? responsiveTouchTarget(touchTarget) : '';
+    touchTarget !== 'none' ? responsiveTouchTarget(touchTarget as 'button' | 'icon') : '';
 
   const layoutClasses =
     layout === 'auto'
@@ -89,5 +87,19 @@ export const ResponsiveButton: React.FC<ResponsiveButtonProps> = ({
         </span>
       )}
     </div>
+  );
+
+  return (
+    <button
+      className={cn(
+        'inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background',
+        paddingClasses,
+        touchTargetClasses,
+        className
+      )}
+      {...props}
+    >
+      {buttonContent}
+    </button>
   );
 };

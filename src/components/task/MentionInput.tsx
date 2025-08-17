@@ -7,7 +7,7 @@ import { cn } from '@/components/ui/utils';
 import { useAuth } from '@/hooks/useAuth';
 import { useData } from '@/hooks/useData';
 import { useGroup } from '@/hooks/useGroup';
-import { GroupMember } from '@/types/group';
+// ... existing code ...
 import { AtSign } from 'lucide-react';
 
 interface MentionInputProps {
@@ -64,6 +64,9 @@ export const MentionInput: React.FC<MentionInputProps> = ({
         if (member.userId !== user?.uid) {
           users.push({
             id: member.userId,
+            name: member.userName || member.userEmail || 'Unknown User',
+            email: member.userEmail || '',
+            avatar: member.userAvatar || undefined,
           });
         }
       });
