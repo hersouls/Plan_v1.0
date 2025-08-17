@@ -351,7 +351,7 @@ function PointsManagement() {
         <div className="relative">
           <img
             src={avatarUrl}
-            alt={`${displayName} 아바타`}
+            alt={`${displayName || 'User'} Avatar`}
             className={`${sizeClasses[size]} rounded-full object-cover shadow-lg`}
             onError={e => {
               // 이미지 로드 실패 시 기본 아바타로 대체
@@ -422,7 +422,7 @@ function PointsManagement() {
       setShowAddPointsModal(false);
     } catch (error) {
         // Handle error silently
-      }
+    }
   };
 
   // 포인트 차감
@@ -453,7 +453,7 @@ function PointsManagement() {
       setShowAddPointsModal(false);
     } catch (error) {
         // Handle error silently
-      }
+    }
   };
 
   if (!user) {

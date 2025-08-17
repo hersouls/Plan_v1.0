@@ -71,7 +71,6 @@ const isValidConfig = (_config: unknown) => {
 
 // Initialize Firebase
 let app;
-}
 
 // Initialize Firebase services
 export const auth = getAuth(app);
@@ -104,7 +103,6 @@ export const loadAnalytics = async () => {
     
     if (supported && firebaseConfig.measurementId && shouldEnableAnalytics) {
       analytics = getAnalytics(app);
-      }
       return analytics;
     }
   } catch (error) {
@@ -121,7 +119,6 @@ export const loadPerformance = async () => {
     
     if (shouldEnableAnalytics) {
       performance = getPerformance(app);
-      }
       return performance;
     }
   } catch (error) {
@@ -139,7 +136,6 @@ export const loadMessaging = async () => {
     
     if (supported) {
       messaging = getMessaging(app);
-      }
       return messaging;
     }
   } catch (error) {
