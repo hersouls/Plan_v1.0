@@ -9,6 +9,7 @@ import {
   User,
   X,
 } from 'lucide-react';
+import { Timestamp } from 'firebase/firestore';
 import { Group } from '../../types/group';
 import { Task } from '../../types/task';
 import { toDate } from '../../utils/dateHelpers';
