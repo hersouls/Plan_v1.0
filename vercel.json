@@ -113,7 +113,7 @@
   },
   "functions": {
     "src/pages/api/**/*.ts": {
-      "runtime": "nodejs18.x"
+      "runtime": "nodejs20.x"
     }
   }
 }

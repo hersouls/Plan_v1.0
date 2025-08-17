@@ -1,7 +1,7 @@
 "use strict";
-const __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
-    let desc = Object.getOwnPropertyDescriptor(m, k);
+    var desc = Object.getOwnPropertyDescriptor(m, k);
     if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
       desc = { enumerable: true, get: function() { return m[k]; } };
     }
@@ -10,30 +10,30 @@ const __createBinding = (this && this.__createBinding) || (Object.create ? (func
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
 }));
-const __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
     Object.defineProperty(o, "default", { enumerable: true, value: v });
 }) : function(o, v) {
     o["default"] = v;
 });
-const __importStar = (this && this.__importStar) || (function () {
-    let ownKeys = function(o) {
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
         ownKeys = Object.getOwnPropertyNames || function (o) {
-            const ar = [];
-            for (const k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
             return ar;
         };
         return ownKeys(o);
     };
     return function (mod) {
         if (mod && mod.__esModule) return mod;
-        const result = {};
-        if (mod != null) for (let k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
         __setModuleDefault(result, mod);
         return result;
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.sendWeeklySummary = exports.sendDailyReminders = exports.onCommentCreated = exports.onTaskUpdated = exports.onTaskCreated = void 0;
+exports.sendWeeklySummary = exports.sendDailyReminders = exports.onCommentDeleted = exports.onCommentCreated = exports.onTaskUpdated = exports.onTaskCreated = void 0;
 const admin = __importStar(require("firebase-admin"));
 const firestore_1 = require("firebase-functions/v2/firestore");
 const scheduler_1 = require("firebase-functions/v2/scheduler");
@@ -46,7 +46,7 @@ const db = admin.firestore();
 const messaging = admin.messaging();
 // Task-related cloud functions
 exports.onTaskCreated = (0, firestore_1.onDocumentCreated)('tasks/{taskId}', async (event) => {
-    let _a;
+    var _a;
     const taskData = (_a = event.data) === null || _a === void 0 ? void 0 : _a.data();
     const taskId = event.params.taskId;
     if (!taskData)
@@ -72,7 +72,7 @@ exports.onTaskCreated = (0, firestore_1.onDocumentCreated)('tasks/{taskId}', asy
     }
 });
 exports.onTaskUpdated = (0, firestore_1.onDocumentUpdated)('tasks/{taskId}', async (event) => {
-    let _a, _b;
+    var _a, _b;
     const before = (_a = event.data) === null || _a === void 0 ? void 0 : _a.before.data();
     const after = (_b = event.data) === null || _b === void 0 ? void 0 : _b.after.data();
     const taskId = event.params.taskId;
@@ -95,18 +95,27 @@ exports.onTaskUpdated = (0, firestore_1.onDocumentUpdated)('tasks/{taskId}', asy
         console.error('Error processing task update:', error);
     }
 });
-exports.onCommentCreated = (0, firestore_1.onDocumentCreated)('tasks/{taskId}/comments/{commentId}', async (event) => {
-    let _a;
+exports.onCommentCreated = (0, firestore_1.onDocumentCreated)('comments', async (event) => {
+    var _a;
     const commentData = (_a = event.data) === null || _a === void 0 ? void 0 : _a.data();
-    const taskId = event.params.taskId;
     if (!commentData)
         return;
     try {
+        const taskId = commentData.taskId;
         // Get task data
         const taskDoc = await db.doc(`tasks/${taskId}`).get();
         if (!taskDoc.exists)
             return;
         const taskData = taskDoc.data();
+        // Update task comment count
+        const commentsQuery = await db
+            .collection('comments')
+            .where('taskId', '==', taskId)
+            .get();
+        await db.doc(`tasks/${taskId}`).update({
+            commentCount: commentsQuery.size,
+            lastCommentAt: new Date(),
+        });
         // Send notification to task members
         const notifyUsers = [taskData.userId, taskData.assigneeId].filter(userId => userId !== commentData.userId);
         for (const userId of notifyUsers) {
@@ -115,6 +124,27 @@ exports.onCommentCreated = (0, firestore_1.onDocumentCreated)('tasks/{taskId}/co
     }
     catch (error) {
         console.error('Error processing comment creation:', error);
+    }
+});
+exports.onCommentDeleted = (0, firestore_1.onDocumentDeleted)('comments', async (event) => {
+    var _a;
+    const commentData = (_a = event.data) === null || _a === void 0 ? void 0 : _a.data();
+    if (!commentData)
+        return;
+    try {
+        const taskId = commentData.taskId;
+        // Update task comment count
+        const commentsQuery = await db
+            .collection('comments')
+            .where('taskId', '==', taskId)
+            .get();
+        await db.doc(`tasks/${taskId}`).update({
+            commentCount: commentsQuery.size,
+            lastCommentAt: commentsQuery.size > 0 ? new Date() : null,
+        });
+    }
+    catch (error) {
+        console.error('Error processing comment deletion:', error);
     }
 });
 // Scheduled function to send daily reminders
@@ -298,20 +328,51 @@ async function sendCommentNotification(userId, taskData, commentData) {
         const fcmTokens = userData.fcmTokens || [];
         if (fcmTokens.length === 0)
             return;
+        // 멘션된 사용자 확인
+        const mentionedUsers = commentData.mentions || [];
+        const isMentioned = mentionedUsers.includes(userId);
+        // 멘션된 경우 더 강조된 알림
+        const notificationTitle = isMentioned
+            ? '멘션되었습니다'
+            : '새 댓글이 있습니다';
+        const notificationBody = isMentioned
+            ? `${commentData.userName}님이 "${taskData.title}" 할일에서 당신을 멘션했습니다.`
+            : `${commentData.userName}님이 "${taskData.title}" 할일에 댓글을 남겼습니다.`;
         const message = {
             notification: {
-                title: '새 댓글이 있습니다',
-                body: `${commentData.userName}님이 "${taskData.title}" 할일에 댓글을 남겼습니다.`,
+                title: notificationTitle,
+                body: notificationBody,
+                icon: '/moonwave-icon.svg',
+                badge: '/moonwave-icon.svg',
             },
             data: {
-                type: 'new_comment',
+                type: isMentioned ? 'mention' : 'new_comment',
                 taskId: taskData.id,
+                commentId: commentData.id,
                 url: `/tasks/${taskData.id}`,
+                userId: commentData.userId,
+                userName: commentData.userName,
             },
             tokens: fcmTokens,
+            android: {
+                notification: {
+                    channelId: isMentioned ? 'mentions' : 'comments',
+                    priority: isMentioned ? 'high' : 'default',
+                    sound: isMentioned ? 'default' : 'default',
+                },
+            },
+            apns: {
+                payload: {
+                    aps: {
+                        sound: isMentioned ? 'default' : 'default',
+                        badge: 1,
+                        category: isMentioned ? 'MENTION' : 'COMMENT',
+                    },
+                },
+            },
         };
         const response = await messaging.sendEachForMulticast(message);
-        console.log('Comment notification sent:', response.successCount, 'successful');
+        console.log(`${isMentioned ? 'Mention' : 'Comment'} notification sent:`, response.successCount, 'successful');
     }
     catch (error) {
         console.error('Error sending comment notification:', error);

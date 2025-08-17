@@ -3,7 +3,32 @@ import { useAuth } from './useAuth';
 import { NotificationService } from '../lib/notifications';
 import { Notification, NotificationStats } from '../types/notification';
 
-export function useNotifications() {
+export interface NotificationData {
+  id: string;
+  type: string;
+  title: string;
+  message: string;
+  status: 'read' | 'unread';
+  createdAt: Date;
+  readAt?: Date;
+}
+
+export interface NotificationPermissionState {
+  permission: NotificationPermission;
+  supported: boolean;
+}
+
+export interface UseNotificationsReturn {
+  notifications: Notification[];
+  stats: NotificationStats | null;
+  loading: boolean;
+  error: string | null;
+  markAsRead: (notificationId: string) => Promise<void>;
+  markAllAsRead: () => Promise<void>;
+  deleteNotification: (notificationId: string) => Promise<void>;
+}
+
+export function useNotifications(): UseNotificationsReturn {
   const { user } = useAuth();
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [stats, setStats] = useState<NotificationStats | null>(null);

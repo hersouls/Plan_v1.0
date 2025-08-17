@@ -4,6 +4,10 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=10.0.0"
+  },
   "scripts": {
     "dev": "vite --port 5173 --host",
     "dev:clean": "node scripts/port-cleanup.js && npm run dev",
