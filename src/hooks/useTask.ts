@@ -21,7 +21,7 @@ export interface UseTaskReturn {
   toggleReaction: (commentId: string, emoji: string) => Promise<void>;
   logActivity: (
     action: TaskActivity['action'],
-    details?: Record<string, any>
+    details?: Record<string, unknown>
   ) => Promise<void>;
   refresh: () => Promise<void>;
 }
@@ -85,11 +85,11 @@ export const useTask = (options: UseTaskOptions): UseTaskReturn => {
         };
 
         await commentService.addComment(taskId, finalData);
-      } catch (err) {
-        const errorMessage = '댓글 추가 중 오류가 발생했습니다.';
-        setError(errorMessage);
-        throw new Error(errorMessage);
-      }
+              } catch (_err) {
+          const errorMessage = '댓글 추가 중 오류가 발생했습니다.';
+          setError(errorMessage);
+          throw new Error(errorMessage);
+        }
     },
     [user, taskId]
   );
@@ -101,7 +101,7 @@ export const useTask = (options: UseTaskOptions): UseTaskReturn => {
       try {
         setError(null);
         await commentService.deleteComment(taskId, commentId);
-      } catch (err) {
+      } catch (_err) {
         const errorMessage = '댓글 삭제 중 오류가 발생했습니다.';
         setError(errorMessage);
         throw new Error(errorMessage);
@@ -117,7 +117,7 @@ export const useTask = (options: UseTaskOptions): UseTaskReturn => {
       try {
         setError(null);
         await commentService.addReaction(taskId, commentId, user.uid, emoji);
-      } catch (err) {
+      } catch (_err) {
         const errorMessage = '반응 추가 중 오류가 발생했습니다.';
         setError(errorMessage);
         throw new Error(errorMessage);
@@ -128,15 +128,15 @@ export const useTask = (options: UseTaskOptions): UseTaskReturn => {
 
   const logActivity = useCallback(
     async (
-      action: TaskActivity['action'],
-      details?: Record<string, any>
+      _action: TaskActivity['action'],
+      _details?: Record<string, unknown>
     ): Promise<void> => {
       if (!user || !taskId) return;
 
       try {
         // Activity logging would need to be implemented in the Firestore service
         // For now, just log to console as a placeholder
-        } catch (err) {
+        } catch (_err) {
         // Don't throw error for activity logging failures
       }
     },
@@ -165,7 +165,7 @@ export const useTask = (options: UseTaskOptions): UseTaskReturn => {
       } else {
         setTask(null);
       }
-    } catch (err) {
+    } catch (_err) {
       const errorMessage = '할일을 새로고침하는 중 오류가 발생했습니다.';
       setError(errorMessage);
     } finally {
@@ -214,8 +214,8 @@ export const useTask = (options: UseTaskOptions): UseTaskReturn => {
             setTask(null);
           }
           setLoading(false);
-        } catch (err) {
-          handleError(err as Error);
+        } catch (_err) {
+          handleError(_err as Error);
         }
       };
 
@@ -231,8 +231,8 @@ export const useTask = (options: UseTaskOptions): UseTaskReturn => {
           handleError
         );
       }
-    } catch (err) {
-      handleError(err as Error);
+    } catch (_err) {
+      handleError(_err as Error);
     }
 
     return () => {
