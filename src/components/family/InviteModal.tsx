@@ -62,8 +62,11 @@ export function InviteModal({
       setMessage('');
       // Show success message or close modal
     } catch (error) {
-        // Handle error silently
-      } finally {
+      // Handle error silently
+      if (import.meta.env.DEV) {
+        console.error('Error sending email invite:', error);
+      }
+    } finally {
       setIsLoading(false);
     }
   };
@@ -76,8 +79,11 @@ export function InviteModal({
       const link = await onGenerateInviteLink();
       setInviteLink(link);
     } catch (error) {
-        // Handle error silently
-      } finally {
+      // Handle error silently
+      if (import.meta.env.DEV) {
+        console.error('Error generating invite link:', error);
+      }
+    } finally {
       setIsLoading(false);
     }
   };
@@ -88,8 +94,11 @@ export function InviteModal({
       setCopied(type);
       setTimeout(() => setCopied(null), 2000);
     } catch (error) {
-        // Handle error silently
+      // Handle error silently
+      if (import.meta.env.DEV) {
+        console.error('Error copying to clipboard:', error);
       }
+    }
   };
 
   return (
@@ -121,7 +130,7 @@ export function InviteModal({
             ].map(tab => (
               <button
                 key={tab.key}
-                onClick={() => setActiveTab(tab.key as any)}
+                onClick={() => setActiveTab(tab.key as 'email' | 'link' | 'code')}
                 className={`
                   flex-1 flex items-center justify-center gap-2 py-3 text-sm font-medium
                   border-b-2 transition-colors
