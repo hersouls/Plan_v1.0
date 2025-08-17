@@ -62,6 +62,17 @@ interface QuickAddTaskProps {
     taskType?: 'personal' | 'group';
     groupId?: string;
   }) => void;
+  onTaskCreate?: (taskData: {
+    title: string;
+    description?: string;
+    priority: TaskPriority;
+    category: TaskCategory;
+    dueDate?: string;
+    assigneeId?: string;
+    tags: string[];
+    taskType?: 'personal' | 'group';
+    groupId?: string;
+  }) => void;
   defaultAssigneeId?: string;
   groupMembers?: Array<{ id: string; name: string; avatar?: string }>;
   groups?: Array<{ id: string; name: string }>;

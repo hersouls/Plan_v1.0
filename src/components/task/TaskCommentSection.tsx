@@ -19,6 +19,7 @@ import { cn } from '@/components/ui/utils';
 import { useAuth } from '@/hooks/useAuth';
 import { useData } from '@/hooks/useData';
 import { Comment, useComments } from '@/hooks/useComments';
+import { useGroup } from '@/hooks/useGroup';
 import { formatDistanceToNow } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import {
@@ -258,7 +259,8 @@ export const TaskCommentSection: React.FC<TaskCommentSectionProps> = ({
   className,
 }) => {
   const { user } = useAuth();
-  const { groupMembers } = useData();
+  const { currentGroup } = useData();
+  const { members: groupMembers } = useGroup({ groupId: currentGroup?.id || null });
   const { comments, loading, addComment, updateComment, deleteComment } = useComments({
     taskId,
     realtime: true,
@@ -283,12 +285,12 @@ export const TaskCommentSection: React.FC<TaskCommentSectionProps> = ({
         const mentionedName = match[1];
         // 그룹 멤버에서 이름으로 ID 찾기
         const mentionedUser = groupMembers?.find(
-          member =>
+          (member: any) =>
             member.displayName === mentionedName ||
             member.email === mentionedName
         );
         if (mentionedUser) {
-          mentions.push(mentionedUser.id);
+          mentions.push(mentionedUser.userId);
         }
       }
 

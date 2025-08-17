@@ -484,3 +484,5 @@ export function AttachmentSection({
     </div>
   );
 }
+
+export { AttachmentSection as FileAttachment };
