@@ -176,7 +176,7 @@ export function ProfileSection({
       // 편집 상태 초기화
       setEditingField(null);
       setFormErrors({});
-    } catch (error) {
+    } catch {
       alert('저장에 실패했습니다.');
     }
   };
@@ -213,7 +213,7 @@ export function ProfileSection({
       setLocalEditData(null);
       setIsEditing(false);
       setEditingField(null);
-    } catch (error) {
+    } catch {
       alert('프로필 저장에 실패했습니다.');
     }
   };
@@ -467,7 +467,7 @@ export function ProfileSection({
                               if (onSave) {
                                 await onSave();
                               }
-                            } catch (error) {
+                            } catch {
                               alert('사진 삭제에 실패했습니다.');
                             }
                           }

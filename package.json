@@ -18,7 +18,6 @@
     "lint:fix": "eslint . --ext ts,tsx --fix",
     "lint:prod": "eslint src --ext .ts,.tsx --config eslint.config.production.js --max-warnings 500",
     "preview": "vite preview --port 4173",
-
     "type-check": "tsc --noEmit",
     "type-check:prod": "tsc --project tsconfig.build.json --noEmit",
     "quality:check": "npm run lint:prod && npm run type-check:prod",
@@ -35,7 +34,6 @@
     "functions:deploy:prod": "node scripts/deploy-functions.js --production",
     "security:check": "node scripts/security-check.js",
     "pwa:check": "node scripts/pwa-check.js",
-
     "vercel:build": "npm run build:production",
     "vercel:dev": "vercel dev",
     "deploy:check": "node scripts/deploy.js",
@@ -43,10 +41,8 @@
     "pre-deploy": "node scripts/pre-deployment.js",
     "deploy:ready": "npm run ci:check && npm run pre-deploy && echo 'Ready for deployment!'",
     "setup": "npm install && npm run quality:check",
-
     "firebase:clear-data": "firebase firestore:delete --all-collections --yes",
     "firebase:setup-cors": "node scripts/setup-storage-cors.js",
-
     "mcp:start": "node scripts/mcp-task-server.js",
     "mcp:test": "node -e \"console.log('Testing MCP server...'); require('./scripts/mcp-task-server.js')\""
   },
@@ -100,7 +96,6 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.30.1",
-
     "@types/qrcode": "^1.5.5",
     "@types/react": "^18.3.23",
     "@types/react-dom": "^18.3.7",
@@ -110,10 +105,8 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",
     "globals": "^16.3.0",
-
     "postcss": "^8.4.32",
     "tailwindcss": "^3.4.0",
-
     "typescript": "~5.8.3",
     "typescript-eslint": "^8.35.1",
     "vite": "^7.0.4",

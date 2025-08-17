@@ -29,7 +29,6 @@ export function DataSection({
     'idle' | 'running' | 'completed' | 'error'
   >('idle');
   const [backupMessage, setBackupMessage] = useState('');
-  const [backupList, setBackupList] = useState<Array<{ id: string; name: string; date: string; size: string }>>([]);
   const [loadingBackups, setLoadingBackups] = useState(false);
 
   // AuthContext 접근을 안전하게 처리
@@ -233,7 +232,7 @@ export function DataSection({
     }
   };
 
-  const loadBackupList = async () => {
+  const loadBackupList = useCallback(async () => {
     if (!authContext.user?.uid) return;
 
     setLoadingBackups(true);
@@ -246,7 +245,7 @@ export function DataSection({
       } finally {
       setLoadingBackups(false);
     }
-  };
+  }, [authContext.user?.uid]);
 
   const restoreFromBackup = async (backupPath: string) => {
     if (!authContext.user?.uid) {
