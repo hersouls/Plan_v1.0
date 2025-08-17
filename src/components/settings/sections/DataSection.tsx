@@ -29,7 +29,6 @@ export function DataSection({
     'idle' | 'running' | 'completed' | 'error'
   >('idle');
   const [backupMessage, setBackupMessage] = useState('');
-  const [backupList, setBackupList] = useState<Array<{ path: string; timestamp: number; size: number }>>([]);
   const [loadingBackups, setLoadingBackups] = useState(false);
 
   // AuthContext 접근을 안전하게 처리
@@ -312,7 +311,7 @@ export function DataSection({
     if (isActive && authContext.user?.uid) {
       loadBackupList();
     }
-  }, [isActive, authContext.user?.uid]);
+  }, [isActive, authContext.user?.uid, loadBackupList]);
 
   if (!isActive) return null;
 

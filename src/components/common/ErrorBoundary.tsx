@@ -3,15 +3,6 @@ import { Button } from '@/components/ui/button';
 import { AlertTriangle, Home, RefreshCw } from 'lucide-react';
 import { Component, ErrorInfo, ReactNode } from 'react';
 
-// Add type declaration for import.meta
-declare global {
-  interface ImportMeta {
-    env: {
-      DEV: boolean;
-      [key: string]: any;
-    };
-  }
-}
 
 interface Props {
   children: ReactNode;
@@ -86,7 +77,7 @@ export class ErrorBoundary extends Component<Props, State> {
                 </p>
               </div>
 
-              {import.meta.env.DEV && this.state.error && (
+              {(import.meta as unknown as { env: { DEV?: boolean } }).env.DEV && this.state.error && (
                 <details className="w-full text-left">
                   <summary
                     className="cursor-pointer text-sm"

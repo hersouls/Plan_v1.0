@@ -19,11 +19,11 @@ import {
   LineChart,
   Pie,
   PieChart as RechartsPieChart,
-  ResponsiveContainer,
   Tooltip,
   XAxis,
   YAxis,
 } from 'recharts';
+import { ResponsiveContainer } from '../components/ui/responsive';
 import { LoadingSpinner } from '../components/common/LoadingSpinner';
 import { WaveBackground } from '../components/layout/WaveBackground';
 import { useSettings } from '../components/settings/hooks/useSettings';

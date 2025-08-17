@@ -9,6 +9,7 @@ import {
   User,
   X,
 } from 'lucide-react';
+import { Timestamp } from 'firebase/firestore';
 import { Group } from '../../types/group';
 import { Task } from '../../types/task';
 import { toDate } from '../../utils/dateHelpers';
@@ -55,8 +56,8 @@ export const TaskDetailModal = ({
   };
 
   // 날짜 포맷팅
-  const formatDate = (_timestamp: unknown) => {
-    const date = toDate(timestamp);
+  const formatDate = (_timestamp: string | Date | Timestamp | null | undefined) => {
+    const date = toDate(_timestamp);
     return date.toLocaleDateString('ko-KR', {
       year: 'numeric',
       month: 'long',
@@ -65,8 +66,8 @@ export const TaskDetailModal = ({
   };
 
   // 시간 포맷팅
-  const formatTime = (_timestamp: unknown) => {
-    const date = toDate(timestamp);
+  const formatTime = (_timestamp: string | Date | Timestamp | null | undefined) => {
+    const date = toDate(_timestamp);
     return date.toLocaleTimeString('ko-KR', {
       hour: '2-digit',
       minute: '2-digit',
