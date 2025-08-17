@@ -1,9 +1,24 @@
+## 🚧 Plan v2.0 전환 안내
+
+- 새 저장소: [hersouls/Plan_v2.0](https://github.com/hersouls/Plan_v2.0)
+- 현재 저장소(Plan_v1.0)는 유지보수 모드입니다. 신규 기능 개발은 v2.0에서 진행됩니다.
+- 운영 환경은 변경되지 않습니다.
+  - Frontend: 현행 버전 유지 (Vercel)
+  - Backend: Firebase Functions 유지
+  - Database: 기존 Firebase 프로젝트 유지
+  - 배포: Vercel 프로덕션 유지
+  - 도메인: plan.moonwave.kr 유지
+- 기여 가이드
+  - 신규 기능/대규모 변경: v2.0 저장소로 이슈 및 PR 생성
+  - v1.0: 치명적 버그 및 보안 수정만 수용 (hotfix)
+- 진행 공지와 로드맵은 v2.0 저장소의 Issues/Projects에서 안내됩니다.
+
 # 🌊 Moonwave Plan - 가족 할일 관리
 
 > 가족과 함께하는 스마트한 할일 관리 앱
 
 [![PWA Score](https://img.shields.io/badge/PWA-97%25-green.svg)](https://plan.moonwave.kr)
-[![Security](https://img.shields.io/badge/Security-100%25-brightgreen.svg)](docs/DEPLOYMENT.md#security)
+[![Security](https://img.shields.io/badge/Security-100%25-brightgreen.svg)](VERCEL_DEPLOYMENT.md)
 [![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue.svg)](https://www.typescriptlang.org/)
 [![Firebase](https://img.shields.io/badge/Firebase-Integrated-orange.svg)](https://firebase.google.com/)
 
@@ -215,12 +230,20 @@ npm run check:vite         # Vite 응답 체크
 
 ## 📖 문서
 
-- [배포 가이드](docs/DEPLOYMENT.md) - 완전한 배포 및 설정 가이드
-- [개발 체크리스트](docs/개발체크리스트.md) - 개발 진행상황 체크리스트
-- [Firebase 구조](docs/firestore-structure.md) - 데이터베이스 구조 설명
-- [AI 컴포넌트](docs/AI_COMPONENTS.md) - Claude AI 통합 지침
+- [배포 가이드](VERCEL_DEPLOYMENT.md) - Vercel 배포 및 환경 설정
+- [배포 트러블슈팅](VERCEL_DEPLOYMENT_TROUBLESHOOTING.md) - 배포 문제 해결 가이드
+- [GitHub Actions 배포](VERCEL_GITHUB_ACTIONS.md) - CI/CD 배포 파이프라인
+- [빌드 파이프라인](docs/BUILD_PIPELINE.md) - 빌드/품질 게이트 문서
+- [Reader's Guide](docs/reader.md) - 전체 문서 네비게이션 가이드
+- [디자인 가이드](docs/디자인가이드.md) - 디자인 시스템 및 토큰
+- [개발 체크리스트(업데이트)](docs/개발체크리스트_업데이트.md) - 현행 개발 체크리스트
+- [프로젝트 계획](docs/Plan.md) - 프로젝트 계획 및 로드맵
+- [Claude AI 통합](docs/CLAUDE_INTEGRATION.md) - AI 통합 지침
 
 ## 🤝 기여하기
 
-1. Fork the repository
-2. Create your feature branch (`
+1. 신규 기능/리팩터링: [Plan_v2.0 저장소](https://github.com/hersouls/Plan_v2.0)에서 이슈/브랜치/PR을 생성하세요.
+2. v1.0 유지보수: 치명적 버그/보안 이슈에 한해 PR을 받습니다.
+3. 브랜치 전략: `feat/*`(v2.0), `hotfix/*`(v1.0)
+4. 커밋 규칙: Conventional Commits(`feat:`, `fix:`, `chore:` 등)
+5. PR 체크리스트: 타입체크/린트/빌드 통과, 관련 이슈 연결
