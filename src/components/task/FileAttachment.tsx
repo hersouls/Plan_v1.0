@@ -42,7 +42,7 @@ export function AttachmentSection({
   const cameraInputRef = useRef<HTMLInputElement>(null);
   const imageInputRef = useRef<HTMLInputElement>(null);
 
-  const handleFileUpload = async (files: FileList | null, source: 'camera' | 'gallery' | 'file') => {
+  const handleFileUpload = async (files: FileList | null) => {
     if (!files || files.length === 0) return;
 
     setIsUploading(true);
@@ -65,13 +65,13 @@ export function AttachmentSection({
         let width, height;
         
         if (isImage) {
-          const img = new Image();
+          const img = new window.Image();
           img.src = URL.createObjectURL(file);
-          await new Promise((resolve) => {
+          await new Promise<void>((resolve) => {
             img.onload = () => {
               width = img.width;
               height = img.height;
-              resolve(null);
+              resolve();
             };
           });
         }
@@ -323,7 +323,7 @@ export function AttachmentSection({
             type="file"
             accept="image/*"
             capture="environment"
-            onChange={(e) => handleFileUpload(e.target.files, 'camera')}
+            onChange={(e) => handleFileUpload(e.target.files)}
             className="hidden"
           />
           <input
@@ -331,14 +331,14 @@ export function AttachmentSection({
             type="file"
             accept="image/*"
             multiple
-            onChange={(e) => handleFileUpload(e.target.files, 'gallery')}
+            onChange={(e) => handleFileUpload(e.target.files)}
             className="hidden"
           />
           <input
             ref={fileInputRef}
             type="file"
             multiple
-            onChange={(e) => handleFileUpload(e.target.files, 'file')}
+            onChange={(e) => handleFileUpload(e.target.files)}
             className="hidden"
           />
         </div>

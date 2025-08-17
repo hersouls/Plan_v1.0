@@ -430,9 +430,6 @@ export function useSettings(): UseSettingsReturn {
 
         await userService.createOrUpdateUserProfile(userId, filteredData);
       }
-
-      if (false) {
-        // Empty block
       }
     } catch (err) {
       setError('설정을 저장하는데 실패했습니다.');

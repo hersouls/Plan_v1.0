@@ -3,11 +3,11 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
-import { GlassCard } from '@/components/ui/GlassCard';
 import { cn } from '@/components/ui/utils';
 import { useAuth } from '@/contexts/AuthContext';
 import { useData } from '@/contexts/DataContext';
-import { AtSign, X } from 'lucide-react';
+import { useGroup } from '@/hooks/useGroup';
+import { AtSign } from 'lucide-react';
 
 interface MentionInputProps {
   value: string;
@@ -34,7 +34,8 @@ export const MentionInput: React.FC<MentionInputProps> = ({
   onKeyDown,
 }) => {
   const { user } = useAuth();
-  const { currentGroup, groupMembers } = useData();
+  const { currentGroup } = useData();
+  const { members: groupMembers } = useGroup({ groupId: currentGroup?.id || null });
   const [showMentions, setShowMentions] = useState(false);
   const [mentionQuery, setMentionQuery] = useState('');
   const [selectedMentionIndex, setSelectedMentionIndex] = useState(0);
@@ -58,10 +59,10 @@ export const MentionInput: React.FC<MentionInputProps> = ({
 
     // 그룹 멤버 추가
     if (currentGroup && groupMembers) {
-      groupMembers.forEach(member => {
-        if (member.id !== user?.uid) {
+      groupMembers.forEach((member: any) => {
+        if (member.userId !== user?.uid) {
           users.push({
-            id: member.id,
+            id: member.userId,
             name: member.displayName || member.email || '사용자',
             email: member.email || '',
             avatar: member.photoURL || undefined,

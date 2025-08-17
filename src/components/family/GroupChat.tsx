@@ -289,7 +289,7 @@ export function GroupChat({
         setMessages(chatMessages);
         setIsLoading(false);
       },
-      error => {
+      _error => {
         setIsLoading(false);
       }
     );
@@ -357,7 +357,7 @@ export function GroupChat({
           uploadProgress: 0,
         },
       ]);
-    } catch (error) {
+    } catch (_error) {
       alert('파일 처리에 실패했습니다.');
     }
   };
@@ -379,7 +379,6 @@ export function GroupChat({
       (!newMessage.trim() && attachments.length === 0) ||
       isSending
     ) {
-      // Skip if already sending
       return;
     }
 
@@ -430,7 +429,7 @@ export function GroupChat({
                 name: attachment.name,
                 size: attachment.size,
               };
-            } catch (error) {
+            } catch (_error) {
               throw new Error(
                 `파일 "${attachment.name}" 업로드에 실패했습니다.`
               );
@@ -456,13 +455,12 @@ export function GroupChat({
         attachments: uploadedAttachments,
       };
 
-      const docRef = await addDoc(chatRef, messageData);
+      await addDoc(chatRef, messageData);
       setNewMessage('');
       setAttachments([]);
       setShowEmojiPicker(false);
       inputRef.current?.focus();
     } catch (error) {
-      alert(`메시지 전송에 실패했습니다: ${(error as any)?.message || error}`);
     } finally {
       setIsSending(false);
     }

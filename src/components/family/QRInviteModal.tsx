@@ -35,8 +35,11 @@ export function QRInviteModal({
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch (error) {
-        // Handle error silently
+      // Handle error silently
+      if (import.meta.env.DEV) {
+        console.error('Error copying link:', error);
       }
+    }
   };
 
   const handleCopyCode = async () => {
@@ -45,8 +48,11 @@ export function QRInviteModal({
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch (error) {
-        // Handle error silently
+      // Handle error silently
+      if (import.meta.env.DEV) {
+        console.error('Error copying code:', error);
       }
+    }
   };
 
   const handleShare = async () => {
@@ -59,6 +65,9 @@ export function QRInviteModal({
         });
       } catch (error) {
         // Handle error silently
+        if (import.meta.env.DEV) {
+          console.error('Error sharing:', error);
+        }
       }
     } else {
       // Fallback to copy link

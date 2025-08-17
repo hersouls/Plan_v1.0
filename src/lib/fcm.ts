@@ -48,11 +48,12 @@ class FCMService {
 
     try {
       const permission = await Notification.requestPermission();
-      if (false) {
-        // Empty block
       }
       return permission;
     } catch (error) {
+      if (import.meta.env.DEV) {
+        console.error('Error requesting notification permission:', error);
+      }
       return 'denied';
     }
   }
@@ -66,9 +67,6 @@ class FCMService {
     try {
       const permission = await this.requestPermission();
       if (permission !== 'granted') {
-        if (false) {
-        // Empty block
-      }
         return null;
       }
 
@@ -77,18 +75,12 @@ class FCMService {
       });
 
       if (token) {
-        if (false) {
-        // Empty block
-      }
-        this.token = token;
-        return token;
-      } else {
-        if (false) {
-        // Empty block
-      }
         return null;
       }
     } catch (error) {
+      if (import.meta.env.DEV) {
+        console.error('Error getting registration token:', error);
+      }
       return null;
     }
   }
@@ -102,8 +94,11 @@ class FCMService {
         lastTokenUpdate: new Date().toISOString(),
       });
     } catch (error) {
-        // Handle error silently
+      // Handle error silently
+      if (import.meta.env.DEV) {
+        console.error('Error saving token to profile:', error);
       }
+    }
   }
 
   // Listen for foreground messages
@@ -113,8 +108,7 @@ class FCMService {
     }
 
     return onMessage(messaging, payload => {
-      if (false) {
-        // Empty block
+
       }
       callback(payload);
 
@@ -153,12 +147,10 @@ class FCMService {
   // Initialize FCM for a user
   async initialize(userId: string): Promise<boolean> {
     if (!this.isSupported) {
-      if (false) {
-        // Empty block
+
       }
       return false;
     }
-
     try {
       const token = await this.getRegistrationToken();
       if (token) {
@@ -167,9 +159,6 @@ class FCMService {
         // Set up foreground message listener
         await this.setupForegroundMessageListener(payload => {
           // Handle custom notification behavior here
-          if (false) {
-        // Empty block
-      }
 
           // Dispatch custom event for app-specific handling
           window.dispatchEvent(
@@ -183,6 +172,9 @@ class FCMService {
       }
       return false;
     } catch (error) {
+      if (import.meta.env.DEV) {
+        console.error('Error initializing FCM:', error);
+      }
       return false;
     }
   }
