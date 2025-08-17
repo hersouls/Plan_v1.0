@@ -162,6 +162,8 @@ ${i + 1}. ID: ${h.id}
               }
             });
           }
+        } catch (parseError) {
+          // Handle parsing error silently
         }
       }
     } catch (error) {

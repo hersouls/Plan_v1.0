@@ -70,6 +70,8 @@ function createSafeSnapshot<T>(
               onNext(null as T);
             }
           }
+        } catch (error) {
+          if (onError) onError(error as Error);
         }
       },
       error: error => {
