@@ -1,193 +1,142 @@
-# Claude AI Integration Guide
+# Claude AI Integration Guide (Plan_v2.0 동기화)
 
-Moonwave Plan에 Claude AI 기능이 통합되어 스마트한 할일 관리를 제공합니다.
+Moonwave Plan에 Claude AI 기능을 통합해 스마트한 할일 관리를 제공합니다. 본 문서는 Plan_v2.0 기준으로 정리되었으며 Plan_v1.0에도 100% 동일하게 적용됩니다. 하나도 빠짐없이 Step by step으로 설명합니다.
 
 ## 🚀 기능 개요
 
-### 1. **AI 할일 어시스턴트**
-- 자연어로 할일 생성 및 관리
-- 컨텍스트 기반 할일 제안
-- 스마트한 카테고리 자동 분류
+### 1. AI 할일 어시스턴트
+- 자연어로 할일 생성/관리
+- 컨텍스트 기반 제안
+- 카테고리 자동 분류
 
-### 2. **스마트 입력 향상**
-- 실시간 할일 분석 및 향상
-- 자동 우선순위 제안
+### 2. 스마트 입력 향상
+- 실시간 할일 분석/보정
+- 우선순위 제안
 - 예상 소요시간 계산
 
-### 3. **AI 기반 제안**
-- 상황별 맞춤 할일 추천
-- 가족 구성원 기반 할일 배분
-- 효율적인 할일 순서 제안
+### 3. AI 기반 제안/인사이트
+- 상황별 맞춤 추천
+- 가족 구성원별 할당 제안
+- 효율적 처리 순서 제안
 
-## 📋 설정 방법
+## 🧩 아키텍처 개요
 
-### 1. 환경 변수 설정
+- 라이브러리: `@anthropic-ai/sdk` 사용
+- 설정 파일: `src/lib/claude.ts` (환경변수 기반 동적 활성화)
+- 프론트엔드 사용: `useClaudeAI()` 훅과 `claudeAIService` 메서드 노출
+- 선택 기능: 통계/포인트 분석기(`src/lib/statisticsAnalyzer.ts`, `src/lib/pointsAnalyzer.ts`)가 Claude 사용
+- MCP: `scripts/mcp-task-server.js`, `mcp-config.json`로 모델 컨텍스트 프로토콜 연동
 
-`.env` 파일에 Claude API 키를 추가하세요:
+핵심 설정(요약):
+
+```ts
+// src/lib/claude.ts 핵심 설정 요약
+const config = {
+  apiKey: import.meta.env.VITE_CLAUDE_API_KEY || import.meta.env.CLAUDE_API_KEY,
+  model: import.meta.env.VITE_CLAUDE_MODEL || 'claude-3-5-sonnet-20241022',
+  maxTokens: parseInt(import.meta.env.VITE_CLAUDE_MAX_TOKENS || '4096'),
+  enabled: import.meta.env.VITE_ENABLE_CLAUDE_AI === 'true'
+}
+```
+
+## 📋 설치·설정 (Step by step)
+
+### 1) API 키 발급
+1. Anthropic Console(`https://console.anthropic.com`) 접속
+2. Workspace에서 API Key 생성
+3. 아래 환경변수로 등록
+
+### 2) 환경변수(.env) 구성
 
 ```bash
 # Claude AI Configuration
+VITE_ENABLE_CLAUDE_AI=true
 VITE_CLAUDE_API_KEY=your-claude-api-key
 CLAUDE_API_KEY=your-claude-api-key
 VITE_CLAUDE_MODEL=claude-3-5-sonnet-20241022
 VITE_CLAUDE_MAX_TOKENS=4096
-VITE_ENABLE_CLAUDE_AI=true
 
-# Claude Features
+# 선택 기능 토글
 VITE_CLAUDE_TASK_ASSISTANT=true
 VITE_CLAUDE_SMART_SUGGESTIONS=true
 VITE_CLAUDE_AUTO_CATEGORIZE=true
 ```
 
-### 2. API 키 발급
+Vercel 배포 시에는 프로젝트 설정 → Environment Variables에 동일 키를 추가하세요. `vercel.json`에도 아래와 같이 매핑되어 있습니다.
 
-1. [Anthropic Console](https://console.anthropic.com)에 접속
-2. API 키 생성
-3. 환경 변수에 추가
+```json
+{
+  "env": {
+    "VITE_ENABLE_CLAUDE_AI": "@VITE_ENABLE_CLAUDE_AI",
+    "VITE_CLAUDE_API_KEY": "@VITE_CLAUDE_API_KEY",
+    "CLAUDE_API_KEY": "@CLAUDE_API_KEY",
+    "VITE_CLAUDE_MODEL": "@VITE_CLAUDE_MODEL",
+    "VITE_CLAUDE_MAX_TOKENS": "@VITE_CLAUDE_MAX_TOKENS"
+  }
+}
+```
 
-### 3. 기능 테스트
+### 3) 의존성 확인
 
 ```bash
-# Claude API 연결 테스트
-npm run claude:test-api
+npm i @anthropic-ai/sdk
+```
 
-# MCP 서버 테스트
-node scripts/mcp-task-server.js
+프로젝트에는 이미 포함되어 있을 수 있습니다. 누락 시 설치하세요.
+
+### 4) 로컬 실행 전 체크
+
+```bash
+echo "VITE_ENABLE_CLAUDE_AI=$VITE_ENABLE_CLAUDE_AI"
+npm run dev
 ```
 
 ## 🛠️ 사용 방법
 
-### 1. Claude 어시스턴트 사용
+### A. 훅/서비스로 바로 사용
 
-```tsx
-import { ClaudeAssistant } from '@/components/ai';
-
-function TaskPage() {
-  const [assistantOpen, setAssistantOpen] = useState(false);
-
-  const handleTaskSuggestion = (suggestion) => {
-    // 제안된 할일을 처리
-    console.log('AI 제안:', suggestion);
-  };
-
-  return (
-    <div>
-      <button onClick={() => setAssistantOpen(true)}>
-        AI 어시스턴트 열기
-      </button>
-      
-      <ClaudeAssistant
-        isOpen={assistantOpen}
-        onClose={() => setAssistantOpen(false)}
-        onTaskSuggestion={handleTaskSuggestion}
-      />
-    </div>
-  );
-}
-```
-
-### 2. 스마트 입력 필드 사용
-
-```tsx
-import { SmartTaskInput } from '@/components/ai';
-
-function CreateTask() {
-  const [taskTitle, setTaskTitle] = useState('');
-
-  const handleSmartSuggestion = (suggestion) => {
-    // AI 향상 제안 적용
-    setTaskData({
-      ...taskData,
-      ...suggestion
-    });
-  };
-
-  return (
-    <SmartTaskInput
-      value={taskTitle}
-      onChange={setTaskTitle}
-      onSmartSuggestion={handleSmartSuggestion}
-      placeholder="할일을 입력하세요..."
-    />
-  );
-}
-```
-
-### 3. AI 할일 제안 위젯
-
-```tsx
-import { AITaskSuggestions } from '@/components/ai';
-
-function Dashboard() {
-  const handleTaskSelect = (suggestion) => {
-    // 제안된 할일을 할일 목록에 추가
-    addTask(suggestion);
-  };
-
-  return (
-    <AITaskSuggestions
-      context="morning"
-      familyMembers={familyMembers}
-      onTaskSelect={handleTaskSelect}
-      maxSuggestions={5}
-    />
-  );
-}
-```
-
-## 🔧 고급 사용법
-
-### 1. 커스텀 프롬프트
-
-```typescript
+```ts
 import { useClaudeAI } from '@/lib/claude';
 
-function CustomAIFeature() {
-  const { generateTaskSuggestions, categorizeTask } = useClaudeAI();
+export async function generateWeeklyPlan() {
+  const { isAvailable, generateTaskSuggestions, categorizeTask, estimateTaskDuration, suggestTaskPriority } = useClaudeAI();
+  if (!isAvailable) return [];
 
-  const generateWeeklyPlan = async () => {
-    const suggestions = await generateTaskSuggestions(
-      "이번 주 가족 일정을 위한 할일 계획을 세워주세요"
-    );
-    return suggestions;
-  };
+  const suggestions = await generateTaskSuggestions('이번 주 가족 일정 기반 할일 계획');
+  return suggestions;
 }
 ```
 
-### 2. 배치 처리
+`claudeAIService`가 노출하는 메서드 목록:
 
-```typescript
-const enhanceMultipleTasks = async (tasks) => {
-  const enhanced = await Promise.all(
-    tasks.map(async (task) => ({
-      ...task,
-      category: await categorizeTask(task.title, task.description),
-      priority: await suggestTaskPriority(task.title, task.description),
-      estimatedMinutes: await estimateTaskDuration(task.title, task.description)
-    }))
-  );
-  return enhanced;
-};
+- `generateTaskSuggestions(input: string)`
+- `categorizeTask(title: string, description?)`
+- `improveTaskDescription(title: string, description?)`
+- `generateSubtasks(taskTitle: string, description?)`
+- `estimateTaskDuration(title: string, description?)`
+- `suggestTaskPriority(title: string, description?, dueDate?)`
+
+### B. UI 컴포넌트 통합(선택)
+
+아래 컴포넌트는 프로젝트 상황에 맞춰 구성하세요.
+
+```tsx
+// 예시: SmartTaskInput/ClaudeAssistant/AITaskSuggestions
 ```
 
 ## 🔍 MCP Integration
 
-### MCP 서버 실행
+### 1) 서버 실행
 
 ```bash
 node scripts/mcp-task-server.js
 ```
 
-### 사용 가능한 도구들
+### 2) 제공 도구 목록
 
-- `create_task`: 새 할일 생성
-- `list_tasks`: 할일 목록 조회
-- `update_task`: 할일 수정
-- `delete_task`: 할일 삭제
-- `get_task_stats`: 통계 조회
-- `suggest_task_improvements`: 개선 제안
+- create_task, list_tasks, update_task, delete_task, get_task_stats, suggest_task_improvements
 
-### MCP 클라이언트 연결
+### 3) 클라이언트 연결 예시(`mcp-config.json`)
 
 ```json
 {
@@ -198,108 +147,99 @@ node scripts/mcp-task-server.js
       "env": {
         "FIREBASE_PROJECT_ID": "your-project-id"
       }
+    },
+    "claude-dev": {
+      "command": "npx",
+      "args": ["-y", "@anthropic-ai/claude-dev-mcp"],
+      "env": {
+        "CLAUDE_API_KEY": "${CLAUDE_API_KEY}",
+        "PROJECT_ROOT": "."
+      }
     }
   }
 }
 ```
 
-## 🎨 컴포넌트 커스터마이징
+## 🧪 테스트 (—all, —seq, —ultrathink)
 
-### 테마 설정
-
-```tsx
-// AI 컴포넌트 스타일 커스터마이징
-<ClaudeAssistant
-  className="custom-ai-assistant"
-  placeholder="맞춤형 플레이스홀더"
-/>
-```
-
-### 이벤트 핸들링
-
-```tsx
-const handleAIInteraction = {
-  onSuggestionReceived: (suggestion) => {
-    // 제안 받았을 때
-  },
-  onError: (error) => {
-    // 오류 발생 시
-  },
-  onSuccess: (result) => {
-    // 성공 시
-  }
-};
-```
-
-## 🚨 주의사항
-
-### 1. API 사용량 관리
-- Claude API는 토큰 기반 과금
-- 요청 빈도 제한 고려
-- 캐싱 전략 구현 권장
-
-### 2. 보안 고려사항
-- API 키는 환경 변수로 관리
-- 클라이언트 사이드에서는 제한적 노출
-- 민감한 데이터 전송 주의
-
-### 3. 오프라인 대응
-- 네트워크 연결 상태 확인
-- 기본 동작 모드 제공
-- 사용자 피드백 표시
-
-## 🔧 문제 해결
-
-### 자주 발생하는 문제
-
-1. **API 키 오류**
-   ```bash
-   Error: Invalid API key
-   ```
-   - `.env` 파일의 API 키 확인
-   - 환경 변수 로딩 확인
-
-2. **네트워크 오류**
-   ```bash
-   Error: Network request failed
-   ```
-   - 인터넷 연결 확인
-   - 방화벽 설정 확인
-
-3. **응답 파싱 오류**
-   ```bash
-   Error: Failed to parse AI response
-   ```
-   - 프롬프트 형식 확인
-   - JSON 스키마 검증
-
-### 디버깅 도구
+다음 명령은 로컬 API 동작을 빠르게 검증하는 예시입니다. npm 스크립트에 인자를 넘길 때는 `--` 이후에 붙입니다.
 
 ```bash
-# API 연결 테스트
+# 기본 연결 테스트
 npm run claude:test-api
 
-# 디버그 모드 실행
+# 전체 시나리오 실행(--all):
+npm run claude:test-api -- --all
+
+# 순차 체인 실행(--seq): 앞 단계 결과를 다음 단계 프롬프트에 반영
+npm run claude:test-api -- --seq
+
+# 심층 추론 모드(--ultrathink): 토큰 상한/프롬프트를 확장해 추가 분석 패스 수행
+npm run claude:test-api -- --ultrathink
+
+# 조합 예시
+npm run claude:test-api -- --all --seq --ultrathink
+```
+
+플래그 의미:
+
+- `--all`: `generateTaskSuggestions` → `categorizeTask` → `improveTaskDescription` → `generateSubtasks` → `estimateTaskDuration` → `suggestTaskPriority` 순으로 전 기능을 실행합니다.
+- `--seq`: 각 단계 출력을 다음 단계 입력에 연쇄적으로 전달합니다(시퀀셜 체인).
+- `--ultrathink`: 모델 프롬프트에 추가 분석 단계를 넣고 `max_tokens` 상한을 확대해 더 깊은 근거를 반영합니다. 토큰 과금이 늘 수 있습니다.
+
+참고: 실행 스크립트 구현은 프로젝트 버전에 따라 다를 수 있습니다. 위 플래그는 테스트 러너가 지원하는 경우에만 적용됩니다.
+
+## 🚨 운영·보안 가이드
+
+### 1) 과금/성능
+- Claude는 토큰 기반 과금입니다. 요청 빈도/토큰 상한을 제어하세요.
+- 동일 입력에 대한 캐싱/디바운싱을 권장합니다.
+
+### 2) 키 보안
+- API 키는 환경변수로 관리하세요.
+- 브라우저 사용 시 `dangerouslyAllowBrowser: true`는 개발 편의 목적입니다. 운영 환경에서는 서버/엣지 함수 경유를 검토하세요.
+
+### 3) 폴백 동작
+- `VITE_ENABLE_CLAUDE_AI !== 'true'` 또는 키 미설정 시, 모든 AI 메서드는 안전한 기본값을 반환합니다.
+
+## 🔧 트러블슈팅
+
+### 1) API 키 오류
+```bash
+Error: Invalid API key
+```
+- `.env`의 키/오탈자 확인, 대시보드 키 권한 확인
+
+### 2) 네트워크 오류
+```bash
+Error: Network request failed
+```
+- 방화벽/프록시/네트워크 상태 확인
+
+### 3) 파싱 오류
+```bash
+Error: Failed to parse AI response
+```
+- 프롬프트 결과가 JSON을 보장하는지 확인하고 필요시 파싱 가드 추가
+
+### 4) 디버깅
+```bash
+# 기본 연결 테스트
+npm run claude:test-api
+
+# 개발 서버 디버그
 VITE_DEBUG=true npm run dev
 
 # MCP 서버 디버그
 DEBUG=mcp:* node scripts/mcp-task-server.js
 ```
 
-## 📚 추가 리소스
+## 📚 참고
 
-- [Claude API 문서](https://docs.anthropic.com/claude/docs)
-- [MCP 사양](https://modelcontextprotocol.io/introduction)
-- [React 컴포넌트 가이드](./COMPONENT_GUIDE.md)
-- [개발 워크플로우](./DEVELOPMENT_WORKFLOW.md)
+- Claude API: `https://docs.anthropic.com/claude/docs`
+- Model Context Protocol: `https://modelcontextprotocol.io/introduction`
+- AI 컴포넌트 가이드: `./AI_COMPONENTS.md`
 
 ## 🤝 기여하기
 
-Claude AI 기능 개선에 기여하고 싶으시면:
-
-1. 이슈 리포트
-2. 기능 제안
-3. 코드 개선
-4. 문서 업데이트
-
-프로젝트 [기여 가이드](../CONTRIBUTING.md)를 참고해주세요.
+문서/코드 개선 제안은 이슈/PR로 환영합니다.
