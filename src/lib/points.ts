@@ -98,7 +98,6 @@ class PointsService {
 
       return docRef.id;
     } catch (error) {
-      console.error('Error in addPointHistory:', error);
       throw error;
     }
   }
@@ -124,7 +123,6 @@ class PointsService {
         ...doc.data(),
       })) as PointHistory[];
     } catch (error) {
-      console.error('Error in getPointHistory:', error);
       return [];
     }
   }
@@ -144,7 +142,6 @@ class PointsService {
         ...doc.data(),
       })) as PointHistory[];
     } catch (error) {
-      console.error('Error in getGroupPointHistory:', error);
       return [];
     }
   }
@@ -163,7 +160,6 @@ class PointsService {
       const docRef = await addDoc(collection(db, 'pointRules'), ruleData);
       return docRef.id;
     } catch (error) {
-      console.error('Error in createPointRule:', error);
       throw error;
     }
   }
@@ -184,7 +180,6 @@ class PointsService {
         ...doc.data(),
       })) as PointRule[];
     } catch (error) {
-      console.error('Error in getPointRules:', error);
       return [];
     }
   }
@@ -201,7 +196,6 @@ class PointsService {
         updatedAt: Timestamp.now(),
       });
     } catch (error) {
-      console.error('Error in updatePointRule:', error);
       throw error;
     }
   }
@@ -221,7 +215,6 @@ class PointsService {
 
       return null;
     } catch (error) {
-      console.error('Error in getPointStats:', error);
       return null;
     }
   }
@@ -281,7 +274,6 @@ class PointsService {
       const statsRef = doc(db, 'pointStats', `${userId}_${groupId}`);
       await setDoc(statsRef, stats);
     } catch (error) {
-      console.error('Error in updatePointStats:', error);
       throw error;
     }
   }
@@ -322,7 +314,6 @@ class PointsService {
 
       return updatedStats;
     } catch (error) {
-      console.error('Error in getGroupPointStats:', error);
       return [];
     }
   }
@@ -350,7 +341,6 @@ class PointsService {
       // 추가 보너스 포인트 규칙 확인 (승인 대기 상태)
       await this.checkAndAwardBonusPoints(userId, groupId);
     } catch (error) {
-      console.error('Error in awardPointsForTaskCompletion:', error);
       throw error;
     }
   }
@@ -397,7 +387,6 @@ class PointsService {
         }
       }
     } catch (error) {
-      console.error('Error in checkAndAwardBonusPoints:', error);
       throw error;
     }
   }
@@ -430,7 +419,6 @@ class PointsService {
       // 포인트 통계 업데이트
       await this.updatePointStats(userId, groupId);
     } catch (error) {
-      console.error('Error in manuallyAdjustPoints:', error);
       throw error;
     }
   }
@@ -468,7 +456,6 @@ class PointsService {
       // 사용자 프로필의 포인트 업데이트
       await this.updateUserPoints(history.userId, history.groupId, pointAmount);
     } catch (error) {
-      console.error('Error in approvePointHistory:', error);
       throw error;
     }
   }
@@ -486,7 +473,6 @@ class PointsService {
         approvedBy: rejectedBy,
       });
     } catch (error) {
-      console.error('Error in rejectPointHistory:', error);
       throw error;
     }
   }
@@ -520,7 +506,6 @@ class PointsService {
 
       return unapprovedHistory;
     } catch (error) {
-      console.error('Error in getUnapprovedPointHistory:', error);
       return [];
     }
   }
@@ -553,7 +538,6 @@ class PointsService {
 
       return approvedHistory;
     } catch (error) {
-      console.error('Error in getApprovedPointHistory:', error);
       return [];
     }
   }
@@ -570,7 +554,6 @@ class PointsService {
         updatedAt: Timestamp.now(),
       });
     } catch (error) {
-      console.error('Error in updatePointHistoryAmount:', error);
       throw error;
     }
   }
@@ -596,7 +579,6 @@ class PointsService {
         });
       }
     } catch (error) {
-      console.error('Error in updateUserPoints:', error);
       throw error;
     }
   }
