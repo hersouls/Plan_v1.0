@@ -44,7 +44,6 @@ export function ManualInviteModal({
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <Typography.Body className="text-white/80 mb-2 block">
-              가족 그룹 초대 코드를 입력해주세요
             </Typography.Body>
             <input
               type="text"

@@ -15,7 +15,6 @@ interface ProjectData {
   technologies: string[];
   status: string;
   launchDate: string;
-  icon: React.ForwardRefExoticComponent<Omit<LucideProps, "ref"> & { ref?: React.Ref<SVGSVGElement> }>;
 }
 
 export function ProjectDetail() {
