@@ -77,7 +77,7 @@ export const claudeAIService: ClaudeAIService = {
         }
       }
       return [];
-    } catch (_error) {
+    } catch {
       // Error generating task suggestions
       return [];
     }
@@ -110,7 +110,7 @@ export const claudeAIService: ClaudeAIService = {
         return validCategories.includes(category) ? category : 'other';
       }
       return 'other';
-    } catch (_error) {
+    } catch {
       // Error categorizing task
       return 'other';
     }
@@ -146,7 +146,7 @@ export const claudeAIService: ClaudeAIService = {
         return content.text.trim();
       }
       return description || '';
-    } catch (_error) {
+    } catch {
       // Error improving task description
       return description || '';
     }

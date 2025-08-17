@@ -45,8 +45,6 @@ export async function uploadFile(
             storageUrl: path,
             downloadUrl: downloadURL,
           });
-        } catch (error) {
-          reject(error);
         }
       }
     );
@@ -82,9 +80,6 @@ export async function uploadAvatarImage(
 
   // 이미지 최적화 (파일 용량 제한 없음)
   let optimizedFile = file;
-
-  try {
-    optimizedFile = await optimizeAvatarImage(file);
     throw new Error('이미지 처리에 실패했습니다.');
   }
 
@@ -114,7 +109,6 @@ export async function uploadAvatarImage(
             storageUrl: avatarPath,
             downloadUrl: downloadURL,
           });
-        } catch (error) {
           reject(
             new Error('아바타 업로드 완료 후 URL을 가져오는데 실패했습니다.')
           );
@@ -141,7 +135,6 @@ export async function deleteAvatarImage(
   try {
     const storageRef = ref(storage, storageUrl);
     await deleteObject(storageRef);
-  } catch (error) {
     throw new Error('아바타 삭제에 실패했습니다.');
   }
 }
@@ -219,7 +212,7 @@ export class StorageService {
       // 토큰 갱신 시도
       try {
         await currentUser.getIdToken(true);
-        } catch (_tokenError) {
+        } catch {
         throw new Error('인증 토큰이 만료되었습니다. 다시 로그인해주세요.');
       }
 
@@ -303,8 +296,6 @@ export class StorageService {
             options?.onComplete?.(fileAttachment);
 
             return fileAttachment;
-          } catch (error) {
-            const errorMessage = this.getErrorMessage(error);
             options?.onError?.(errorMessage);
             throw new Error(errorMessage);
           }
@@ -340,8 +331,6 @@ export class StorageService {
       };
 
       return fileAttachment;
-    } catch (error) {
-      const errorMessage = this.getErrorMessage(error);
       options?.onError?.(errorMessage);
       throw new Error(errorMessage);
     }
@@ -357,8 +346,6 @@ export class StorageService {
         throw new Error('파일 다운로드에 실패했습니다.');
       }
       return await response.blob();
-    } catch (error) {
-      throw new Error(this.getErrorMessage(error));
     }
   }
 
@@ -375,8 +362,6 @@ export class StorageService {
         const thumbnailRef = ref(storage, fileAttachment.thumbnailUrl);
         await deleteObject(thumbnailRef);
       }
-    } catch (error) {
-      throw new Error(this.getErrorMessage(error));
     }
   }
 
@@ -387,8 +372,6 @@ export class StorageService {
     try {
       const taskFilesRef = ref(storage, `tasks/${taskId}`);
       await this.deleteFolder(taskFilesRef);
-    } catch (error) {
-      throw new Error(this.getErrorMessage(error));
     }
   }
 
@@ -405,8 +388,6 @@ export class StorageService {
         `tasks/${taskId}/comments/${commentId}`
       );
       await this.deleteFolder(commentFilesRef);
-    } catch (error) {
-      throw new Error(this.getErrorMessage(error));
     }
   }
 
@@ -428,7 +409,6 @@ export class StorageService {
         this.deleteFolder(prefix)
       );
       await Promise.all(folderPromises);
-    } catch (error) {
         // Handle error silently
       }
   }

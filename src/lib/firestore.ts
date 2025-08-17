@@ -70,8 +70,6 @@ function createSafeSnapshot<T>(
               onNext(null as T);
             }
           }
-        } catch (error) {
-          if (onError) onError(error as Error);
         }
       },
       error: error => {
@@ -81,7 +79,6 @@ function createSafeSnapshot<T>(
           (error.message.includes('INTERNAL ASSERTION FAILED') ||
             error.message.includes('Unexpected state'))
         ) {
-
 
           setTimeout(() => {
             try {
@@ -95,8 +92,6 @@ function createSafeSnapshot<T>(
         }
       },
     });
-  } catch (error) {
-    if (onError) onError(error as Error);
     // 빈 unsubscribe 함수 반환
     return () => {};
   }
@@ -130,8 +125,6 @@ export const taskService = {
       // 디버깅용 로그
       const docRef = await addDoc(collection(db, 'tasks'), finalData);
       return docRef.id;
-    } catch (error) {
-      throw error;
     }
   },
 
@@ -145,8 +138,6 @@ export const taskService = {
         updatedAt: serverTimestamp(),
       });
       await updateDoc(taskRef, sanitizedUpdates);
-    } catch (error) {
-      throw error;
     }
   },
 
@@ -164,8 +155,6 @@ export const taskService = {
         return { id: docSnap.id, ...docSnap.data() } as Task;
       }
       return null;
-    } catch (error) {
-      throw error;
     }
   },
 
@@ -183,8 +172,6 @@ export const taskService = {
       );
 
       return createSafeSnapshot<Task[]>(q, callback, onError);
-    } catch (error) {
-      if (onError) onError(error as Error);
       return () => {};
     }
   },
@@ -203,8 +190,6 @@ export const taskService = {
       );
 
       return createSafeSnapshot<Task[]>(q, callback, onError);
-    } catch (error) {
-      if (onError) onError(error as Error);
       return () => {};
     }
   },
@@ -234,8 +219,6 @@ export const taskService = {
         },
         onError
       );
-    } catch (error) {
-      if (onError) onError(error as Error);
       return () => {};
     }
   },
@@ -254,8 +237,6 @@ export const taskService = {
         id: doc.id,
         ...doc.data(),
       })) as Task[];
-    } catch (error) {
-      throw error;
     }
   },
 
@@ -272,9 +253,6 @@ export const taskService = {
       return querySnapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data(),
-      })) as Task[];
-    } catch (error) {
-      throw error;
     }
   },
 };
@@ -292,8 +270,6 @@ export const groupService = {
         updatedAt: serverTimestamp(),
       });
       return docRef.id;
-    } catch (error) {
-      throw error;
     }
   },
 
@@ -305,8 +281,6 @@ export const groupService = {
         ...updates,
         updatedAt: serverTimestamp(),
       });
-    } catch (error) {
-      throw error;
     }
   },
 
@@ -325,8 +299,6 @@ export const groupService = {
         return { id: docSnap.id, ...docSnap.data() } as FamilyGroup;
       }
       return null;
-    } catch (error) {
-      throw error;
     }
   },
 
@@ -349,8 +321,6 @@ export const groupService = {
         callback,
         onError
       );
-    } catch (error) {
-      if (onError) onError(error as Error);
       return () => {};
     }
   },
@@ -368,8 +338,6 @@ export const groupService = {
         [`memberRoles.${userId}`]: role,
         updatedAt: serverTimestamp(),
       });
-    } catch (error) {
-      throw error;
     }
   },
 
@@ -395,8 +363,6 @@ export const groupService = {
       }
 
       await batch.commit();
-    } catch (error) {
-      throw error;
     }
   },
 
@@ -413,9 +379,6 @@ export const groupService = {
       return querySnapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data(),
-      })) as FamilyGroup[];
-    } catch (error) {
-      throw error;
     }
   },
 
@@ -433,14 +396,11 @@ export const groupService = {
       );
 
       return createSafeSnapshot<FamilyGroup[]>(q, callback, onError);
-    } catch (error) {
-      if (onError) onError(error as Error);
       return () => {};
     }
   },
 
   // Get group members with details
-  async getGroupMembers(groupId: string | null | undefined): Promise<GroupMember[]> {
     try {
       // groupId가 null이거나 undefined이면 빈 배열 반환
       if (!groupId) {
@@ -492,13 +452,10 @@ export const groupService = {
       });
 
       return await Promise.all(memberPromises);
-    } catch (error) {
-      throw error;
     }
   },
 
   // Get group statistics
-  async getGroupStats(groupId: string | null | undefined): Promise<GroupStats> {
     try {
       // groupId가 null이거나 undefined이면 빈 통계 반환
       if (!groupId) {
@@ -535,7 +492,6 @@ export const groupService = {
       const tasks = tasksSnapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data(),
-      })) as Task[];
 
       // Calculate stats
       const totalTasks = tasks.length;
@@ -577,8 +533,6 @@ export const groupService = {
           totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0,
         memberStats,
       };
-    } catch (error) {
-      throw error;
     }
   },
 
@@ -612,8 +566,6 @@ export const groupService = {
       batch.delete(doc(db, 'groups', groupId));
 
       await batch.commit();
-    } catch (error) {
-      throw error;
     }
   },
 
@@ -634,8 +586,6 @@ export const groupService = {
         createdAt: serverTimestamp(),
         expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
       });
-    } catch (error) {
-      throw error;
     }
   },
 
@@ -651,8 +601,6 @@ export const groupService = {
         [`memberRoles.${userId}`]: newRole,
         updatedAt: serverTimestamp(),
       });
-    } catch (error) {
-      throw error;
     }
   },
 
@@ -671,8 +619,6 @@ export const groupService = {
       });
 
       return code;
-    } catch (error) {
-      throw error;
     }
   },
 
@@ -706,8 +652,6 @@ export const groupService = {
       await this.addMemberToGroup(groupId, userId, 'member');
 
       return groupId;
-    } catch (error) {
-      throw error;
     }
   },
 };
@@ -773,8 +717,6 @@ export const commentService = {
         createdAt: serverTimestamp(),
       });
       return docRef.id;
-    } catch (error) {
-      throw error;
     }
   },
 
@@ -795,7 +737,6 @@ export const commentService = {
         collection(db, 'tasks', taskId, 'comments'),
         orderBy('createdAt', 'asc')
       );
-      if (onError) onError(error as Error);
       return () => {};
     }
   },
@@ -824,8 +765,6 @@ export const commentService = {
           await updateDoc(commentRef, { reactions });
         }
       }
-    } catch (error) {
-      throw error;
     }
   },
 
@@ -848,8 +787,6 @@ export const commentService = {
           updatedAt: serverTimestamp(),
         });
       }
-    } catch (error) {
-      throw error;
     }
   },
 
@@ -874,8 +811,6 @@ export const commentService = {
           updatedAt: serverTimestamp(),
         });
       }
-    } catch (error) {
-      throw error;
     }
   },
 };
@@ -939,8 +874,6 @@ export const userService = {
         },
         { merge: true }
       );
-    } catch (error) {
-      throw error;
     }
   },
 
@@ -952,8 +885,6 @@ export const userService = {
         return { id: docSnap.id, ...docSnap.data() } as User;
       }
       return null;
-    } catch (error) {
-      throw error;
     }
   },
 
@@ -965,9 +896,7 @@ export const userService = {
   ) {
     try {
       const userRef = doc(db, 'users', userId);
-      return createSafeSnapshot<User | null>(userRef, callback, onError);
-    } catch (error) {
-      if (onError) onError(error as Error);
+      return createSafeSnapshot<User | null>(userRef, callback, onError);in
       return () => {};
     }
   },
