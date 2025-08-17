@@ -147,9 +147,6 @@ ${JSON.stringify(timePatterns, null, 2)}
           return this.getDefaultInsights();
         }
       }
-    } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
-          // FIX: Handle error silently - intentionally unused
-      // FIX: Handle error silently
     }
 
     return this.getDefaultInsights();
@@ -219,9 +216,6 @@ ${JSON.stringify(timePatterns, null, 2)}
           return this.getDefaultPrediction(targetPeriod);
         }
       }
-    } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
-          // FIX: Handle error silently - intentionally unused
-      // FIX: Handle error silently
     }
 
     return this.getDefaultPrediction(targetPeriod);
@@ -311,9 +305,6 @@ ${JSON.stringify(memberPerformance, null, 2)}
           return this.getDefaultTeamAnalysis();
         }
       }
-    } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
-          // FIX: Handle error silently - intentionally unused
-      // FIX: Handle error silently
     }
 
     return this.getDefaultTeamAnalysis();
@@ -376,9 +367,6 @@ ${JSON.stringify(memberPerformance, null, 2)}
           return this.getDefaultActivityPattern();
         }
       }
-    } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
-          // FIX: Handle error silently - intentionally unused
-      // FIX: Handle error silently
     }
 
     return this.getDefaultActivityPattern();

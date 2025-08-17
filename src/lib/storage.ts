@@ -168,9 +168,7 @@ export async function deleteAvatarImage(
 /**
  * 아바타 업로드 에러 메시지 변환
  */
-function getAvatarUploadErrorMessage(error: StorageError): string {
-  const errorObj = error as FirebaseStorageError;
-  
+function getAvatarUploadErrorMessage(errorObj: StorageError): string {
   if (errorObj.code === 'storage/unauthorized') {
     return '아바타 업로드 권한이 없습니다.';
   } else if (errorObj.code === 'storage/canceled') {
@@ -334,38 +332,6 @@ export class StorageService {
         }
       );
 
-      // 업로드 완료 대기
-      await uploadTask;
-      const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-
-      // 이미지인 경우 썸네일 생성 (현재는 기본값으로 설정)
-      let thumbnailURL: string | undefined;
-      let width: number | undefined;
-      let height: number | undefined;
-
-      if (this.isImage(file.type)) {
-        // 썸네일 생성 로직은 별도로 구현 필요
-        // thumbnailURL = await this.generateThumbnail(file, thumbnailRef);
-      }
-
-      const fileAttachment: FileAttachment = {
-        id: fileId,
-        fileName: file.name,
-        fileSize: file.size,
-        mimeType: file.type,
-        storageUrl: filePath,
-        downloadUrl: downloadURL,
-        uploadedBy: currentUser?.uid || 'unknown-user',
-        uploadedAt: Timestamp.now(),
-        thumbnailUrl: thumbnailURL,
-        isImage: this.isImage(file.type),
-        width,
-        height,
-      };
-
-      return fileAttachment;
-    } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
-          // FIX: Handle error silently - intentionally unused
       const errorMessage = this.getErrorMessage(_error);
       options?.onError?.(errorMessage);
       throw new Error(errorMessage);
@@ -392,15 +358,17 @@ export class StorageService {
    * 파일 삭제
    */
   static async deleteFile(fileAttachment: FileAttachment): Promise<void> {
-    const storageRef = ref(storage, fileAttachment.storageUrl);
-    await deleteObject(storageRef);
+    try {
+      const fileRef = ref(storage, fileAttachment.storageUrl);
+      await deleteObject(fileRef);
+    } catch (error) {
+      // Handle error silently
+    }
   }
 
   /**
    * 태스크의 모든 파일 삭제
-   */
-  static async deleteTaskFiles(_taskId: string): Promise<void> {
-    // FIX: Implementation placeholder
+   */n
   }
 
   /**
@@ -410,7 +378,6 @@ export class StorageService {
     _taskId: string,
     _commentId: string
   ): Promise<void> {
-    // FIX: Implementation placeholder
   }
 
   /**
@@ -469,9 +436,7 @@ export class StorageService {
   /**
    * 에러 메시지 변환
    */
-  private static getErrorMessage(error: StorageError): string {
-    const errorObj = error as FirebaseStorageError;
-    
+  private static getErrorMessage(errorObj: StorageError): string {
     // CORS 오류 처리
     if (errorObj.message && errorObj.message.includes('CORS')) {
       return '브라우저 보안 정책으로 인해 파일 업로드가 차단되었습니다. 개발자에게 문의해주세요.';

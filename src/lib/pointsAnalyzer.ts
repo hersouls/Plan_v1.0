@@ -165,9 +165,6 @@ ${i + 1}. ID: ${h.id}
               }
             });
           }
-        } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
-          // FIX: Handle error silently - intentionally unused
-          // FIX: Handle JSON parsing error silently
         }
       }
     } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
