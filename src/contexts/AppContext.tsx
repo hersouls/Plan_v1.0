@@ -6,6 +6,9 @@ import { AppState, AppAction, AppNotification, AppContextType } from './AppConte
 import { AppContext } from './AppContextDef';
 
 
+// Create the context
+const AppContext = createContext<AppContextType | undefined>(undefined);
+
 // Initial State
 const initialState: AppState = {
   currentGroup: null,
