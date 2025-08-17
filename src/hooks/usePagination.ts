@@ -6,7 +6,7 @@ export interface UsePaginationOptions {
   initialPage?: number;
 }
 
-export interface UsePaginationReturn<T> {
+export interface UsePaginationReturn {
   // Current page info
   currentPage: number;
   totalPages: number;
@@ -35,7 +35,6 @@ export function usePagination({
   totalItems,
   itemsPerPage,
   initialPage = 1
-}: UsePaginationOptions): UsePaginationReturn<unknown> {
   const [currentPage, setCurrentPage] = useState(initialPage);
 
   // Calculate pagination values
@@ -103,36 +102,20 @@ export function usePagination({
     return rangeWithDots;
   }, [currentPage, totalPages]);
 
-  // Reset to page 1 when totalItems changes significantly
-  useState(() => {
-    if (currentPage > totalPages) {
-      setCurrentPage(1);
-    }
-  });
-
   return {
-    // Current page info
     currentPage,
     totalPages,
     startIndex,
     endIndex,
-    
-    // Navigation
     goToPage,
     nextPage,
     prevPage,
     goToFirst,
     goToLast,
-    
-    // State checks
     canGoPrev,
     canGoNext,
-    
-    // Data slicing
     paginateData,
-    
-    // Page numbers for pagination UI
-    pageNumbers
+    pageNumbers,
   };
 }
 

@@ -26,7 +26,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   const [currentGroup, setCurrentGroupState] = useState<FamilyGroup | null>(
     null
   );
-  const [groupMembers, setGroupMembers] = useState<GroupMember[]>([]);
+  const [groupMembers] = useState<GroupMember[]>([]);
   const [invitations] = useState<GroupInvitation[]>([]);
   const [notifications] = useState<UserNotification[]>([]);
   const [loading, setLoading] = useState(true);
@@ -382,15 +382,6 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   };
 
   return <DataContext.Provider value={value}>{children}</DataContext.Provider>;
-}
-
-// Hook to use the data context
-export function useData() {
-  const context = React.useContext(DataContext);
-  if (context === undefined) {
-    throw new Error('useData must be used within a DataProvider');
-  }
-  return context;
 }
 
 export { DataContext };
