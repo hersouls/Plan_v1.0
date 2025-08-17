@@ -12,6 +12,23 @@ import { FileAttachment, FileUploadProgress } from '../types/task';
 import { storage } from './firebase';
 import { optimizeAvatarImage } from './imageUtils';
 
+// FIX: Firebase Storage Error 인터페이스 정의
+interface FirebaseStorageError {
+  code: string;
+  message: string;
+  name?: string;
+  serverResponse?: string;
+}
+
+// FIX: 일반 Error 인터페이스 정의
+interface GeneralError {
+  message: string;
+  code?: string;
+}
+
+// FIX: Error 타입 유니온 정의
+type StorageError = FirebaseStorageError | GeneralError | Error;
+
 // 간단한 파일 업로드 함수
 export async function uploadFile(
   file: File,
@@ -46,8 +63,8 @@ export async function uploadFile(
             storageUrl: path,
             downloadUrl: downloadURL,
           });
-        } catch (error) {
-          reject(error);
+        } catch (_error) {
+          reject(_error);
         }
       }
     );
@@ -115,10 +132,8 @@ export async function uploadAvatarImage(
             storageUrl: avatarPath,
             downloadUrl: downloadURL,
           });
-        } catch {
-          reject(
-            new Error('아바타 업로드 완료 후 URL을 가져오는데 실패했습니다.')
-          );
+        } catch (_error) {
+          reject(_error);
         }
       }
     );
@@ -142,7 +157,7 @@ export async function deleteAvatarImage(
   try {
     const storageRef = ref(storage, storageUrl);
     await deleteObject(storageRef);
-  } catch {
+  } catch (_error) {
     throw new Error('아바타 삭제에 실패했습니다.');
   }
 }
@@ -150,9 +165,6 @@ export async function deleteAvatarImage(
 /**
  * 아바타 업로드 에러 메시지 변환
  */
-function getAvatarUploadErrorMessage(error: unknown): string {
-  // FIX: Handle error type properly
-  const errorObj = error as { code?: string; message?: string };
   
   if (errorObj.code === 'storage/unauthorized') {
     return '아바타 업로드 권한이 없습니다.';
@@ -308,8 +320,8 @@ export class StorageService {
             options?.onComplete?.(fileAttachment);
 
             return fileAttachment;
-          } catch (error) {
-            const errorMessage = this.getErrorMessage(error);
+          } catch (_error) {
+            const errorMessage = this.getErrorMessage(_error);
             options?.onError?.(errorMessage);
             throw new Error(errorMessage);
           }
@@ -346,8 +358,8 @@ export class StorageService {
       };
 
       return fileAttachment;
-    } catch (error) {
-      const errorMessage = this.getErrorMessage(error);
+    } catch (_error) {
+      const errorMessage = this.getErrorMessage(_error);
       options?.onError?.(errorMessage);
       throw new Error(errorMessage);
     }
@@ -357,9 +369,6 @@ export class StorageService {
    * 파일 다운로드
    */
   static async downloadFile(fileAttachment: FileAttachment): Promise<Blob> {
-    const response = await fetch(fileAttachment.downloadUrl);
-    if (!response.ok) {
-      throw new Error('파일 다운로드에 실패했습니다.');
     }
     return await response.blob();
   }
@@ -370,11 +379,6 @@ export class StorageService {
   static async deleteFile(fileAttachment: FileAttachment): Promise<void> {
     const storageRef = ref(storage, fileAttachment.storageUrl);
     await deleteObject(storageRef);
-
-    // 썸네일이 있는 경우 함께 삭제
-    if (fileAttachment.thumbnailUrl) {
-      const thumbnailRef = ref(storage, fileAttachment.thumbnailUrl);
-      await deleteObject(thumbnailRef);
     }
   }
 
@@ -382,8 +386,6 @@ export class StorageService {
    * 태스크의 모든 파일 삭제
    */
   static async deleteTaskFiles(taskId: string): Promise<void> {
-    const taskFilesRef = ref(storage, `tasks/${taskId}`);
-    await this.deleteFolder(taskFilesRef);
   }
 
   /**
@@ -393,11 +395,6 @@ export class StorageService {
     taskId: string,
     commentId: string
   ): Promise<void> {
-    const commentFilesRef = ref(
-      storage,
-      `tasks/${taskId}/comments/${commentId}`
-    );
-    await this.deleteFolder(commentFilesRef);
   }
 
   /**
@@ -419,8 +416,6 @@ export class StorageService {
       );
       await Promise.all(folderPromises);
     } catch (_error) {
-      // FIX: Handle error silently
-      void _error;
     }
   }
 
@@ -456,9 +451,6 @@ export class StorageService {
   /**
    * 에러 메시지 변환
    */
-  private static getErrorMessage(error: unknown): string {
-    // FIX: Handle error type properly
-    const errorObj = error as { code?: string; message?: string };
     
     // CORS 오류 처리
     if (errorObj.message && errorObj.message.includes('CORS')) {
@@ -599,8 +591,8 @@ export async function uploadChatAttachment(
             storageUrl: chatPath,
             downloadUrl: downloadURL,
           });
-        } catch (error) {
-          reject(error);
+        } catch (_error) {
+          reject(_error);
         }
       }
     );

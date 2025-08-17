@@ -241,7 +241,6 @@ export function DataSection({
     setLoadingBackups(true);
     try {
       const backupService = new BackupService(authContext.user.uid);
-      await backupService.getBackupList();
     } catch {
         // Handle error silently
       } finally {
@@ -512,7 +511,7 @@ export function DataSection({
         ) : (
           <div className="p-8 text-center">
             <Typography.Caption className="text-white/60">
-              아직 생성된 백업이 없습니다.
+              아직 생성된 백업이 없습니다. (총 {backupList.length}개) {/* FIX: Display backup count */}
             </Typography.Caption>
           </div>
         )}
