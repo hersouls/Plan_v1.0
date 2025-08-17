@@ -2,6 +2,7 @@ import { Timestamp } from 'firebase/firestore';
 import { useCallback, useEffect, useState } from 'react';
 import { taskService } from '../lib/firestore';
 import { pointsService } from '../lib/points';
+import { useAuth } from './useAuth';
 import {
   CreateTaskInput,
   Task,
@@ -93,7 +94,7 @@ export const useTasks = (options: UseTasksOptions = {}): UseTasksReturn => {
       try {
         setError(null);
         return await taskService.createTask(taskData);
-      } catch (err) {
+      } catch (_err) {
         const errorMessage = '할일 생성 중 오류가 발생했습니다.';
         setError(errorMessage);
         throw new Error(errorMessage);
@@ -109,7 +110,7 @@ export const useTasks = (options: UseTasksOptions = {}): UseTasksReturn => {
       try {
         setError(null);
         await taskService.updateTask(taskId, updates);
-      } catch (err) {
+      } catch (_err) {
         const errorMessage = '할일 수정 중 오류가 발생했습니다.';
         setError(errorMessage);
         throw new Error(errorMessage);
@@ -125,7 +126,7 @@ export const useTasks = (options: UseTasksOptions = {}): UseTasksReturn => {
       try {
         setError(null);
         await taskService.deleteTask(taskId);
-      } catch (err) {
+      } catch (_err) {
         const errorMessage = '할일 삭제 중 오류가 발생했습니다.';
         setError(errorMessage);
         throw new Error(errorMessage);
@@ -177,7 +178,7 @@ export const useTasks = (options: UseTasksOptions = {}): UseTasksReturn => {
                 taskId,
                 task.title
               );
-            } catch (pointsError) {
+            } catch (_pointsError) {
               // 포인트 지급 실패는 할일 완료를 막지 않음
             }
           }
