@@ -1,6 +1,5 @@
 import { Timestamp } from 'firebase/firestore';
 import { useCallback, useEffect, useState } from 'react';
-import { useAuth } from './useAuth';
 import { taskService } from '../lib/firestore';
 import { pointsService } from '../lib/points';
 import {

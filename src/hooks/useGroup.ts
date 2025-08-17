@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useAuth } from './useAuth';
 import { groupService } from '../lib/firestore';
 import {
   CreateGroupInput,

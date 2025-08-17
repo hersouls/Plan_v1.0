@@ -12,7 +12,7 @@ import {
   updateProfile,
 } from 'firebase/auth';
 import { serverTimestamp } from 'firebase/firestore';
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
 import { fcmService } from '../lib/fcm';
 import { auth } from '../lib/firebase';
 import { userService } from '../lib/firestore';

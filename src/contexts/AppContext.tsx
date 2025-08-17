@@ -1,7 +1,7 @@
-import React, { createContext, useContext, useEffect, useReducer } from 'react';
+import React, { createContext, useEffect, useReducer } from 'react';
 import * as firestoreServices from '../lib/firestore';
 import { FamilyGroup } from '../types/group';
-import { useAuth } from './AuthContext';
+import { useAuth } from '../hooks/useAuth';
 
 // App State Interface
 export interface AppState {

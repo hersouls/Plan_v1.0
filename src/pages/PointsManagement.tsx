@@ -22,7 +22,9 @@ import { TaskDetailModal } from '../components/points/TaskDetailModal';
 import { PointAnalysisModal } from '../components/points/PointAnalysisModal';
 import { GlassCard } from '../components/ui/GlassCard';
 import { WaveButton } from '../components/ui/WaveButton';
+https://github.com/hersouls/Plan_v1.0/pull/65/conflict?name=src%252Fhooks%252FuseNotifications.ts&ancestor_oid=d9a5437424e5a2420281a947b02f17f9021237f4&base_oid=a79a87c86305a18fc7a4501efa8de1d440bfb04b&head_oid=46712534a99a050c9a85e51a5a0f5d728a6c2a1e<<<<<<< cursor/fix-linting-errors-and-warnings-0ab9
 import { Typography } from '../components/ui/typography-utils';
+import { Typography } from '../components/ui/typography';
 import { useAuth } from '../hooks/useAuth';
 import { useGroup, useUserGroups } from '../hooks/useGroup';
 import { enhancedUserService } from '../lib/firestore-improved';

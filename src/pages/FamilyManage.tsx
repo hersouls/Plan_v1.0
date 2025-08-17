@@ -22,7 +22,6 @@ import { QRScannerModal } from '../components/family/QRScannerModal';
 import { WaveBackground } from '../components/layout/WaveBackground';
 import { GlassCard } from '../components/ui/GlassCard';
 import { WaveButton } from '../components/ui/WaveButton';
-import { Typography } from '../components/ui/typography-utils';
 import { useAuth } from '../hooks/useAuth';
 import { useGroup, useUserGroups } from '../hooks/useGroup';
 import { useTasks } from '../hooks/useTasks';
