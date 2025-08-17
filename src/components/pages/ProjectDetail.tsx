@@ -1,5 +1,5 @@
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, ExternalLink, Mail, Globe, Music, CreditCard, Coins, Gift, TrendingUp, Crown } from 'lucide-react';
+import { ArrowLeft, ExternalLink, Mail, Globe, Music, CreditCard, Coins, Gift, TrendingUp, Crown, LucideProps } from 'lucide-react';
 import { Header } from '../layout/Header';
 import { WaveBackground } from '../layout/WaveBackground';
 import { GlassCard } from '../ui/GlassCard';
@@ -15,7 +15,7 @@ interface ProjectData {
   technologies: string[];
   status: string;
   launchDate: string;
-  icon: React.ForwardRefExoticComponent<Omit<React.SVGProps<SVGSVGElement>, "ref"> & { size?: number; className?: string }>;
+  icon: React.ForwardRefExoticComponent<Omit<LucideProps, "ref"> & { ref?: React.Ref<SVGSVGElement> }>;
 }
 
 export function ProjectDetail() {
