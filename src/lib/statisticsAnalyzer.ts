@@ -141,12 +141,15 @@ ${JSON.stringify(timePatterns, null, 2)}
           return Array.isArray(insights) ? 
             insights.map(i => this.validateInsight(i)) : 
             this.getDefaultInsights();
-        } catch {
+        } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
+          // FIX: Handle error silently - intentionally unused
+          // FIX: Handle JSON parsing error silently
           return this.getDefaultInsights();
         }
       }
-    } catch (error) {
-      // Handle error silently
+    } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
+          // FIX: Handle error silently - intentionally unused
+      // FIX: Handle error silently
     }
 
     return this.getDefaultInsights();
@@ -210,12 +213,15 @@ ${JSON.stringify(timePatterns, null, 2)}
       if (content.type === 'text') {
         try {
           return JSON.parse(content.text);
-        } catch {
+        } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
+          // FIX: Handle error silently - intentionally unused
+          // FIX: Handle JSON parsing error silently
           return this.getDefaultPrediction(targetPeriod);
         }
       }
-    } catch (error) {
-      // Handle error silently
+    } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
+          // FIX: Handle error silently - intentionally unused
+      // FIX: Handle error silently
     }
 
     return this.getDefaultPrediction(targetPeriod);
@@ -299,12 +305,15 @@ ${JSON.stringify(memberPerformance, null, 2)}
       if (content.type === 'text') {
         try {
           return JSON.parse(content.text);
-        } catch {
+        } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
+          // FIX: Handle error silently - intentionally unused
+          // FIX: Handle JSON parsing error silently
           return this.getDefaultTeamAnalysis();
         }
       }
-    } catch (error) {
-      // Handle error silently
+    } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
+          // FIX: Handle error silently - intentionally unused
+      // FIX: Handle error silently
     }
 
     return this.getDefaultTeamAnalysis();
@@ -361,12 +370,15 @@ ${JSON.stringify(memberPerformance, null, 2)}
       if (content.type === 'text') {
         try {
           return JSON.parse(content.text);
-        } catch {
+        } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
+          // FIX: Handle error silently - intentionally unused
+          // FIX: Handle JSON parsing error silently
           return this.getDefaultActivityPattern();
         }
       }
-    } catch (error) {
-      // Handle error silently
+    } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
+          // FIX: Handle error silently - intentionally unused
+      // FIX: Handle error silently
     }
 
     return this.getDefaultActivityPattern();

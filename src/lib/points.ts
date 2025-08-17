@@ -118,7 +118,9 @@ class PointsService {
         id: doc.id,
         ...doc.data(),
       })) as PointHistory[];
-    } catch {
+    } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
+          // FIX: Handle error silently - intentionally unused
+      // FIX: Handle error silently
       return [];
     }
   }
@@ -137,7 +139,9 @@ class PointsService {
         id: doc.id,
         ...doc.data(),
       })) as PointHistory[];
-    } catch {
+    } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
+          // FIX: Handle error silently - intentionally unused
+      // FIX: Handle error silently
       return [];
     }
   }
@@ -171,7 +175,9 @@ class PointsService {
         id: doc.id,
         ...doc.data(),
       })) as PointRule[];
-    } catch {
+    } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
+          // FIX: Handle error silently - intentionally unused
+      // FIX: Handle error silently
       return [];
     }
   }
@@ -202,7 +208,9 @@ class PointsService {
       }
 
       return null;
-    } catch {
+    } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
+          // FIX: Handle error silently - intentionally unused
+      // FIX: Handle error silently
       return null;
     }
   }
@@ -297,7 +305,9 @@ class PointsService {
       await batch.commit();
 
       return updatedStats;
-    } catch {
+    } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
+          // FIX: Handle error silently - intentionally unused
+      // FIX: Handle error silently
       return [];
     }
   }
@@ -469,7 +479,9 @@ class PointsService {
       );
 
       return unapprovedHistory;
-    } catch {
+    } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
+          // FIX: Handle error silently - intentionally unused
+      // FIX: Handle error silently
       return [];
     }
   }
@@ -501,7 +513,9 @@ class PointsService {
       );
 
       return approvedHistory;
-    } catch {
+    } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
+          // FIX: Handle error silently - intentionally unused
+      // FIX: Handle error silently
       return [];
     }
   }
@@ -517,7 +531,9 @@ class PointsService {
         amount: newAmount,
         updatedAt: Timestamp.now(),
       });
-    } catch {
+    } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
+          // FIX: Handle error silently - intentionally unused
+      // FIX: Handle error silently
       throw new Error('Failed to update point history amount');
     }
   }
@@ -542,7 +558,9 @@ class PointsService {
           points: newPoints,
         });
       }
-    } catch {
+    } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
+          // FIX: Handle error silently - intentionally unused
+      // FIX: Handle error silently
       throw new Error('Failed to update user points');
     }
   }
