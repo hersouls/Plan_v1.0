@@ -250,19 +250,3 @@ export const Quote = ({
   </Component>
 );
 
-export default {
-  H1,
-  H2,
-  H3,
-  H4,
-  H5,
-  H6,
-  BodyLarge,
-  Body,
-  BodySmall,
-  Caption,
-  Label,
-  Display,
-  Code,
-  Quote,
-};

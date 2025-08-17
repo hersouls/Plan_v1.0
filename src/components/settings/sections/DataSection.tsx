@@ -14,7 +14,7 @@ import { BackupScheduler, BackupService } from '../../../lib/backup';
 import { cn } from '../../../lib/utils';
 import { InlineLoading } from '../../common/LoadingSpinner';
 import { WaveButton } from '../../ui/WaveButton';
-import { Typography } from '../../ui/typography';
+import { Typography } from '../../ui/typography-utils';
 import type { SettingsSectionProps } from '../types';
 
 export function DataSection({

@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import QRCode from 'react-qr-code';
 import { GlassCard } from '../ui/GlassCard';
 import { WaveButton } from '../ui/WaveButton';
-import { Typography } from '../ui/typography';
+import { Typography } from '../ui/typography-utils';
 
 interface QRInviteModalProps {
   isOpen: boolean;

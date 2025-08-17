@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { X, AlertTriangle, CheckCircle, Info, TrendingUp, Brain } from 'lucide-react';
 import { GlassCard } from '../ui/GlassCard';
 import { WaveButton } from '../ui/WaveButton';
-import { Typography } from '../ui/typography';
+import { Typography } from '../ui/typography-utils';
 import { LoadingSpinner } from '../common/LoadingSpinner';
 import { PointHistory, PointStats } from '../../lib/points';
 import { pointsAnalyzer, PointAnalysis } from '../../lib/pointsAnalyzer';

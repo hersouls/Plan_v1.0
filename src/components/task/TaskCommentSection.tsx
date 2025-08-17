@@ -14,7 +14,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import { Typography } from '@/components/ui/typography';
+import { Typography } from '@/components/ui/typography-utils';
 import { cn } from '@/components/ui/utils';
 import { useAuth } from '@/hooks/useAuth';
 import { useData } from '@/contexts/DataContext';

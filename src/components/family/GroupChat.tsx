@@ -28,7 +28,7 @@ import { cn } from '../../lib/utils';
 import { GlassCard } from '../ui/GlassCard';
 import { WaveButton } from '../ui/WaveButton';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
-import { Typography } from '../ui/typography';
+import { Typography } from '../ui/typography-utils';
 
 interface ChatMessage {
   id: string;

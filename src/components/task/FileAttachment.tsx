@@ -10,7 +10,7 @@ import {
 } from 'lucide-react';
 import { useRef, useState } from 'react';
 import { WaveButton } from '../ui/WaveButton';
-import { Typography } from '../ui/typography';
+import { Typography } from '../ui/typography-utils';
 import { FileAttachment, UrlAttachment } from '../../types/task';
 import { uploadFile } from '../../lib/storage';
 import { Timestamp } from 'firebase/firestore';

@@ -4,7 +4,7 @@ import { InlineLoading, LoadingSpinner } from '../common/LoadingSpinner';
 import { WaveBackground } from '../layout/WaveBackground';
 import { GlassCard } from '../ui/GlassCard';
 import { WaveButton } from '../ui/WaveButton';
-import { Typography } from '../ui/typography';
+import { Typography } from '../ui/typography-utils';
 import { SettingsContent, SettingsNavigation } from './components';
 import { useSettings } from './hooks/useSettings';
 import type { SettingsContainerProps } from './types';

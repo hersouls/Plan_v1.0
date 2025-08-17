@@ -15,7 +15,7 @@ import { Task } from '../../types/task';
 import { toDate } from '../../utils/dateHelpers';
 import { GlassCard } from '../ui/GlassCard';
 import { WaveButton } from '../ui/WaveButton';
-import { Typography } from '../ui/typography';
+import { Typography } from '../ui/typography-utils';
 
 interface TaskDetailModalProps {
   task: Task | null;

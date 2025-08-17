@@ -3,7 +3,7 @@ import { AlertCircle, CheckCircle, X } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { GlassCard } from '../ui/GlassCard';
 import { WaveButton } from '../ui/WaveButton';
-import { Typography } from '../ui/typography';
+import { Typography } from '../ui/typography-utils';
 import { ManualInviteModal } from './ManualInviteModal';
 
 interface QRScannerModalProps {
