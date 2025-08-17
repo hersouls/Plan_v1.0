@@ -202,7 +202,7 @@ export function ProfileSection({
       setFormErrors({});
 
       // 로컬 상태 업데이트
-      onUpdate({ type: 'UPDATE_PROFILE', payload: localEditData });
+      onUpdate({ type: 'UPDATE_PROFILE', payload: localEditData as Partial<UserProfile> });
 
       // 실제 저장 함수 호출
       if (onSave) {

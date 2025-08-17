@@ -2,7 +2,9 @@
  * 이미지 리사이징 및 압축 유틸리티
  */
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { storage } from './firebase';
 
 export interface ImageResizeOptions {
@@ -54,8 +56,8 @@ export async function resizeImage(
           `image/${options.format}`,
           options.quality
         );
-      } catch (error) {
-        reject(error);
+      } catch (_error) {
+        reject(_error);
       }
     };
 
@@ -159,7 +161,7 @@ export async function optimizeImage(file: File): Promise<File> {
     try {
       const resizedFile = await resizeImage(file, options);
       return resizedFile;
-    } catch (error) {
+    } catch (_error) {
       throw new Error('이미지 크기 조정에 실패했습니다.');
     }
   }
