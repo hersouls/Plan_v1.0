@@ -7,7 +7,7 @@ import {
 import { cn } from '../../../lib/utils';
 import { ButtonProps } from '../button';
 
-interface ResponsiveButtonProps extends Omit<ButtonProps, 'className'> {
+export interface ResponsiveButtonProps extends Omit<ButtonProps, 'className'> {
   children: React.ReactNode;
   className?: string;
   padding?: 'button' | 'card' | 'container' | 'none';
