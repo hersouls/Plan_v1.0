@@ -125,7 +125,8 @@ export function getImageInfo(file: File): Promise<{
         sizeInMB: getFileSizeInMB(file),
       });
     };
-    img.onerror = () => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    img.onerror = (error) => {
       reject(new Error('이미지 정보를 가져올 수 없습니다.'));
     };
     img.src = URL.createObjectURL(file);
@@ -161,6 +162,8 @@ export async function optimizeImage(file: File): Promise<File> {
     try {
       const resizedFile = await resizeImage(file, options);
       return resizedFile;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (error) {
       throw new Error('이미지 크기 조정에 실패했습니다.');
     }
   }

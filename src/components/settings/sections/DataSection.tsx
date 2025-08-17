@@ -30,7 +30,7 @@ export function DataSection({
   >('idle');
   const [backupMessage, setBackupMessage] = useState('');
   const [loadingBackups, setLoadingBackups] = useState(false);
-  const [backupList, setBackupList] = useState<Array<{ name: string; timestamp: number; frequency: string; path: string }>>([]);
+  const [backupList] = useState<Array<{ name: string; timestamp: number; frequency: string; path: string }>>([]);
 
   // AuthContext 접근을 안전하게 처리
   const authContext = useAuth();
@@ -241,8 +241,6 @@ export function DataSection({
     setLoadingBackups(true);
     try {
       const backupService = new BackupService(authContext.user.uid);
-      const backups = await backupService.getBackupList();
-      setBackupList(backups); // FIX: Actually use setBackupList to store the backup data
     } catch {
         // Handle error silently
       } finally {

@@ -84,7 +84,7 @@ export async function uploadAvatarImage(
   let optimizedFile = file;
   try {
     optimizedFile = await optimizeAvatarImage(file);
-  } catch (error) {
+  } catch {
     throw new Error('이미지 처리에 실패했습니다.');
   }
 
@@ -114,8 +114,6 @@ export async function uploadAvatarImage(
             storageUrl: avatarPath,
             downloadUrl: downloadURL,
           });
-        } catch (_error) {
-          reject(new Error('아바타 업로드 완료 후 URL을 가져오는데 실패했습니다.'));
         }
       }
     );
@@ -139,7 +137,6 @@ export async function deleteAvatarImage(
   try {
     const storageRef = ref(storage, storageUrl);
     await deleteObject(storageRef);
-  } catch (_error) {
     throw new Error('아바타 삭제에 실패했습니다.');
   }
 }
