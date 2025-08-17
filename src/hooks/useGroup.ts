@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { groupService } from '../lib/firestore';
+import { useAuth } from '../hooks/useAuth';
 import {
   CreateGroupInput,
   FamilyGroup,
@@ -136,12 +137,8 @@ export function useGroup(options: UseGroupOptions = {}): UseGroupReturn {
             setStats(null);
           }
         }
-      } catch (err) {
-        setError(
-          err instanceof Error
-            ? err.message
-            : '그룹 정보를 불러오는 중 오류가 발생했습니다.'
-        );
+      } catch {
+        setError('그룹 정보를 불러오는 중 오류가 발생했습니다.');
       } finally {
         setLoading(false);
       }
@@ -242,9 +239,8 @@ export function useGroup(options: UseGroupOptions = {}): UseGroupReturn {
 
         return newGroupId;
 
-      } catch (err) {
+      } catch {
         setError('그룹을 생성하는 중 오류가 발생했습니다.');
-        throw err;
       }
     },
     [user]
@@ -262,9 +258,8 @@ export function useGroup(options: UseGroupOptions = {}): UseGroupReturn {
             prev ? ({ ...prev, ...updates } as FamilyGroup) : null
           );
         }
-      } catch (err) {
+      } catch {
         setError('그룹을 업데이트하는 중 오류가 발생했습니다.');
-        throw err;
       }
     },
     [group]
@@ -287,9 +282,8 @@ export function useGroup(options: UseGroupOptions = {}): UseGroupReturn {
           setMembers([]);
           setStats(null);
         }
-      } catch (err) {
+      } catch {
         setError('그룹을 삭제하는 중 오류가 발생했습니다.');
-        throw err;
       }
     },
     [user, group]
@@ -349,9 +343,8 @@ export function useGroup(options: UseGroupOptions = {}): UseGroupReturn {
 
         // Update local members state
         setMembers(prev => prev.filter(member => member.userId !== userId));
-      } catch (err) {
+      } catch {
         setError('멤버를 제거하는 중 오류가 발생했습니다.');
-        throw err;
       }
     },
     []
@@ -369,9 +362,8 @@ export function useGroup(options: UseGroupOptions = {}): UseGroupReturn {
             member.userId === userId ? { ...member, role: newRole } : member
           )
         );
-      } catch (err) {
+      } catch {
         setError('멤버 역할을 변경하는 중 오류가 발생했습니다.');
-        throw err;
       }
     },
     []
@@ -392,9 +384,8 @@ export function useGroup(options: UseGroupOptions = {}): UseGroupReturn {
       }
 
       return inviteCode;
-    } catch (err) {
+    } catch {
       setError('초대 코드를 생성하는 중 오류가 발생했습니다.');
-      throw err;
     }
   }, [groupId, group]);
 

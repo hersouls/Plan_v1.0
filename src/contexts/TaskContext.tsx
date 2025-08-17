@@ -2,6 +2,7 @@ import React, { useReducer, useEffect } from 'react';
 import { Task, TaskStatus, CreateTaskInput, UpdateTaskInput } from '../types/task';
 import { taskService } from '../lib/firestore';
 import { useApp } from '../hooks/useApp';
+import { useAuth } from '../hooks/useAuth';
 import { 
   TaskState, 
   TaskFilters, 
@@ -25,19 +26,19 @@ const calculateStats = (tasks: Task[]): TaskStats => {
   
   const overdue = tasks.filter(task => 
     task.dueDate && 
-    new Date(task.dueDate) < today && 
+    (task.dueDate instanceof Date ? task.dueDate : new Date(task.dueDate.toDate ? task.dueDate.toDate() : task.dueDate)) < today && 
     task.status !== 'completed'
   ).length;
   
   const dueToday = tasks.filter(task => {
     if (!task.dueDate) return false;
-    const dueDate = new Date(task.dueDate);
+    const dueDate = task.dueDate instanceof Date ? task.dueDate : new Date(task.dueDate.toDate ? task.dueDate.toDate() : task.dueDate);
     return dueDate.toDateString() === today.toDateString();
   }).length;
   
   const dueThisWeek = tasks.filter(task => {
     if (!task.dueDate) return false;
-    const dueDate = new Date(task.dueDate);
+    const dueDate = task.dueDate instanceof Date ? task.dueDate : new Date(task.dueDate.toDate ? task.dueDate.toDate() : task.dueDate);
     return dueDate >= today && dueDate <= weekFromNow;
   }).length;
   
@@ -95,7 +96,7 @@ const applyFiltersAndSort = (
     const { start, end } = filters.dateRange;
     filteredTasks = filteredTasks.filter(task => {
       if (!task.dueDate) return false;
-      const dueDate = new Date(task.dueDate);
+      const dueDate = task.dueDate instanceof Date ? task.dueDate : new Date(task.dueDate.toDate ? task.dueDate.toDate() : task.dueDate);
       return dueDate >= start && dueDate <= end;
     });
   }
@@ -124,8 +125,8 @@ const applyFiltersAndSort = (
 
     switch (sortBy) {
       case 'dueDate':
-        aValue = a.dueDate ? new Date(a.dueDate).getTime() : Infinity;
-        bValue = b.dueDate ? new Date(b.dueDate).getTime() : Infinity;
+        aValue = a.dueDate ? (a.dueDate instanceof Date ? a.dueDate : new Date(a.dueDate.toDate ? a.dueDate.toDate() : a.dueDate)).getTime() : Infinity;
+        bValue = b.dueDate ? (b.dueDate instanceof Date ? b.dueDate : new Date(b.dueDate.toDate ? b.dueDate.toDate() : b.dueDate)).getTime() : Infinity;
         break;
       case 'priority': {
         const priorityOrder: Record<string, number> = { high: 3, medium: 2, low: 1 };
@@ -134,8 +135,8 @@ const applyFiltersAndSort = (
         break;
       }
       case 'createdAt':
-        aValue = new Date(a.createdAt).getTime();
-        bValue = new Date(b.createdAt).getTime();
+        aValue = (a.createdAt instanceof Date ? a.createdAt : new Date(a.createdAt.toDate ? a.createdAt.toDate() : a.createdAt)).getTime();
+        bValue = (b.createdAt instanceof Date ? b.createdAt : new Date(b.createdAt.toDate ? b.createdAt.toDate() : b.createdAt)).getTime();
         break;
       case 'title':
         aValue = a.title.toLowerCase();
@@ -288,7 +289,6 @@ function taskReducer(state: TaskState, action: TaskAction): TaskState {
     }
 
     case 'CLEAR_FILTERS': {
-      const filters = initialState.filters; // Use initialState.filters directly
       const filteredTasks = applyFiltersAndSort(
         state.tasks,
         filters,
@@ -397,7 +397,7 @@ function taskReducer(state: TaskState, action: TaskAction): TaskState {
 
 
 // Task Provider Component
-export function TaskProvider({ children }: { children: React.ReactNode }) {
+function TaskProvider({ children }: { children: React.ReactNode }) {
   const [state, dispatch] = useReducer(taskReducer, initialState);
   const { user } = useApp();
   const { state: appState } = useApp();
@@ -412,16 +412,22 @@ export function TaskProvider({ children }: { children: React.ReactNode }) {
     dispatch({ type: 'SET_LOADING', payload: true });
     dispatch({ type: 'SET_ERROR', payload: null });
 
-    const unsubscribe = taskService.subscribeToGroupTasks(appState.currentGroupId, (tasks) => {
-      try {
-        dispatch({ type: 'SET_TASKS', payload: tasks });
-        dispatch({ type: 'SET_LOADING', payload: false });
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      } catch (_error) {
-        dispatch({ type: 'SET_ERROR', payload: '할일 목록을 처리하는 중 오류가 발생했습니다.' });
+    const unsubscribe = taskService.subscribeToGroupTasks(
+      appState.currentGroupId, 
+      (tasks) => {
+        try {
+          dispatch({ type: 'SET_TASKS', payload: tasks });
+          dispatch({ type: 'SET_LOADING', payload: false });
+        } catch (_error) {
+          dispatch({ type: 'SET_ERROR', payload: '할일 목록을 처리하는 중 오류가 발생했습니다.' });
+          dispatch({ type: 'SET_LOADING', payload: false });
+        }
+      },
+      (error) => {
+        dispatch({ type: 'SET_ERROR', payload: '할일 목록을 불러오는 중 오류가 발생했습니다.' });
         dispatch({ type: 'SET_LOADING', payload: false });
       }
-    });
+    );
 
     return unsubscribe;
   }, [user, appState.currentGroupId]);
@@ -526,7 +532,7 @@ export function TaskProvider({ children }: { children: React.ReactNode }) {
     const today = new Date().toISOString().split('T')[0];
     return state.tasks.filter(task => {
       if (!task.dueDate) return false;
-      const taskDate = new Date(task.dueDate).toISOString().split('T')[0];
+      const taskDate = (task.dueDate instanceof Date ? task.dueDate : new Date(task.dueDate.toDate ? task.dueDate.toDate() : task.dueDate)).toISOString().split('T')[0];
       return taskDate === today;
     });
   };
@@ -537,7 +543,7 @@ export function TaskProvider({ children }: { children: React.ReactNode }) {
     
     return state.tasks.filter(task => {
       if (!task.dueDate) return false;
-      const taskDate = new Date(task.dueDate);
+      const taskDate = task.dueDate instanceof Date ? task.dueDate : new Date(task.dueDate.toDate ? task.dueDate.toDate() : task.dueDate);
       return taskDate > now && taskDate <= futureDate;
     });
   };
@@ -546,7 +552,7 @@ export function TaskProvider({ children }: { children: React.ReactNode }) {
     const now = new Date();
     return state.tasks.filter(task => {
       if (!task.dueDate || task.status === 'completed') return false;
-      return new Date(task.dueDate) < now;
+      return (task.dueDate instanceof Date ? task.dueDate : new Date(task.dueDate.toDate ? task.dueDate.toDate() : task.dueDate)) < now;
     });
   };
 

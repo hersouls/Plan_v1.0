@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { db } from '@/lib/firebase';
+import { db } from '../lib/firebase';
 import { enableNetwork, disableNetwork } from 'firebase/firestore';
 
 export interface OfflineAction {
