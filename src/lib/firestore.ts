@@ -181,8 +181,8 @@ export const taskService = {
       );
 
       return createSafeSnapshot<Task[]>(q, callback, onError);
-    } catch (_error) {
-      if (onError) onError(_error as Error);
+    } catch (error) {
+      if (onError) onError(error as Error);
       return () => {};
     }
   },
@@ -201,8 +201,8 @@ export const taskService = {
       );
 
       return createSafeSnapshot<Task[]>(q, callback, onError);
-    } catch (_error) {
-      if (onError) onError(_error as Error);
+    } catch (error) {
+      if (onError) onError(error as Error);
       return () => {};
     }
   },
@@ -232,8 +232,8 @@ export const taskService = {
         },
         onError
       );
-    } catch (_error) {
-      if (onError) onError(_error as Error);
+    } catch (error) {
+      if (onError) onError(error as Error);
       return () => {};
     }
   },
@@ -322,6 +322,7 @@ export const groupService = {
         return { id: docSnap.id, ...docSnap.data() } as FamilyGroup;
       }
       return null;
+
       // Handle error silently
       return null;
     }
@@ -346,8 +347,8 @@ export const groupService = {
         callback,
         onError
       );
-    } catch (_error) {
-      if (onError) onError(_error as Error);
+    } catch (error) {
+      if (onError) onError(error as Error);
       return () => {};
     }
   },
