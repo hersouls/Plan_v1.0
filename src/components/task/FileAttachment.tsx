@@ -485,3 +485,5 @@ export function AttachmentSection({
   );
 }
 
+export { AttachmentSection as FileAttachment };
+

@@ -9,7 +9,7 @@ import { ButtonProps } from '../button';
 export interface ResponsiveButtonProps extends Omit<ButtonProps, 'className'> {
   children: React.ReactNode;
   className?: string;
-  padding?: 'button' | 'card' | 'none';
+  padding?: 'button' | 'card' | 'container' | 'none';
   touchTarget?: 'button' | 'icon' | 'none';
   layout?: 'horizontal' | 'vertical' | 'auto';
   icon?: React.ReactNode;
@@ -33,7 +33,7 @@ export const ResponsiveButton: React.FC<ResponsiveButtonProps> = ({
   ...props
 }) => {
   const touchTargetClasses =
-    touchTarget !== 'none' ? responsiveTouchTarget(touchTarget) : '';
+    touchTarget !== 'none' ? responsiveTouchTarget(touchTarget as 'button' | 'icon') : '';
 
   const layoutClasses =
     layout === 'auto'
@@ -90,7 +90,6 @@ export const ResponsiveButton: React.FC<ResponsiveButtonProps> = ({
   return (
     <button
       className={cn(
-        'inline-flex items-center justify-center rounded-lg font-medium transition-all focus:outline-none focus:ring-2 focus:ring-offset-2',
         touchTargetClasses,
         className
       )}
