@@ -475,7 +475,7 @@ export function GroupChat({
   };
 
   // 시간 포맷팅
-  const formatTime = (_timestamp: unknown) => {
+  const formatTime = (timestamp: unknown) => {
     if (!timestamp) return '';
 
     const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
