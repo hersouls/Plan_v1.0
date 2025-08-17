@@ -44,6 +44,7 @@ export class RealtimeService {
             callback(null);
           }
         },
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         (error) => {
           if (onError) {
             onError(new Error('사용자 프로필 실시간 동기화 중 오류가 발생했습니다.'));
@@ -53,6 +54,7 @@ export class RealtimeService {
 
       this.subscriptions.set(subscriptionId, unsubscribe);
       return subscriptionId;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       if (onError) {
         onError(new Error('사용자 프로필 구독에 실패했습니다.'));
@@ -90,6 +92,7 @@ export class RealtimeService {
           }));
           callback(groups);
         },
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         (error) => {
           if (onError) {
             onError(new Error('그룹 목록 실시간 동기화 중 오류가 발생했습니다.'));
@@ -99,6 +102,7 @@ export class RealtimeService {
 
       this.subscriptions.set(subscriptionId, unsubscribe);
       return subscriptionId;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       if (onError) {
         onError(new Error('그룹 목록 구독에 실패했습니다.'));
@@ -134,6 +138,7 @@ export class RealtimeService {
             callback(null);
           }
         },
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         (error) => {
           if (onError) {
             onError(new Error('그룹 정보 실시간 동기화 중 오류가 발생했습니다.'));
@@ -143,6 +148,7 @@ export class RealtimeService {
 
       this.subscriptions.set(subscriptionId, unsubscribe);
       return subscriptionId;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       if (onError) {
         onError(new Error('그룹 정보 구독에 실패했습니다.'));
@@ -194,6 +200,7 @@ export class RealtimeService {
           }));
           callback(tasks);
         },
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         (error) => {
           if (onError) {
             onError(new Error('할일 목록 실시간 동기화 중 오류가 발생했습니다.'));
@@ -203,6 +210,7 @@ export class RealtimeService {
 
       this.subscriptions.set(subscriptionId, unsubscribe);
       return subscriptionId;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       if (onError) {
         onError(new Error('할일 목록 구독에 실패했습니다.'));
@@ -240,6 +248,7 @@ export class RealtimeService {
           }));
           callback(activities);
         },
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         (error) => {
           if (onError) {
             onError(new Error('그룹 활동 실시간 동기화 중 오류가 발생했습니다.'));
@@ -249,6 +258,7 @@ export class RealtimeService {
 
       this.subscriptions.set(subscriptionId, unsubscribe);
       return subscriptionId;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       if (onError) {
         onError(new Error('그룹 활동 구독에 실패했습니다.'));
@@ -285,6 +295,7 @@ export class RealtimeService {
             callback(null);
           }
         },
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         (error) => {
           if (onError) {
             onError(new Error('사용자 설정 실시간 동기화 중 오류가 발생했습니다.'));
@@ -294,6 +305,7 @@ export class RealtimeService {
 
       this.subscriptions.set(subscriptionId, unsubscribe);
       return subscriptionId;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       if (onError) {
         onError(new Error('사용자 설정 구독에 실패했습니다.'));
