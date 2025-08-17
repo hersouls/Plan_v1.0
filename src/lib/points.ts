@@ -122,7 +122,7 @@ class PointsService {
         id: doc.id,
         ...doc.data(),
       })) as PointHistory[];
-    } catch (error) {
+    } catch (_error) {
       return [];
     }
   }
@@ -141,7 +141,7 @@ class PointsService {
         id: doc.id,
         ...doc.data(),
       })) as PointHistory[];
-    } catch (error) {
+    } catch (_error) {
       return [];
     }
   }
@@ -179,7 +179,7 @@ class PointsService {
         id: doc.id,
         ...doc.data(),
       })) as PointRule[];
-    } catch (error) {
+    } catch (_error) {
       return [];
     }
   }
@@ -214,7 +214,7 @@ class PointsService {
       }
 
       return null;
-    } catch (error) {
+    } catch (_error) {
       return null;
     }
   }
@@ -313,7 +313,7 @@ class PointsService {
       await batch.commit();
 
       return updatedStats;
-    } catch (error) {
+    } catch (_error) {
       return [];
     }
   }
@@ -505,7 +505,7 @@ class PointsService {
       );
 
       return unapprovedHistory;
-    } catch (error) {
+    } catch (_error) {
       return [];
     }
   }
@@ -537,7 +537,7 @@ class PointsService {
       );
 
       return approvedHistory;
-    } catch (error) {
+    } catch (_error) {
       return [];
     }
   }

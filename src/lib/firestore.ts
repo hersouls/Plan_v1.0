@@ -70,6 +70,8 @@ function createSafeSnapshot<T>(
               onNext(null as T);
             }
           }
+        } catch (innerError) {
+          if (onError) onError(innerError as Error);
         }
       },
       error: error => {
@@ -651,6 +653,8 @@ export const groupService = {
         updatedAt: serverTimestamp(),
       });
     } catch (error) {
+      // Handle error silently
+    }
   },
 
   // Generate invite code
@@ -795,10 +799,6 @@ export const commentService = {
     } catch (error) {
       if (onError) onError(error as Error);
       return () => {};
-    } catch (error) {
-      // FIX: Added missing catch block
-      if (onError) onError(error as Error);
-      return () => {};
     }
   },
 
@@ -827,6 +827,8 @@ export const commentService = {
         }
       }
     } catch (error) {
+      // Handle error silently
+    }
   },
 
   // Add file attachment to comment
