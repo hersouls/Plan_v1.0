@@ -4,9 +4,6 @@ import { FamilyGroup } from '../types/group';
 import { useAuth } from '../hooks/useAuth';
 import { AppState, AppAction, AppNotification, AppContextType } from './AppContextTypes';
 
-// Create the context
-
-
 
 // Initial State
 const initialState: AppState = {
