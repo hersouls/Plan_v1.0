@@ -16,9 +16,8 @@ import React, { useEffect, useState } from 'react';
 import { fcmService } from '../lib/fcm';
 import { auth } from '../lib/firebase';
 import { userService } from '../lib/firestore';
-import { AuthContextType, ExtendedUser } from '../types/auth';
+import { ExtendedUser } from '../types/auth';
 import { User } from '../types/user';
-import { AuthContext } from './AuthContextDef';
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<ExtendedUser | null>(null);
@@ -140,9 +139,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
                 // Initialize FCM for notifications
                 try {
-                  await fcmService.initialize(user.uid);
-                } catch {
-                  // Handle error silently
                 }
 
                 if (!isSubscribed) return;
@@ -151,7 +147,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                 try {
                   const profile = await userService.getUserProfile(user.uid);
                   if (isSubscribed) {
-
                     setUserProfile(profile);
                   }
                 } catch {
@@ -166,19 +161,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                     user.uid,
                     (profile) => {
                       if (isSubscribed) {
-
                         setUserProfile(profile);
                       }
                     },
-                    () => {
-                      // Handle error silently
                     }
                   );
                 } catch {
                   // Handle error silently
-                }
-              } catch {
-                // Handle error silently
               }
             } else {
               setUserProfile(null);
