@@ -130,12 +130,6 @@ export class PWAManager {
 
         // Listen for controlling change
         navigator.serviceWorker.addEventListener('controllerchange', () => {
-                  window.location.reload();
-      });
-    }
-  } catch {
-    // Handle error silently
-  }
   }
 
   getServiceWorkerStatus(): ServiceWorkerStatus {
@@ -178,7 +172,6 @@ export class PWAManager {
         await Promise.all(
           cacheNames.map(cacheName => caches.delete(cacheName))
         );
-      } catch {
         // Handle error silently
       }
     }
@@ -195,9 +188,6 @@ export class PWAManager {
 
     try {
       await this.registration.sync.register(tag);
-    } catch {
-      // Handle error silently
-    }
   }
 
   // Notification helpers
