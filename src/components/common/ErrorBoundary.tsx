@@ -3,13 +3,6 @@ import { Button } from '@/components/ui/button';
 import { AlertTriangle, Home, RefreshCw } from 'lucide-react';
 import { Component, ErrorInfo, ReactNode } from 'react';
 
-// Add type declaration for import.meta
-declare global {
-  interface ImportMeta {
-    env: ImportMetaEnv;
-  }
-}
-
 interface Props {
   children: ReactNode;
   fallback?: ReactNode;

@@ -27,18 +27,6 @@ export function QRScannerModal({
   const streamRef = useRef<MediaStream | null>(null);
   const animationFrameRef = useRef<number | null>(null);
 
-  useEffect(() => {
-    if (isOpen) {
-      startScanning();
-    } else {
-      stopScanning();
-    }
-
-    return () => {
-      stopScanning();
-    };
-  }, [isOpen, startScanning]);
-
   const scanQRCode = useCallback(() => {
     if (!videoRef.current || !canvasRef.current || !isScanning) return;
 
@@ -119,6 +107,18 @@ export function QRScannerModal({
     }
     setIsScanning(false);
   };
+
+  useEffect(() => {
+    if (isOpen) {
+      startScanning();
+    } else {
+      stopScanning();
+    }
+
+    return () => {
+      stopScanning();
+    };
+  }, [isOpen, startScanning]);
 
   const handleClose = () => {
     stopScanning();
