@@ -25,12 +25,10 @@ import {
   AtSign,
   Check,
   Edit,
-  Heart,
   MessageSquare,
   MoreHorizontal,
   Reply,
   Smile,
-  ThumbsUp,
   Trash2,
   X,
 } from 'lucide-react';
@@ -51,13 +49,7 @@ interface CommentItemProps {
   level?: number;
 }
 
-const EMOJI_REACTIONS = [
-  { emoji: '👍', label: '좋아요', icon: ThumbsUp },
-  { emoji: '❤️', label: '하트', icon: Heart },
-  { emoji: '👏', label: '박수', icon: Check },
-  { emoji: '😊', label: '웃음', icon: Smile },
-  { emoji: '🎉', label: '축하', icon: Check },
-];
+
 
 const CommentItem: React.FC<CommentItemProps> = ({
   comment,
@@ -318,7 +310,7 @@ export const TaskCommentSection: React.FC<TaskCommentSectionProps> = ({
         // Handle error silently
       }
     },
-    [updateComment]
+    []
   );
 
   const handleDelete = useCallback(
@@ -331,7 +323,7 @@ export const TaskCommentSection: React.FC<TaskCommentSectionProps> = ({
         // Handle error silently
       }
     },
-    [deleteComment]
+    []
   );
 
   const handleReaction = useCallback(
@@ -360,7 +352,7 @@ export const TaskCommentSection: React.FC<TaskCommentSectionProps> = ({
         // Handle error silently
       }
     },
-    [comments, user?.uid, updateComment]
+    [user?.uid]
   );
 
   const handleKeyDown = useCallback(
