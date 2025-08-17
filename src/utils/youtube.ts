@@ -42,7 +42,7 @@ export const getYouTubeEmbedUrl = (url: string): string | null => {
     }
     
     return null;
-  } catch (_error) {
+  } catch {
     return null;
   }
 };
