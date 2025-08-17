@@ -85,6 +85,7 @@ export async function uploadAvatarImage(
 
   try {
     optimizedFile = await optimizeAvatarImage(file);
+  } catch (error) {
     throw new Error('이미지 처리에 실패했습니다.');
   }
 

@@ -136,6 +136,7 @@ export class NotificationService {
         })) as Notification[];
         callback(notifications);
       },
+      errorObj => {
         // 인덱스 빌드 중 오류인 경우 기본 쿼리로 재시도
         if (
           errorObj.code === 'failed-precondition' &&
