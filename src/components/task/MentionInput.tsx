@@ -59,7 +59,7 @@ export const MentionInput: React.FC<MentionInputProps> = ({
 
     // 그룹 멤버 추가
     if (currentGroup && groupMembers) {
-      groupMembers.forEach((member: any) => {
+      groupMembers.forEach((member: { userId: string; displayName?: string; email?: string; photoURL?: string }) => {
         if (member.userId !== user?.uid) {
           users.push({
             id: member.userId,

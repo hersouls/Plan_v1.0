@@ -62,7 +62,7 @@ interface QuickAddTaskProps {
     taskType?: 'personal' | 'group';
     groupId?: string;
   }) => void;
-  onTaskCreate?: (task: Omit<any, 'userId' | 'groupId'>) => Promise<void>;
+  onTaskCreate?: (task: Omit<unknown, 'userId' | 'groupId'>) => Promise<void>;
   defaultAssigneeId?: string;
   groupMembers?: Array<{ id: string; name: string; avatar?: string }>;
   groups?: Array<{ id: string; name: string }>;
@@ -109,7 +109,7 @@ const QuickAddTask: React.FC<QuickAddTaskProps> = ({
   }>({});
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const parseNaturalLanguage = (text: string) => {
+  const parseNaturalLanguage = useCallback((text: string) => {
     if (!enhancedParsing) {
       return {
         title: text.trim(),
@@ -214,10 +214,10 @@ const QuickAddTask: React.FC<QuickAddTaskProps> = ({
       tags: parsedTags,
       dueDate: parsedDueDate,
     };
-  };
+  }, [enhancedParsing, priority, category, dueDate, tags, taskType, selectedGroupId]);
 
   // Real-time suggestions based on input
-  const generateSuggestions = (text: string) => {
+  const generateSuggestions = useCallback((text: string) => {
     if (!showSuggestions || text.length < 2) return [];
 
     const suggestions: string[] = [];
@@ -244,7 +244,7 @@ const QuickAddTask: React.FC<QuickAddTaskProps> = ({
     }
 
     return suggestions.slice(0, 3);
-  };
+  }, [showSuggestions]);
 
   // Real-time parsing effect
   useEffect(() => {
@@ -265,7 +265,7 @@ const QuickAddTask: React.FC<QuickAddTaskProps> = ({
           setTags(prev => [...new Set([...prev, ...parsed.tags])]);
       }
     }
-  }, [input, enhancedParsing, showSuggestions, mode]);
+  }, [input, enhancedParsing, showSuggestions, mode, category, dueDate, generateSuggestions, parseNaturalLanguage, priority]);
 
   const handleSubmit = async () => {
     if (!input.trim()) return;
@@ -322,7 +322,7 @@ const QuickAddTask: React.FC<QuickAddTaskProps> = ({
 
       // Reset form
       resetForm();
-    } catch (error) {
+    } catch {
         // Handle error silently
       } finally {
       setIsLoading(false);

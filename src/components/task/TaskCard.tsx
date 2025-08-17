@@ -169,7 +169,7 @@ const TaskCard: React.FC<TaskCardProps> = memo(
           isPast(toDate(task.dueDate)) &&
           task.status !== 'completed',
       };
-    }, [task?.status, task?.dueDate]);
+    }, [task]);
 
     // Memoized date formatting
     const formattedDueDate = useMemo(() => {
@@ -181,13 +181,13 @@ const TaskCard: React.FC<TaskCardProps> = memo(
       const days = differenceInDays(date, new Date());
       if (days > 0 && days <= 7) return `${days}일 후`;
       return format(date, 'M월 d일', { locale: ko });
-    }, [task?.dueDate]);
+    }, [task]);
 
     // Memoized priority config
     const PriorityIcon = useMemo(() => {
       if (!task || !task.priority) return priorityConfig.low.icon;
       return (priorityConfig[task.priority] || priorityConfig.low).icon;
-    }, [task?.priority]);
+    }, [task]);
 
     // Memoized initials for avatar
     const assigneeInitials = useMemo(() => {

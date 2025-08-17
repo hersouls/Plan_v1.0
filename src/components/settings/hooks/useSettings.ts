@@ -380,7 +380,7 @@ export function useSettings(): UseSettingsReturn {
     } finally {
       setLoading(false);
     }
-  }, [currentUser?.uid, authContext.user]);
+  }, [currentUser, authContext.user]);
 
   // 외부에서 호출할 수 있는 loadSettings 함수
   const loadSettings = useCallback(async () => {
@@ -436,7 +436,7 @@ export function useSettings(): UseSettingsReturn {
     } finally {
       setSaving(false);
     }
-  }, [settings]); // settings에만 의존
+  }, [settings, currentUser?.uid]); // settings와 currentUser.uid에 의존
 
   // 아바타 업로드
   const uploadAvatar = useCallback(
