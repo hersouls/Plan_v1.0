@@ -82,12 +82,10 @@ export async function uploadAvatarImage(
 
   // 이미지 최적화 (파일 용량 제한 없음)
   let optimizedFile = file;
-  const originalSizeMB = getFileSizeInMB(file);
 
   try {
     optimizedFile = await optimizeAvatarImage(file);
-    const optimizedSizeMB = getFileSizeInMB(optimizedFile);
-  } catch (error) {
+  } catch (_error) {
     throw new Error('이미지 처리에 실패했습니다.');
   }
 
@@ -153,7 +151,7 @@ export async function deleteAvatarImage(
  * 아바타 업로드 에러 메시지 변환
  */
 function getAvatarUploadErrorMessage(_error: unknown): string {
-  const error = _error as any;
+  const error = _error as Error;
   if (error.code === 'storage/unauthorized') {
     return '아바타 업로드 권한이 없습니다.';
   } else if (error.code === 'storage/canceled') {
@@ -223,7 +221,7 @@ export class StorageService {
       // 토큰 갱신 시도
       try {
         await currentUser.getIdToken(true);
-        } catch (tokenError) {
+        } catch (_tokenError) {
         throw new Error('인증 토큰이 만료되었습니다. 다시 로그인해주세요.');
       }
 
@@ -295,7 +293,7 @@ export class StorageService {
               storageUrl: filePath,
               downloadUrl: downloadURL,
               uploadedBy: currentUser?.uid || 'unknown-user',
-              uploadedAt: new Date() as any, // Timestamp로 교체 필요
+              uploadedAt: new Date() as unknown as Timestamp, // Timestamp로 교체 필요
               thumbnailUrl: thumbnailURL,
               isImage: this.isImage(file.type),
               width,
@@ -342,7 +340,7 @@ export class StorageService {
         storageUrl: filePath,
         downloadUrl: downloadURL,
         uploadedBy: currentUser?.uid || 'unknown-user',
-        uploadedAt: new Date() as any, // Timestamp로 교체 필요
+        uploadedAt: new Date() as unknown as Timestamp, // Timestamp로 교체 필요
         thumbnailUrl: thumbnailURL,
         isImage: this.isImage(file.type),
         width,
@@ -362,7 +360,10 @@ export class StorageService {
    */
   static async downloadFile(fileAttachment: FileAttachment): Promise<Blob> {
     try {
-      const response = await fetch(fileAttachment.downloadUrl!);
+      if (!fileAttachment.downloadUrl) {
+        throw new Error('다운로드 URL이 없습니다.');
+      }
+      const response = await fetch(fileAttachment.downloadUrl);
       if (!response.ok) {
         throw new Error('파일 다운로드에 실패했습니다.');
       }
@@ -438,7 +439,7 @@ export class StorageService {
         this.deleteFolder(prefix)
       );
       await Promise.all(folderPromises);
-    } catch (error) {
+    } catch (_error) {
         // Handle error silently
       }
   }
@@ -475,7 +476,7 @@ export class StorageService {
   /**
    * 에러 메시지 변환
    */
-  private static getErrorMessage(error: any): string {
+  private static getErrorMessage(error: unknown): string {
     // CORS 오류 처리
     if (error.message && error.message.includes('CORS')) {
       return '브라우저 보안 정책으로 인해 파일 업로드가 차단되었습니다. 개발자에게 문의해주세요.';

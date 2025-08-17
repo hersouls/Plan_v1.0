@@ -90,7 +90,9 @@ function PointsManagement() {
   // 모달 상태 디버깅
   useEffect(() => {
     // 모달 상태 변경 시 로그 출력 (디버깅용)
-    console.log('Point settings modal state:', showPointSettingsModal);
+    if (import.meta.env?.DEV) {
+      console.log('Point settings modal state:', showPointSettingsModal);
+    }
   }, [showPointSettingsModal]);
 
   // 즐겨찾기 그룹 로드
@@ -334,19 +336,9 @@ function PointsManagement() {
   const renderAvatar = (
     memberId: string,
     displayName: string,
-    size: 'sm' | 'md' | 'lg' = 'md'
+    _size: 'sm' | 'md' | 'lg' = 'md'
   ) => {
     const avatarUrl = getAvatarUrl(memberId);
-    const sizeClasses = {
-      sm: 'w-8 h-8 sm:w-10 sm:h-10',
-      md: 'w-10 h-10 sm:w-12 sm:h-12',
-      lg: 'w-12 h-12 sm:w-16 sm:h-16',
-    };
-    const textSizes = {
-      sm: 'text-sm sm:text-base',
-      md: 'text-base sm:text-lg',
-      lg: 'text-lg sm:text-xl',
-    };
 
     if (avatarUrl && avatarUrl !== null) {
       return (
@@ -393,7 +385,7 @@ function PointsManagement() {
       loadApprovedPointHistory();
       loadMemberStats();
     }
-  }, [selectedGroupId, selectedMember]);
+  }, [selectedGroupId, selectedMember, loadApprovedPointHistory, loadMemberStats, loadUnapprovedPointHistory]);
 
   // 포인트 수동 추가/차감
   const handleAddPoints = async (amount: number, reason: string) => {
@@ -420,9 +412,11 @@ function PointsManagement() {
       await loadUnapprovedPointHistory();
       await loadApprovedPointHistory();
       setShowAddPointsModal(false);
-    } catch (error) {
+    } catch (_error) {
         // Handle error silently
-        console.error('Error adding points:', error);
+        if (import.meta.env?.DEV) {
+          console.error('Error adding points:', _error);
+        }
     }
   };
 
@@ -452,9 +446,11 @@ function PointsManagement() {
       await loadUnapprovedPointHistory();
       await loadApprovedPointHistory();
       setShowAddPointsModal(false);
-    } catch (error) {
+    } catch (_error) {
         // Handle error silently
-        console.error('Error deducting points:', error);
+        if (import.meta.env?.DEV) {
+          console.error('Error deducting points:', _error);
+        }
     }
   };
 
@@ -929,14 +925,14 @@ function PointsManagement() {
                               role="listitem"
                               onClick={
                                 history.taskId
-                                  ? () => handleTaskCardClick(history.taskId!)
+                                  ? () => handleTaskCardClick(history.taskId)
                                   : undefined
                               }
                               onKeyDown={
                                 history.taskId
                                   ? e => {
                                       if (e.key === 'Enter') {
-                                        handleTaskCardClick(history.taskId!);
+                                        handleTaskCardClick(history.taskId);
                                       }
                                     }
                                   : undefined

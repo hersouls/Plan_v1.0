@@ -60,7 +60,7 @@ export class NotificationService {
         ...doc.data(),
       })) as Notification[];
     } catch (_error: unknown) {
-      const error = _error as any;
+      const error = _error as Error;
       // 인덱스 빌드 중 오류인 경우 기본 쿼리로 재시도
       if (
         error.code === 'failed-precondition' &&
@@ -93,7 +93,7 @@ export class NotificationService {
           }
 
           return notifications;
-        } catch (fallbackError) {
+        } catch (_fallbackError) {
           throw new Error(
             '알림 목록을 가져올 수 없습니다. 잠시 후 다시 시도해주세요.'
           );
@@ -138,7 +138,7 @@ export class NotificationService {
         callback(notifications);
       },
       (_error: unknown) => {
-        const error = _error as any;
+        const error = _error as Error;
         // 인덱스 빌드 중 오류인 경우 기본 쿼리로 재시도
         if (
           error.code === 'failed-precondition' &&
@@ -167,7 +167,7 @@ export class NotificationService {
 
               callback(notifications);
             },
-            fallbackError => {
+            _fallbackError => {
               callback([]); // 빈 배열 반환
             }
           );
@@ -192,7 +192,7 @@ export class NotificationService {
         createdAt: Timestamp.now(),
       });
       return docRef.id;
-    } catch (error) {
+    } catch (_error) {
       throw new Error('알림을 생성할 수 없습니다.');
     }
   }
@@ -206,7 +206,7 @@ export class NotificationService {
         status: 'read',
         readAt: Timestamp.now(),
       });
-    } catch (error) {
+    } catch (_error) {
       throw new Error('알림을 읽음 처리할 수 없습니다.');
     }
   }
@@ -230,7 +230,7 @@ export class NotificationService {
       });
 
       await batch.commit();
-    } catch (error) {
+    } catch (_error) {
       throw new Error('알림을 읽음 처리할 수 없습니다.');
     }
   }
@@ -241,7 +241,7 @@ export class NotificationService {
   static async deleteNotification(notificationId: string): Promise<void> {
     try {
       await deleteDoc(doc(db, this.COLLECTION, notificationId));
-    } catch (error) {
+    } catch (_error) {
       throw new Error('알림을 삭제할 수 없습니다.');
     }
   }
@@ -270,7 +270,7 @@ export class NotificationService {
       };
 
       return stats;
-    } catch (error) {
+    } catch (_error) {
       throw new Error('알림 통계를 가져올 수 없습니다.');
     }
   }
@@ -290,7 +290,7 @@ export class NotificationService {
       }
 
       return null;
-    } catch (error) {
+    } catch (_error) {
       throw new Error('알림 설정을 가져올 수 없습니다.');
     }
   }
@@ -304,9 +304,9 @@ export class NotificationService {
     try {
       await updateDoc(
         doc(db, this.SETTINGS_COLLECTION, settings.userId),
-        settings as any
+        settings as Record<string, unknown>
       );
-    } catch (error) {
+    } catch (_error) {
       throw new Error('알림 설정을 저장할 수 없습니다.');
     }
   }
@@ -334,9 +334,9 @@ export class NotificationService {
 
       await updateDoc(
         doc(db, this.SETTINGS_COLLECTION, userId),
-        defaultSettings as any
+        defaultSettings as Record<string, unknown>
       );
-    } catch (error) {
+    } catch (_error) {
       throw new Error('기본 알림 설정을 생성할 수 없습니다.');
     }
   }

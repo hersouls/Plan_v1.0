@@ -47,9 +47,9 @@ export interface UpdateCommentInput {
 export interface CommentUpdateData {
   content?: string;
   reactions?: Record<string, string[]>;
-  updatedAt: any; // FieldValue | Timestamp
+  updatedAt: unknown; // FieldValue | Timestamp
   isEdited?: boolean;
-  editedAt?: any; // FieldValue | Timestamp
+  editedAt?: unknown; // FieldValue | Timestamp
 }
 
 export interface UseCommentsOptions {
@@ -158,6 +158,7 @@ export const useComments = ({ taskId, realtime = true }: UseCommentsOptions): Us
 
     try {
       const commentRef = doc(db, 'comments', commentId);
+      const updateData = {
         ...updates,
         updatedAt: serverTimestamp(),
       };
@@ -167,7 +168,7 @@ export const useComments = ({ taskId, realtime = true }: UseCommentsOptions): Us
         updateData.editedAt = serverTimestamp();
       }
 
-      await updateDoc(commentRef, updateData as any);
+      await updateDoc(commentRef, updateData as Record<string, unknown>);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (_err) {
       throw new Error('댓글 수정 중 오류가 발생했습니다.');
