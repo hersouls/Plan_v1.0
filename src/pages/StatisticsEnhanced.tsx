@@ -108,7 +108,7 @@ function StatisticsEnhanced() {
           }
         }
         setPointStats(stats);
-      } catch (error) {
+      } catch (_error) {
         // Handle error silently
       } finally {
         setLoadingPoints(false);

@@ -60,7 +60,7 @@ export class NavigationCallback {
     if (returnQuery) {
       try {
         state.returnQuery = JSON.parse(returnQuery);
-      } catch (error) {
+      } catch (_error) {
         // Handle error silently
       }
     }
@@ -76,7 +76,7 @@ export class NavigationCallback {
     if (contextData) {
       try {
         state.contextData = JSON.parse(contextData);
-      } catch (error) {
+      } catch (_error) {
         // Handle error silently
       }
     }

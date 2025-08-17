@@ -16,7 +16,7 @@ export const trackEvent = async (eventName: string, parameters?: Record<string, 
     if (false) {
         // Empty block
       }
-  } catch (error) {
+  } catch (_error) {
         // Handle error silently
       }
 };

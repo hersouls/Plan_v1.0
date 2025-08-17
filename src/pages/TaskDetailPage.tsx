@@ -235,7 +235,7 @@ function TaskDetailPage() {
       } else {
         await updateTask(task.id, { status: newStatus });
       }
-    } catch (error) {
+    } catch (_error) {
       alert('상태 변경에 실패했습니다.');
       } finally {
       setActionLoading(null);
@@ -251,7 +251,7 @@ function TaskDetailPage() {
     try {
       await deleteTask(task.id);
       navigate('/');
-    } catch (error) {
+    } catch (_error) {
       alert('할일 삭제에 실패했습니다.');
       } finally {
       setActionLoading(null);
@@ -283,14 +283,14 @@ function TaskDetailPage() {
   // 그룹 멤버 정보 가져오기
   const getGroupMemberInfo = (memberId: string) => {
     const member = groupMembers?.find((_m: unknown) => {
-      const m = _m as any;
+      const m = _m as Record<string, unknown>;
       return m.userId === memberId;
     });
     return member
       ? {
-          name: (member as any).userName || '알 수 없음',
-          role: (member as any).role,
-          avatar: (member as any).userAvatar,
+          name: (member as Record<string, unknown>).userName || '알 수 없음',
+          role: (member as Record<string, unknown>).role,
+          avatar: (member as Record<string, unknown>).userAvatar,
         }
       : null;
   };
@@ -605,7 +605,7 @@ function TaskDetailPage() {
                                 {groupMembers
                                   .slice(0, 3)
                                   .map((_member: unknown, _index: number) => {
-                                    const member = _member as any;
+                                    const member = _member as Record<string, unknown>;
                                     return (
                                       <div
                                         key={member.userId}

@@ -19,6 +19,7 @@ import {
   getUpcomingTasks as getUpcomingTasksUtil, 
   getOverdueTasks as getOverdueTasksUtil, 
   getTasksByStatus as getTasksByStatusUtil 
+} from '../utils/taskUtils';
 
 // Helper function to calculate stats
 const calculateStats = (tasks: Task[]): TaskStats => {

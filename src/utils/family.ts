@@ -40,7 +40,7 @@ export const formatRelativeTime = (
       addSuffix,
       locale: ko,
     });
-  } catch (error) {
+  } catch (_error) {
     return '날짜 정보 없음';
   }
 };
@@ -62,7 +62,7 @@ export const formatDateTime = (
     }
 
     return format(dateObj, formatString);
-  } catch (error) {
+  } catch (_error) {
     return '날짜 정보 없음';
   }
 };
@@ -95,7 +95,7 @@ export const isWithinTimeRange = (
       default:
         return false;
     }
-  } catch (error) {
+  } catch (_error) {
     return false;
   }
 };
@@ -474,11 +474,11 @@ export const calculateEngagementScore = (
 export const validateFamilyMember = (member: unknown): member is FamilyMember => {
   return (
     member &&
-    typeof (member as any).id === 'string' &&
-    typeof (member as any).userId === 'string' &&
-    typeof (member as any).name === 'string' &&
-    (member as any).stats &&
-    typeof (member as any).stats.completedTasks === 'number'
+    typeof (member as Record<string, unknown>).id === 'string' &&
+    typeof (member as Record<string, unknown>).userId === 'string' &&
+    typeof (member as Record<string, unknown>).name === 'string' &&
+    (member as Record<string, unknown>).stats &&
+    typeof (member as Record<string, unknown>).stats.completedTasks === 'number'
   );
 };
 
@@ -486,10 +486,10 @@ export const validateFamilyActivity = (
   activity: unknown): activity is FamilyActivity => {
   return (
     activity &&
-    typeof (activity as any).id === 'string' &&
-    typeof (activity as any).userId === 'string' &&
-    typeof (activity as any).type === 'string' &&
-    (activity as any).timestamp
+    typeof (activity as Record<string, unknown>).id === 'string' &&
+    typeof (activity as Record<string, unknown>).userId === 'string' &&
+    typeof (activity as Record<string, unknown>).type === 'string' &&
+    (activity as Record<string, unknown>).timestamp
   );
 };
 

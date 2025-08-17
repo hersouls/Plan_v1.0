@@ -263,7 +263,7 @@ const TaskCard: React.FC<TaskCardProps> = memo(
         if (navigator.share) {
           try {
             await navigator.share(shareData);
-          } catch (error) {
+          } catch (_error) {
             if ((error as Error).name !== 'AbortError') {
               // 공유 실패 시 클립보드에 복사
               navigator.clipboard.writeText(taskUrl);
@@ -318,7 +318,7 @@ const TaskCard: React.FC<TaskCardProps> = memo(
         if (navigator.share) {
           try {
             await navigator.share(shareData);
-          } catch (error) {
+          } catch (_error) {
             if ((error as Error).name !== 'AbortError') {
               handleCopyLink(e);
             }

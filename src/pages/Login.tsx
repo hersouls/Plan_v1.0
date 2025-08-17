@@ -40,7 +40,7 @@ function Login() {
         '비밀번호 재설정 링크를 이메일로 발송했습니다. 이메일을 확인해주세요.'
       );
     } catch (_err: unknown) {
-      const err = _err as any;
+      const err = _err as Record<string, unknown>;
       let errorMessage = '비밀번호 재설정에 실패했습니다.';
 
       if (err.code === 'auth/user-not-found') {
@@ -97,7 +97,7 @@ function Login() {
       }
       navigate('/');
     } catch (_err: unknown) {
-      const err = _err as any;
+      const err = _err as Record<string, unknown>;
       // Firebase 에러 메시지 한국어 변환
       let errorMessage = err.message || '오류가 발생했습니다.';
 
@@ -129,7 +129,7 @@ function Login() {
       await signInWithGoogle();
       navigate('/');
     } catch (_err: unknown) {
-      const err = _err as any;
+      const err = _err as Record<string, unknown>;
       setError(err.message || 'Google 로그인에 실패했습니다.');
     } finally {
       setIsGoogleLoading(false);
@@ -144,7 +144,7 @@ function Login() {
       await signInAnonymously();
       navigate('/');
     } catch (_err: unknown) {
-      const err = _err as any;
+      const err = _err as Record<string, unknown>;
       setError(err.message || '익명 로그인에 실패했습니다.');
     } finally {
       setIsLoading(false);
