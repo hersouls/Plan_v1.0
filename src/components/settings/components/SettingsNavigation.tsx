@@ -41,7 +41,7 @@ export const SettingsNavigation: React.FC<SettingsNavigationProps> = ({
               }
             `}
           >
-            <tab.icon size={16} />
+            <tab.icon />
             <span className="hidden sm:inline">{tab.label}</span>
           </button>
         ))}
@@ -83,7 +83,6 @@ export const SettingsNavigation: React.FC<SettingsNavigationProps> = ({
                   )}
                 >
                   <Icon
-                    size={20}
                     className={cn(
                       activeTab === tab.id ? 'text-white' : 'text-slate-700'
                     )}

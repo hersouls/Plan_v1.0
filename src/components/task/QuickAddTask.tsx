@@ -62,7 +62,6 @@ interface QuickAddTaskProps {
     taskType?: 'personal' | 'group';
     groupId?: string;
   }) => void;
-  onTaskCreate?: (task: Omit<Task, 'userId' | 'groupId'>) => Promise<void>;
   defaultAssigneeId?: string;
   groupMembers?: Array<{ id: string; name: string; avatar?: string }>;
   groups?: Array<{ id: string; name: string }>;

@@ -436,8 +436,6 @@ export function useSettings(): UseSettingsReturn {
     } finally {
       setSaving(false);
     }
-  }, [settings, currentUser?.uid]); // settings와 currentUser?.uid에 의존
-
   // 아바타 업로드
   const uploadAvatar = useCallback(
     async (
