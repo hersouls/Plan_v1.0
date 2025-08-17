@@ -10,7 +10,6 @@ interface ProjectData {
   name: string;
   url: string;
   description: string;
-  icon: React.ComponentType<{ size?: number; className?: string }> | React.ForwardRefExoticComponent<any>;
   color: string;
   longDescription: string;
   features: string[];
