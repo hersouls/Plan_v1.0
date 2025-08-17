@@ -2,7 +2,6 @@
 
 // Main Components
 export { SettingsContainer } from './SettingsContainer';
-export { SettingsModal } from './SettingsModal';
 
 // Hooks
 export { useSettings } from './hooks/useSettings';
@@ -17,7 +16,6 @@ export type {
   SettingsAction,
   SettingsContainerProps,
   SettingsGroupProps,
-  SettingsModalProps,
   SettingsSectionProps,
   SettingsState,
   SettingsTab,
@@ -43,4 +41,3 @@ export {
 
 // Backward Compatibility Aliases
 export { SettingsContainer as Settings } from './SettingsContainer';
-export { SettingsModal as SettingsModalComponent } from './SettingsModal';
