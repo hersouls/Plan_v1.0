@@ -1,7 +1,9 @@
 // Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
+import type { Messaging } from "firebase/messaging";
 // Analytics, Performance, and Messaging will be loaded dynamically to reduce bundle size
 
 // 환경 변수에서 Firebase 설정 가져오기
@@ -57,7 +59,7 @@ const firebaseConfig = getFirebaseConfig();
 // 설정 유효성 검사 (사용하지 않음)
 
 // Initialize Firebase
-let app;
+const app = initializeApp(firebaseConfig);
 
 // Initialize Firebase services
 export const auth = getAuth(app);
@@ -72,7 +74,7 @@ export const isAuthInitialized = () => {
 // Analytics, Performance, Messaging 초기화 (브라우저 환경에서만) - Dynamic Loading
 export let analytics: unknown | null = null;
 export let performance: unknown | null = null;
-export let messaging: unknown | null = null;
+export let messaging: Messaging | null = null;
 
 // Analytics 활성화 체크
 const shouldEnableAnalytics = import.meta.env.VITE_ENABLE_ANALYTICS === 'true' && 

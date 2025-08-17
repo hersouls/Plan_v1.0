@@ -313,24 +313,24 @@ export class BackupService {
 
       // Restore groups
       if (backupData.data.groups) {
-        for (const group of backupData.data.groups as any[]) {
-          const groupRef = doc(db, 'groups', group.id);
+        for (const group of backupData.data.groups as Record<string, unknown>[]) {
+          const groupRef = doc(db, 'groups', group.id as string);
           batch.set(groupRef, group);
         }
       }
 
       // Restore tasks
       if (backupData.data.tasks) {
-        for (const task of backupData.data.tasks as any[]) {
-          const taskRef = doc(db, 'tasks', task.id);
+        for (const task of backupData.data.tasks as Record<string, unknown>[]) {
+          const taskRef = doc(db, 'tasks', task.id as string);
           batch.set(taskRef, task);
         }
       }
 
       // Restore activities
       if (backupData.data.activities) {
-        for (const activity of backupData.data.activities as any[]) {
-          const activityRef = doc(db, 'activities', activity.id);
+        for (const activity of backupData.data.activities as Record<string, unknown>[]) {
+          const activityRef = doc(db, 'activities', activity.id as string);
           batch.set(activityRef, activity);
         }
       }
