@@ -37,7 +37,7 @@ export function DataSection({
 
   useEffect(() => {
     try {
-      setSignOut(() => () => authContext.signOut());
+      setSignOut(() => authContext.signOut);
     } catch (error) {
       console.error('Error accessing auth context in DataSection:', error);
       // Auth context가 없어도 기본적으로 작동

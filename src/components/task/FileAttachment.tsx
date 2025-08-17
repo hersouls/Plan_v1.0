@@ -324,7 +324,7 @@ export function AttachmentSection({
             type="file"
             accept="image/*"
             capture="environment"
-            onChange={(e) => handleFileUpload(e.target.files, 'camera')}
+            onChange={(e) => handleFileUpload(e.target.files)}
             className="hidden"
           />
           <input
@@ -332,14 +332,14 @@ export function AttachmentSection({
             type="file"
             accept="image/*"
             multiple
-            onChange={(e) => handleFileUpload(e.target.files, 'gallery')}
+            onChange={(e) => handleFileUpload(e.target.files)}
             className="hidden"
           />
           <input
             ref={fileInputRef}
             type="file"
             multiple
-            onChange={(e) => handleFileUpload(e.target.files, 'file')}
+            onChange={(e) => handleFileUpload(e.target.files)}
             className="hidden"
           />
         </div>
