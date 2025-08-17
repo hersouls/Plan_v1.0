@@ -29,7 +29,7 @@ export function DataSection({
     'idle' | 'running' | 'completed' | 'error'
   >('idle');
   const [backupMessage, setBackupMessage] = useState('');
-  const [backupList, setBackupList] = useState<any[]>([]);
+  const [backupList, setBackupList] = useState<Array<{ path: string; timestamp: number; size: number }>>([]);
   const [loadingBackups, setLoadingBackups] = useState(false);
 
   // AuthContext 접근을 안전하게 처리
@@ -38,7 +38,7 @@ export function DataSection({
   useEffect(() => {
     try {
       setSignOut(() => authContext.signOut);
-    } catch (error) {
+    } catch {
       // Auth context가 없어도 기본적으로 작동
     }
   }, [authContext.signOut]);
@@ -81,7 +81,7 @@ export function DataSection({
       document.body.removeChild(a);
 
       URL.revokeObjectURL(url);
-    } catch (error) {
+    } catch {
       alert('데이터 내보내기에 실패했습니다.');
     } finally {
       setExporting(false);
@@ -105,7 +105,7 @@ export function DataSection({
       // 데이터 복원
       onUpdate({ type: 'LOAD_SETTINGS', payload: data });
       alert('데이터를 성공적으로 가져왔습니다.');
-    } catch (error) {
+    } catch {
       alert('데이터 가져오기에 실패했습니다. 파일 형식을 확인해주세요.');
     } finally {
       setImporting(false);
@@ -134,7 +134,7 @@ export function DataSection({
           onUpdate({ type: 'RESET_TO_DEFAULTS' });
 
           alert('모든 데이터가 삭제되었습니다.');
-        } catch (error) {
+        } catch {
           alert('데이터 삭제에 실패했습니다.');
         }
       }
@@ -146,7 +146,7 @@ export function DataSection({
     if (confirmed && signOut) {
       try {
         await signOut();
-      } catch (error) {
+      } catch {
         alert('로그아웃에 실패했습니다.');
       }
     }
@@ -222,7 +222,7 @@ export function DataSection({
         setBackupStatus('idle');
         setBackupMessage('');
       }, 3000);
-    } catch (error) {
+    } catch {
       setBackupStatus('error');
       setBackupMessage('백업 생성에 실패했습니다.');
 
@@ -241,7 +241,7 @@ export function DataSection({
       const backupService = new BackupService(authContext.user.uid);
       const backups = await backupService.getBackupList();
       setBackupList(backups);
-    } catch (error) {
+    } catch {
         // Handle error silently
       } finally {
       setLoadingBackups(false);
@@ -277,7 +277,7 @@ export function DataSection({
         setBackupStatus('idle');
         setBackupMessage('');
       }, 3000);
-    } catch (error) {
+    } catch {
       setBackupStatus('error');
       setBackupMessage('데이터 복원에 실패했습니다.');
 
@@ -302,7 +302,7 @@ export function DataSection({
       // 백업 목록 새로고침
       loadBackupList();
       alert('백업이 삭제되었습니다.');
-    } catch (error) {
+    } catch {
       alert('백업 삭제에 실패했습니다.');
     }
   };

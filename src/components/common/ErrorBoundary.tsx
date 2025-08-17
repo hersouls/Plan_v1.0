@@ -6,7 +6,10 @@ import { Component, ErrorInfo, ReactNode } from 'react';
 // Add type declaration for import.meta
 declare global {
   interface ImportMeta {
-    env: ImportMetaEnv;
+    env: {
+      DEV: boolean;
+      [key: string]: any;
+    };
   }
 }
 
