@@ -49,37 +49,6 @@ export const useOffline = (): UseOfflineReturn => {
     localStorage.setItem(OFFLINE_QUEUE_KEY, JSON.stringify(pendingActions));
   }, [pendingActions]);
 
-  const executeAction = useCallback(async (action: OfflineAction): Promise<void> => {
-    const { collection: collectionName, type, docId, data } = action;
-    
-    // Import Firestore functions dynamically to avoid circular dependencies
-    const { 
-      collection, 
-      addDoc, 
-      updateDoc, 
-      deleteDoc, 
-      doc 
-    } = await import('firebase/firestore');
-
-    switch (type) {
-      case 'create':
-        await addDoc(collection(db, collectionName), data as Record<string, any>);
-        break;
-      
-      case 'update':
-        if (!docId) throw new Error('Document ID required for update');
-        await updateDoc(doc(db, collectionName, docId), data as Record<string, any>);
-        break;
-      
-      case 'delete':
-        if (!docId) throw new Error('Document ID required for delete');
-        await deleteDoc(doc(db, collectionName, docId));
-        break;
-      
-      default:
-        throw new Error(`Unknown action type: ${type}`);
-    }
-  }, []);
 
   const syncPendingActions = useCallback(async (): Promise<void> => {
     if (!isOnline || pendingActions.length === 0) return;
@@ -116,10 +85,6 @@ export const useOffline = (): UseOfflineReturn => {
       timestamp: Date.now(),
       retry: 0,
     };
-
-    setPendingActions(prev => [...prev, offlineAction]);
-  }, []);
-
   const clearPendingActions = useCallback(() => {
     setPendingActions([]);
     localStorage.removeItem(OFFLINE_QUEUE_KEY);
