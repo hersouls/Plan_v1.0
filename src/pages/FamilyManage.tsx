@@ -135,7 +135,7 @@ function FamilyManage() {
     if (savedFavorites) {
       try {
         setFavoriteGroups(JSON.parse(savedFavorites));
-      } catch (error) {
+      } catch {
         setFavoriteGroups([]);
       }
     }
@@ -353,7 +353,7 @@ function FamilyManage() {
             }
         } else {
           }
-      } catch (error) {
+      } catch {
         // Handle error silently
       }
 
@@ -409,7 +409,7 @@ function FamilyManage() {
       }
 
       return { isOnline: false, lastLoginTime: null };
-    } catch (error) {
+    } catch {
       return { isOnline: false, lastLoginTime: null };
     }
   };
@@ -462,7 +462,7 @@ function FamilyManage() {
       }
 
       return { isOnline: false, lastLoginTime: null };
-    } catch (error) {
+    } catch {
       return { isOnline: false, lastLoginTime: null };
     }
   };
@@ -562,7 +562,7 @@ function FamilyManage() {
         await navigator.clipboard.writeText(newCode);
         alert('새 초대 코드가 생성되고 복사되었습니다!');
       }
-    } catch (error) {
+    } catch {
       alert('초대 코드 복사에 실패했습니다.');
     }
   };
@@ -590,13 +590,13 @@ function FamilyManage() {
       alert('가족 그룹에 성공적으로 참여했습니다!');
     } catch (error) {
       const errorMessage =
-        _error instanceof Error ? _error.message : '그룹 참여에 실패했습니다.';
+        error instanceof Error ? error.message : '그룹 참여에 실패했습니다.';
       alert(errorMessage);
     }
   };
 
-  const handleQRScanError = (_error: string) => {
-    alert(_error);
+  const handleQRScanError = (error: string) => {
+    alert(error);
     setShowQRScannerModal(false);
   };
 
@@ -642,7 +642,7 @@ function FamilyManage() {
           await removeMember(selectedGroupId, memberId);
           alert('멤버가 제거되었습니다.');
         }
-      } catch (error) {
+      } catch {
         alert('멤버 제거에 실패했습니다.');
       }
     }
@@ -681,7 +681,7 @@ function FamilyManage() {
           await changeMemberRole(selectedGroupId, memberId, newRole);
           alert(`멤버 역할이 ${roleLabels[newRole]}로 변경되었습니다.`);
         }
-      } catch (error) {
+      } catch {
         alert('멤버 역할 변경에 실패했습니다.');
       }
     }
@@ -716,7 +716,7 @@ function FamilyManage() {
           }
           alert('그룹장 권한이 양도되었습니다.');
         }
-      } catch (error) {
+      } catch {
         alert('그룹장 권한 양도에 실패했습니다.');
       }
     }
@@ -734,7 +734,7 @@ function FamilyManage() {
           setSelectedGroupId(null);
           alert('그룹이 삭제되었습니다.');
         }
-      } catch (error) {
+      } catch {
         alert('그룹 삭제에 실패했습니다.');
       }
     }
@@ -759,7 +759,7 @@ function FamilyManage() {
         alert(`${inviteEmail}에게 초대장을 보냈습니다.`);
         setInviteEmail('');
         setShowInviteModal(false);
-      } catch (error) {
+      } catch {
         alert('초대장 발송에 실패했습니다.');
       }
     }
@@ -798,7 +798,7 @@ function FamilyManage() {
       if (selectedGroupId) {
         await refetchGroups();
       }
-    } catch (error) {
+    } catch {
       alert('멤버 정보 업데이트에 실패했습니다.');
     }
   };
@@ -810,7 +810,7 @@ function FamilyManage() {
         alert('그룹 정보가 업데이트되었습니다.');
         setShowEditGroupModal(false);
       }
-    } catch (error) {
+    } catch {
       alert('그룹 업데이트에 실패했습니다.');
     }
   };
@@ -824,7 +824,7 @@ function FamilyManage() {
         alert('그룹 설정이 업데이트되었습니다.');
         setShowSettingsModal(false);
       }
-    } catch (error) {
+    } catch {
       alert('설정 업데이트에 실패했습니다.');
     }
   };

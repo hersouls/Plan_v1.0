@@ -9,7 +9,7 @@ import {
 } from 'lucide-react';
 import { Typography } from '../components/ui/typography-utils';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+
 import { LoadingSpinner } from '../components/common/LoadingSpinner';
 import { WaveBackground } from '../components/layout/WaveBackground';
 import { GlassCard } from '../components/ui/GlassCard';
@@ -47,7 +47,7 @@ function Notifications() {
         
         setNotifications(notificationsData);
         setStats(statsData);
-      } catch (err) {
+      } catch {
         setError('알림을 불러올 수 없습니다.');
       } finally {
         setLoading(false);
@@ -75,7 +75,7 @@ function Notifications() {
             : n
         )
       );
-    } catch (error) {
+    } catch {
         // Handle error silently
       }
   };
@@ -89,7 +89,7 @@ function Notifications() {
       setNotifications(prev => 
         prev.map(n => ({ ...n, status: 'read' as const, readAt: new Date() }))
       );
-    } catch (error) {
+    } catch {
         // Handle error silently
       }
   };
@@ -101,7 +101,7 @@ function Notifications() {
     try {
       await NotificationService.deleteNotification(_notificationId);
       setNotifications(prev => prev.filter(n => n.id !== _notificationId));
-    } catch (error) {
+    } catch {
         // Handle error silently
       }
   };
