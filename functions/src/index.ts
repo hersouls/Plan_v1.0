@@ -2,6 +2,7 @@ import * as admin from 'firebase-admin';
 import {
   onDocumentCreated,
   onDocumentUpdated,
+  onDocumentDeleted,
 } from 'firebase-functions/v2/firestore';
 import { onSchedule } from 'firebase-functions/v2/scheduler';
 // import { onObjectFinalized, onObjectDeleted } from 'firebase-functions/v2/storage';
@@ -86,7 +87,6 @@ export const onCommentCreated = onDocumentCreated(
   'comments',
   async event => {
     const commentData = event.data?.data();
-    const commentId = event.params.commentId;
 
     if (!commentData) return;
 
@@ -126,7 +126,7 @@ export const onCommentCreated = onDocumentCreated(
 
 export const onCommentDeleted = onDocumentDeleted(
   'comments',
-  async event => {
+  async (event: any) => {
     const commentData = event.data?.data();
     
     if (!commentData) return;
@@ -415,7 +415,7 @@ async function sendCommentNotification(
       android: {
         notification: {
           channelId: isMentioned ? 'mentions' : 'comments',
-          priority: isMentioned ? 'high' : 'normal',
+          priority: isMentioned ? ('high' as const) : ('default' as const),
           sound: isMentioned ? 'default' : 'default',
         },
       },
