@@ -36,3 +36,4 @@ export interface DataContextType {
   // Loading states
   loading: boolean;
   error: string | null;
+}
