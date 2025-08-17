@@ -324,7 +324,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setError(null);
       await firebaseSignOut(auth);
       return { success: true };
-    } catch (_err) {
+    } catch (err) {
       const errorMessage =
         err instanceof Error ? err.message : '로그아웃에 실패했습니다.';
       setError(errorMessage);
@@ -362,7 +362,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setError(null);
       setLoading(true);
       await firebaseUpdatePassword(user, newPassword);
-    } catch (_err) {
+    } catch (err) {
       const errorMessage =
         err instanceof Error
           ? err.message
