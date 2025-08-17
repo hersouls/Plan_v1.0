@@ -380,7 +380,7 @@ export function useSettings(): UseSettingsReturn {
     } finally {
       setLoading(false);
     }
-  }, [currentUser?.uid, authContext.user, currentUser]);
+  }, [currentUser?.uid, authContext.user]);
 
   // 외부에서 호출할 수 있는 loadSettings 함수
   const loadSettings = useCallback(async () => {
@@ -601,7 +601,6 @@ export function useSettings(): UseSettingsReturn {
       isInitializedRef.current = true;
       loadSettingsInternal();
     }
-  }, [currentUser?.uid, loadSettingsInternal]); // Added loadSettingsInternal to dependencies
 
   // 1시간마다 자동 동기화 설정
   useEffect(() => {
