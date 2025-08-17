@@ -52,7 +52,7 @@ export function AITaskSuggestions({
       const fullPrompt = `${promptText}. ${familyContext}`;
       const newSuggestions = await generateTaskSuggestions(fullPrompt);
       setSuggestions(newSuggestions.slice(0, maxSuggestions));
-    } catch (_error) {
+    } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
       // Handle AI task suggestions error silently
       setSuggestions([]);
     } finally {
