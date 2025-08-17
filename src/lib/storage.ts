@@ -165,6 +165,8 @@ export async function deleteAvatarImage(
 /**
  * 아바타 업로드 에러 메시지 변환
  */
+function getAvatarUploadErrorMessage(error: StorageError): string {
+  const errorObj = error as FirebaseStorageError;
   
   if (errorObj.code === 'storage/unauthorized') {
     return '아바타 업로드 권한이 없습니다.';
@@ -379,7 +381,6 @@ export class StorageService {
       throw new Error('파일 다운로드 중 오류가 발생했습니다.');
     }
   }
-  }
 
   /**
    * 파일 삭제
@@ -387,7 +388,6 @@ export class StorageService {
   static async deleteFile(fileAttachment: FileAttachment): Promise<void> {
     const storageRef = ref(storage, fileAttachment.storageUrl);
     await deleteObject(storageRef);
-    }
   }
 
   /**
@@ -459,6 +459,8 @@ export class StorageService {
   /**
    * 에러 메시지 변환
    */
+  private static getErrorMessage(error: StorageError): string {
+    const errorObj = error as FirebaseStorageError;
     
     // CORS 오류 처리
     if (errorObj.message && errorObj.message.includes('CORS')) {

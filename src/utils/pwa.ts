@@ -132,6 +132,10 @@ export class PWAManager {
         navigator.serviceWorker.addEventListener('controllerchange', () => {
           // Handle controller change
         });
+      }
+    } catch {
+      // Handle error silently
+    }
   }
 
   getServiceWorkerStatus(): ServiceWorkerStatus {
