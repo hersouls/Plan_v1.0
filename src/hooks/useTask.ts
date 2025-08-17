@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { commentService, taskService } from '../lib/firestore';
 import { Task, TaskActivity, TaskComment } from '../types/task';
+import { useAuth } from '../hooks/useAuth';
 
 export interface UseTaskOptions {
   taskId: string;
@@ -29,9 +30,7 @@ export const useTask = (options: UseTaskOptions): UseTaskReturn => {
   const { user } = useAuth();
   const {
     taskId,
-    realtime = true,
     includeComments = true,
-    includeActivities = false,
   } = options;
 
   const [task, setTask] = useState<Task | null>(null);
@@ -226,7 +225,7 @@ export const useTask = (options: UseTaskOptions): UseTaskReturn => {
       if (includeComments) {
         commentsUnsubscribe = commentService.subscribeToTaskComments(
           taskId,
-          (commentList: unknown[]) => {
+          (commentList: TaskComment[]) => {
             setComments(commentList);
           },
           handleError

@@ -13,7 +13,7 @@ const srcDir = path.join(__dirname, '..', 'src');
 function processFile(filePath) {
   try {
     let content = fs.readFileSync(filePath, 'utf8');
-    let changes = 0;
+    const changes = 0;
     
     // Fix empty catch blocks
     const originalContent = content;

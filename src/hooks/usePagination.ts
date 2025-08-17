@@ -35,7 +35,7 @@ export function usePagination({
   totalItems,
   itemsPerPage,
   initialPage = 1
-}: UsePaginationOptions): UsePaginationReturn<any> {
+}: UsePaginationOptions): UsePaginationReturn<unknown> {
   const [currentPage, setCurrentPage] = useState(initialPage);
 
   // Calculate pagination values
