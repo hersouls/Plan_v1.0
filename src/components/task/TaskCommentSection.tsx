@@ -303,7 +303,7 @@ export const TaskCommentSection: React.FC<TaskCommentSectionProps> = ({
     } catch {
       setIsSubmitting(false);
     }
-  }, [commentText, user, taskId, replyToId, groupMembers]);
+  }, [commentText, user, taskId, replyToId, groupMembers, addComment]);
 
   const handleReply = useCallback((commentId: string) => {
     setReplyToId(commentId);

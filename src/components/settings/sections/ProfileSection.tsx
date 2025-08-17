@@ -233,7 +233,7 @@ export function ProfileSection({
     const isFieldEditing = editingField === fieldKey;
     const value = isFieldEditing ? (editData[fieldKey as keyof UserProfile] || '') : (settings.profile[fieldKey as keyof UserProfile] || '');
     const hasError = formErrors[fieldKey];
-    const IconComponent = icon;
+    const IconComponent = _icon as React.ComponentType<{ size: number; className: string }>;
 
     return (
       <div className="field-group">
