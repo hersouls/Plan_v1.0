@@ -293,7 +293,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
 
   // Mark notification as read
   const markNotificationAsRead = useCallback(
-    async (notificationId: string): Promise<void> => {
+    async (_notificationId: string): Promise<void> => {
       if (!user) throw new Error('User not authenticated');
 
       try {
@@ -330,7 +330,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
 
   // Delete notification
   const deleteNotification = useCallback(
-    async (notificationId: string): Promise<void> => {
+    async (_notificationId: string): Promise<void> => {
       if (!user) throw new Error('User not authenticated');
 
       try {
