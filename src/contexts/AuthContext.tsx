@@ -13,7 +13,7 @@ import {
 } from 'firebase/auth';
 import { serverTimestamp } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
-import { fcmService } from '../lib/fcm';
+
 import { auth } from '../lib/firebase';
 import { userService } from '../lib/firestore';
 import { ExtendedUser, AuthContextType } from '../types/auth';
@@ -145,7 +145,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                   if (isSubscribed) {
                     setUserProfile(profile);
                   }
-                } catch (error) {
+                } catch {
                   if (isSubscribed) {
                     setUserProfile(null);
                   }
@@ -161,7 +161,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                       }
                     }
                   );
-                } catch (error) {
+                } catch {
                   // Handle error silently
                 }
               } catch {
@@ -173,7 +173,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
               if (profileUnsubscribe) {
                 try {
                   profileUnsubscribe();
-                } catch (error) {
+                } catch {
                   // Handle error silently
                 }
                 profileUnsubscribe = null;
@@ -185,7 +185,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             }
           }
         );
-      } catch (error) {
+      } catch {
         if (isSubscribed) {
           setLoading(false);
         }
@@ -200,7 +200,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (authUnsubscribe) {
         try {
           authUnsubscribe();
-        } catch (error) {
+        } catch {
           // Handle error silently
         }
       }
@@ -208,7 +208,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (profileUnsubscribe) {
         try {
           profileUnsubscribe();
-        } catch (error) {
+        } catch {
           // Handle error silently
         }
       }

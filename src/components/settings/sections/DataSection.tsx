@@ -8,7 +8,7 @@ import {
   Trash2,
   Upload,
 } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useAuth } from '../../../hooks/useAuth';
 import { BackupScheduler, BackupService } from '../../../lib/backup';
 import { cn } from '../../../lib/utils';
@@ -30,13 +30,16 @@ export function DataSection({
   >('idle');
   const [backupMessage, setBackupMessage] = useState('');
   const [loadingBackups, setLoadingBackups] = useState(false);
+  const [backupList, setBackupList] = useState<Array<{ name: string; timestamp: number; frequency: string; path: string }>>([]);
 
   // AuthContext 접근을 안전하게 처리
   const authContext = useAuth();
 
   useEffect(() => {
     try {
-      setSignOut(() => () => authContext.signOut());
+      setSignOut(() => async () => {
+        await authContext.signOut();
+      });
     } catch {
       // Auth context가 없어도 기본적으로 작동
     }
@@ -467,7 +470,7 @@ export function DataSection({
           </div>
         ) : backupList.length > 0 ? (
           <div className="space-y-3">
-            {backupList.map((backup, index) => (
+            {backupList.map((backup: { name: string; timestamp: number; frequency: string; path: string }, index: number) => (
               <div
                 key={index}
                 className="flex items-center justify-between p-4 bg-white/10 backdrop-blur-sm rounded-xl border border-white/20 hover:bg-black/40 transition-all duration-200 hover:shadow-lg"

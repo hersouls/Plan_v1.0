@@ -73,7 +73,7 @@ export function NotificationSection({
       payload: {
         timing: {
           ...settings.notifications.timing,
-          [field]: value,
+          [field]: _value,
         },
       },
     });
@@ -85,7 +85,7 @@ export function NotificationSection({
       payload: {
         sound: {
           ...settings.notifications.sound,
-          [field]: value,
+          [field]: _value,
         },
       },
     });

@@ -635,4 +635,3 @@ export function TaskProvider({ children }: { children: React.ReactNode }) {
   );
 }
 
-export default TaskProvider;

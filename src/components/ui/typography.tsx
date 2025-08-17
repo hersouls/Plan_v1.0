@@ -250,8 +250,8 @@ export const Quote = ({
   </Component>
 );
 
-// Create a Typography namespace object
-export const Typography = {
+// Export individual components
+export {
   H1,
   H2,
   H3,
