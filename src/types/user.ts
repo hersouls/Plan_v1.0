@@ -25,6 +25,7 @@ export interface User {
   groupIds: string[];           // Groups user belongs to
   loginCount: number;
   lastLoginAt: Timestamp;
+  fcmTokens?: string[];         // FCM registration tokens for push notifications
   
   preferences: {
     theme: 'light' | 'dark' | 'system';

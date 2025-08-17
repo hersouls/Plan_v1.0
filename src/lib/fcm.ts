@@ -23,6 +23,16 @@ export interface NotificationPayload {
   data?: Record<string, unknown>;
 }
 
+// Extended NotificationOptions interface to include image property
+interface ExtendedNotificationOptions extends NotificationOptions {
+  image?: string;
+  actions?: Array<{
+    action: string;
+    title: string;
+    icon?: string;
+  }>;
+}
+
 class FCMService {
   private token: string | null = null;
   private isSupported: boolean = false;
@@ -88,7 +98,7 @@ class FCMService {
       const { userService } = await import('./firestore');
       await userService.createOrUpdateUserProfile(userId, {
         fcmTokens: [token], // Array to support multiple devices
-        lastTokenUpdate: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
       });
     } catch {
       // Handle error silently
@@ -120,7 +130,7 @@ class FCMService {
   private showNotification(notificationPayload: NotificationPayload) {
     if ('serviceWorker' in navigator && 'Notification' in window) {
       navigator.serviceWorker.ready.then(registration => {
-        registration.showNotification(notificationPayload.title, {
+        const options: ExtendedNotificationOptions = {
           body: notificationPayload.body,
           icon: notificationPayload.icon || '/Moonwave.png',
           badge: notificationPayload.badge || '/Moonwave.png',
@@ -131,7 +141,8 @@ class FCMService {
           data: notificationPayload.data,
           vibrate: [100, 50, 100],
           timestamp: Date.now(),
-        });
+        };
+        registration.showNotification(notificationPayload.title, options);
       });
     }
   }
