@@ -19,7 +19,6 @@ import {
   getUpcomingTasks as getUpcomingTasksUtil, 
   getOverdueTasks as getOverdueTasksUtil, 
   getTasksByStatus as getTasksByStatusUtil 
-} from '../utils/taskUtils';
 
 // Helper function to calculate stats
 const calculateStats = (tasks: Task[]): TaskStats => {
@@ -549,8 +548,7 @@ export function TaskProvider({ children }: { children: React.ReactNode }) {
     try {
       dispatch({ type: 'SET_LOADING', payload: true });
       // The subscription will automatically refresh the data
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (_error) {
+    } catch {
       dispatch({ type: 'SET_ERROR', payload: '할일 목록을 새로고침하는 중 오류가 발생했습니다.' });
     }
   };

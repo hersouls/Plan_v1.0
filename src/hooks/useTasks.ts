@@ -94,7 +94,7 @@ export const useTasks = (options: UseTasksOptions = {}): UseTasksReturn => {
       try {
         setError(null);
         return await taskService.createTask(taskData);
-      } catch (_err) {
+      } catch {
         const errorMessage = '할일 생성 중 오류가 발생했습니다.';
         setError(errorMessage);
         throw new Error(errorMessage);

@@ -2,8 +2,6 @@ export { AuthProvider } from './AuthContext';
 export { DataProvider } from './DataContext';
 export { AppProvider } from './AppContext';
 export { TaskProvider } from './TaskContext';
-
-// Re-export hooks from hooks folder
 export { useAuth } from '../hooks/useAuth';
 export { useApp } from '../hooks/useApp';
 export { useData } from '../hooks/useData';
