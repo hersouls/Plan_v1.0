@@ -86,7 +86,7 @@ export const TaskDetail: React.FC<TaskDetailProps> = ({
       a.click();
       window.URL.revokeObjectURL(url);
       document.body.removeChild(a);
-    } catch (error) {
+    } catch {
       alert('파일 다운로드에 실패했습니다.');
     }
   };

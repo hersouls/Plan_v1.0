@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { GlassCard } from '../ui/GlassCard';
 import { WaveButton } from '../ui/WaveButton';
-import { Typography } from '../ui/typography';
+import { H3, BodySmall } from '../ui/typography';
 
 interface ManualInviteModalProps {
   isOpen: boolean;

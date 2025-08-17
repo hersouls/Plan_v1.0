@@ -18,7 +18,7 @@ import { LoadingSpinner } from '../components/common/LoadingSpinner';
 import { WaveBackground } from '../components/layout/WaveBackground';
 import { StatisticsInsights } from '../components/statistics/StatisticsInsights';
 import { GlassCard } from '../components/ui/GlassCard';
-import { AvatarWrapper, getAvatarInitials } from '../components/ui/avatar';
+import { AvatarWrapper, getAvatarInitials } from '../components/ui/avatar-utils';
 import { Typography } from '../components/ui/typography';
 import { WaveButton } from '../components/ui/WaveButton';
 import { useAuth } from '../contexts/AuthContext';

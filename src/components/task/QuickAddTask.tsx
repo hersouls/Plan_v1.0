@@ -25,7 +25,7 @@ import {
   User,
   Users,
 } from 'lucide-react';
-import React, { KeyboardEvent, useEffect, useRef, useState } from 'react';
+import React, { KeyboardEvent, useEffect, useRef, useState, useCallback } from 'react';
 
 // Enhanced natural language parsing patterns
 const DATE_PATTERNS = {
@@ -198,13 +198,13 @@ const QuickAddTask: React.FC<QuickAddTaskProps> = ({
     const tagMatches = text.match(/#\S+/g);
     if (tagMatches) {
       tagMatches.forEach(tag => {
-        parsedTags.push(tag.substring(1));
+        const cleanTag = tag.substring(1).trim();
+        if (cleanTag && !parsedTags.includes(cleanTag)) {
+          parsedTags.push(cleanTag);
+        }
         parsedTitle = parsedTitle.replace(tag, '').trim();
       });
     }
-
-    // "까지" 제거
-    parsedTitle = parsedTitle.replace(/까지/g, '').trim();
 
     return {
       title: parsedTitle,
