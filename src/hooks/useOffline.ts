@@ -49,6 +49,65 @@ export const useOffline = (): UseOfflineReturn => {
     localStorage.setItem(OFFLINE_QUEUE_KEY, JSON.stringify(pendingActions));
   }, [pendingActions]);
 
+
+  const syncPendingActions = useCallback(async (): Promise<void> => {
+    if (!isOnline || pendingActions.length === 0) return;
+
+    for (const action of pendingActions) {
+      try {
+        // Attempt to execute the action
+        await executeAction(action);
+        
+        // Remove successful action from queue
+        setPendingActions(prev => prev.filter(a => a.id !== action.id));
+        
+      } catch {
+        // Increment retry count
+        const updatedAction = { ...action, retry: action.retry + 1 };
+        
+        if (updatedAction.retry >= MAX_RETRY_ATTEMPTS) {
+          // Remove failed action after max retries
+          setPendingActions(prev => prev.filter(a => a.id !== action.id));
+        } else {
+          // Update retry count
+          setPendingActions(prev => 
+            prev.map(a => a.id === action.id ? updatedAction : a)
+          );
+        }
+      }
+    }
+  }, [isOnline, pendingActions, executeAction]);
+
+  const queueOfflineAction = useCallback((action: Omit<OfflineAction, 'id' | 'timestamp' | 'retry'>) => {
+    const offlineAction: OfflineAction = {
+      ...action,
+      id: crypto.randomUUID(),
+      timestamp: Date.now(),
+      retry: 0,
+    };
+  const clearPendingActions = useCallback(() => {
+    setPendingActions([]);
+    localStorage.removeItem(OFFLINE_QUEUE_KEY);
+  }, []);
+
+  const enableOfflineMode = useCallback(async (): Promise<void> => {
+    try {
+      await disableNetwork(db);
+      setIsConnected(false);
+    } catch {
+      // Handle error silently
+    }
+  }, []);
+
+  const disableOfflineMode = useCallback(async (): Promise<void> => {
+    try {
+      await enableNetwork(db);
+      setIsConnected(true);
+    } catch {
+      // Handle error silently
+    }
+  }, []);
+
   // Monitor online/offline status
   useEffect(() => {
     const handleOnline = async () => {
@@ -58,7 +117,7 @@ export const useOffline = (): UseOfflineReturn => {
       // Re-enable Firestore network
       try {
         await enableNetwork(db);
-        } catch {
+      } catch {
         // Handle error silently
       }
 
@@ -70,7 +129,7 @@ export const useOffline = (): UseOfflineReturn => {
 
     const handleOffline = async () => {
       setIsOnline(false);
-      };
+    };
 
     // Check Firestore connection status
     const checkFirestoreConnection = () => {
@@ -94,101 +153,7 @@ export const useOffline = (): UseOfflineReturn => {
       window.removeEventListener('offline', handleOffline);
       clearInterval(connectionCheck);
     };
-  }, [pendingActions.length]);
-
-  const syncPendingActions = useCallback(async (): Promise<void> => {
-    if (!isOnline || pendingActions.length === 0) return;
-
-    for (const action of pendingActions) {
-      try {
-        // Attempt to execute the action
-        await executeAction(action);
-        
-        // Remove successful action from queue
-        setPendingActions(prev => prev.filter(a => a.id !== action.id));
-        
-        } catch {
-        // Increment retry count
-        const updatedAction = { ...action, retry: action.retry + 1 };
-        
-        if (updatedAction.retry >= MAX_RETRY_ATTEMPTS) {
-          // Remove failed action after max retries
-          setPendingActions(prev => prev.filter(a => a.id !== action.id));
-          } else {
-          // Update retry count
-          setPendingActions(prev => 
-            prev.map(a => a.id === action.id ? updatedAction : a)
-          );
-        }
-      }
-    }
-  }, [isOnline, pendingActions]);
-
-  const queueOfflineAction = useCallback((action: Omit<OfflineAction, 'id' | 'timestamp' | 'retry'>) => {
-    const offlineAction: OfflineAction = {
-      ...action,
-      id: crypto.randomUUID(),
-      timestamp: Date.now(),
-      retry: 0,
-    };
-
-    setPendingActions(prev => [...prev, offlineAction]);
-  }, []);
-
-  const executeAction = async (action: OfflineAction): Promise<void> => {
-    const { collection: collectionName, type, docId, data } = action;
-    
-    // Import Firestore functions dynamically to avoid circular dependencies
-    const { 
-      collection, 
-      addDoc, 
-      updateDoc, 
-      deleteDoc, 
-      doc 
-    } = await import('firebase/firestore');
-
-    switch (type) {
-      case 'create':
-        await addDoc(collection(db, collectionName), data as Record<string, any>);
-        break;
-      
-      case 'update':
-        if (!docId) throw new Error('Document ID required for update');
-        await updateDoc(doc(db, collectionName, docId), data as Record<string, any>);
-        break;
-      
-      case 'delete':
-        if (!docId) throw new Error('Document ID required for delete');
-        await deleteDoc(doc(db, collectionName, docId));
-        break;
-      
-      default:
-        throw new Error(`Unknown action type: ${type}`);
-    }
-  };
-
-  const clearPendingActions = useCallback(() => {
-    setPendingActions([]);
-    localStorage.removeItem(OFFLINE_QUEUE_KEY);
-  }, []);
-
-  const enableOfflineMode = useCallback(async (): Promise<void> => {
-    try {
-      await disableNetwork(db);
-      setIsConnected(false);
-      } catch {
-        // Handle error silently
-      }
-  }, []);
-
-  const disableOfflineMode = useCallback(async (): Promise<void> => {
-    try {
-      await enableNetwork(db);
-      setIsConnected(true);
-      } catch {
-        // Handle error silently
-      }
-  }, []);
+  }, [pendingActions.length, syncPendingActions]);
 
   return {
     isOnline,

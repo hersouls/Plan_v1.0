@@ -56,7 +56,8 @@ export async function resizeImage(
           `image/${options.format}`,
           options.quality
         );
-      } catch (_error) {
+      } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
+          // FIX: Handle error silently - intentionally unused
         reject(_error);
       }
     };

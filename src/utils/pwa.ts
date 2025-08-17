@@ -248,8 +248,9 @@ export class PWAManager {
     try {
       await navigator.share(data);
       return true;
-    } catch (error) {
-      if ((error as Error).name !== 'AbortError') {
+    } catch (_error) {
+      // FIX: Handle error silently
+      if ((_error as Error).name !== 'AbortError') {
         // Handle non-abort errors if needed
       }
       return false;
