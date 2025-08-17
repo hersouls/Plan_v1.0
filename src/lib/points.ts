@@ -97,6 +97,8 @@ class PointsService {
       // await this.updatePointStats(history.userId, history.groupId);
 
       return docRef.id;
+    } catch (error) {
+      throw error;
     }
   }
 
@@ -120,11 +122,13 @@ class PointsService {
         id: doc.id,
         ...doc.data(),
       })) as PointHistory[];
+    } catch (error) {
+      throw error;
     }
   }
 
   // 그룹의 모든 멤버 포인트 내역 조회
-  async getGroupPointHistory(_groupId: string): Promise<PointHistory[]> {
+  async getGroupPointHistory(groupId: string): Promise<PointHistory[]> {
     try {
       const q = query(
         collection(db, 'pointHistory'),
@@ -137,6 +141,8 @@ class PointsService {
         id: doc.id,
         ...doc.data(),
       })) as PointHistory[];
+    } catch (error) {
+      throw error;
     }
   }
 
@@ -153,11 +159,13 @@ class PointsService {
 
       const docRef = await addDoc(collection(db, 'pointRules'), ruleData);
       return docRef.id;
+    } catch (error) {
+      throw error;
     }
   }
 
   // 포인트 규칙 조회
-  async getPointRules(_groupId: string): Promise<PointRule[]> {
+  async getPointRules(groupId: string): Promise<PointRule[]> {
     try {
       const q = query(
         collection(db, 'pointRules'),
@@ -171,6 +179,8 @@ class PointsService {
         id: doc.id,
         ...doc.data(),
       })) as PointRule[];
+    } catch (error) {
+      throw error;
     }
   }
 
@@ -185,6 +195,8 @@ class PointsService {
         ...updates,
         updatedAt: Timestamp.now(),
       });
+    } catch (error) {
+      throw error;
     }
   }
 
@@ -202,6 +214,8 @@ class PointsService {
       }
 
       return null;
+    } catch (error) {
+      throw error;
     }
   }
 
@@ -259,11 +273,13 @@ class PointsService {
       // Firestore에 저장
       const statsRef = doc(db, 'pointStats', `${userId}_${groupId}`);
       await setDoc(statsRef, stats);
+    } catch (error) {
+      throw error;
     }
   }
 
   // 그룹의 모든 멤버 포인트 통계 조회
-  async getGroupPointStats(_groupId: string): Promise<PointStats[]> {
+  async getGroupPointStats(groupId: string): Promise<PointStats[]> {
     try {
       const q = query(
         collection(db, 'pointStats'),
@@ -297,6 +313,8 @@ class PointsService {
       await batch.commit();
 
       return updatedStats;
+    } catch (error) {
+      throw error;
     }
   }
 
@@ -322,6 +340,8 @@ class PointsService {
 
       // 추가 보너스 포인트 규칙 확인 (승인 대기 상태)
       await this.checkAndAwardBonusPoints(userId, groupId);
+    } catch (error) {
+      throw error;
     }
   }
 
@@ -366,6 +386,8 @@ class PointsService {
           }
         }
       }
+    } catch (error) {
+      throw error;
     }
   }
 
@@ -396,6 +418,8 @@ class PointsService {
 
       // 포인트 통계 업데이트
       await this.updatePointStats(userId, groupId);
+    } catch (error) {
+      throw error;
     }
   }
 
@@ -431,6 +455,8 @@ class PointsService {
 
       // 사용자 프로필의 포인트 업데이트
       await this.updateUserPoints(history.userId, history.groupId, pointAmount);
+    } catch (error) {
+      throw error;
     }
   }
 
@@ -446,6 +472,8 @@ class PointsService {
         approvedAt: Timestamp.now(),
         approvedBy: rejectedBy,
       });
+    } catch (error) {
+      throw error;
     }
   }
 
@@ -477,6 +505,8 @@ class PointsService {
       );
 
       return unapprovedHistory;
+    } catch (error) {
+      throw error;
     }
   }
 
@@ -507,6 +537,8 @@ class PointsService {
       );
 
       return approvedHistory;
+    } catch (error) {
+      throw error;
     }
   }
 
@@ -521,6 +553,8 @@ class PointsService {
         amount: newAmount,
         updatedAt: Timestamp.now(),
       });
+    } catch (error) {
+      throw error;
     }
   }
 
@@ -544,6 +578,8 @@ class PointsService {
           points: newPoints,
         });
       }
+    } catch (error) {
+      throw error;
     }
   }
 }
