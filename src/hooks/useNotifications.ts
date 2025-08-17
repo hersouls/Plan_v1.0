@@ -3,15 +3,17 @@ import { useAuth } from './useAuth';
 import { NotificationService } from '../lib/notifications';
 import { Notification, NotificationStats } from '../types/notification';
 
-export interface NotificationData {
-  id: string;
-  type: string;
+// 타입 정의
+export type NotificationData = {
+  id?: string;
   title: string;
-  message: string;
-  status: 'read' | 'unread';
-  createdAt: Date;
-  readAt?: Date;
-}
+  body?: string;
+  icon?: string;
+  tag?: string;
+  data?: Record<string, unknown>;
+  requireInteraction?: boolean;
+  actions?: Array<{ action: string; title: string; icon?: string }>;
+};
 
 export interface NotificationPermissionState {
   permission: NotificationPermission;
@@ -154,7 +156,7 @@ export type NotificationData = {
   status: 'read' | 'unread';
   createdAt: Date;
   readAt?: Date;
-  data?: Record<string, any>;
+  data?: Record<string, unknown>;
 };
 
 export type NotificationPermissionState = 'granted' | 'denied' | 'default';

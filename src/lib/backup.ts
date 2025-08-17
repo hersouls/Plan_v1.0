@@ -199,9 +199,8 @@ export class BackupService {
   }
 
   // 파일 메타데이터 가져오기
-  private async getFileMetadata(path: string): Promise<any> {
+  private async getFileMetadata(path: string): Promise<Record<string, unknown> | null> {
     try {
-      // const fileRef = ref(storage, path); // Unused variable
       // Firebase Storage의 메타데이터는 직접 접근이 제한적이므로
       // 파일명에서 날짜를 파싱하는 방식 사용
       const fileName = path.split('/').pop();
@@ -238,7 +237,7 @@ export class BackupService {
   }
 
   // 백업 목록 조회
-  async getBackupList(frequency?: 'weekly' | 'monthly'): Promise<any[]> {
+  async getBackupList(frequency?: 'weekly' | 'monthly'): Promise<Record<string, unknown>[]> {
     try {
       const basePath = frequency 
         ? `backups/${this.userId}/auto/${frequency}`
