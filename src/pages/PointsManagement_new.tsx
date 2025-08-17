@@ -1,3 +1,4 @@
+import React from 'react';
 import {
   Award,
   CheckCircle,
@@ -353,8 +354,8 @@ function PointsManagement() {
         <div className="relative">
           <img
             src={avatarUrl}
-            alt={(displayName || 'User') + ' Avatar'}
-            className={sizeClasses[size] + ' rounded-full object-cover shadow-lg'}
+            alt={`${displayName || 'User'} Avatar`}
+            className={`${sizeClasses[size]} rounded-full object-cover shadow-lg`}
             onError={e => {
               // 이미지 로드 실패 시 기본 아바타로 대체
               const target = e.target as HTMLImageElement;
@@ -371,7 +372,7 @@ function PointsManagement() {
             }}
           />
           <div
-            className={sizeClasses[size] + ' bg-gradient-to-br from-blue-400 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold ' + textSizes[size] + ' shadow-lg avatar-fallback absolute inset-0'}
+            className={`${sizeClasses[size]} bg-gradient-to-br from-blue-400 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold ${textSizes[size]} shadow-lg avatar-fallback absolute inset-0`}
             style={{ display: 'none' }}
           >
             {displayName?.charAt(0) || 'U'}
@@ -382,7 +383,7 @@ function PointsManagement() {
 
     return (
       <div
-        className={sizeClasses[size] + ' bg-gradient-to-br from-blue-400 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold ' + textSizes[size] + ' shadow-lg avatar-fallback'}
+        className={`${sizeClasses[size]} bg-gradient-to-br from-blue-400 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold ${textSizes[size]} shadow-lg avatar-fallback`}
       >
         {displayName?.charAt(0) || 'U'}
       </div>
@@ -529,11 +530,11 @@ function PointsManagement() {
                     >
                       <Star
                         size={16}
-                        className={'sm:w-4 sm:h-4 lg:w-5 lg:h-5 ' + (
+                        className={`sm:w-4 sm:h-4 lg:w-5 lg:h-5 ${
                           favoriteGroups.includes(selectedGroupId)
                             ? 'text-yellow-400 fill-yellow-400'
                             : 'text-white/60'
-                        )}
+                        }`}
                       />
                     </WaveButton>
                   )}
@@ -655,14 +656,17 @@ function PointsManagement() {
                         <button
                           key={member.userId}
                           onClick={() => setSelectedMember(member.userId)}
-                                                      className={'w-full p-4 rounded-xl cursor-pointer transition-all duration-300 text-left font-pretendard ' + (
-                               isSelected
-                                 ? 'bg-gradient-to-r from-blue-500/20 to-purple-500/20 border-2 border-blue-400/50 shadow-lg'
-                                 : member.userId === user?.uid
-                                 ? 'bg-gradient-to-r from-yellow-400/10 to-orange-400/10 border-2 border-yellow-400/30 hover:bg-yellow-400/20 hover:border-yellow-400/50'
-                                 : 'bg-white/10 border-2 border-transparent hover:bg-white/20 hover:border-white/30'
-                             )}
-                                                      aria-label={(member.userName || 'Unknown') + ' 선택'}
+                          className={`
+                           w-full p-4 rounded-xl cursor-pointer transition-all duration-300 text-left font-pretendard
+                           ${
+                             isSelected
+                               ? 'bg-gradient-to-r from-blue-500/20 to-purple-500/20 border-2 border-blue-400/50 shadow-lg'
+                               : member.userId === user?.uid
+                               ? 'bg-gradient-to-r from-yellow-400/10 to-orange-400/10 border-2 border-yellow-400/30 hover:bg-yellow-400/20 hover:border-yellow-400/50'
+                               : 'bg-white/10 border-2 border-transparent hover:bg-white/20 hover:border-white/30'
+                           }
+                         `}
+                          aria-label={`${member.userName || 'Unknown'} 선택`}
                           aria-pressed={isSelected}
                         >
                           <div className="flex items-center justify-between">
@@ -883,7 +887,9 @@ function PointsManagement() {
                           aria-label="미승인 포인트 내역 새로고침"
                         >
                           <RefreshCw
-                            className={'w-4 h-4 ' + (loading ? 'animate-spin' : '')}
+                            className={`w-4 h-4 ${
+                              loading ? 'animate-spin' : ''
+                            }`}
                           />
                         </WaveButton>
                       </div>
