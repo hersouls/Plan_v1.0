@@ -68,9 +68,6 @@ export function QRScannerModal({
     } catch (err) {
       setError('카메라 접근에 실패했습니다. 카메라 권한을 확인해주세요.');
       setIsScanning(false);
-      if (import.meta.env.DEV) {
-        console.error('Camera access error:', err);
-      }
     }
   }, []);
 

@@ -61,11 +61,8 @@ export function InviteModal({
       setEmail('');
       setMessage('');
       // Show success message or close modal
-    } catch (error) {
+    } catch {
       // Handle error silently
-      if (import.meta.env.DEV) {
-        // Error logging can be added here if needed
-      }
     } finally {
       setIsLoading(false);
     }
@@ -78,11 +75,8 @@ export function InviteModal({
     try {
       const link = await onGenerateInviteLink();
       setInviteLink(link);
-    } catch (error) {
+    } catch {
       // Handle error silently
-      if (import.meta.env.DEV) {
-        // Error logging can be added here if needed
-      }
     } finally {
       setIsLoading(false);
     }
@@ -93,11 +87,8 @@ export function InviteModal({
       await navigator.clipboard.writeText(text);
       setCopied(type);
       setTimeout(() => setCopied(null), 2000);
-    } catch (error) {
+    } catch {
       // Handle error silently
-      if (import.meta.env.DEV) {
-        // Error logging can be added here if needed
-      }
     }
   };
 
