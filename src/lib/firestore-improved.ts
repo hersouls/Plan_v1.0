@@ -16,6 +16,7 @@ import {
   arrayUnion,
   increment,
   runTransaction,
+  FieldValue,
 } from 'firebase/firestore';
 import { db } from './firebase';
 import type { 
@@ -61,7 +62,7 @@ function validateTaskInput(input: CreateTaskInput | UpdateTaskInput): void {
     // Handle both Timestamp and Date objects
     const dueDate = input.dueDate instanceof Date 
       ? input.dueDate 
-      : (input.dueDate as { toDate?: () => Date }).toDate ? (input.dueDate as { toDate: () => Date }).toDate() : new Date(input.dueDate as string | number);
+      : (input.dueDate as { toDate?: () => Date }).toDate ? (input.dueDate as { toDate: () => Date }).toDate() : new Date((input.dueDate as unknown) as string | number);
     if (isNaN(dueDate.getTime())) {
       throw new Error('Invalid due date format');
     }
@@ -140,7 +141,7 @@ export const enhancedTaskService = {
         updatedAt: serverTimestamp(),
       }) as Record<string, unknown>;
       
-      transaction.update(taskRef, sanitizedUpdates);
+      transaction.update(taskRef, sanitizedUpdates as { [x: string]: FieldValue | Partial<unknown> | undefined; });
       
       // Log changes for history
       const changes = Object.keys(updates).map(key => ({
@@ -391,7 +392,7 @@ export const enhancedGroupService = {
         updatedAt: serverTimestamp(),
       }) as Record<string, unknown>;
       
-      const docRef = await addDoc(collection(db, 'groups'), sanitizedData);
+      const docRef = await addDoc(collection(db, 'groups'), sanitizedData as { [x: string]: FieldValue | Partial<unknown> | undefined; });
       
       // Update user's groupIds
       await this.addUserToGroup(docRef.id, groupData.ownerId);
@@ -413,7 +414,7 @@ export const enhancedGroupService = {
       }) as Record<string, unknown>;
       
       const groupRef = doc(db, 'groups', groupId);
-      await updateDoc(groupRef, sanitizedUpdates);
+      await updateDoc(groupRef, sanitizedUpdates as { [x: string]: FieldValue | Partial<unknown> | undefined; });
     } catch {
       throw new Error('Failed to update group');
     }
@@ -498,14 +499,14 @@ export const enhancedUserService = {
         await updateDoc(userRef, {
           ...(cleanProfileData as Record<string, unknown>),
           updatedAt: serverTimestamp(),
-        });
+        } as { [x: string]: FieldValue | Partial<unknown> | undefined; });
       } else {
         // Document doesn't exist, use setDoc
         await setDoc(userRef, {
           ...(cleanProfileData as Record<string, unknown>),
           createdAt: serverTimestamp(),
           updatedAt: serverTimestamp(),
-        });
+        } as { [x: string]: FieldValue | Partial<unknown> | undefined; });
       }
     } catch {
       throw new Error('Failed to create or update user profile');
@@ -534,7 +535,7 @@ export const enhancedUserService = {
         }
       });
       
-      await updateDoc(userRef, updateData);
+      await updateDoc(userRef, updateData as { [x: string]: FieldValue | Partial<unknown> | undefined; });
     } catch {
       throw new Error('Failed to update user stats');
     }

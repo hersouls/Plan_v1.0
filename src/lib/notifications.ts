@@ -276,7 +276,7 @@ export class NotificationService {
     try {
       await updateDoc(
         doc(db, this.SETTINGS_COLLECTION, settings.userId),
-        settings as Record<string, unknown>
+        settings as unknown as Record<string, unknown>
       );
     } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
       // FIX: Handle error silently - intentionally unused
@@ -307,7 +307,7 @@ export class NotificationService {
 
       await updateDoc(
         doc(db, this.SETTINGS_COLLECTION, userId),
-        defaultSettings as Record<string, unknown>
+        defaultSettings as unknown as Record<string, unknown>
       );
     } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
       // FIX: Handle error silently - intentionally unused

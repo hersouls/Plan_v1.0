@@ -16,6 +16,9 @@ import {
   updateDoc,
   where,
   writeBatch,
+  Query,
+  DocumentReference,
+  FieldValue,
 } from 'firebase/firestore';
 import type {
   Comment,
@@ -33,7 +36,7 @@ import { db } from './firebase';
 
 // 안전한 실시간 구독을 위한 헬퍼 함수 - 재시도 로직 포함
 function createSafeSnapshot<T>(
-  queryOrDoc: any,
+  queryOrDoc: Query<unknown> | DocumentReference<unknown>,
   onNext: (data: T) => void,
   onError?: (error: Error) => void,
   retryCount: number = 0
@@ -42,8 +45,8 @@ function createSafeSnapshot<T>(
   const RETRY_DELAY = 1000;
 
   try {
-    return onSnapshot(queryOrDoc, {
-      next: snapshot => {
+    return onSnapshot(queryOrDoc as any, {
+      next: (snapshot: any) => {
         try {
           // Check if it's a QuerySnapshot (has 'empty' property)
           if ('empty' in snapshot && 'docs' in snapshot) {
@@ -55,7 +58,7 @@ function createSafeSnapshot<T>(
             // QuerySnapshot
             const data = snapshot.docs.map((_doc: any) => ({
               id: _doc.id,
-              ..._doc.data(),
+              ...(_doc.data() as Record<string, unknown>),
             })) as T;
             onNext(data);
           } else {
@@ -63,7 +66,7 @@ function createSafeSnapshot<T>(
             if (snapshot.exists()) {
               const data = {
                 id: snapshot.id,
-                ...snapshot.data(),
+                ...(snapshot.data() as Record<string, unknown>),
               } as T;
               onNext(data);
             } else {
@@ -71,7 +74,7 @@ function createSafeSnapshot<T>(
             }
           }
         } catch (_error) {
-          // FIX: Handle error silently - intentionally unused
+          // Handle error silently - intentionally unused
           if (onError) onError(_error as Error);
         }
       },
@@ -128,11 +131,10 @@ export const taskService = {
       );
 
       // 디버깅용 로그
-      const docRef = await addDoc(collection(db, 'tasks'), finalData as Record<string, any>);
+      const docRef = await addDoc(collection(db, 'tasks'), finalData as any);
       return docRef.id;
     } catch (_error) { 
-      // FIX: Handle error silently - intentionally unused
-      // Handle error silently
+      // Handle error silently - intentionally unused
       return '';
     }
   },
@@ -146,10 +148,9 @@ export const taskService = {
         ...updates,
         updatedAt: serverTimestamp(),
       });
-      await updateDoc(taskRef, sanitizedUpdates as Record<string, any>);
+      await updateDoc(taskRef, sanitizedUpdates as { [x: string]: FieldValue | Partial<unknown> | undefined; });
     } catch (_error) { 
-      // FIX: Handle error silently - intentionally unused
-      // Handle error silently
+      // Handle error silently - intentionally unused
     }
   },
 
@@ -158,8 +159,7 @@ export const taskService = {
     try {
       await deleteDoc(doc(db, 'tasks', taskId));
     } catch (_error) { 
-      // FIX: Handle error silently - intentionally unused
-      // Handle error silently
+      // Handle error silently - intentionally unused
     }
   },
 
@@ -172,8 +172,7 @@ export const taskService = {
       }
       return null;
     } catch (_error) { 
-      // FIX: Handle error silently - intentionally unused
-      // Handle error silently
+      // Handle error silently - intentionally unused
       return null;
     }
   },
@@ -264,8 +263,7 @@ export const taskService = {
         ...doc.data(),
       })) as Task[];
     } catch (_error) { 
-      // FIX: Handle error silently - intentionally unused
-      // Handle error silently
+      // Handle error silently - intentionally unused
       return [];
     }
   },
@@ -285,8 +283,7 @@ export const taskService = {
         ...doc.data(),
       })) as Task[];
     } catch (_error) { 
-      // FIX: Handle error silently - intentionally unused
-      // Handle error silently
+      // Handle error silently - intentionally unused
       return [];
     }
   },
@@ -298,7 +295,7 @@ export const groupService = {
   async createGroup(groupData: CreateGroupInput): Promise<string> {
     try {
       const docRef = await addDoc(collection(db, 'groups'), {
-        ...(groupData as Record<string, any>),
+        ...(groupData as unknown as Record<string, unknown>),
         memberIds: [groupData.ownerId],
         memberRoles: { [groupData.ownerId]: 'owner' },
         createdAt: serverTimestamp(),
@@ -306,8 +303,7 @@ export const groupService = {
       });
       return docRef.id;
     } catch (_error) { 
-      // FIX: Handle error silently - intentionally unused
-      // Handle error silently
+      // Handle error silently - intentionally unused
       return '';
     }
   },
@@ -317,12 +313,11 @@ export const groupService = {
     try {
       const groupRef = doc(db, 'groups', groupId);
       await updateDoc(groupRef, {
-        ...(updates as Record<string, any>),
+        ...(updates as unknown as Record<string, unknown>),
         updatedAt: serverTimestamp(),
       });
     } catch (_error) { 
-      // FIX: Handle error silently - intentionally unused
-      // Handle error silently
+      // Handle error silently - intentionally unused
     }
   },
 
@@ -342,8 +337,7 @@ export const groupService = {
       }
       return null;
     } catch (_error) { 
-      // FIX: Handle error silently - intentionally unused
-      // Handle error silently
+      // Handle error silently - intentionally unused
       return null;
     }
   },
@@ -387,8 +381,7 @@ export const groupService = {
         updatedAt: serverTimestamp(),
       });
     } catch (_error) { 
-      // FIX: Handle error silently - intentionally unused
-      // Handle error silently
+      // Handle error silently - intentionally unused
     }
   },
 
@@ -415,8 +408,7 @@ export const groupService = {
 
       await batch.commit();
     } catch (_error) { 
-      // FIX: Handle error silently - intentionally unused
-      // Handle error silently
+      // Handle error silently - intentionally unused
     }
   },
 
@@ -435,8 +427,7 @@ export const groupService = {
         ...doc.data(),
       })) as FamilyGroup[];
     } catch (_error) { 
-      // FIX: Handle error silently - intentionally unused
-      // Handle error silently
+      // Handle error silently - intentionally unused
       return [];
     }
   },
@@ -456,7 +447,7 @@ export const groupService = {
 
       return createSafeSnapshot<FamilyGroup[]>(q, callback, onError);
     } catch (_error) { 
-      // FIX: Handle error silently - intentionally unused
+      // Handle error silently - intentionally unused
       if (onError) onError(_error as Error);
       return () => {};
     }
@@ -516,8 +507,7 @@ export const groupService = {
 
       return await Promise.all(memberPromises);
     } catch (_error) { 
-      // FIX: Handle error silently - intentionally unused
-      // Handle error silently
+      // Handle error silently - intentionally unused
       return [];
     }
   },
@@ -528,12 +518,35 @@ export const groupService = {
       // groupId가 null이거나 undefined이면 빈 통계 반환
       if (!groupId) {
         return {
+          groupId: '',
+          period: 'all_time',
           totalTasks: 0,
           completedTasks: 0,
           pendingTasks: 0,
           overdueTasks: 0,
           completionRate: 0,
+          tasks: {
+            created: 0,
+            completed: 0,
+            inProgress: 0,
+            overdue: 0,
+          },
+          performance: {
+            completionRate: 0,
+            averageCompletionTime: 0,
+            totalPoints: 0,
+          },
+          members: {
+            total: 0,
+            active: 0,
+            newThisPeriod: 0,
+          },
           memberStats: [],
+          trends: {
+            completionTrend: 0,
+            activityTrend: 0,
+          },
+          updatedAt: serverTimestamp() as any,
         };
       }
 
@@ -541,12 +554,35 @@ export const groupService = {
       const groupDoc = await getDoc(doc(db, 'groups', groupId));
       if (!groupDoc.exists()) {
         return {
+          groupId,
+          period: 'all_time',
           totalTasks: 0,
           completedTasks: 0,
           pendingTasks: 0,
           overdueTasks: 0,
           completionRate: 0,
+          tasks: {
+            created: 0,
+            completed: 0,
+            inProgress: 0,
+            overdue: 0,
+          },
+          performance: {
+            completionRate: 0,
+            averageCompletionTime: 0,
+            totalPoints: 0,
+          },
+          members: {
+            total: 0,
+            active: 0,
+            newThisPeriod: 0,
+          },
           memberStats: [],
+          trends: {
+            completionTrend: 0,
+            activityTrend: 0,
+          },
+          updatedAt: serverTimestamp() as any,
         };
       }
 
@@ -575,9 +611,6 @@ export const groupService = {
       // Get member stats with detailed calculations
       const members = await this.getGroupMembers(groupId);
       const memberStats = members.map(member => {
-        // 해당 멤버가 생성한 할일
-        const createdTasks = tasks.filter(task => task.userId === member.userId);
-
         // 해당 멤버에게 할당된 할일
         const assignedTasks = tasks.filter(task => task.assigneeId === member.userId);
 
@@ -586,33 +619,77 @@ export const groupService = {
 
         return {
           userId: member.userId,
-          userName: member.userName,
-          tasksCreated: createdTasks.length,
-          tasksAssigned: assignedTasks.length,
+          userName: member.userName || '',
           tasksCompleted: completedTasks.length,
+          totalTasks: assignedTasks.length,
           points: member.points || 0,
         };
       });
 
       return {
+        groupId,
+        period: 'all_time',
         totalTasks,
         completedTasks,
         pendingTasks,
         overdueTasks,
         completionRate:
           totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0,
+        tasks: {
+          created: totalTasks,
+          completed: completedTasks,
+          inProgress: pendingTasks,
+          overdue: overdueTasks,
+        },
+        performance: {
+          completionRate: totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0,
+          averageCompletionTime: 0,
+          totalPoints: memberStats.reduce((sum, member) => sum + member.points, 0),
+        },
+        members: {
+          total: members.length,
+          active: members.filter(m => m.isActive).length,
+          newThisPeriod: 0,
+        },
         memberStats,
+        trends: {
+          completionTrend: 0,
+          activityTrend: 0,
+        },
+        updatedAt: serverTimestamp() as any,
       };
     } catch (_error) { 
-      // FIX: Handle error silently - intentionally unused
-      // Handle error silently
+      // Handle error silently - intentionally unused
       return {
+        groupId: groupId || '',
+        period: 'all_time',
         totalTasks: 0,
         completedTasks: 0,
         pendingTasks: 0,
         overdueTasks: 0,
         completionRate: 0,
+        tasks: {
+          created: 0,
+          completed: 0,
+          inProgress: 0,
+          overdue: 0,
+        },
+        performance: {
+          completionRate: 0,
+          averageCompletionTime: 0,
+          totalPoints: 0,
+        },
+        members: {
+          total: 0,
+          active: 0,
+          newThisPeriod: 0,
+        },
         memberStats: [],
+        trends: {
+          completionTrend: 0,
+          activityTrend: 0,
+        },
+        updatedAt: serverTimestamp() as any,
       };
     }
   },
@@ -648,8 +725,7 @@ export const groupService = {
 
       await batch.commit();
     } catch (_error) { 
-      // FIX: Handle error silently - intentionally unused
-      // Handle error silently
+      // Handle error silently - intentionally unused
     }
   },
 
@@ -671,8 +747,7 @@ export const groupService = {
         expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
       });
     } catch (_error) { 
-      // FIX: Handle error silently - intentionally unused
-      // Handle error silently
+      // Handle error silently - intentionally unused
     }
   },
 
@@ -689,8 +764,7 @@ export const groupService = {
         updatedAt: serverTimestamp(),
       });
     } catch (_error) { 
-      // FIX: Handle error silently - intentionally unused
-      // Handle error silently
+      // Handle error silently - intentionally unused
     }
   },
 
@@ -710,8 +784,7 @@ export const groupService = {
 
       return code;
     } catch (_error) { 
-      // FIX: Handle error silently - intentionally unused
-      // Handle error silently
+      // Handle error silently - intentionally unused
       return '';
     }
   },
@@ -747,8 +820,7 @@ export const groupService = {
 
       return groupId;
     } catch (_error) { 
-      // FIX: Handle error silently - intentionally unused
-      // Handle error silently
+      // Handle error silently - intentionally unused
       return '';
     }
   },
@@ -760,7 +832,7 @@ export const commentService = {
   async addComment(taskId: string, _commentData: unknown) {
     try {
       // 데이터 검증 및 정리
-      const cleanData = { ..._commentData };
+      const cleanData = { ...(_commentData as Record<string, unknown>) };
 
       // undefined 값 제거
       Object.keys(cleanData).forEach(key => {
@@ -811,13 +883,12 @@ export const commentService = {
       }
 
       const docRef = await addDoc(collection(db, 'tasks', taskId, 'comments'), {
-        ...(finalData as Record<string, any>),
+        ...(finalData as Record<string, unknown>),
         createdAt: serverTimestamp(),
       });
       return docRef.id;
     } catch (_error) { 
-      // FIX: Handle error silently - intentionally unused
-      // Handle error silently
+      // Handle error silently - intentionally unused
       return '';
     }
   },
@@ -827,8 +898,7 @@ export const commentService = {
     try {
       await deleteDoc(doc(db, 'tasks', taskId, 'comments', commentId));
     } catch (_error) { 
-      // FIX: Handle error silently - intentionally unused
-      // Handle error silently
+      // Handle error silently - intentionally unused
     }
   },
 
@@ -875,8 +945,7 @@ export const commentService = {
         }
       }
     } catch (_error) { 
-      // FIX: Handle error silently - intentionally unused
-      // Handle error silently
+      // Handle error silently - intentionally unused
     }
   },
 
@@ -901,8 +970,7 @@ export const commentService = {
         });
       }
     } catch (_error) { 
-      // FIX: Handle error silently - intentionally unused
-      // Handle error silently
+      // Handle error silently - intentionally unused
     }
   },
 
@@ -929,8 +997,7 @@ export const commentService = {
         });
       }
     } catch (_error) { 
-      // FIX: Handle error silently - intentionally unused
-      // Handle error silently
+      // Handle error silently - intentionally unused
     }
   },
 };
@@ -989,14 +1056,13 @@ export const userService = {
       await setDoc(
         userRef,
         {
-          ...(userData as Record<string, any>),
+          ...(userData as Record<string, unknown>),
           updatedAt: serverTimestamp(),
         },
         { merge: true }
       );
     } catch (_error) { 
-      // FIX: Handle error silently - intentionally unused
-      // Handle error silently
+      // Handle error silently - intentionally unused
     }
   },
 
@@ -1009,8 +1075,7 @@ export const userService = {
       }
       return null;
     } catch (_error) { 
-      // FIX: Handle error silently - intentionally unused
-      // Handle error silently
+      // Handle error silently - intentionally unused
       return null;
     }
   },
@@ -1042,7 +1107,7 @@ export const batchService = {
       const taskRef = doc(collection(db, 'tasks'));
       taskRefs.push(taskRef);
       batch.set(taskRef, {
-        ...(taskData as Record<string, any>),
+        ...(taskData as Record<string, unknown>),
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
       });
@@ -1058,7 +1123,7 @@ export const batchService = {
     updates.forEach(({ id, data }) => {
       const taskRef = doc(db, 'tasks', id);
       batch.update(taskRef, {
-        ...(data as Record<string, any>),
+        ...(data as Record<string, unknown>),
         updatedAt: serverTimestamp(),
       });
     });
