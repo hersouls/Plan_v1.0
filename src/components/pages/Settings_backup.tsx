@@ -44,6 +44,9 @@ export const Settings: React.FC<SettingsProps> = ({
         setPreferences(JSON.parse(savedPreferences));
       } catch (error) {
         // Handle error silently
+        if (import.meta.env.DEV) {
+          console.error('Error loading preferences:', error);
+        }
       }
     }
   }, []);
@@ -65,6 +68,9 @@ export const Settings: React.FC<SettingsProps> = ({
         navigate('/login');
       }
     } catch (error) {
+      if (import.meta.env.DEV) {
+        console.error('Error signing out:', error);
+      }
       alert('로그아웃에 실패했습니다.');
     }
   };

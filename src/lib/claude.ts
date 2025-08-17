@@ -10,7 +10,8 @@ const getClaudeConfig = () => {
   };
 
   if (!config.apiKey && config.enabled) {
-    }
+    console.warn('Claude API key is not configured but Claude AI is enabled');
+  }
 
   return config;
 };
@@ -74,11 +75,17 @@ export const claudeAIService: ClaudeAIService = {
         try {
           return JSON.parse(content.text);
         } catch (parseError) {
+          if (import.meta.env.DEV) {
+            console.error('Error parsing task suggestions:', parseError);
+          }
           return [];
         }
       }
       return [];
     } catch (error) {
+      if (import.meta.env.DEV) {
+        console.error('Error generating task suggestions:', error);
+      }
       return [];
     }
   },
@@ -111,6 +118,9 @@ export const claudeAIService: ClaudeAIService = {
       }
       return 'other';
     } catch (error) {
+      if (import.meta.env.DEV) {
+        console.error('Error categorizing task:', error);
+      }
       return 'other';
     }
   },
@@ -146,6 +156,9 @@ export const claudeAIService: ClaudeAIService = {
       }
       return description || '';
     } catch (error) {
+      if (import.meta.env.DEV) {
+        console.error('Error improving task description:', error);
+      }
       return description || '';
     }
   },
@@ -178,6 +191,9 @@ export const claudeAIService: ClaudeAIService = {
         try {
           return JSON.parse(content.text);
         } catch (parseError) {
+          if (import.meta.env.DEV) {
+            console.error('Error parsing subtasks:', parseError);
+          }
           // Fallback: split by lines if JSON parsing fails
           return content.text.split('\n')
             .filter(line => line.trim())
@@ -187,6 +203,9 @@ export const claudeAIService: ClaudeAIService = {
       }
       return [];
     } catch (error) {
+      if (import.meta.env.DEV) {
+        console.error('Error generating subtasks:', error);
+      }
       return [];
     }
   },
@@ -219,6 +238,9 @@ export const claudeAIService: ClaudeAIService = {
       }
       return 30;
     } catch (error) {
+      if (import.meta.env.DEV) {
+        console.error('Error estimating task duration:', error);
+      }
       return 30;
     }
   },
@@ -254,6 +276,9 @@ export const claudeAIService: ClaudeAIService = {
       }
       return 'medium';
     } catch (error) {
+      if (import.meta.env.DEV) {
+        console.error('Error suggesting task priority:', error);
+      }
       return 'medium';
     }
   }

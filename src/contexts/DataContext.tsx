@@ -93,6 +93,9 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
             return group;
           } catch (error) {
             // 그룹 로딩 실패 시에도 계속 진행
+            if (import.meta.env.DEV) {
+              console.error('Error loading group:', error);
+            }
             return null;
           }
         });
@@ -126,8 +129,12 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
             isInitialLoad.current = false;
           }
         } else {
-          }
+          // No valid groups found
+        }
       } catch (err) {
+        if (import.meta.env.DEV) {
+          console.error('Error loading groups:', err);
+        }
         setError('그룹 정보를 불러오는데 실패했습니다.');
       } finally {
         setLoading(false);

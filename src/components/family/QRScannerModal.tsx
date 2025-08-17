@@ -1,6 +1,6 @@
 import jsQR from 'jsqr';
 import { AlertCircle, CheckCircle, X } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { GlassCard } from '../ui/GlassCard';
 import { WaveButton } from '../ui/WaveButton';
 import { Typography } from '../ui/typography';
@@ -37,9 +37,9 @@ export function QRScannerModal({
     return () => {
       stopScanning();
     };
-  }, [isOpen]);
+  }, [isOpen, startScanning]);
 
-  const startScanning = async () => {
+  const startScanning = useCallback(async () => {
     try {
       setError(null);
       setSuccess(null);
@@ -68,8 +68,11 @@ export function QRScannerModal({
     } catch (err) {
       setError('카메라 접근에 실패했습니다. 카메라 권한을 확인해주세요.');
       setIsScanning(false);
+      if (import.meta.env.DEV) {
+        console.error('Camera access error:', err);
+      }
     }
-  };
+  }, []);
 
   const scanQRCode = () => {
     if (!videoRef.current || !canvasRef.current || !isScanning) return;
