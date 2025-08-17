@@ -897,7 +897,7 @@ function PointsManagement() {
                             history.type === 'penalty';
 
                           // 날짜 포맷팅 개선
-                          const formatDate = (_timestamp: unknown) => {
+                          const formatDate = (timestamp: any) => {
                             try {
                               const date = new Date(timestamp.seconds * 1000);
                               const now = new Date();
@@ -945,6 +945,7 @@ function PointsManagement() {
                               tabIndex={history.taskId ? 0 : -1}
                               aria-label={
                                 history.taskId
+                                  ? `할일 수정: ${history.description}`
                                   : history.description
                               }
                             >
@@ -1126,6 +1127,7 @@ function PointsManagement() {
                           className="hover:points-glow transition-all duration-200 text-white border-white/30 hover:bg-white/10"
                           aria-label="승인된 포인트 내역 새로고침"
                         >
+                          <RefreshCw className="w-4 h-4" />
                         </WaveButton>
                       </div>
                     </div>
@@ -1149,7 +1151,7 @@ function PointsManagement() {
                             history.type === 'penalty';
 
                           // 날짜 포맷팅 개선
-                          const formatDate = (_timestamp: unknown) => {
+                          const formatDate = (timestamp: any) => {
                             try {
                               const date = new Date(timestamp.seconds * 1000);
                               const now = new Date();
@@ -1164,6 +1166,9 @@ function PointsManagement() {
                                 return '오늘';
                               } else if (diffDays === 2) {
                                 return '어제';
+                              } else if (diffDays <= 7) {
+                                return `${diffDays}일 전`;
+                              } else {
                                 return date.toLocaleDateString('ko-KR', {
                                   month: 'short',
                                   day: 'numeric',
@@ -1498,7 +1503,7 @@ function PointsManagement() {
                     history.type === 'deducted' || history.type === 'penalty';
 
                   // 날짜 포맷팅 개선
-                  const formatDate = (_timestamp: unknown) => {
+                  const formatDate = (timestamp: any) => {
                     try {
                       const date = new Date(timestamp.seconds * 1000);
                       return date.toLocaleDateString('ko-KR', {
@@ -1684,7 +1689,7 @@ function PointsManagement() {
                     history.type === 'deducted' || history.type === 'penalty';
 
                   // 날짜 포맷팅 개선
-                  const formatDate = (_timestamp: unknown) => {
+                  const formatDate = (timestamp: any) => {
                     try {
                       const date = new Date(timestamp.seconds * 1000);
                       return date.toLocaleDateString('ko-KR', {

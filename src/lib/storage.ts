@@ -474,7 +474,7 @@ export class StorageService {
   /**
    * 에러 메시지 변환
    */
-  private static getErrorMessage(_error: unknown): string {
+  private static getErrorMessage(error: any): string {
     // CORS 오류 처리
     if (error.message && error.message.includes('CORS')) {
       return '브라우저 보안 정책으로 인해 파일 업로드가 차단되었습니다. 개발자에게 문의해주세요.';
