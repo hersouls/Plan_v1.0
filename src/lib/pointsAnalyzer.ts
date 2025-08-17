@@ -275,16 +275,17 @@ ${histories.map(h => `
   }
 
   private validateAnalysis(_analysis: unknown): PointAnalysis {
+    const analysis = _analysis as any;
     return {
-      score: typeof analysis.score === 'number' ? 
+      score: typeof analysis?.score === 'number' ? 
         Math.max(0, Math.min(100, analysis.score)) : 50,
-      validity: ['valid', 'suspicious', 'invalid'].includes(analysis.validity) ? 
+      validity: ['valid', 'suspicious', 'invalid'].includes(analysis?.validity) ? 
         analysis.validity : 'valid',
-      reasoning: typeof analysis.reasoning === 'string' ? 
+      reasoning: typeof analysis?.reasoning === 'string' ? 
         analysis.reasoning : '분석 결과를 확인할 수 없습니다.',
-      recommendations: Array.isArray(analysis.recommendations) ? 
+      recommendations: Array.isArray(analysis?.recommendations) ? 
         analysis.recommendations : [],
-      adjustedAmount: typeof analysis.adjustedAmount === 'number' ? 
+      adjustedAmount: typeof analysis?.adjustedAmount === 'number' ? 
         analysis.adjustedAmount : undefined
     };
   }

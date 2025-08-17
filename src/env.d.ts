@@ -10,6 +10,8 @@ interface ImportMetaEnv {
   readonly VITE_APP_ENV: 'development' | 'production';
   readonly VITE_FIREBASE_MEASUREMENT_ID?: string;
   readonly VITE_FCM_VAPID_KEY: string;
+  readonly PROD: boolean;
+  readonly BASE_URL: string;
 }
 
 interface ImportMeta {

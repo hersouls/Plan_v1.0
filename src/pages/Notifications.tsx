@@ -142,6 +142,7 @@ function Notifications() {
   // 날짜 포맷팅
   const formatDate = (_timestamp: unknown) => {
     try {
+      const timestamp = _timestamp as any;
       const date = timestamp?.seconds ? new Date(timestamp.seconds * 1000) : new Date(timestamp);
       const now = new Date();
       const diffTime = Math.abs(now.getTime() - date.getTime());
