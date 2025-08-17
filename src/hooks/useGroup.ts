@@ -73,7 +73,7 @@ export function useGroup(options: UseGroupOptions = {}): UseGroupReturn {
   }, [groupId, loadGroupData]);
 
   const loadGroupData = useCallback(
-    async (targetGroupId: string | null) => {
+    async (targetGroupId: string | null): Promise<void> => {
       try {
         setLoading(true);
         setError(null);
@@ -122,7 +122,7 @@ export function useGroup(options: UseGroupOptions = {}): UseGroupReturn {
               setMembers(prevMembers =>
                 prevMembers.map(member => {
                   const memberStat = statsData.memberStats.find(
-                    (_stat: unknown) => stat.userId === member.userId
+                    (stat: unknown) => (stat as any).userId === member.userId
                   );
                   return {
                     ...member,
@@ -241,6 +241,7 @@ export function useGroup(options: UseGroupOptions = {}): UseGroupReturn {
 
       } catch {
         setError('그룹을 생성하는 중 오류가 발생했습니다.');
+        throw new Error('그룹을 생성하는 중 오류가 발생했습니다.');
       }
     },
     [user]
