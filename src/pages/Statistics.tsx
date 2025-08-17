@@ -1,5 +1,5 @@
 import { format, startOfWeek, subDays } from 'date-fns';
-import { Award, Clock, Star, Trophy, Users, Zap, Brain } from 'lucide-react';
+import { Award, Clock, Star, Trophy, Users, Zap } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -42,7 +42,6 @@ const COLORS = [
 ];
 
 function Statistics() {
-  const navigate = useNavigate();
   const { user } = useAuth();
   const { groups } = useUserGroups();
   const [selectedGroupId, setSelectedGroupId] = useState<string | null>(null);
@@ -69,8 +68,7 @@ function Statistics() {
   const [loadingPoints, setLoadingPoints] = useState(false);
 
   // 사용자 프로필 정보 상태
-  const [userProfiles, setUserProfiles] = useState<Record<string, any>>({});
-  const [loadingProfiles, setLoadingProfiles] = useState(false);
+  const [userProfiles, setUserProfiles] = useState<Record<string, unknown>>({});
 
   // 즐겨찾기 그룹 관리
   const [favoriteGroups, setFavoriteGroups] = useState<string[]>([]);
@@ -134,7 +132,7 @@ function Statistics() {
         const { enhancedUserService } = await import(
           '../lib/firestore-improved'
         );
-        const profiles: Record<string, any> = {};
+        const profiles: Record<string, unknown> = {};
 
         for (const member of members) {
           try {
@@ -144,12 +142,12 @@ function Statistics() {
             if (profile) {
               profiles[member.userId] = profile;
             }
-          } catch (_error) {
+          } catch (error) {
           }
         }
 
         setUserProfiles(profiles);
-      } catch (_error) {
+      } catch (error) {
         // Handle error silently
       } finally {
         setLoadingProfiles(false);
@@ -173,7 +171,7 @@ function Statistics() {
               selectedGroupId
             );
             return { userId: member.userId, stats };
-          } catch (_error) {
+          } catch (error) {
             return { userId: member.userId, stats: null };
           }
         });
@@ -187,7 +185,7 @@ function Statistics() {
         }, {} as Record<string, PointStats>);
 
         setPointStats(statsMap);
-      } catch (_error) {
+      } catch (error) {
         // Handle error silently
       } finally {
         setLoadingPoints(false);
@@ -231,7 +229,7 @@ function Statistics() {
         try {
           const taskDate = format(toDate(task.createdAt), 'yyyy-MM-dd');
           return taskDate === dateStr;
-        } catch (_error) {
+        } catch (error) {
           return false;
         }
       });
@@ -241,7 +239,7 @@ function Statistics() {
         try {
           const completedDate = format(toDate(task.completedAt), 'yyyy-MM-dd');
           return completedDate === dateStr;
-        } catch (_error) {
+        } catch (error) {
           return false;
         }
       });
@@ -855,7 +853,7 @@ function Statistics() {
                         }
                         // If it's already a Date object or string
                         return new Date(task.dueDate as Record<string, unknown>) < new Date();
-                      } catch (_error) {
+                      } catch (error) {
                         return false;
                       }
                     });

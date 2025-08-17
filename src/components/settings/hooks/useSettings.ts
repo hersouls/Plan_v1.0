@@ -430,7 +430,7 @@ export function useSettings(): UseSettingsReturn {
 
         await userService.createOrUpdateUserProfile(userId, filteredData);
       }
-    } catch (_err) {
+    } catch (err) {
       setError('설정을 저장하는데 실패했습니다.');
       throw err;
     } finally {
@@ -526,7 +526,7 @@ export function useSettings(): UseSettingsReturn {
         }
 
         return result.downloadURL;
-      } catch (_error) {
+      } catch (error) {
         const errorMessage =
           error instanceof Error
             ? error.message
@@ -601,7 +601,7 @@ export function useSettings(): UseSettingsReturn {
           updatedAt: Timestamp.now(),
         });
       }
-    } catch (_error) {
+    } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : '아바타 삭제에 실패했습니다.';
       setError(errorMessage);

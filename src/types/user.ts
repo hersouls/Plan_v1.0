@@ -1,5 +1,5 @@
 import { Timestamp } from 'firebase/firestore';
-import { TypographyAccessibility, FontSize, LineHeight, LetterSpacing } from './typography';
+import { TypographyAccessibility } from './typography';
 
 export type UserStatus = 'online' | 'offline' | 'away' | 'busy';
 export type UserTheme = 'light' | 'dark' | 'system';
@@ -181,7 +181,7 @@ export interface UserNotification {
   type: 'task_assigned' | 'task_due' | 'task_completed' | 'comment_added' | 'mention' | 'group_invite';
   title: string;
   body: string;
-  data?: Record<string, any>;
+  data?: Record<string, unknown>;
   read: boolean;
   createdAt: Timestamp;
 }
