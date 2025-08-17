@@ -14,7 +14,11 @@ import {
   GroupMember,
 } from '../types';
 import { useAuth } from '../hooks/useAuth';
-import { DataContextType, DataContext } from './DataContextTypes';
+import { DataContextType } from './DataContextTypes';
+import { createContext } from 'react';
+
+// Create Context locally to avoid multiple exports
+const DataContext = createContext<DataContextType | undefined>(undefined);
 
 export function DataProvider({ children }: { children: React.ReactNode }) {
   const { user, userProfile } = useAuth();
@@ -379,3 +383,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
 
   return <DataContext.Provider value={value}>{children}</DataContext.Provider>;
 }
+
+// Export DataContext and DataProvider
+export { DataContext };
+export default DataProvider;
