@@ -15,10 +15,7 @@ import {
 } from '../types';
 import { useAuth } from '../hooks/useAuth';
 import { DataContextType } from './DataContextTypes';
-import { createContext } from 'react';
-
-// Create the context
-export const DataContext = createContext<DataContextType | undefined>(undefined);
+import { DataContext } from './DataContextTypes';
 
 export function DataProvider({ children }: { children: React.ReactNode }) {
   const { user, userProfile } = useAuth();

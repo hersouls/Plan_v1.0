@@ -2,7 +2,6 @@ import React, { useReducer, useEffect } from 'react';
 import { Task, TaskStatus, CreateTaskInput, UpdateTaskInput } from '../types/task';
 import { taskService } from '../lib/firestore';
 import { useApp } from '../hooks/useApp';
-import { useAuth } from '../hooks/useAuth';
 import { 
   TaskState, 
   TaskFilters, 
@@ -73,22 +72,22 @@ const applyFiltersAndSort = (
 
   // Apply status filter
   if (filters.status && filters.status.length > 0) {
-    filteredTasks = filteredTasks.filter(task => filters.status!.includes(task.status));
+    filteredTasks = filteredTasks.filter(task => filters.status?.includes(task.status));
   }
 
   // Apply assignee filter
   if (filters.assigneeId && filters.assigneeId.length > 0) {
-    filteredTasks = filteredTasks.filter(task => filters.assigneeId!.includes(task.assigneeId));
+    filteredTasks = filteredTasks.filter(task => filters.assigneeId?.includes(task.assigneeId));
   }
 
   // Apply priority filter
   if (filters.priority && filters.priority.length > 0) {
-    filteredTasks = filteredTasks.filter(task => filters.priority!.includes(task.priority));
+    filteredTasks = filteredTasks.filter(task => filters.priority?.includes(task.priority));
   }
 
   // Apply category filter
   if (filters.category && filters.category.length > 0) {
-    filteredTasks = filteredTasks.filter(task => filters.category!.includes(task.category));
+    filteredTasks = filteredTasks.filter(task => filters.category?.includes(task.category));
   }
 
   // Apply date range filter
@@ -114,7 +113,7 @@ const applyFiltersAndSort = (
   // Apply tags filter
   if (filters.tags && filters.tags.length > 0) {
     filteredTasks = filteredTasks.filter(task =>
-      filters.tags!.some(tag => task.tags.includes(tag))
+      filters.tags?.some(tag => task.tags.includes(tag))
     );
   }
 
@@ -397,7 +396,7 @@ function taskReducer(state: TaskState, action: TaskAction): TaskState {
 
 
 // Task Provider Component
-function TaskProvider({ children }: { children: React.ReactNode }) {
+export function TaskProvider({ children }: { children: React.ReactNode }) {
   const [state, dispatch] = useReducer(taskReducer, initialState);
   const { user } = useApp();
   const { state: appState } = useApp();
@@ -418,12 +417,13 @@ function TaskProvider({ children }: { children: React.ReactNode }) {
         try {
           dispatch({ type: 'SET_TASKS', payload: tasks });
           dispatch({ type: 'SET_LOADING', payload: false });
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (_error) {
           dispatch({ type: 'SET_ERROR', payload: '할일 목록을 처리하는 중 오류가 발생했습니다.' });
           dispatch({ type: 'SET_LOADING', payload: false });
         }
       },
-      (error) => {
+      (_error) => {
         dispatch({ type: 'SET_ERROR', payload: '할일 목록을 불러오는 중 오류가 발생했습니다.' });
         dispatch({ type: 'SET_LOADING', payload: false });
       }
