@@ -44,7 +44,7 @@ export const Settings: React.FC<SettingsProps> = ({
         setPreferences(JSON.parse(savedPreferences));
       } catch (error) {
         // Handle error silently
-        if (import.meta.env.DEV) {
+        if ((import.meta as any).env.DEV) {
           // eslint-disable-next-line no-console
           console.error('Error loading preferences:', error);
         }
@@ -69,7 +69,7 @@ export const Settings: React.FC<SettingsProps> = ({
         navigate('/login');
       }
     } catch (error) {
-      if (import.meta.env.DEV) {
+      if ((import.meta as any).env.DEV) {
         // eslint-disable-next-line no-console
         console.error('Error signing out:', error);
       }

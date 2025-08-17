@@ -15,7 +15,7 @@ interface ProjectData {
   technologies: string[];
   status: string;
   launchDate: string;
-  icon: any; // Add icon property to fix TypeScript errors
+  icon: React.ComponentType<{ size?: number; className?: string }>; // Properly typed icon property
 }
 
 export function ProjectDetail() {

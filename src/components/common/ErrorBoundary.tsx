@@ -76,7 +76,7 @@ export class ErrorBoundary extends Component<Props, State> {
                 </p>
               </div>
 
-              {import.meta.env.DEV && this.state.error && (
+              {(import.meta as any).env.DEV && this.state.error && (
                 <details className="w-full text-left">
                   <summary
                     className="cursor-pointer text-sm"

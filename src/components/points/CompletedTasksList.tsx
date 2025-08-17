@@ -106,7 +106,7 @@ export const CompletedTasksList = ({
 
   // 날짜 포맷팅
   const formatDate = (_timestamp: unknown) => {
-    const date = toDate(timestamp);
+    const date = toDate(_timestamp);
     return date.toLocaleDateString('ko-KR', {
       year: 'numeric',
       month: 'short',
@@ -116,7 +116,7 @@ export const CompletedTasksList = ({
 
   // 시간 포맷팅
   const formatTime = (_timestamp: unknown) => {
-    const date = toDate(timestamp);
+    const date = toDate(_timestamp);
     return date.toLocaleTimeString('ko-KR', {
       hour: '2-digit',
       minute: '2-digit',
