@@ -54,7 +54,6 @@ function TodoHome() {
         if (profile) {
           setUserProfile(profile as User);
         }
-      } catch {
         // 프로필 로드 실패 시 Auth 정보만 사용
         setUserProfile(null);
       } finally {
@@ -116,7 +115,6 @@ function TodoHome() {
     if (!task.dueDate || task.status === 'completed') return false;
     try {
       return isPast(toDate(task.dueDate));
-    } catch {
       return false;
     }
   });
@@ -166,7 +164,6 @@ function TodoHome() {
               isToday(taskDate) ||
               (isPast(taskDate) && task.status !== 'completed')
             );
-          } catch {
             return false;
           }
         });
@@ -174,8 +171,7 @@ function TodoHome() {
         return tasks.filter(task => {
           if (!task.dueDate) return false;
           try {
-            return isThisWeek(toDate(task.dueDate));
-          } catch {
+            return isThisWeek(toDate(task.dueDate));n
             return false;
           }
         });
@@ -192,7 +188,6 @@ function TodoHome() {
       if (!task.dueDate || task.status === 'completed') return false;
       try {
         return isPast(toDate(task.dueDate));
-      } catch {
         return false;
       }
     });
@@ -245,8 +240,6 @@ function TodoHome() {
       const visibilityText =
         groupId === 'personal' ? '나만 보는 할일' : '그룹 할일';
       // TODO: 토스트 알림으로 변경
-      console.log(`✅ "${taskData.title}" ${visibilityText}이 추가되었습니다!`);
-    } catch {
       // 에러 피드백 개선
       // TODO: 토스트 알림으로 변경
       console.error('❌ 할일 생성에 실패했습니다. 다시 시도해주세요.');
@@ -256,7 +249,6 @@ function TodoHome() {
   const handleTaskToggle = async (taskId: string) => {
     try {
       await toggleTaskComplete(taskId);
-    } catch {
       alert('할일 상태 변경에 실패했습니다.');
       }
   };
@@ -270,7 +262,6 @@ function TodoHome() {
       try {
         await deleteTask(taskId);
         alert('할일이 삭제되었습니다.');
-      } catch {
         alert('할일 삭제에 실패했습니다.');
       }
     }
@@ -318,7 +309,6 @@ function TodoHome() {
       try {
         await signOut();
         navigate('/login');
-      } catch {
         alert('로그아웃 중 오류가 발생했습니다.');
       }
     }
