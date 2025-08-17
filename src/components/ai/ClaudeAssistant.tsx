@@ -36,7 +36,7 @@ export function ClaudeAssistant({
     try {
       const taskSuggestions = await generateTaskSuggestions(input.trim());
       setSuggestions(taskSuggestions);
-    } catch (_error) {
+    } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
       // Handle Claude Assistant error silently
     } finally {
       setLoading(false);

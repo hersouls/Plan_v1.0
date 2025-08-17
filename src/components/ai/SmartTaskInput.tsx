@@ -91,7 +91,7 @@ export function SmartTaskInput({
 
       setSuggestion(enhancedSuggestion);
       setShowSuggestions(true);
-    } catch (_error) {
+    } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
       // Handle enhancement error silently
     } finally {
       setIsEnhancing(false);

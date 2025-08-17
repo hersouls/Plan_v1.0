@@ -261,10 +261,6 @@ export function ProfileSection({
             {type === 'textarea' ? (
               <textarea
                 value={value}
-                onChange={e => setLocalEditData(prev => prev ? ({
-                  ...prev,
-                  [fieldKey]: e.target.value,
-                }) : null)}
                 className={`w-full px-3 py-2 bg-white/10 backdrop-blur-sm rounded-lg text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-primary-400 resize-none font-pretendard transition-all ${
                   hasError
                     ? 'ring-2 ring-red-400 bg-red-500/10'
@@ -278,10 +274,6 @@ export function ProfileSection({
               <input
                 type={type}
                 value={value}
-                onChange={e => setLocalEditData(prev => prev ? ({
-                  ...prev,
-                  [fieldKey]: e.target.value,
-                }) : null)}
                 className={`w-full px-3 py-2 bg-white/10 backdrop-blur-sm rounded-lg text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-primary-400 font-pretendard transition-all ${
                   hasError
                     ? 'ring-2 ring-red-400 bg-red-500/10'

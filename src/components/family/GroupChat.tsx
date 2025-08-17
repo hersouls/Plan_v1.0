@@ -235,8 +235,8 @@ export function GroupChat({
       const messageRef = doc(db, 'groups', groupId, 'chat', messageId);
       await deleteDoc(messageRef);
       setSelectedMessageForDelete(null);
-    } catch (error) {
-      console.error('메시지 삭제 실패:', error);
+    } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
+      // Handle error silently
     }
   };
 
@@ -262,10 +262,7 @@ export function GroupChat({
 
   // 채팅 메시지 실시간 구독
   useEffect(() => {
-    console.log('채팅 구독 시작:', { groupId });
-
     if (!groupId) {
-      console.log('groupId가 없어서 구독 중단');
       return;
     }
 
@@ -273,16 +270,12 @@ export function GroupChat({
     const chatRef = collection(db, 'groups', groupId, 'chat');
     const q = query(chatRef, orderBy('timestamp', 'asc'));
 
-    console.log('Firestore 쿼리 생성:', q);
-
     const unsubscribe = onSnapshot(
       q,
       snapshot => {
-        console.log('채팅 메시지 스냅샷 받음:', snapshot.size, '개 메시지');
         const chatMessages: ChatMessage[] = [];
         snapshot.forEach(doc => {
           const data = doc.data();
-          console.log('메시지 데이터:', { id: doc.id, data });
           chatMessages.push({
             id: doc.id,
             userId: data.userId,
@@ -298,17 +291,11 @@ export function GroupChat({
       },
       error => {
         console.error('채팅 메시지 로드 실패:', error);
-        console.error('오류 상세:', {
-          code: error?.code,
-          message: error?.message,
-          name: (error as any)?.name,
-        });
         setIsLoading(false);
       }
     );
 
     return () => {
-      console.log('채팅 구독 해제');
       unsubscribe();
     };
   }, [groupId]);
