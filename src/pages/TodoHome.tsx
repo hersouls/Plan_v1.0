@@ -8,7 +8,7 @@ import {
   List,
   LogOut,
   Target,
-  User,
+  User as UserIcon,
   Users,
 } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
@@ -30,6 +30,7 @@ import { FilterConfig, FilterUtils } from '../lib/design-tokens';
 import { userService } from '../lib/firestore';
 import { cn } from '../lib/utils';
 import { Task } from '../types/task';
+import { User } from '../types/user';
 import { toDate } from '../utils/dateHelpers';
 
 function TodoHome() {
@@ -256,6 +257,7 @@ function TodoHome() {
         groupId = 'personal';
       }
 
+      const taskData = _taskData as any;
       await createTask({
         ...taskData,
         groupId: groupId,
@@ -466,12 +468,12 @@ function TodoHome() {
                       filterOption => {
                         const IconComponent =
                           filterOption.icon === 'User'
-                            ? User
+                            ? UserIcon
                             : filterOption.icon === 'Users'
                             ? Users
                             : filterOption.icon === 'List'
                             ? List
-                            : User;
+                            : UserIcon;
 
                         return (
                           <ResponsiveButton
@@ -535,12 +537,12 @@ function TodoHome() {
                 {FilterUtils.getVisibilityFilterOptions().map(filterOption => {
                   const IconComponent =
                     filterOption.icon === 'User'
-                      ? User
+                      ? UserIcon
                       : filterOption.icon === 'Users'
                       ? Users
                       : filterOption.icon === 'List'
                       ? List
-                      : User;
+                      : UserIcon;
 
                   return (
                     <ResponsiveButton
