@@ -2,11 +2,6 @@
  * 이미지 리사이징 및 압축 유틸리티
  */
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { storage } from './firebase';
-
 export interface ImageResizeOptions {
   maxWidth: number;
   maxHeight: number;
