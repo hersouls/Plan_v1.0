@@ -39,12 +39,11 @@ export function DataSection({
     try {
       setSignOut(() => authContext.signOut);
     } catch (error) {
-      console.error('Error accessing auth context in DataSection:', error);
       // Auth context가 없어도 기본적으로 작동
     }
   }, [authContext.signOut]);
 
-  const updateData = (field: keyof typeof settings.data, value: any) => {
+  const updateData = (field: keyof typeof settings.data, _value: unknown) => {
     onUpdate({
       type: 'UPDATE_DATA',
       payload: {
@@ -83,7 +82,6 @@ export function DataSection({
 
       URL.revokeObjectURL(url);
     } catch (error) {
-      console.error('Failed to export data:', error);
       alert('데이터 내보내기에 실패했습니다.');
     } finally {
       setExporting(false);
@@ -108,7 +106,6 @@ export function DataSection({
       onUpdate({ type: 'LOAD_SETTINGS', payload: data });
       alert('데이터를 성공적으로 가져왔습니다.');
     } catch (error) {
-      console.error('Failed to import data:', error);
       alert('데이터 가져오기에 실패했습니다. 파일 형식을 확인해주세요.');
     } finally {
       setImporting(false);
@@ -138,7 +135,6 @@ export function DataSection({
 
           alert('모든 데이터가 삭제되었습니다.');
         } catch (error) {
-          console.error('Failed to clear data:', error);
           alert('데이터 삭제에 실패했습니다.');
         }
       }
@@ -151,7 +147,6 @@ export function DataSection({
       try {
         await signOut();
       } catch (error) {
-        console.error('Failed to sign out:', error);
         alert('로그아웃에 실패했습니다.');
       }
     }
@@ -228,7 +223,6 @@ export function DataSection({
         setBackupMessage('');
       }, 3000);
     } catch (error) {
-      console.error('Backup failed:', error);
       setBackupStatus('error');
       setBackupMessage('백업 생성에 실패했습니다.');
 
@@ -248,8 +242,7 @@ export function DataSection({
       const backups = await backupService.getBackupList();
       setBackupList(backups);
     } catch (error) {
-      console.error('Failed to load backup list:', error);
-    } finally {
+      } finally {
       setLoadingBackups(false);
     }
   };
@@ -284,7 +277,6 @@ export function DataSection({
         setBackupMessage('');
       }, 3000);
     } catch (error) {
-      console.error('Restore failed:', error);
       setBackupStatus('error');
       setBackupMessage('데이터 복원에 실패했습니다.');
 
@@ -310,7 +302,6 @@ export function DataSection({
       loadBackupList();
       alert('백업이 삭제되었습니다.');
     } catch (error) {
-      console.error('Failed to delete backup:', error);
       alert('백업 삭제에 실패했습니다.');
     }
   };

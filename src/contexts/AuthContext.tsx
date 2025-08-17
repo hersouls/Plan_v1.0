@@ -40,19 +40,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const createUserProfile = async (user: ExtendedUser) => {
     try {
       if (import.meta.env.DEV) {
-        console.log('Creating/updating user profile for:', user.uid);
-      }
+        }
 
       // Add safety check for userService
       if (!userService || typeof userService.getUserProfile !== 'function') {
-        console.error('userService is not properly loaded');
         return;
       }
 
       const existingProfile = await userService.getUserProfile(user.uid);
       if (import.meta.env.DEV) {
-        console.log('Existing profile:', existingProfile);
-      }
+        }
 
       if (!existingProfile) {
         const initialProfile: Partial<User> = {
@@ -109,7 +106,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         await userService.createOrUpdateUserProfile(user.uid, initialProfile);
       } else {
         // Update login count and last login with safe data
-        const updateData: any = {
+        const updateData: unknown = {
           loginCount: ((existingProfile as any).loginCount || 0) + 1,
           lastLoginAt: serverTimestamp(),
           lastLoginTime: serverTimestamp(), // 추가: 최근 로그인 시간
@@ -122,14 +119,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         await userService.createOrUpdateUserProfile(user.uid, updateData);
       }
     } catch (error) {
-      console.error('Error creating/updating user profile:', error);
-    }
+      }
   };
 
   useEffect(() => {
     // Firebase auth 객체가 제대로 초기화되었는지 확인
     if (!auth) {
-      console.error('Firebase auth is not initialized');
       setLoading(false);
       setError('Firebase 인증 서비스를 초기화할 수 없습니다.');
       return;
@@ -146,11 +141,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           auth,
           async (user: ExtendedUser | null) => {
             if (import.meta.env.DEV) {
-              console.log(
-                'Auth state changed:',
-                user ? 'User logged in' : 'User logged out'
-              );
-            }
+              }
 
             if (!isSubscribed) return;
 
@@ -168,12 +159,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                   const success = await fcmService.initialize(user.uid);
                   if (success) {
                     if (import.meta.env.DEV) {
-                      console.log('FCM initialized for user:', user.uid);
-                    }
+                      }
                   }
                 } catch (error) {
-                  console.error('Failed to initialize FCM:', error);
-                }
+                  }
 
                 if (!isSubscribed) return;
 
@@ -182,12 +171,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                   const profile = await userService.getUserProfile(user.uid);
                   if (isSubscribed) {
                     if (import.meta.env.DEV) {
-                      console.log('Profile loaded:', profile);
-                    }
+                      }
                     setUserProfile(profile);
                   }
                 } catch (profileError) {
-                  console.error('Profile loading error:', profileError);
                   if (isSubscribed) {
                     setUserProfile(null);
                   }
@@ -200,32 +187,24 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                     (profile) => {
                       if (isSubscribed) {
                         if (import.meta.env.DEV) {
-                          console.log('Profile updated via subscription:', profile);
-                        }
+                          }
                         setUserProfile(profile);
                       }
                     },
                     (error) => {
-                      console.error('Profile subscription error:', error);
-                    }
+                      }
                   );
                 } catch (subscriptionError) {
-                  console.error('Failed to subscribe to profile:', subscriptionError);
-                }
+                  }
               } catch (error) {
-                console.error('Error in auth state change:', error);
-              }
+                }
             } else {
               setUserProfile(null);
               if (profileUnsubscribe) {
                 try {
                   profileUnsubscribe();
                 } catch (error) {
-                  console.warn(
-                    'Error unsubscribing from profile on logout:',
-                    error
-                  );
-                }
+                  }
                 profileUnsubscribe = null;
               }
             }
@@ -236,7 +215,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           }
         );
       } catch (error) {
-        console.error('Error setting up auth listener:', error);
         if (isSubscribed) {
           setLoading(false);
         }
@@ -252,16 +230,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         try {
           authUnsubscribe();
         } catch (error) {
-          console.warn('Error unsubscribing from auth:', error);
-        }
+          }
       }
 
       if (profileUnsubscribe) {
         try {
           profileUnsubscribe();
         } catch (error) {
-          console.warn('Error unsubscribing from profile:', error);
-        }
+          }
       }
     };
   }, []);
@@ -394,7 +370,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       // 프로필 업데이트 후 사용자 프로필 새로고침
       await refreshUserProfile();
     } catch (error) {
-      console.error('Failed to update user profile:', error);
       throw error;
     }
   };
@@ -407,8 +382,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const profile = await userService.getUserProfile(user.uid);
       setUserProfile(profile);
     } catch (error) {
-      console.error('Failed to refresh user profile:', error);
-    }
+      }
   };
 
   // Update user password

@@ -308,8 +308,7 @@ export const TaskCommentSection: React.FC<TaskCommentSectionProps> = ({
       setCommentText('');
       setReplyToId(null);
     } catch (error) {
-      console.error('댓글 추가 실패:', error);
-    } finally {
+      } finally {
       setIsSubmitting(false);
     }
   }, [commentText, user, taskId, replyToId, addComment, groupMembers]);
@@ -324,8 +323,7 @@ export const TaskCommentSection: React.FC<TaskCommentSectionProps> = ({
       try {
         await updateComment(commentId, { content });
       } catch (error) {
-        console.error('댓글 수정 실패:', error);
-      }
+        }
     },
     [updateComment]
   );
@@ -337,8 +335,7 @@ export const TaskCommentSection: React.FC<TaskCommentSectionProps> = ({
       try {
         await deleteComment(commentId);
       } catch (error) {
-        console.error('댓글 삭제 실패:', error);
-      }
+        }
     },
     [deleteComment]
   );
@@ -366,8 +363,7 @@ export const TaskCommentSection: React.FC<TaskCommentSectionProps> = ({
 
         await updateComment(commentId, { reactions: newReactions });
       } catch (error) {
-        console.error('반응 추가 실패:', error);
-      }
+        }
     },
     [comments, user?.uid, updateComment]
   );

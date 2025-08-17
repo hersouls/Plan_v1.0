@@ -24,7 +24,6 @@ export function toDate(
   if (timestamp instanceof Date) {
     // Check if the Date is valid
     if (isNaN(timestamp.getTime())) {
-      console.debug('Invalid Date object provided to toDate:', timestamp);
       return new Date();
     }
     return timestamp;
@@ -35,12 +34,10 @@ export function toDate(
       const date = timestamp.toDate();
       // Check if the converted Date is valid
       if (isNaN(date.getTime())) {
-        console.debug('Invalid Timestamp provided to toDate:', timestamp);
         return new Date();
       }
       return date;
     } catch (error) {
-      console.debug('Error converting Timestamp to Date:', error, timestamp);
       return new Date();
     }
   }
@@ -50,12 +47,10 @@ export function toDate(
       const date = new Date(timestamp);
       // Check if the parsed Date is valid
       if (isNaN(date.getTime())) {
-        console.debug('Invalid date string provided to toDate:', timestamp);
         return new Date();
       }
       return date;
     } catch (error) {
-      console.debug('Error parsing date string:', error, timestamp);
       return new Date();
     }
   }
@@ -64,12 +59,10 @@ export function toDate(
   try {
     const date = new Date(timestamp);
     if (isNaN(date.getTime())) {
-      console.debug('Invalid timestamp value provided to toDate:', timestamp);
       return new Date();
     }
     return date;
   } catch (error) {
-    console.debug('Error creating Date from timestamp:', error, timestamp);
     return new Date();
   }
 }

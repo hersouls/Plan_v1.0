@@ -28,15 +28,12 @@ export class PWAManager {
       try {
         await this.registerServiceWorker();
       } catch (error) {
-        console.error('Service Worker registration failed:', error);
-      }
+        }
     }
   }
 
   private listenForInstallPrompt() {
     window.addEventListener('beforeinstallprompt', event => {
-      console.log('PWA install prompt available');
-
       // Prevent the default install prompt
       event.preventDefault();
 
@@ -50,7 +47,6 @@ export class PWAManager {
 
   async registerServiceWorker(): Promise<ServiceWorkerRegistration | null> {
     if (!('serviceWorker' in navigator)) {
-      console.warn('Service Worker not supported');
       return null;
     }
 
@@ -61,12 +57,8 @@ export class PWAManager {
 
       this.registration = registration;
 
-      console.log('Service Worker registered successfully');
-
       // Listen for updates
       registration.addEventListener('updatefound', () => {
-        console.log('Service Worker update found');
-
         const newWorker = registration.installing;
         if (newWorker) {
           newWorker.addEventListener('statechange', () => {
@@ -74,7 +66,6 @@ export class PWAManager {
               newWorker.state === 'installed' &&
               navigator.serviceWorker.controller
             ) {
-              console.log('New Service Worker installed, update available');
               window.dispatchEvent(
                 new CustomEvent('sw-update-available', {
                   detail: { registration },
@@ -87,14 +78,12 @@ export class PWAManager {
 
       return registration;
     } catch (error) {
-      console.error('Service Worker registration failed:', error);
       return null;
     }
   }
 
   async promptInstall(): Promise<boolean> {
     if (!this.installPrompt) {
-      console.warn('Install prompt not available');
       return false;
     }
 
@@ -108,10 +97,8 @@ export class PWAManager {
       // Clear the stored prompt
       this.installPrompt = null;
 
-      console.log('Install prompt result:', result.outcome);
       return result.outcome === 'accepted';
     } catch (error) {
-      console.error('Install prompt failed:', error);
       return false;
     }
   }
@@ -129,7 +116,6 @@ export class PWAManager {
 
   async updateServiceWorker(): Promise<void> {
     if (!this.registration) {
-      console.warn('No service worker registration available');
       return;
     }
 
@@ -147,8 +133,7 @@ export class PWAManager {
         });
       }
     } catch (error) {
-      console.error('Service Worker update failed:', error);
-    }
+      }
   }
 
   getServiceWorkerStatus(): ServiceWorkerStatus {
@@ -191,10 +176,8 @@ export class PWAManager {
         await Promise.all(
           cacheNames.map(cacheName => caches.delete(cacheName))
         );
-        console.log('All caches cleared');
-      } catch (error) {
-        console.error('Failed to clear caches:', error);
-      }
+        } catch (error) {
+        }
     }
   }
 
@@ -204,22 +187,18 @@ export class PWAManager {
       !this.registration ||
       !('sync' in window.ServiceWorkerRegistration.prototype)
     ) {
-      console.warn('Background sync not supported');
       return;
     }
 
     try {
       await this.registration.sync.register(tag);
-      console.log('Background sync registered:', tag);
-    } catch (error) {
-      console.error('Background sync registration failed:', error);
-    }
+      } catch (error) {
+      }
   }
 
   // Notification helpers
   async requestNotificationPermission(): Promise<NotificationPermission> {
     if (!('Notification' in window)) {
-      console.warn('Notifications not supported');
       return 'denied';
     }
 
@@ -237,7 +216,6 @@ export class PWAManager {
     const permission = await this.requestNotificationPermission();
 
     if (permission !== 'granted') {
-      console.warn('Notification permission denied');
       return;
     }
 
@@ -260,7 +238,6 @@ export class PWAManager {
   // Share API helpers
   async shareContent(data: ShareData): Promise<boolean> {
     if (!('share' in navigator)) {
-      console.warn('Web Share API not supported');
       return false;
     }
 
@@ -269,8 +246,7 @@ export class PWAManager {
       return true;
     } catch (error) {
       if ((error as Error).name !== 'AbortError') {
-        console.error('Share failed:', error);
-      }
+        }
       return false;
     }
   }

@@ -94,8 +94,7 @@ export function StatisticsInsights({
         setActivityPattern(patternData);
       }
     } catch (error) {
-      console.error('인사이트 로드 실패:', error);
-    } finally {
+      } finally {
       setLoading(false);
     }
   };

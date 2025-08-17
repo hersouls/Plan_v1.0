@@ -11,7 +11,7 @@ export interface StatisticsInsight {
   priority: 'low' | 'medium' | 'high';
   actionable: boolean;
   actions?: string[];
-  data?: any;
+  data?: unknown;
 }
 
 export interface PerformancePrediction {
@@ -141,13 +141,11 @@ ${JSON.stringify(timePatterns, null, 2)}
             insights.map(i => this.validateInsight(i)) : 
             this.getDefaultInsights();
         } catch (parseError) {
-          console.error('Failed to parse insights:', parseError);
           return this.getDefaultInsights();
         }
       }
     } catch (error) {
-      console.error('Statistics analysis error:', error);
-    }
+      }
 
     return this.getDefaultInsights();
   }
@@ -215,8 +213,7 @@ ${JSON.stringify(timePatterns, null, 2)}
         }
       }
     } catch (error) {
-      console.error('Performance prediction error:', error);
-    }
+      }
 
     return this.getDefaultPrediction(targetPeriod);
   }
@@ -304,8 +301,7 @@ ${JSON.stringify(memberPerformance, null, 2)}
         }
       }
     } catch (error) {
-      console.error('Team analysis error:', error);
-    }
+      }
 
     return this.getDefaultTeamAnalysis();
   }
@@ -366,13 +362,12 @@ ${JSON.stringify(memberPerformance, null, 2)}
         }
       }
     } catch (error) {
-      console.error('Activity pattern detection error:', error);
-    }
+      }
 
     return this.getDefaultActivityPattern();
   }
 
-  private validateInsight(insight: any): StatisticsInsight {
+  private validateInsight(_insight: unknown): StatisticsInsight {
     return {
       type: ['trend', 'pattern', 'anomaly', 'prediction', 'recommendation'].includes(insight.type) ? 
         insight.type : 'recommendation',

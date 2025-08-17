@@ -54,7 +54,6 @@ function TodoHome() {
           setUserProfile(profile as User);
         }
       } catch (error) {
-        console.error('사용자 프로필 로드 실패:', error);
         // 프로필 로드 실패 시 Auth 정보만 사용
         setUserProfile(null);
       } finally {
@@ -123,7 +122,6 @@ function TodoHome() {
         isToday(taskDate) || (isPast(taskDate) && task.status !== 'completed')
       );
     } catch (error) {
-      console.warn('Invalid dueDate for task:', task.id, task.dueDate, error);
       return false;
     }
   });
@@ -133,7 +131,6 @@ function TodoHome() {
     try {
       return isThisWeek(toDate(task.dueDate));
     } catch (error) {
-      console.warn('Invalid dueDate for task:', task.id, task.dueDate, error);
       return false;
     }
   });
@@ -143,7 +140,6 @@ function TodoHome() {
     try {
       return isPast(toDate(task.dueDate));
     } catch (error) {
-      console.warn('Invalid dueDate for task:', task.id, task.dueDate, error);
       return false;
     }
   });
@@ -194,12 +190,6 @@ function TodoHome() {
               (isPast(taskDate) && task.status !== 'completed')
             );
           } catch (error) {
-            console.warn(
-              'Invalid dueDate for task:',
-              task.id,
-              task.dueDate,
-              error
-            );
             return false;
           }
         });
@@ -209,12 +199,6 @@ function TodoHome() {
           try {
             return isThisWeek(toDate(task.dueDate));
           } catch (error) {
-            console.warn(
-              'Invalid dueDate for task:',
-              task.id,
-              task.dueDate,
-              error
-            );
             return false;
           }
         });
@@ -232,7 +216,6 @@ function TodoHome() {
       try {
         return isPast(toDate(task.dueDate));
       } catch (error) {
-        console.warn('Invalid dueDate for task:', task.id, task.dueDate, error);
         return false;
       }
     });
@@ -257,7 +240,7 @@ function TodoHome() {
     };
   }, [filteredTasks]);
 
-  const handleTaskCreate = async (taskData: any) => {
+  const handleTaskCreate = async (_taskData: unknown) => {
     if (!user) {
       alert('로그인이 필요합니다.');
       return;
@@ -284,13 +267,10 @@ function TodoHome() {
       const visibilityText =
         groupId === 'personal' ? '나만 보는 할일' : '그룹 할일';
       const successMessage = `✅ "${taskData.title}" ${visibilityText}이 추가되었습니다!`;
-      console.log(successMessage);
       // TODO: 토스트 알림으로 변경
     } catch (error) {
-      console.error('Failed to create task:', error);
       // 에러 피드백 개선
       const errorMessage = '❌ 할일 생성에 실패했습니다. 다시 시도해주세요.';
-      console.error(errorMessage);
       // TODO: 토스트 알림으로 변경
     }
   };
@@ -300,8 +280,7 @@ function TodoHome() {
       await toggleTaskComplete(taskId);
     } catch (error) {
       alert('할일 상태 변경에 실패했습니다.');
-      console.error('Failed to toggle task:', error);
-    }
+      }
   };
 
   const handleTaskEdit = (task: Task) => {
@@ -315,8 +294,7 @@ function TodoHome() {
         alert('할일이 삭제되었습니다.');
       } catch (error) {
         alert('할일 삭제에 실패했습니다.');
-        console.error('Failed to delete task:', error);
-      }
+        }
     }
   };
 
@@ -364,7 +342,6 @@ function TodoHome() {
         await signOut();
         navigate('/login');
       } catch (error) {
-        console.error('로그아웃 중 오류가 발생했습니다:', error);
         alert('로그아웃 중 오류가 발생했습니다.');
       }
     }

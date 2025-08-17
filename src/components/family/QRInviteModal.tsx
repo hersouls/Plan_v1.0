@@ -35,8 +35,7 @@ export function QRInviteModal({
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
-      console.error('Failed to copy link:', err);
-    }
+      }
   };
 
   const handleCopyCode = async () => {
@@ -45,8 +44,7 @@ export function QRInviteModal({
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
-      console.error('Failed to copy code:', err);
-    }
+      }
   };
 
   const handleShare = async () => {
@@ -58,8 +56,7 @@ export function QRInviteModal({
           url: inviteUrl,
         });
       } catch (err) {
-        console.error('Failed to share:', err);
-      }
+        }
     } else {
       // Fallback to copy link
       handleCopyLink();

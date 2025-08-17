@@ -280,7 +280,7 @@ export interface FamilyAnalytics {
 export interface FamilyError {
   code: string;
   message: string;
-  details?: any;
+  details?: unknown;
   timestamp: Date;
   userId?: string;
   action?: string;

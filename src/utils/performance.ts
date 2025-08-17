@@ -5,8 +5,7 @@ export const measurePerformance = async (name: string) => {
     const performance = await loadPerformance();
     if (!performance) {
       if (import.meta.env.DEV) {
-        console.warn('Performance monitoring not available');
-      }
+        }
       return {
         start: () => {},
         stop: () => {}
@@ -20,18 +19,15 @@ export const measurePerformance = async (name: string) => {
       start: () => {
         performanceTrace.start();
         if (import.meta.env.DEV) {
-          console.log(`⏱️ Performance trace started: ${name}`);
-        }
+          }
       },
       stop: () => {
         performanceTrace.stop();
         if (import.meta.env.DEV) {
-          console.log(`⏱️ Performance trace stopped: ${name}`);
-        }
+          }
       }
     };
   } catch (error) {
-    console.warn('Performance measurement error:', error);
     return {
       start: () => {},
       stop: () => {}

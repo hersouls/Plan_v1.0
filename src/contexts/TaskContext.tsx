@@ -210,8 +210,8 @@ const applyFiltersAndSort = (
 
   // Apply sorting
   filteredTasks.sort((a, b) => {
-    let aValue: any;
-    let bValue: any;
+    let aValue: unknown;
+    let bValue: unknown;
 
     switch (sortBy) {
       case 'dueDate':
@@ -544,7 +544,6 @@ export function TaskProvider({ children }: { children: React.ReactNode }) {
         dispatch({ type: 'SET_TASKS', payload: tasks });
         dispatch({ type: 'SET_LOADING', payload: false });
       } catch (error) {
-        console.error('Error processing tasks:', error);
         dispatch({ type: 'SET_ERROR', payload: '할일 목록을 처리하는 중 오류가 발생했습니다.' });
         dispatch({ type: 'SET_LOADING', payload: false });
       }
@@ -569,7 +568,6 @@ export function TaskProvider({ children }: { children: React.ReactNode }) {
       
       await taskService.createTask(fullTaskData);
     } catch (error) {
-      console.error('Error creating task:', error);
       dispatch({ type: 'SET_ERROR', payload: '할일을 생성하는 중 오류가 발생했습니다.' });
       throw error;
     }
@@ -579,7 +577,6 @@ export function TaskProvider({ children }: { children: React.ReactNode }) {
     try {
       await taskService.updateTask(taskId, updates);
     } catch (error) {
-      console.error('Error updating task:', error);
       dispatch({ type: 'SET_ERROR', payload: '할일을 업데이트하는 중 오류가 발생했습니다.' });
       throw error;
     }
@@ -589,7 +586,6 @@ export function TaskProvider({ children }: { children: React.ReactNode }) {
     try {
       await taskService.deleteTask(taskId);
     } catch (error) {
-      console.error('Error deleting task:', error);
       dispatch({ type: 'SET_ERROR', payload: '할일을 삭제하는 중 오류가 발생했습니다.' });
       throw error;
     }
@@ -615,7 +611,6 @@ export function TaskProvider({ children }: { children: React.ReactNode }) {
     try {
       await updateTask(taskId, updates);
     } catch (error) {
-      console.error('Error toggling task status:', error);
       dispatch({ type: 'SET_ERROR', payload: '할일 상태를 변경하는 중 오류가 발생했습니다.' });
     }
   };
@@ -691,7 +686,6 @@ export function TaskProvider({ children }: { children: React.ReactNode }) {
       dispatch({ type: 'SET_LOADING', payload: true });
       // The subscription will automatically refresh the data
     } catch (error) {
-      console.error('Error refreshing tasks:', error);
       dispatch({ type: 'SET_ERROR', payload: '할일 목록을 새로고침하는 중 오류가 발생했습니다.' });
     }
   };

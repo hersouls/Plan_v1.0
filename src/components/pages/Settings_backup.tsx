@@ -43,8 +43,7 @@ export const Settings: React.FC<SettingsProps> = ({
       try {
         setPreferences(JSON.parse(savedPreferences));
       } catch (error) {
-        console.error('Failed to parse preferences:', error);
-      }
+        }
     }
   }, []);
 
@@ -65,7 +64,6 @@ export const Settings: React.FC<SettingsProps> = ({
         navigate('/login');
       }
     } catch (error) {
-      console.error('Logout failed:', error);
       alert('로그아웃에 실패했습니다.');
     }
   };

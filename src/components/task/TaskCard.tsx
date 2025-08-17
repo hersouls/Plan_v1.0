@@ -265,17 +265,14 @@ const TaskCard: React.FC<TaskCardProps> = memo(
             await navigator.share(shareData);
           } catch (error) {
             if ((error as Error).name !== 'AbortError') {
-              console.error('공유 실패:', error);
               // 공유 실패 시 클립보드에 복사
               navigator.clipboard.writeText(taskUrl);
-              console.log('링크가 클립보드에 복사되었습니다.');
-            }
+              }
           }
         } else {
           // Web Share API를 지원하지 않는 경우 클립보드에 복사
           navigator.clipboard.writeText(taskUrl);
-          console.log('링크가 클립보드에 복사되었습니다.');
-        }
+          }
       },
       [task.id, task.title, task.description, formattedDueDate, task.priority]
     );
@@ -300,8 +297,7 @@ const TaskCard: React.FC<TaskCardProps> = memo(
         window.open(kakaoUrl, '_blank');
 
         // TODO: 토스트 알림으로 안내 메시지 표시
-        console.log('링크가 복사되었습니다. 카카오톡에서 직접 등록해주세요.');
-      },
+        },
       [task.id, task.title, task.description, formattedDueDate, task.priority]
     );
 
@@ -324,7 +320,6 @@ const TaskCard: React.FC<TaskCardProps> = memo(
             await navigator.share(shareData);
           } catch (error) {
             if ((error as Error).name !== 'AbortError') {
-              console.error('공유 실패:', error);
               handleCopyLink(e);
             }
           }
@@ -423,7 +418,6 @@ const TaskCard: React.FC<TaskCardProps> = memo(
 
     // Early return if task is undefined or null
     if (!task) {
-      console.warn('TaskCard: task prop is undefined or null');
       return null;
     }
 

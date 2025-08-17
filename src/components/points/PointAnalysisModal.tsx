@@ -46,8 +46,7 @@ export function PointAnalysisModal({
       );
       setAnalysis(result);
     } catch (error) {
-      console.error('포인트 분석 실패:', error);
-    } finally {
+      } finally {
       setLoading(false);
     }
   };

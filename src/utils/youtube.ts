@@ -43,7 +43,6 @@ export const getYouTubeEmbedUrl = (url: string): string | null => {
     
     return null;
   } catch (error) {
-    console.error('Invalid YouTube URL:', error);
     return null;
   }
 };

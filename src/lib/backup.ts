@@ -22,11 +22,11 @@ export interface BackupData {
   timestamp: string;
   version: string;
   data: {
-    profile: any;
+    profile: unknown;
     settings: SettingsState;
-    tasks: any[];
-    groups: any[];
-    activities: any[];
+    tasks: unknown[];
+    groups: unknown[];
+    activities: unknown[];
   };
   metadata: {
     backupType: 'auto' | 'manual';
@@ -46,8 +46,6 @@ export class BackupService {
   // 자동 백업 실행
   async createAutoBackup(frequency: 'weekly' | 'monthly'): Promise<string> {
     try {
-      console.log(`Creating ${frequency} backup for user: ${this.userId}`);
-      
       const backupData = await this.collectUserData();
       const fileName = this.generateBackupFileName(frequency);
       const path = `backups/${this.userId}/auto/${frequency}/${fileName}`;
@@ -57,10 +55,8 @@ export class BackupService {
       // 오래된 백업 정리
       await this.cleanupOldBackups(frequency);
       
-      console.log(`Backup created successfully: ${path}`);
       return downloadURL;
     } catch (error) {
-      console.error('Failed to create backup:', error);
       throw new Error('백업 생성에 실패했습니다.');
     }
   }
@@ -194,12 +190,10 @@ export class BackupService {
       for (const item of result.items) {
         const metadata = await this.getFileMetadata(item.fullPath);
         if (metadata && metadata.timeCreated < cutoffDate.getTime()) {
-          console.log(`Deleting old backup: ${item.fullPath}`);
           await deleteObject(item);
         }
       }
     } catch (error) {
-      console.error('Failed to cleanup old backups:', error);
       // 정리 실패는 백업 실패로 처리하지 않음
     }
   }
@@ -230,7 +224,6 @@ export class BackupService {
       }
       return null;
     } catch (error) {
-      console.error('Failed to get file metadata:', error);
       return null;
     }
   }
@@ -269,7 +262,6 @@ export class BackupService {
       
       return backups.sort((a, b) => b.timestamp - a.timestamp);
     } catch (error) {
-      console.error('Failed to get backup list:', error);
       return [];
     }
   }
@@ -294,7 +286,6 @@ export class BackupService {
       
       return backupData;
     } catch (error) {
-      console.error('Failed to restore backup:', error);
       throw new Error('백업 복원에 실패했습니다.');
     }
   }
@@ -304,9 +295,7 @@ export class BackupService {
     try {
       const backupRef = ref(storage, backupPath);
       await deleteObject(backupRef);
-      console.log(`Backup deleted: ${backupPath}`);
-    } catch (error) {
-      console.error('Failed to delete backup:', error);
+      } catch (error) {
       throw new Error('백업 삭제에 실패했습니다.');
     }
   }
@@ -336,15 +325,12 @@ export class BackupScheduler {
       try {
         const backupService = new BackupService(userId);
         await backupService.createAutoBackup(frequency);
-        console.log(`Scheduled ${frequency} backup completed for user: ${userId}`);
-      } catch (error) {
-        console.error(`Scheduled ${frequency} backup failed for user: ${userId}:`, error);
-      }
+        } catch (error) {
+        }
     }, interval);
     
     this.intervals.set(key, timeout);
-    console.log(`Started ${frequency} backup schedule for user: ${userId}`);
-  }
+    }
 
   // 백업 스케줄 중지
   stopScheduledBackup(userId: string, frequency: 'weekly' | 'monthly'): void {
@@ -354,16 +340,14 @@ export class BackupScheduler {
     if (timeout) {
       clearInterval(timeout);
       this.intervals.delete(key);
-      console.log(`Stopped ${frequency} backup schedule for user: ${userId}`);
-    }
+      }
   }
 
   // 모든 스케줄 중지
   stopAllSchedules(): void {
     this.intervals.forEach((timeout) => clearInterval(timeout));
     this.intervals.clear();
-    console.log('All backup schedules stopped');
-  }
+    }
 
   // 백업 간격 계산 (밀리초)
   private calculateInterval(frequency: 'weekly' | 'monthly'): number {

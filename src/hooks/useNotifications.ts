@@ -31,7 +31,6 @@ export function useNotifications() {
         setNotifications(notificationsData);
         setStats(statsData);
       } catch (err) {
-        console.error('알림 로드 실패:', err);
         setError('알림을 불러올 수 없습니다.');
       } finally {
         setLoading(false);
@@ -82,8 +81,7 @@ export function useNotifications() {
         )
       );
     } catch (error) {
-      console.error('알림 읽음 처리 실패:', error);
-    }
+      }
   };
 
   // 모든 알림 읽음 처리
@@ -96,8 +94,7 @@ export function useNotifications() {
         prev.map(n => ({ ...n, status: 'read' as const, readAt: new Date() }))
       );
     } catch (error) {
-      console.error('모든 알림 읽음 처리 실패:', error);
-    }
+      }
   };
 
   // 알림 삭제
@@ -106,8 +103,7 @@ export function useNotifications() {
       await NotificationService.deleteNotification(notificationId);
       setNotifications(prev => prev.filter(n => n.id !== notificationId));
     } catch (error) {
-      console.error('알림 삭제 실패:', error);
-    }
+      }
   };
 
   return {

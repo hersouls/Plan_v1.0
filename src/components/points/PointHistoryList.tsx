@@ -134,7 +134,7 @@ export function PointHistoryList({
   }, [filteredAndSortedHistories]);
 
   // 날짜 포맷팅
-  const formatDate = (timestamp: any) => {
+  const formatDate = (_timestamp: unknown) => {
     try {
       const date = new Date(timestamp.seconds * 1000);
       const now = new Date();

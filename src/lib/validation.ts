@@ -7,7 +7,7 @@ export interface ValidationRule {
   minLength?: number;
   maxLength?: number;
   pattern?: RegExp;
-  custom?: (value: any) => string | null;
+  custom?: (_value: unknown) => string | null;
   message?: string;
 }
 
@@ -32,7 +32,7 @@ export class ValidationService {
   /**
    * Validate a single field
    */
-  validateField(value: any, rules: ValidationRule): string | null {
+  validateField(_value: unknown, rules: ValidationRule): string | null {
     // Required validation
     if (rules.required && this.isEmpty(value)) {
       return rules.message || '이 필드는 필수입니다.';
@@ -317,7 +317,7 @@ export class ValidationService {
   /**
    * Check if value is empty
    */
-  private isEmpty(value: any): boolean {
+  private isEmpty(_value: unknown): boolean {
     if (value === null || value === undefined) return true;
     if (typeof value === 'string') return value.trim().length === 0;
     if (Array.isArray(value)) return value.length === 0;
@@ -363,7 +363,7 @@ export class ValidationService {
    * Custom validation for specific business rules
    */
   validateBusinessRules(
-    data: any,
+    _data: unknown,
     type: 'task' | 'group' | 'user'
   ): ValidationResult {
     const errors: Record<string, string> = {};

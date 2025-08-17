@@ -55,7 +55,7 @@ export const TaskDetailModal = ({
   };
 
   // 날짜 포맷팅
-  const formatDate = (timestamp: any) => {
+  const formatDate = (_timestamp: unknown) => {
     const date = toDate(timestamp);
     return date.toLocaleDateString('ko-KR', {
       year: 'numeric',
@@ -65,7 +65,7 @@ export const TaskDetailModal = ({
   };
 
   // 시간 포맷팅
-  const formatTime = (timestamp: any) => {
+  const formatTime = (_timestamp: unknown) => {
     const date = toDate(timestamp);
     return date.toLocaleTimeString('ko-KR', {
       hour: '2-digit',

@@ -95,7 +95,6 @@ export function useGroup(options: UseGroupOptions = {}): UseGroupReturn {
           setMembers([]);
           setStats(null);
           // 에러 메시지를 설정하지 않고 조용히 처리
-          console.warn(`Group ${targetGroupId} not found`);
           return;
         }
         setGroup(groupData);
@@ -108,7 +107,6 @@ export function useGroup(options: UseGroupOptions = {}): UseGroupReturn {
             );
             setMembers(membersData);
           } catch (error) {
-            console.error('Error loading members:', error);
             setMembers([]);
           }
         }
@@ -124,7 +122,7 @@ export function useGroup(options: UseGroupOptions = {}): UseGroupReturn {
               setMembers(prevMembers =>
                 prevMembers.map(member => {
                   const memberStat = statsData.memberStats.find(
-                    (stat: any) => stat.userId === member.userId
+                    (_stat: unknown) => stat.userId === member.userId
                   );
                   return {
                     ...member,
@@ -136,12 +134,10 @@ export function useGroup(options: UseGroupOptions = {}): UseGroupReturn {
               );
             }
           } catch (error) {
-            console.error('Error loading stats:', error);
             setStats(null);
           }
         }
       } catch (err) {
-        console.error('Error loading group data:', err);
         setError(
           err instanceof Error
             ? err.message
@@ -181,7 +177,6 @@ export function useGroup(options: UseGroupOptions = {}): UseGroupReturn {
           setGroup(groupData);
         },
         error => {
-          console.error('Error subscribing to group:', error);
           setError('그룹 정보 구독 중 오류가 발생했습니다.');
         }
       );
@@ -193,7 +188,6 @@ export function useGroup(options: UseGroupOptions = {}): UseGroupReturn {
             const membersData = await groupService.getGroupMembers(groupId);
             setMembers(membersData);
           } catch (error) {
-            console.error('Error updating members:', error);
             // 그룹이 존재하지 않는 경우 빈 배열로 설정
             setMembers([]);
           }
@@ -207,8 +201,7 @@ export function useGroup(options: UseGroupOptions = {}): UseGroupReturn {
         unsubscribeMembers = () => clearInterval(interval);
       }
     } catch (error) {
-      console.error('Error setting up subscriptions:', error);
-    }
+      }
 
     return () => {
       if (unsubscribeGroup) unsubscribeGroup();
@@ -244,13 +237,11 @@ export function useGroup(options: UseGroupOptions = {}): UseGroupReturn {
             });
           }
         } catch (profileError) {
-          console.warn('Failed to update user profile:', profileError);
           // Don't throw error as group creation was successful
         }
 
         return newGroupId;
       } catch (err) {
-        console.error('Error creating group:', err);
         setError('그룹을 생성하는 중 오류가 발생했습니다.');
         throw err;
       }
@@ -271,7 +262,6 @@ export function useGroup(options: UseGroupOptions = {}): UseGroupReturn {
           );
         }
       } catch (err) {
-        console.error('Error updating group:', err);
         setError('그룹을 업데이트하는 중 오류가 발생했습니다.');
         throw err;
       }
@@ -297,7 +287,6 @@ export function useGroup(options: UseGroupOptions = {}): UseGroupReturn {
           setStats(null);
         }
       } catch (err) {
-        console.error('Error deleting group:', err);
         setError('그룹을 삭제하는 중 오류가 발생했습니다.');
         throw err;
       }
@@ -323,7 +312,6 @@ export function useGroup(options: UseGroupOptions = {}): UseGroupReturn {
           setStats(null);
         }
       } catch (err) {
-        console.error('Error leaving group:', err);
         setError('그룹을 나가는 중 오류가 발생했습니다.');
         throw err;
       }
@@ -347,7 +335,6 @@ export function useGroup(options: UseGroupOptions = {}): UseGroupReturn {
         setError(null);
         await groupService.inviteMemberByEmail(targetGroupId, email, role);
       } catch (err) {
-        console.error('Error inviting member:', err);
         setError('멤버를 초대하는 중 오류가 발생했습니다.');
         throw err;
       }
@@ -364,7 +351,6 @@ export function useGroup(options: UseGroupOptions = {}): UseGroupReturn {
         // Update local members state
         setMembers(prev => prev.filter(member => member.userId !== userId));
       } catch (err) {
-        console.error('Error removing member:', err);
         setError('멤버를 제거하는 중 오류가 발생했습니다.');
         throw err;
       }
@@ -385,7 +371,6 @@ export function useGroup(options: UseGroupOptions = {}): UseGroupReturn {
           )
         );
       } catch (err) {
-        console.error('Error changing member role:', err);
         setError('멤버 역할을 변경하는 중 오류가 발생했습니다.');
         throw err;
       }
@@ -409,7 +394,6 @@ export function useGroup(options: UseGroupOptions = {}): UseGroupReturn {
 
       return inviteCode;
     } catch (err) {
-      console.error('Error generating invite code:', err);
       setError('초대 코드를 생성하는 중 오류가 발생했습니다.');
       throw err;
     }
@@ -432,7 +416,6 @@ export function useGroup(options: UseGroupOptions = {}): UseGroupReturn {
         // Load the newly joined group data
         await loadGroupData(joinedGroupId);
       } catch (err) {
-        console.error('Error joining group:', err);
         setError('그룹에 참여하는 중 오류가 발생했습니다.');
         throw err;
       }
@@ -488,7 +471,6 @@ export function useUserGroups() {
         const userGroups = await groupService.getUserGroups(user.uid);
         setGroups(userGroups);
       } catch (err) {
-        console.error('Error loading user groups:', err);
         setError('사용자 그룹을 불러오는 중 오류가 발생했습니다.');
       } finally {
         setLoading(false);
@@ -507,7 +489,6 @@ export function useUserGroups() {
       const userGroups = await groupService.getUserGroups(user.uid);
       setGroups(userGroups);
     } catch (err) {
-      console.error('Error refetching user groups:', err);
       setError('사용자 그룹을 다시 불러오는 중 오류가 발생했습니다.');
     } finally {
       setLoading(false);

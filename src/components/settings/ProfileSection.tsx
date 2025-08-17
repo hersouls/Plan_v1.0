@@ -122,7 +122,6 @@ export function ProfileSection() {
         setEditData(newProfileData);
       }
     } catch (error) {
-      console.error('Error loading user profile:', error);
       // 에러 발생 시 Auth 데이터만 사용
       const newProfileData = {
         displayName: user.displayName || '',
@@ -197,8 +196,7 @@ export function ProfileSection() {
         try {
           await deleteAvatarImage(user.uid, editData.avatarStorageUrl);
         } catch (error) {
-          console.warn('기존 아바타 삭제 실패:', error);
-        }
+          }
       }
 
       // 새 아바타 정보로 업데이트
@@ -213,9 +211,7 @@ export function ProfileSection() {
       setSelectedFile(null);
       setUploadProgress(0);
 
-      console.log('Avatar uploaded successfully:', result);
-    } catch (error) {
-      console.error('Failed to upload avatar:', error);
+      } catch (error) {
       alert(
         error instanceof Error ? error.message : '아바타 업로드에 실패했습니다.'
       );
@@ -265,9 +261,7 @@ export function ProfileSection() {
             displayName: editData.displayName,
             photoURL: editData.avatar,
           });
-          console.log('Firebase Auth profile updated');
-        } catch (authError) {
-          console.error('Failed to update Firebase Auth profile:', authError);
+          } catch (authError) {
           // Auth 업데이트 실패해도 Firestore 업데이트는 계속 진행
         }
       }
@@ -298,9 +292,7 @@ export function ProfileSection() {
       // 프로필 업데이트 후 페이지 새로고침으로 변경사항 반영
       window.location.reload();
 
-      console.log('Profile updated:', editData);
-    } catch (error) {
-      console.error('Failed to update profile:', error);
+      } catch (error) {
       alert('프로필 업데이트에 실패했습니다.');
     } finally {
       setSaving(false);

@@ -96,7 +96,6 @@ export const useTasks = (options: UseTasksOptions = {}): UseTasksReturn => {
         return await taskService.createTask(taskData);
       } catch (err) {
         const errorMessage = '할일 생성 중 오류가 발생했습니다.';
-        console.error('Create task error:', err);
         setError(errorMessage);
         throw new Error(errorMessage);
       }
@@ -113,7 +112,6 @@ export const useTasks = (options: UseTasksOptions = {}): UseTasksReturn => {
         await taskService.updateTask(taskId, updates);
       } catch (err) {
         const errorMessage = '할일 수정 중 오류가 발생했습니다.';
-        console.error('Update task error:', err);
         setError(errorMessage);
         throw new Error(errorMessage);
       }
@@ -130,7 +128,6 @@ export const useTasks = (options: UseTasksOptions = {}): UseTasksReturn => {
         await taskService.deleteTask(taskId);
       } catch (err) {
         const errorMessage = '할일 삭제 중 오류가 발생했습니다.';
-        console.error('Delete task error:', err);
         setError(errorMessage);
         throw new Error(errorMessage);
       }
@@ -182,7 +179,6 @@ export const useTasks = (options: UseTasksOptions = {}): UseTasksReturn => {
                 task.title
               );
             } catch (pointsError) {
-              console.error('포인트 지급 실패:', pointsError);
               // 포인트 지급 실패는 할일 완료를 막지 않음
             }
           }
@@ -195,7 +191,6 @@ export const useTasks = (options: UseTasksOptions = {}): UseTasksReturn => {
         }
       } catch (err) {
         const errorMessage = '할일 상태 변경 중 오류가 발생했습니다.';
-        console.error('Toggle task complete error:', err);
         setError(errorMessage);
         throw new Error(errorMessage);
       }
@@ -213,7 +208,6 @@ export const useTasks = (options: UseTasksOptions = {}): UseTasksReturn => {
       setTasks(taskList);
     } catch (err) {
       const errorMessage = '할일을 새로고침하는 중 오류가 발생했습니다.';
-      console.error('Refresh tasks error:', err);
       setError(errorMessage);
     } finally {
       setLoading(false);
@@ -277,7 +271,6 @@ export const useTasks = (options: UseTasksOptions = {}): UseTasksReturn => {
 
           setTasks(filteredTasks);
         } catch (err) {
-          console.error('Load initial data error:', err);
           setError('할일을 불러오는 중 오류가 발생했습니다.');
         } finally {
           setLoading(false);
@@ -291,7 +284,6 @@ export const useTasks = (options: UseTasksOptions = {}): UseTasksReturn => {
     let unsubscribe: (() => void) | undefined;
 
     const handleError = (error: Error) => {
-      console.error('Tasks subscription error:', error);
       setError('할일을 불러오는 중 오류가 발생했습니다.');
       setLoading(false);
     };

@@ -61,8 +61,7 @@ export class NavigationCallback {
       try {
         state.returnQuery = JSON.parse(returnQuery);
       } catch (e) {
-        console.warn('Failed to parse returnQuery:', e);
-      }
+        }
     }
     
     // 프래그먼트 복원
@@ -77,8 +76,7 @@ export class NavigationCallback {
       try {
         state.contextData = JSON.parse(contextData);
       } catch (e) {
-        console.warn('Failed to parse contextData:', e);
-      }
+        }
     }
     
     return state;
@@ -149,7 +147,7 @@ export class NavigationCallback {
     const currentSearch = new URLSearchParams(window.location.search);
     const currentFragment = window.location.hash.substring(1);
     
-    const callbackOptions: any = {};
+    const callbackOptions: unknown = {};
     
     // 현재 쿼리 파라미터 보존
     if (options?.preserveQuery && currentSearch.toString()) {

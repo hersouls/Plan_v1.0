@@ -51,7 +51,6 @@ function Notifications() {
         setNotifications(notificationsData);
         setStats(statsData);
       } catch (err) {
-        console.error('알림 로드 실패:', err);
         setError('알림을 불러올 수 없습니다.');
       } finally {
         setLoading(false);
@@ -80,8 +79,7 @@ function Notifications() {
         )
       );
     } catch (error) {
-      console.error('알림 읽음 처리 실패:', error);
-    }
+      }
   };
 
   // 모든 알림 읽음 처리
@@ -94,8 +92,7 @@ function Notifications() {
         prev.map(n => ({ ...n, status: 'read' as const, readAt: new Date() }))
       );
     } catch (error) {
-      console.error('모든 알림 읽음 처리 실패:', error);
-    }
+      }
   };
 
   // 알림 삭제
@@ -106,8 +103,7 @@ function Notifications() {
       await NotificationService.deleteNotification(notificationId);
       setNotifications(prev => prev.filter(n => n.id !== notificationId));
     } catch (error) {
-      console.error('알림 삭제 실패:', error);
-    }
+      }
   };
 
   // 알림 타입별 아이콘
@@ -141,7 +137,7 @@ function Notifications() {
   };
 
   // 날짜 포맷팅
-  const formatDate = (timestamp: any) => {
+  const formatDate = (_timestamp: unknown) => {
     try {
       const date = timestamp?.seconds ? new Date(timestamp.seconds * 1000) : new Date(timestamp);
       const now = new Date();

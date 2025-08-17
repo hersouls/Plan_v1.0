@@ -381,14 +381,13 @@ function TaskCreate({ mode = 'create' }: TaskCreateProps) {
           assigneeId: finalAssigneeId,
         } as CreateTaskInput;
 
-        console.log('Creating task with data:', createData); // 디버깅용 로그
+        // 디버깅용 로그
         await createTask(createData);
       }
 
       navigate(-1); // Go back
     } catch (error) {
-      console.error('Failed to save task:', error);
-    } finally {
+      } finally {
       setSaving(false);
     }
   };

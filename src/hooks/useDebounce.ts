@@ -22,7 +22,7 @@ export function useDebounce<T>(value: T, delay: number): T {
 /**
  * Hook that debounces a callback function
  */
-export function useDebouncedCallback<T extends (...args: any[]) => any>(
+export function useDebouncedCallback<T extends (...args: unknown[]) => any>(
   callback: T,
   delay: number
 ): T {
@@ -85,7 +85,6 @@ export function useDebouncedSearch<T>(
         const searchResults = await searchFunction(debouncedQuery);
         setResults(searchResults);
       } catch (err) {
-        console.error('Search error:', err);
         setError(err instanceof Error ? err.message : '검색 중 오류가 발생했습니다.');
         setResults([]);
       } finally {

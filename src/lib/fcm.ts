@@ -43,18 +43,15 @@ class FCMService {
   // Request notification permission
   async requestPermission(): Promise<NotificationPermission> {
     if (!this.isSupported) {
-      console.warn('FCM not supported in this environment');
       return 'denied';
     }
 
     try {
       const permission = await Notification.requestPermission();
       if (import.meta.env.DEV) {
-        console.log('Notification permission:', permission);
-      }
+        }
       return permission;
     } catch (error) {
-      console.error('Error requesting notification permission:', error);
       return 'denied';
     }
   }
@@ -69,8 +66,7 @@ class FCMService {
       const permission = await this.requestPermission();
       if (permission !== 'granted') {
         if (import.meta.env.DEV) {
-          console.log('Notification permission not granted');
-        }
+          }
         return null;
       }
 
@@ -80,18 +76,15 @@ class FCMService {
 
       if (token) {
         if (import.meta.env.DEV) {
-          console.log('FCM registration token:', token);
-        }
+          }
         this.token = token;
         return token;
       } else {
         if (import.meta.env.DEV) {
-          console.log('No registration token available.');
-        }
+          }
         return null;
       }
     } catch (error) {
-      console.error('Error getting FCM token:', error);
       return null;
     }
   }
@@ -105,8 +98,7 @@ class FCMService {
         lastTokenUpdate: new Date().toISOString(),
       });
     } catch (error) {
-      console.error('Error saving FCM token to profile:', error);
-    }
+      }
   }
 
   // Listen for foreground messages
@@ -117,8 +109,7 @@ class FCMService {
 
     return onMessage(messaging, payload => {
       if (import.meta.env.DEV) {
-        console.log('Message received in foreground:', payload);
-      }
+        }
       callback(payload);
 
       // Show notification if the app is in focus
@@ -157,8 +148,7 @@ class FCMService {
   async initialize(userId: string): Promise<boolean> {
     if (!this.isSupported) {
       if (import.meta.env.DEV) {
-        console.log('FCM not supported');
-      }
+        }
       return false;
     }
 
@@ -171,8 +161,7 @@ class FCMService {
         await this.setupForegroundMessageListener(payload => {
           // Handle custom notification behavior here
           if (import.meta.env.DEV) {
-            console.log('Foreground notification received:', payload);
-          }
+            }
 
           // Dispatch custom event for app-specific handling
           window.dispatchEvent(
@@ -186,7 +175,6 @@ class FCMService {
       }
       return false;
     } catch (error) {
-      console.error('Error initializing FCM:', error);
       return false;
     }
   }

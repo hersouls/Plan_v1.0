@@ -113,12 +113,10 @@ export function AccountActions() {
     try {
       await new Promise(resolve => setTimeout(resolve, 1500));
       
-      console.log('Password updated');
       setShowPasswordModal(false);
       setPasswordForm({ current: '', new: '', confirm: '' });
       setPasswordError('');
     } catch (error) {
-      console.error('Failed to update password:', error);
       setPasswordError('비밀번호 변경에 실패했습니다.');
     } finally {
       setLoading(null);
@@ -151,10 +149,8 @@ export function AccountActions() {
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
 
-      console.log('Data exported successfully');
-    } catch (error) {
-      console.error('Failed to export data:', error);
-    } finally {
+      } catch (error) {
+      } finally {
       setLoading(null);
     }
   };
@@ -175,11 +171,9 @@ export function AccountActions() {
         localStorage.setItem('moonwave-theme', JSON.stringify(data.theme));
       }
 
-      console.log('Data imported successfully');
       window.location.reload();
     } catch (error) {
-      console.error('Failed to import data:', error);
-    } finally {
+      } finally {
       setLoading(null);
     }
   };
@@ -190,8 +184,7 @@ export function AccountActions() {
       await signOut();
       navigate('/login');
     } catch (error) {
-      console.error('Failed to logout:', error);
-    } finally {
+      } finally {
       setLoading(null);
       setShowLogoutModal(false);
     }
@@ -202,11 +195,9 @@ export function AccountActions() {
     try {
       await new Promise(resolve => setTimeout(resolve, 2000));
       
-      console.log('Account deleted');
       navigate('/login');
     } catch (error) {
-      console.error('Failed to delete account:', error);
-    } finally {
+      } finally {
       setLoading(null);
       setShowDeleteModal(false);
     }

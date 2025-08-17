@@ -186,7 +186,7 @@ export function FamilyStats({
           </div>
           
           <div className="space-y-3">
-            {[].map((activity: any, index: number) => (
+            {[].map((_activity: unknown, index: number) => (
               <div key={index} className="flex items-center gap-3 py-2">
                 <div className="w-8 h-8 bg-primary-100 rounded-full flex items-center justify-center flex-shrink-0">
                   <span className="text-xs font-semibold text-primary-700">

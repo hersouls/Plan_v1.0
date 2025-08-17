@@ -87,7 +87,6 @@ export const TaskDetail: React.FC<TaskDetailProps> = ({
       window.URL.revokeObjectURL(url);
       document.body.removeChild(a);
     } catch (error) {
-      console.error('File download failed:', error);
       alert('파일 다운로드에 실패했습니다.');
     }
   };
@@ -337,11 +336,7 @@ export const TaskDetail: React.FC<TaskDetailProps> = ({
                                           size="sm"
                                           onClick={() => {
                                             // TODO: Implement file removal from comment
-                                            console.log(
-                                              'Remove file from comment:',
-                                              file.id
-                                            );
-                                          }}
+                                            }}
                                           className="text-red-500 hover:text-red-600"
                                         >
                                           <Trash2 className="h-4 w-4" />

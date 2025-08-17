@@ -37,7 +37,7 @@ interface ExtendedGroupMember {
   email?: string;
   avatar?: string;
   role: 'owner' | 'admin' | 'vice_owner' | 'member' | 'viewer';
-  joinedAt: any;
+  joinedAt: unknown;
 
   // 그룹별 통계 (개선된 구조)
   tasksCreated?: number; // 이 그룹에서 생성한 할일 수
@@ -60,7 +60,7 @@ function FamilyManage() {
   const [fullscreenChatData, setFullscreenChatData] = useState<{
     groupId: string;
     groupName: string;
-    members: any[];
+    members: unknown[];
   } | null>(null);
   const [selectedMember, setSelectedMember] =
     useState<ExtendedGroupMember | null>(null);
@@ -136,7 +136,6 @@ function FamilyManage() {
       try {
         setFavoriteGroups(JSON.parse(savedFavorites));
       } catch (error) {
-        console.error('Failed to parse favorite groups:', error);
         setFavoriteGroups([]);
       }
     }
@@ -145,20 +144,16 @@ function FamilyManage() {
   // 전체화면 채팅 모달 이벤트 리스너
   useEffect(() => {
     const handleFullscreenChatOpen = (event: CustomEvent) => {
-      console.log('전체화면 채팅 모달 이벤트 수신:', event.detail);
       setFullscreenChatData(event.detail);
       setShowFullscreenChatModal(true);
-      console.log('전체화면 채팅 모달 상태 업데이트 완료');
-    };
+      };
 
-    console.log('전체화면 채팅 모달 이벤트 리스너 등록');
     window.addEventListener(
       'groupChatFullscreenOpen',
       handleFullscreenChatOpen as EventListener
     );
 
     return () => {
-      console.log('전체화면 채팅 모달 이벤트 리스너 제거');
       window.removeEventListener(
         'groupChatFullscreenOpen',
         handleFullscreenChatOpen as EventListener
@@ -170,7 +165,6 @@ function FamilyManage() {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && showFullscreenChatModal) {
-        console.log('ESC 키로 모달 닫기');
         setShowFullscreenChatModal(false);
       }
     };
@@ -182,7 +176,6 @@ function FamilyManage() {
   // 전체화면 채팅 모달 닫기 이벤트 리스너
   useEffect(() => {
     const handleFullscreenChatClose = () => {
-      console.log('전체화면 채팅 모달 닫기 이벤트 수신');
       setShowFullscreenChatModal(false);
     };
 
@@ -340,8 +333,6 @@ function FamilyManage() {
     userId: string
   ): Promise<{ isOnline: boolean; lastLoginTime: Date | null }> => {
     try {
-      console.log(`🔍 Checking online status for user: ${userId}`);
-
       // 방법 1: 현재 로그인한 사용자의 정보 확인 (클라이언트 사이드 안전)
       try {
         const auth = getAuth();
@@ -349,53 +340,34 @@ function FamilyManage() {
 
         // 현재 사용자와 확인하려는 사용자가 같은 경우에만 정보 접근 가능
         if (currentUser && currentUser.uid === userId) {
-          console.log('📱 Current user metadata:', currentUser.metadata);
-
           if (currentUser.metadata.lastSignInTime) {
             const lastLogin = new Date(currentUser.metadata.lastSignInTime);
             const now = new Date();
             const timeDiff = now.getTime() - lastLogin.getTime();
-
-            console.log('✅ Current user lastSignInTime found:', lastLogin);
-            console.log('⏰ Time difference:', timeDiff / 1000 / 60, 'minutes');
 
             return {
               isOnline: timeDiff < 10 * 60 * 1000,
               lastLoginTime: lastLogin,
             };
           } else {
-            console.log('❌ Current user lastSignInTime not found');
-          }
+            }
         } else {
-          console.log('⚠️ Cannot access other user metadata from client side');
-        }
+          }
       } catch (authError) {
-        console.log('⚠️ Firebase Auth error:', authError);
-      }
+        }
 
       // 방법 2: Firestore에서 사용자 정보 확인 (백업)
-      console.log('🔄 Trying Firestore backup method...');
       const db = getFirestore();
       const userDoc = await getDoc(doc(db, 'users', userId));
 
       if (userDoc.exists()) {
         const userData = userDoc.data();
-        console.log('📄 Firestore user data:', userData);
-
         // 여러 가능한 필드명 확인 (우선순위 순서)
         const lastLoginTime =
           userData.lastLoginTime ||
           userData.lastSignInTime ||
           userData.lastLoginAt ||
           userData.lastLogin;
-        console.log('🕐 Firestore lastLoginTime:', lastLoginTime);
-        console.log('📊 Available login time fields:', {
-          lastLoginTime: userData.lastLoginTime,
-          lastSignInTime: userData.lastSignInTime,
-          lastLoginAt: userData.lastLoginAt,
-          lastLogin: userData.lastLogin,
-        });
-
         if (lastLoginTime) {
           let lastLogin: Date;
 
@@ -406,52 +378,37 @@ function FamilyManage() {
             'toDate' in lastLoginTime
           ) {
             lastLogin = lastLoginTime.toDate();
-            console.log('✅ Firebase Timestamp detected and converted');
-          } else if (
+            } else if (
             lastLoginTime &&
             typeof lastLoginTime === 'object' &&
             'seconds' in lastLoginTime
           ) {
             // Firestore Timestamp 형식 (seconds, nanoseconds)
             lastLogin = new Date(lastLoginTime.seconds * 1000);
-            console.log('✅ Firestore Timestamp detected and converted');
-          } else if (typeof lastLoginTime === 'string') {
+            } else if (typeof lastLoginTime === 'string') {
             lastLogin = new Date(lastLoginTime);
-            console.log('✅ String timestamp detected and converted');
-          } else if (typeof lastLoginTime === 'number') {
+            } else if (typeof lastLoginTime === 'number') {
             lastLogin = new Date(lastLoginTime);
-            console.log('✅ Number timestamp detected and converted');
-          } else {
-            console.log(
-              '❌ Unknown timestamp format:',
-              typeof lastLoginTime,
-              lastLoginTime
-            );
+            } else {
             return { isOnline: false, lastLoginTime: null };
           }
 
           const now = new Date();
           const timeDiff = now.getTime() - lastLogin.getTime();
 
-          console.log('✅ Firestore lastLoginTime found:', lastLogin);
-          console.log('⏰ Time difference:', timeDiff / 1000 / 60, 'minutes');
-
           return {
             isOnline: timeDiff < 10 * 60 * 1000,
             lastLoginTime: lastLogin,
           };
         } else {
-          console.log('❌ Firestore lastLoginTime field not found');
-          console.log('🔍 Available fields:', Object.keys(userData));
+          // Handle case where user data is not available
         }
       } else {
-        console.log('❌ Firestore user document does not exist');
+        // Handle case where user data is not available
       }
 
-      console.log('❌ No login time found from any source');
       return { isOnline: false, lastLoginTime: null };
     } catch (error) {
-      console.error('💥 Error checking online status:', error);
       return { isOnline: false, lastLoginTime: null };
     }
   };
@@ -505,7 +462,6 @@ function FamilyManage() {
 
       return { isOnline: false, lastLoginTime: null };
     } catch (error) {
-      console.error('Error checking online status (optimized):', error);
       return { isOnline: false, lastLoginTime: null };
     }
   };
@@ -582,7 +538,6 @@ function FamilyManage() {
       // 성공 메시지 표시
       alert('새 그룹이 성공적으로 생성되었습니다!');
     } catch (error) {
-      console.error('Failed to create group:', error);
       const errorMessage =
         error instanceof Error
           ? error.message
@@ -607,7 +562,6 @@ function FamilyManage() {
         alert('새 초대 코드가 생성되고 복사되었습니다!');
       }
     } catch (error) {
-      console.error('Failed to copy invite code:', error);
       alert('초대 코드 복사에 실패했습니다.');
     }
   };
@@ -634,7 +588,6 @@ function FamilyManage() {
       setShowQRScannerModal(false);
       alert('가족 그룹에 성공적으로 참여했습니다!');
     } catch (error) {
-      console.error('Failed to join group:', error);
       const errorMessage =
         error instanceof Error ? error.message : '그룹 참여에 실패했습니다.';
       alert(errorMessage);
@@ -689,7 +642,6 @@ function FamilyManage() {
           alert('멤버가 제거되었습니다.');
         }
       } catch (error) {
-        console.error('Failed to remove member:', error);
         alert('멤버 제거에 실패했습니다.');
       }
     }
@@ -729,7 +681,6 @@ function FamilyManage() {
           alert(`멤버 역할이 ${roleLabels[newRole]}로 변경되었습니다.`);
         }
       } catch (error) {
-        console.error('Failed to change member role:', error);
         alert('멤버 역할 변경에 실패했습니다.');
       }
     }
@@ -765,7 +716,6 @@ function FamilyManage() {
           alert('그룹장 권한이 양도되었습니다.');
         }
       } catch (error) {
-        console.error('Failed to transfer ownership:', error);
         alert('그룹장 권한 양도에 실패했습니다.');
       }
     }
@@ -784,7 +734,6 @@ function FamilyManage() {
           alert('그룹이 삭제되었습니다.');
         }
       } catch (error) {
-        console.error('Failed to delete group:', error);
         alert('그룹 삭제에 실패했습니다.');
       }
     }
@@ -810,7 +759,6 @@ function FamilyManage() {
         setInviteEmail('');
         setShowInviteModal(false);
       } catch (error) {
-        console.error('Failed to send invite:', error);
         alert('초대장 발송에 실패했습니다.');
       }
     }
@@ -850,12 +798,11 @@ function FamilyManage() {
         await refetchGroups();
       }
     } catch (error) {
-      console.error('Failed to update member:', error);
       alert('멤버 정보 업데이트에 실패했습니다.');
     }
   };
 
-  const handleUpdateGroup = async (updates: any) => {
+  const handleUpdateGroup = async (_updates: unknown) => {
     try {
       if (selectedGroupId) {
         await updateGroup(selectedGroupId, updates);
@@ -863,12 +810,11 @@ function FamilyManage() {
         setShowEditGroupModal(false);
       }
     } catch (error) {
-      console.error('Failed to update group:', error);
       alert('그룹 업데이트에 실패했습니다.');
     }
   };
 
-  const handleUpdateSettings = async (settings: any) => {
+  const handleUpdateSettings = async (_settings: unknown) => {
     try {
       if (selectedGroupId && group) {
         await updateGroup(selectedGroupId, {
@@ -878,7 +824,6 @@ function FamilyManage() {
         setShowSettingsModal(false);
       }
     } catch (error) {
-      console.error('Failed to update settings:', error);
       alert('설정 업데이트에 실패했습니다.');
     }
   };
@@ -2059,15 +2004,9 @@ function FamilyManage() {
                 avatar: member.avatar,
               }))}
               onOpenFullscreen={data => {
-                console.log('GroupChat에서 전체화면 모달 열기 요청:', data);
-                console.log('현재 모달 상태:', {
-                  showFullscreenChatModal,
-                  fullscreenChatData,
-                });
                 setFullscreenChatData(data);
                 setShowFullscreenChatModal(true);
-                console.log('모달 상태 업데이트 완료');
-              }}
+                }}
             />
           </div>
         )}
@@ -2684,8 +2623,7 @@ function FamilyManage() {
                 members={fullscreenChatData.members}
                 onOpenFullscreen={() => {
                   // 전체화면 모달에서는 전체화면 기능 비활성화
-                  console.log('이미 전체화면 모드입니다');
-                }}
+                  }}
               />
             </div>
           </div>
