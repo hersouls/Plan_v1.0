@@ -68,6 +68,7 @@ function TodoHome() {
   const {
     tasks: personalTasks,
     loading: personalLoading,
+    error: personalError,
     createTask,
     toggleTaskComplete,
     deleteTask,
@@ -80,11 +81,15 @@ function TodoHome() {
   const {
     tasks: groupTasks,
     loading: groupLoading,
+    error: groupError,
   } = useTasks({
     groupId: currentGroup?.id,
     realtime: true,
     limit: 50,
   });
+
+  // 에러 상태 통합
+  const error = personalError || groupError;
 
   // 모든 할일 합치기 (중복 제거)
   const allTasks = useMemo(() => {
@@ -237,7 +242,7 @@ function TodoHome() {
         ...taskData,
         groupId: groupId,
         userId: user.uid,
-        assigneeId: taskData.assigneeId || user.uid,
+        assigneeId: (taskData.assigneeId as string) || user?.uid || '',
       });
 
       // 성공 피드백 개선
@@ -245,7 +250,7 @@ function TodoHome() {
       // FIX: Handle error silently - intentionally unused
       // 에러 피드백 개선
       // TODO: 토스트 알림으로 변경
-      console.error('❌ 할일 생성에 실패했습니다. 다시 시도해주세요.');
+      // console.error('❌ 할일 생성에 실패했습니다. 다시 시도해주세요.');
     }
   };
 

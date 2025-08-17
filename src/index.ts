@@ -1,13 +1,57 @@
 // Main entry point for all exports
 
-// Export all types
-export * from './types';
+// Export specific types to avoid conflicts
+export * from './types/ui';
+export * from './types/app';
+export * from './types/auth';
+export * from './types/task';
+export * from './types/user';
+export * from './types/group';
+export * from './types/plan';
+export * from './types/trip';
+export * from './types/analytics';
+export * from './types/typography';
 
-// Export all contexts and providers
-export * from './contexts';
+// Export common types individually to avoid conflicts
+export type { 
+  TimeRange, 
+  Address, 
+  ContactInfo, 
+  SocialLinks, 
+  LanguageCode, 
+  Timezone, 
+  CurrencyCode, 
+  DeviceType, 
+  BrowserType, 
+  Environment, 
+  LogLevel, 
+  AnalyticsEvent, 
+  ErrorBoundaryState, 
+  FeatureFlag, 
+  ABTestVariant 
+} from './types/common';
 
-// Export all hooks
-export * from './hooks';
+// Export contexts and providers
+export { AppProvider } from './contexts/AppContext';
+export { AuthProvider } from './contexts/AuthContext';
+export { DataProvider } from './contexts/DataContext';
+export { TaskProvider } from './contexts/TaskContext';
+export { useAuth } from './hooks/useAuth';
+export { useApp } from './hooks/useApp';
+export { useData } from './contexts/utils/dataContext.utils';
+
+// Export hooks (excluding conflicting useTask)
+export * from './hooks/useAuth';
+export * from './hooks/useApp';
+export * from './hooks/useData';
+export * from './hooks/useGroup';
+export * from './hooks/useOffline';
+export * from './hooks/useTasks';
+export * from './hooks/useUser';
+
+// Re-export specific types to resolve conflicts
+export type { Coordinates as MapCoordinates } from './utils/mapUrlParser';
+export { useTask as useTaskHook } from './hooks/useTask';
 
 // Export all components
 export * from './components/ui/GlassCard';
