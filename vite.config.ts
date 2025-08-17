@@ -12,6 +12,10 @@ export default defineConfig(({ mode }) => {
     // Use root path for Vercel deployment
     base: '/',
     plugins: [react(), tsconfigPaths()],
+    esbuild: {
+      jsx: 'automatic',
+      jsxImportSource: 'react',
+    },
     resolve: {
       alias: {
         '@': path.resolve(__dirname, './src'),
