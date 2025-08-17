@@ -212,6 +212,8 @@ ${JSON.stringify(timePatterns, null, 2)}
           return this.getDefaultPrediction(targetPeriod);
         }
       }
+    } catch (error) {
+      // Handle error silently
     }
 
     return this.getDefaultPrediction(targetPeriod);

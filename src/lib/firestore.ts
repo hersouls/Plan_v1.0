@@ -96,10 +96,6 @@ function createSafeSnapshot<T>(
     if (onError) onError(error as Error);
     // 빈 unsubscribe 함수 반환
     return () => {};
-  } catch (error) {
-    // FIX: Added missing catch block
-    if (onError) onError(error as Error);
-    return () => {};
   }
 }
 
@@ -132,6 +128,7 @@ export const taskService = {
       const docRef = await addDoc(collection(db, 'tasks'), finalData);
       return docRef.id;
     } catch (error) {
+      // Handle error silently
     }
   },
 
@@ -146,6 +143,7 @@ export const taskService = {
       });
       await updateDoc(taskRef, sanitizedUpdates);
     } catch (error) {
+      // Handle error silently
     }
   },
 
@@ -154,6 +152,7 @@ export const taskService = {
     try {
       await deleteDoc(doc(db, 'tasks', taskId));
     } catch (error) {
+      // Handle error silently
     }
   },
 
@@ -166,6 +165,7 @@ export const taskService = {
       }
       return null;
     } catch (error) {
+      // Handle error silently
     }
   },
 
@@ -255,6 +255,7 @@ export const taskService = {
         ...doc.data(),
       })) as Task[];
     } catch (error) {
+      // Handle error silently
     }
   },
 
@@ -273,6 +274,7 @@ export const taskService = {
         ...doc.data(),
       })) as Task[];
     } catch (error) {
+      // Handle error silently
     }
   },
 };
@@ -290,7 +292,8 @@ export const groupService = {
         updatedAt: serverTimestamp(),
       });
       return docRef.id;
-    } catch (error) {n
+    } catch (error) {
+      // Handle error silently
     }
   },
 
@@ -303,6 +306,7 @@ export const groupService = {
         updatedAt: serverTimestamp(),
       });
     } catch (error) {
+      // Handle error silently
     }
   },
 
@@ -322,6 +326,7 @@ export const groupService = {
       }
       return null;
     } catch (error) {
+      // Handle error silently
     }
   },
 
@@ -364,6 +369,7 @@ export const groupService = {
         updatedAt: serverTimestamp(),
       });
     } catch (error) {
+      // Handle error silently
     }
   },
 
@@ -390,6 +396,7 @@ export const groupService = {
 
       await batch.commit();
     } catch (error) {
+      // Handle error silently
     }
   },
 
@@ -406,6 +413,9 @@ export const groupService = {
       return querySnapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data(),
+      })) as FamilyGroup[];
+    } catch (error) {
+      // Handle error silently
     }
   },
 
@@ -483,6 +493,7 @@ export const groupService = {
 
       return await Promise.all(memberPromises);
     } catch (error) {
+      // Handle error silently
     }
   },
 
@@ -568,6 +579,7 @@ export const groupService = {
         memberStats,
       };
     } catch (error) {
+      // Handle error silently
     }
   },
 

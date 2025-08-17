@@ -115,6 +115,7 @@ function TodoHome() {
     if (!task.dueDate || task.status === 'completed') return false;
     try {
       return isPast(toDate(task.dueDate));
+    } catch {
       return false;
     }
   });
@@ -164,6 +165,7 @@ function TodoHome() {
               isToday(taskDate) ||
               (isPast(taskDate) && task.status !== 'completed')
             );
+          } catch {
             return false;
           }
         });
@@ -171,7 +173,8 @@ function TodoHome() {
         return tasks.filter(task => {
           if (!task.dueDate) return false;
           try {
-            return isThisWeek(toDate(task.dueDate));n
+            return isThisWeek(toDate(task.dueDate));
+          } catch {
             return false;
           }
         });
@@ -188,6 +191,7 @@ function TodoHome() {
       if (!task.dueDate || task.status === 'completed') return false;
       try {
         return isPast(toDate(task.dueDate));
+      } catch {
         return false;
       }
     });
@@ -249,8 +253,9 @@ function TodoHome() {
   const handleTaskToggle = async (taskId: string) => {
     try {
       await toggleTaskComplete(taskId);
+    } catch {
       alert('할일 상태 변경에 실패했습니다.');
-      }
+    }
   };
 
   const handleTaskEdit = (task: Task) => {
@@ -262,6 +267,7 @@ function TodoHome() {
       try {
         await deleteTask(taskId);
         alert('할일이 삭제되었습니다.');
+      } catch {
         alert('할일 삭제에 실패했습니다.');
       }
     }
@@ -309,6 +315,7 @@ function TodoHome() {
       try {
         await signOut();
         navigate('/login');
+      } catch {
         alert('로그아웃 중 오류가 발생했습니다.');
       }
     }

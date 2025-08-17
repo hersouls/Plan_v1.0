@@ -443,7 +443,8 @@ class PointsService {
 
       // 사용자 프로필의 포인트 업데이트
       await this.updateUserPoints(history.userId, history.groupId, pointAmount);
-    } catch (error) 
+    } catch (error) {
+      // Handle error silently
     }
   }
 
