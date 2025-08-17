@@ -34,7 +34,7 @@ export function PointAnalysisModal({
     if (isOpen && pointHistory) {
       analyzePoint();
     }
-  }, [isOpen, pointHistory]);
+  }, [isOpen, pointHistory, analyzePoint]);
 
   const analyzePoint = async () => {
     setLoading(true);

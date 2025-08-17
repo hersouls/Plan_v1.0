@@ -51,7 +51,7 @@ export const CompletedTasksList = ({
       setLoading(true);
       try {
         await refresh();
-      } catch (error) {
+      } catch {
         // Handle error silently
       } finally {
         setLoading(false);
@@ -171,7 +171,7 @@ export const CompletedTasksList = ({
     }
 
     setGroupedTasks(grouped);
-  }, [selectedGroupId, groups, selectedMemberId, completedTasks]);
+  }, [selectedGroupId, groups, selectedMemberId, completedTasks, calculateTotalPoints]);
 
   if (loading || tasksLoading) {
     return (

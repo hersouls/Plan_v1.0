@@ -45,6 +45,7 @@ export const Settings: React.FC<SettingsProps> = ({
       } catch (error) {
         // Handle error silently
         if (import.meta.env.DEV) {
+          // eslint-disable-next-line no-console
           console.error('Error loading preferences:', error);
         }
       }
@@ -69,6 +70,7 @@ export const Settings: React.FC<SettingsProps> = ({
       }
     } catch (error) {
       if (import.meta.env.DEV) {
+        // eslint-disable-next-line no-console
         console.error('Error signing out:', error);
       }
       alert('로그아웃에 실패했습니다.');
