@@ -897,7 +897,6 @@ function PointsManagement() {
                             history.type === 'penalty';
 
                           // 날짜 포맷팅 개선
-                          const formatDate = (_timestamp: any) => {
                             try {
                               const date = new Date(_timestamp.seconds * 1000);
                               const now = new Date();
@@ -946,7 +945,6 @@ function PointsManagement() {
                               tabIndex={history.taskId ? 0 : -1}
                               aria-label={
                                 history.taskId
-                                  ? `할일 수정: ${history.taskId}`
                                   : history.description
                               }
                             >
@@ -1151,7 +1149,6 @@ function PointsManagement() {
                             history.type === 'penalty';
 
                           // 날짜 포맷팅 개선
-                          const formatDate = (_timestamp: any) => {
                             try {
                               const date = new Date(_timestamp.seconds * 1000);
                               const now = new Date();
@@ -1167,7 +1164,6 @@ function PointsManagement() {
                               } else if (diffDays === 2) {
                                 return '어제';
                               } else if (diffDays <= 7) {
-                                return `${diffDays - 1}일 전`;
                               } else {
                                 return date.toLocaleDateString('ko-KR', {
                                   month: 'short',
@@ -1503,7 +1499,6 @@ function PointsManagement() {
                     history.type === 'deducted' || history.type === 'penalty';
 
                   // 날짜 포맷팅 개선
-                  const formatDate = (_timestamp: any) => {
                     try {
                       const date = new Date(_timestamp.seconds * 1000);
                       return date.toLocaleDateString('ko-KR', {
@@ -1689,7 +1684,7 @@ function PointsManagement() {
                     history.type === 'deducted' || history.type === 'penalty';
 
                   // 날짜 포맷팅 개선
-                  const formatDate = (_timestamp: any) => {
+
                     try {
                       const date = new Date(_timestamp.seconds * 1000);
                       return date.toLocaleDateString('ko-KR', {

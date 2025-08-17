@@ -7,7 +7,7 @@ export interface ValidationRule {
   minLength?: number;
   maxLength?: number;
   pattern?: RegExp;
-  custom?: (_value: unknown) => string | null;
+  custom?: (_value: unknown, _data?: Record<string, any>) => string | null;
   message?: string;
 }
 
@@ -32,7 +32,7 @@ export class ValidationService {
   /**
    * Validate a single field
    */
-  validateField(_value: unknown, rules: ValidationRule): string | null {
+  validateField(value: unknown, rules: ValidationRule, data?: Record<string, any>): string | null {
     // Required validation
     if (rules.required && this.isEmpty(value)) {
       return rules.message || '이 필드는 필수입니다.';
@@ -65,7 +65,7 @@ export class ValidationService {
 
     // Custom validation
     if (rules.custom) {
-      const customError = rules.custom(value);
+      const customError = rules.custom(value, data);
       if (customError) {
         return customError;
       }
@@ -86,7 +86,7 @@ export class ValidationService {
     Object.keys(rules).forEach(fieldName => {
       const value = data[fieldName];
       const fieldRules = rules[fieldName];
-      const error = this.validateField(value, fieldRules);
+      const error = this.validateField(value, fieldRules, data);
 
       if (error) {
         errors[fieldName] = error;
@@ -248,8 +248,8 @@ export class ValidationService {
       },
       confirmPassword: {
         required: true,
-        custom: (value, data) => {
-          if (value !== data?.password) {
+        custom: (_value, data) => {
+          if (_value !== data?.password) {
             return '비밀번호가 일치하지 않습니다.';
           }
           return null;
@@ -317,7 +317,7 @@ export class ValidationService {
   /**
    * Check if value is empty
    */
-  private isEmpty(_value: unknown): boolean {
+  private isEmpty(value: unknown): boolean {
     if (value === null || value === undefined) return true;
     if (typeof value === 'string') return value.trim().length === 0;
     if (Array.isArray(value)) return value.length === 0;
@@ -363,7 +363,7 @@ export class ValidationService {
    * Custom validation for specific business rules
    */
   validateBusinessRules(
-    _data: unknown,
+    data: Record<string, any>,
     type: 'task' | 'group' | 'user'
   ): ValidationResult {
     const errors: Record<string, string> = {};
